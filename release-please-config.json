@@ -1,0 +1,8 @@
+{
+  "release-type": "node",
+  "tag-separator": "@",
+  "bump-minor-pre-major": true,
+  "bump-patch-for-minor-pre-major": true,
+  "monorepo-tags": true,
+  "include-v-in-tag": false
+}

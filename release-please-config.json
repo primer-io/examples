@@ -3,6 +3,6 @@
   "tag-separator": "@",
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": true,
-  "monorepo-tags": true,
-  "include-v-in-tag": false
+  "include-v-in-tag": false,
+  "default-branch": "sandbox"
 }

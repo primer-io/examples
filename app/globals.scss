@@ -1,0 +1,62 @@
+@use '@primer-io/goat';
+
+body {
+  @include goat.typography('body-medium');
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+  color: goat.color('gray-900');
+  margin: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+code {
+  @include goat.typography('code');
+}
+
+.collapse-css-transition {
+  transition: height 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*::selection,
+::selection {
+  background-color: goat.color('indigo-100');
+  color: inherit;
+}
+
+article,
+aside,
+dialog,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section {
+  display: block;
+}
+
+figure {
+  all: unset;
+}
+
+fieldset {
+  all: unset;
+  display: block;
+}
+
+/* Safari 15 fix, see https://primerapi.atlassian.net/browse/PO-936 */
+html [type='button'][class^='goat'] {
+  -webkit-appearance: none;
+}

@@ -1,6 +1,6 @@
 "use client";
 import styles from "./page.module.scss";
-import { AppTopbar, BrandIcon, H1, H2, Link, P } from "@primer-io/goat";
+import { AppTopbar, BrandIcon, Button, H1, H2, Link, P } from "@primer-io/goat";
 export default function Home() {
   return (
     <AppTopbar>
@@ -14,7 +14,11 @@ export default function Home() {
           />
           </AppTopbar.Logo>
           <H1 type="title-large">Primer Playground Repo</H1>
+        <AppTopbar.Actions>
+          <Button as='a' href="https://goat-primer-io.vercel.app/">Goat docs</Button>
+        </AppTopbar.Actions>
       </AppTopbar.Root>
+
       <main className={styles.main}>
         <H2>Primer Playground Repo</H2>
         <P>

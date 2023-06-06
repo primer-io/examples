@@ -21,10 +21,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <H2>Primer Playground Repo</H2>
-        <P>
-          This is a playground repo for testing out Primer components and
-          styles.
-        </P>
+        <img src="https://www.elegantthemes.com/blog/wp-content/uploads/2020/08/000-http-error-codes.png" alt="404" />
         <P>
           Check out the{" "}
           <Link href="https://goat-primer-io.vercel.app/">Goat docs</Link> for

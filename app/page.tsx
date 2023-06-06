@@ -1,17 +1,32 @@
-'use client';
-import styles from './page.module.scss'
-import { BrandIcon, H1, Link, P } from "@primer-io/goat";
+"use client";
+import styles from "./page.module.scss";
+import { AppTopbar, BrandIcon, H1, H2, Link, P } from "@primer-io/goat";
 export default function Home() {
   return (
-    <main className={styles.main}>
-        <H1>Primer Playground Repo</H1>
+    <AppTopbar>
+      <AppTopbar.Root className={styles.topbar}>
+
+        <AppTopbar.Logo>
+          <BrandIcon
+            src="https://goat-assets.production.core.primer.io/brand/icon/primer.svg"
+            size="large"
+            className={styles.logo}
+          />
+          </AppTopbar.Logo>
+          <H1 type="title-large">Primer Playground Repo</H1>
+      </AppTopbar.Root>
+      <main className={styles.main}>
+        <H2>Primer Playground Repo</H2>
         <P>
-          This is a playground repo for testing out Primer components and styles.
+          This is a playground repo for testing out Primer components and
+          styles.
         </P>
         <P>
-          Check out the <Link href="https://goat-primer-io.vercel.app/">Goat docs</Link> for more info.
+          Check out the{" "}
+          <Link href="https://goat-primer-io.vercel.app/">Goat docs</Link> for
+          more info.
         </P>
-        <BrandIcon src='https://goat-assets.production.core.primer.io/brand/icon/primer.svg' size='large' className={styles.logo} />
-    </main>
-  )
+      </main>
+    </AppTopbar>
+  );
 }

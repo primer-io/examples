@@ -14,7 +14,7 @@ The POC also shows how these workflows create separate issues for release approv
 
 The full RFC can be found here:
 
-### [Migrate Dashboard’s Deployment Pipelines](https://www.notion.so/primerio/Migrate-Dashboard-s-Deployment-Pipelines-fe409af5ee044ef5ac38d69102f60bdd?pvs=4)
+### [Migrate Dashboard’s Deployment Pipelines](https://www.notion.so/primerio/RFC-019-Migrate-Frontend-Deployment-Pipelines-cf87138ef4cd4513a851c24ebfc0c245)
 
 
 ## Getting Started

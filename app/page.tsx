@@ -20,7 +20,7 @@ export default function Home() {
       </AppTopbar.Root>
 
       <main className={styles.main}>
-        <H2>Primer Playground Repo</H2>
+        <H2>Primer Playground Repo #2</H2>
         <P>
           Check out the{" "}
           <Link href="https://goat-primer-io.vercel.app/">Goat docs</Link> for

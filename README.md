@@ -1,41 +1,30 @@
+# React + TypeScript + Vite
 
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-# Vercel Deployment POC
+Currently, two official plugins are available:
 
-Welcome to the Vercel Deployment Proof of Concept (POC) repository!
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-This POC was created to demonstrate the feasibility of deploying our Primer's Dashboard and Frontend Assets using Vercel, a battle-tested hosting service capable of handling high-traffic applications.
+## Expanding the ESLint configuration
 
-In this repository, you will find a working model that shows how we can streamline our deployment process. We illustrate how GitHub workflows are triggered once a PR is merged into the main branch and how they correspond to different environments (sandbox and production).
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-The POC also shows how these workflows create separate issues for release approval and detail all changes ready for release. Once approved, the workflow continues by creating a PR and performing a fast-forward merge to keep our history clean and easily traceable.
+- Configure the top-level `parserOptions` property like this:
 
-## The RFC
-
-The full RFC can be found here:
-
-### [Migrate Dashboard’s Deployment Pipelines](https://www.notion.so/primerio/RFC-019-Migrate-Frontend-Deployment-Pipelines-cf87138ef4cd4513a851c24ebfc0c245)
-
-
-## Getting Started
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+```js
+export default {
+  // other rules...
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: ['./tsconfig.json', './tsconfig.node.json'],
+    tsconfigRootDir: __dirname,
+  },
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
+- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
+- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list

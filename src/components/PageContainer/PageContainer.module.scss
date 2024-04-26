@@ -1,0 +1,25 @@
+@use '@primer-io/goat' as goat;
+
+/**
+ * Reference: https://www.figma.com/file/073EH8sy5Y8nb1d5utX9mP/Goat-styles?type=design&node-id=56-4&mode=design
+ */
+.container {
+  --left-right-padding: #{goat.space(4)};
+  --content-max-width: 1128px;
+
+  display: flex;
+  flex-direction: column;
+  gap: goat.space(4);
+  margin: 0 auto;
+  max-width: calc(var(--content-max-width) + var(--left-right-padding) * 2);
+  padding: 0 var(--left-right-padding) goat.space(16);
+  min-height: 100%;
+
+  @media screen and (min-width: 600px) {
+    --left-right-padding: #{goat.space(6)};
+  }
+
+  @media screen and (min-width: 1024px) {
+    --left-right-padding: #{goat.space(10)};
+  }
+}

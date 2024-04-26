@@ -1,0 +1,23 @@
+@use '@primer-io/goat';
+
+.container {
+  gap: goat.space(8);
+}
+
+.actions {
+  display: flex;
+  gap: goat.space(2);
+}
+
+.main {
+  display: grid;
+  gap: goat.space(4);
+  grid-template-columns: minmax(300px, 2fr) minmax(500px, 3fr);
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: goat.space(4);
+  overflow: auto;
+}

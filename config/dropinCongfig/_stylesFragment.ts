@@ -155,7 +155,10 @@ export const stylesFragment: GenericObjectType = {
       loading: submitButtonStyleFragment,
     },
   },
-  vaultTitle: textStyleFragment,
+  vaultTitle: {
+    type: 'object',
+    properties: textStyleFragment,
+  },
   savedPaymentMethodButton: {
     type: 'object',
     description: 'Styles for saved payment method buttons.',
@@ -221,5 +224,8 @@ export const stylesFragment: GenericObjectType = {
     description: 'Styles for error messages.',
     properties: errorMessageStyleFragment,
   },
-  smallPrint: textStyleFragment,
+  smallPrint: {
+    type: 'object',
+    properties: textStyleFragment,
+  },
 };

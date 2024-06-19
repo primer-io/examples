@@ -1,40 +1,19 @@
 {
   "name": "primer-playground",
-  "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "private": true,
+  "packageManager": "npm@10.8.1",
   "scripts": {
-    "start": "vite",
-    "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "check-types": "turbo run check-types",
+    "lint": "turbo run lint"
   },
-  "dependencies": {
-    "@primer-io/checkout-web": "2.41.0",
-    "@primer-io/goat": "0.36.1",
-    "@primer-io/goat-icons": "0.2.5",
-    "@primer-io/goat-tokens": "0.5.4",
-    "@rjsf/core": "5.18.2",
-    "@rjsf/utils": "5.18.2",
-    "@rjsf/validator-ajv8": "5.18.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-router-dom": "6.22.3",
-    "react-use": "17.5.0",
-    "swr": "2.2.5"
-  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "devDependencies": {
-    "@types/react": "18.2.79",
-    "@types/react-dom": "18.2.25",
-    "@typescript-eslint/eslint-plugin": "7.7.0",
-    "@typescript-eslint/parser": "7.7.0",
-    "@vitejs/plugin-react": "4.2.1",
-    "eslint": "8.57.0",
-    "eslint-plugin-react-hooks": "4.6.0",
-    "eslint-plugin-react-refresh": "0.4.6",
-    "prettier": "3.2.5",
-    "sass": "1.75.0",
-    "typescript": "5.4.5",
-    "vite": "5.2.10"
+    "turbo": "^2.0.4"
   }
 }

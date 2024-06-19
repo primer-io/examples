@@ -1,0 +1,4 @@
+{
+  "extends": "@primer-playground/typescript-config/node.json",
+  "include": ["vite.config.ts"]
+}

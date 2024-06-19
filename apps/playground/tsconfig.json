@@ -1,0 +1,5 @@
+{
+  "extends": "@primer-playground/typescript-config/base.json",
+  "include": ["@types","src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}

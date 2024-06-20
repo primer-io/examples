@@ -1,6 +1,6 @@
 import { RJSFSchema } from '@rjsf/utils';
 import { paymentsFragment } from './_paymentsFragment';
-import { stylesFragment } from './_stylesFragment.ts';
+import { stylesFragment } from './_stylesFragment';
 
 export const dropInConfigSchema: RJSFSchema = {
   $schema: 'http://json-schema.org/draft-07/schema#',

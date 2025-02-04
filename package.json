@@ -1,19 +1,15 @@
 {
   "name": "primer-playground",
-  "version": "0.0.0",
-  "private": true,
-  "packageManager": "npm@10.8.1",
-  "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "check-types": "turbo run check-types",
-    "lint": "turbo run lint"
-  },
+  "version": "0.0.0-semantic-release",
+  "packageManager": "yarn@4.5.0",
   "workspaces": [
-    "apps/*",
     "packages/*"
   ],
+  "scripts": {
+    "format": "prettier . --write"
+  },
   "devDependencies": {
-    "turbo": "^2.0.4"
+    "prettier": "^3.4.2",
+    "turbo": "2.3.4"
   }
 }

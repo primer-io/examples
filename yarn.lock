@@ -625,6 +625,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@primer-io/checkout-web@npm:^2.49.2":
+  version: 2.49.2
+  resolution: "@primer-io/checkout-web@npm:2.49.2"
+  checksum: 10/433a2268405cc138f4918b5046c774c9be470e93fcf0a0c15325e438c70c0f13b39fa33369e467ff9a5f7fb9cf234efaa21ca2ed2519e7824a0e63036805918e
+  languageName: node
+  linkType: hard
+
 "@rollup/rollup-android-arm-eabi@npm:4.34.2":
   version: 4.34.2
   resolution: "@rollup/rollup-android-arm-eabi@npm:4.34.2"
@@ -2360,6 +2367,7 @@ __metadata:
   resolution: "react-web-components@workspace:packages/react-web-components"
   dependencies:
     "@eslint/js": "npm:^9.17.0"
+    "@primer-io/checkout-web": "npm:^2.49.2"
     "@types/react": "npm:^18.3.18"
     "@types/react-dom": "npm:^18.3.5"
     "@vitejs/plugin-react": "npm:^4.3.4"

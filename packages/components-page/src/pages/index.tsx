@@ -20,10 +20,7 @@ function HomepageHeader(): ReactNode {
           Tech
         </p>
         <div className={styles.buttons}>
-          <Link
-            className='button button--secondary button--lg'
-            to='/docs/intro'
-          >
+          <Link className='button button--secondary button--lg'>
             Get Started
           </Link>
         </div>

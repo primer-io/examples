@@ -17,4 +17,4 @@ temp
 .ignore
 .npmrc
 
-packages/react-web-components/src/clientToken.ts
+examples/react-web-components/src/clientToken.ts

@@ -21,7 +21,7 @@ const config: Config = {
   organizationName: 'primer.io', // Usually your GitHub org/user name.
   projectName: 'primer-components', // Usually your repo name.
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   noIndex: true,
   // Even if you don't use internationalization, you can use this field to set

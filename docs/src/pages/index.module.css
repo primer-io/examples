@@ -1,0 +1,69 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    145deg,
+    var(--ifm-color-primary) 0%,
+    var(--ifm-color-primary-darker) 100%
+  );
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.codePreview {
+  margin: 3rem auto;
+  max-width: 800px;
+  padding: 0 1rem;
+}
+
+.features {
+  padding: 4rem 0;
+  background-color: var(--ifm-background-surface-color);
+}
+
+.features h3 {
+  margin-bottom: 1rem;
+}
+
+.beta {
+  padding: 4rem 0;
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.beta h2 {
+  margin-bottom: 1.5rem;
+}
+
+.beta ul {
+  margin-bottom: 2rem;
+}
+
+.betaFeatures {
+  background-color: var(--ifm-background-surface-color);
+  border-radius: var(--ifm-border-radius);
+  padding: 2rem;
+  height: 100%;
+}
+
+.betaFeatures h3 {
+  margin-bottom: 1.5rem;
+}

@@ -5152,9 +5152,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"components-page@workspace:packages/components-page":
+"components-page@workspace:docs":
   version: 0.0.0-use.local
-  resolution: "components-page@workspace:packages/components-page"
+  resolution: "components-page@workspace:docs"
   dependencies:
     "@docusaurus/core": "npm:3.7.0"
     "@docusaurus/module-type-aliases": "npm:3.7.0"
@@ -11355,9 +11355,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-web-components@workspace:packages/react-web-components":
+"react-web-components@workspace:examples/react-web-components":
   version: 0.0.0-use.local
-  resolution: "react-web-components@workspace:packages/react-web-components"
+  resolution: "react-web-components@workspace:examples/react-web-components"
   dependencies:
     "@eslint/js": "npm:^9.17.0"
     "@primer-io/checkout-web": "npm:^2.49.2"

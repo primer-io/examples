@@ -1,5 +1,6 @@
 ---
 sidebar_position: 1
+title: Getting Started
 ---
 
 
@@ -30,17 +31,6 @@ Then import and initialize Primer in your application:
 ```javascript
 import { loadPrimer } from '@primer-io/primer-js';
 loadPrimer();
-```
-
-### Using CDN
-
-Add the following script tag to your HTML:
-
-```html
-<script
-  src="https://sdk.primer.io/web/v1-latest/primer.min.js"
-  crossorigin="anonymous"
-></script>
 ```
 
 ## Basic Setup

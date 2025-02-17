@@ -94,24 +94,6 @@ You have complete control over the layout of form elements. Here are some common
 </primer-card-form>
 ```
 
-### Floating Submit Button
-
-```html
-<primer-card-form>
-  <div class="form-with-floating-button">
-    <div class="fields">
-      <!-- Form fields -->
-    </div>
-    <button 
-      type="submit"
-      class="floating-button"
-    >
-      Pay Now
-    </button>
-  </div>
-</primer-card-form>
-```
-
 ## Adding Custom Fields
 
 When adding custom fields, remember they won't be included in the default form submission:

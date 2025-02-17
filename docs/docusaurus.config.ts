@@ -38,10 +38,12 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
+          path: '.',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/primer-io/examples/tree/main/docs/',
+
         },
         blog: false,
         theme: {
@@ -53,22 +55,27 @@ const config: Config = {
 
   themeConfig: {
     // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'My Site',
+      title: 'Primer Components Beta',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'Primer Logo',
         src: 'https://goat-assets.production.core.primer.io/brand/icon/primer.svg',
       },
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          sidebarId: 'documentation',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Documentation',
         },
         {
-          href: 'https://github.com/facebook/docusaurus',
+          type: 'docSidebar',
+          sidebarId: 'api',
+          position: 'left',
+          label: 'API',
+        },
+        {
+          href: 'https://github.com/primer-io/examples',
           label: 'GitHub',
           position: 'right',
         },
@@ -78,25 +85,16 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Tutorial',
-              to: '/docs/intro',
-            },
-          ],
-        },
-        {
           title: 'More',
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/primer-io/examples',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Primer. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,

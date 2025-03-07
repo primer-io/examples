@@ -13,17 +13,31 @@
   --ifm-color-primary-light: #155ca5;
   --ifm-color-primary-lighter: #1661ad;
   --ifm-color-primary-lightest: #196dc3;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
-  --ifm-color-primary: #ffa49b;
-  --ifm-color-primary-dark: #ff7f72;
-  --ifm-color-primary-darker: #ff6c5d;
-  --ifm-color-primary-darkest: #ff3420;
-  --ifm-color-primary-light: #ffc9c4;
-  --ifm-color-primary-lighter: #ffdcd9;
-  --ifm-color-primary-lightest: #ffffff;
+.navbar-beta-item {
+  background-color: #f9d147;
+  color: #000 !important;
+  font-weight: bold;
+  padding: 0.25rem 0.6rem;
+  border-radius: 8px;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+  transition: background-color 0.2s ease;
+}
+
+.navbar-beta-item:hover {
+  background-color: #f0c83d;
+  color: #000 !important;
+}
+
+/* Dark mode keeps the same styling to ensure visibility */
+[data-theme='dark'] .navbar-beta-item {
+  background-color: #f9d147;
+  color: #000 !important;
+}
+
+[data-theme='dark'] .navbar-beta-item:hover {
+  background-color: #f0c83d;
 }

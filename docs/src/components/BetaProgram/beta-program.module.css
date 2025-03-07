@@ -1,0 +1,410 @@
+/**
+ * CSS for the Beta Program page
+ */
+
+.betaPageHeader {
+  padding: 3rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background-color: #fff9e0;
+  border-bottom: 4px solid #f9d147;
+  color: #333;
+}
+
+.betaPageHeader h1 {
+  color: #333;
+  position: relative;
+  display: inline-block;
+}
+
+.betaPageHeader .hero__subtitle {
+  color: #555;
+  max-width: 800px;
+  margin: 1rem auto 0;
+}
+
+@media screen and (max-width: 996px) {
+  .betaPageHeader {
+    padding: 2rem;
+  }
+}
+
+/* In-page navigation */
+.inPageNav {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.navLink {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: rgba(249, 209, 71, 0.2);
+  border-radius: 20px;
+  color: #333;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.navLink:hover {
+  background-color: rgba(249, 209, 71, 0.4);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.codePreview {
+  margin: 3rem auto;
+  max-width: 800px;
+  padding: 0 1rem;
+}
+
+.features {
+  padding: 4rem 0;
+  background-color: var(--ifm-background-surface-color);
+}
+
+.features h3 {
+  margin-bottom: 1rem;
+}
+
+/* Beta Explanation styles */
+.betaExplanation {
+  padding: 4rem 0;
+  background-color: var(--ifm-background-surface-color);
+}
+
+.betaExplanation h2 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.betaExplanationText {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 2.5rem;
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.betaExplanationGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto 2.5rem;
+}
+
+.betaExplanationCard {
+  background-color: var(--ifm-background-surface-color);
+  border-radius: var(--ifm-border-radius);
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.betaExplanationCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.betaExplanationCard h3 {
+  margin-bottom: 1rem;
+  color: var(--ifm-color-primary);
+  font-size: 1.4rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--ifm-color-emphasis-200);
+}
+
+.betaExplanationCard ul {
+  padding-left: 1.5rem;
+  margin-bottom: 0;
+}
+
+.betaExplanationCard li {
+  margin-bottom: 0.8rem;
+  line-height: 1.5;
+}
+
+.betaExplanationFooter {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  padding: 1.5rem;
+  background-color: var(--ifm-color-emphasis-100);
+  border-radius: var(--ifm-border-radius);
+}
+
+@media (max-width: 768px) {
+  .betaExplanationGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .betaExplanationCard {
+    padding: 1.25rem;
+  }
+}
+
+/* Beta section styles */
+.beta {
+  padding: 4rem 0;
+  background-color: #fff9e0;
+  border-top: 1px solid #f9d147;
+  border-bottom: 1px solid #f9d147;
+}
+
+.beta h2 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #866a00;
+}
+
+.betaDescription {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 2.5rem;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.betaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto 2.5rem;
+}
+
+.betaCard {
+  background-color: var(--ifm-background-surface-color);
+  border-radius: var(--ifm-border-radius);
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.betaCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.betaCard h3 {
+  margin-bottom: 1rem;
+  color: var(--ifm-color-primary);
+  font-size: 1.3rem;
+}
+
+.betaCard p {
+  margin-bottom: 0;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.betaNote {
+  text-align: center;
+  margin: 2rem auto 0;
+  padding: 1rem 2rem;
+  background-color: var(--ifm-color-emphasis-200);
+  border-radius: var(--ifm-border-radius);
+  max-width: 800px;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .betaGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .betaCard {
+    padding: 1.25rem;
+  }
+}
+
+/* Progress tracking styles */
+.progress {
+  padding: 4rem 0;
+  background-color: var(--ifm-background-surface-color);
+}
+
+.progress h2 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.progress p {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 2rem;
+}
+
+.progress p.progressNote {
+  margin-top: 1rem;
+}
+
+.progressGrid {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 18% 22% 30% 30%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background-color: var(--ifm-background-surface-color);
+}
+
+@media (max-width: 996px) {
+  .progressGrid {
+    grid-template-columns: 100%;
+    display: block;
+    overflow: auto;
+  }
+
+  .progressRow {
+    display: grid;
+    grid-template-columns: 100%;
+  }
+
+  .progressHeader,
+  .progressCell {
+    border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  }
+
+  .progressHeader:not(:first-child),
+  .progressCell:not(:first-child) {
+    border-top: 1px dashed var(--ifm-color-emphasis-300);
+  }
+}
+
+.progressRow {
+  display: contents;
+}
+
+.progressHeader {
+  background-color: var(--ifm-color-primary);
+  color: white;
+  font-weight: bold;
+  padding: 1rem 1.25rem;
+  font-size: 1.1rem;
+}
+
+.progressCell {
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  transition: background-color 0.2s ease;
+  vertical-align: top;
+}
+
+/* Last row has no bottom border */
+.progressRow:last-child .progressCell {
+  border-bottom: none;
+}
+
+/* Hover effect for rows */
+.progressRow:hover .progressCell {
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+/* Feature cell styling */
+.progressRow .progressCell:first-child {
+  font-weight: 500;
+}
+
+/* Enhanced progress visualization */
+.progressStatus {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.progressBar {
+  height: 8px;
+  width: 100%;
+  background-color: var(--ifm-color-emphasis-300);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Status colors - only for the progress bar fill */
+.statusComplete {
+  background-color: var(--ifm-color-success);
+}
+
+.statusNearlyComplete {
+  background-color: #4caf50;
+}
+
+.statusInProgress {
+  background-color: #2196f3;
+}
+
+.statusEarlyDevelopment {
+  background-color: #ff9800;
+}
+
+.statusPlanned {
+  background-color: #9e9e9e;
+}
+
+/* MDX content styling */
+.mdxContent ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.mdxContent p {
+  margin: 0 0 0.5rem;
+}
+
+.mdxContent p:last-child {
+  margin-bottom: 0;
+}
+
+.mdxContent a {
+  color: var(--ifm-color-primary);
+  text-decoration: underline;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.mdxContent a:hover {
+  color: var(--ifm-color-primary-dark);
+  text-decoration: underline;
+}
+
+.importantNotes {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: rgba(255, 243, 224, 0.5);
+  border-left: 3px solid #ff9800;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.no-content {
+  font-style: italic;
+  color: var(--ifm-color-emphasis-700);
+}

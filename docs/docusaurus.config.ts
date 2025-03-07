@@ -5,13 +5,13 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Primer Components Beta Docs',
+  title: 'Composable Checkout Docs',
   tagline:
     'Shape extraordinary commerce experiences, process payments with precision, and accelerate growth without compromise.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'https://composable-checkout.vercel.app',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -19,10 +19,10 @@ const config: Config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'primer.io', // Usually your GitHub org/user name.
-  projectName: 'primer-components', // Usually your repo name.
+  projectName: 'composable-checkout', // Usually your repo name.
 
-  onBrokenLinks: 'warn',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'throw',
   noIndex: true,
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -38,12 +38,14 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          path: '.',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/primer-io/examples/tree/main/docs/',
-
+          path: 'general-docs',
+          routeBasePath: '',
+        },
+        pages: {
+          path: 'src/pages',
+          routeBasePath: '',
+          include: ['**/*.{js,jsx,ts,tsx,md,mdx}'],
+          mdxPageComponent: '@theme/MDXPage',
         },
         blog: false,
         theme: {
@@ -52,16 +54,34 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
-
+  plugins: [require.resolve('docusaurus-lunr-search')],
   themeConfig: {
-    // Replace with your project's social card
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: true,
+    },
+    announcementBar: {
+      id: 'beta_announcement',
+      content:
+        '🚧 <b>BETA:</b> Composable Checkout is in beta. <a href="/beta-program">Learn what this means</a>.',
+      backgroundColor: '#FFF8E1', // Light yellow background
+      textColor: '#856404', // Darker text for contrast
+      isCloseable: false, // Ensure users always see this notice
+    },
     navbar: {
-      title: 'Primer Components Beta',
+      title: 'Composable Checkout',
       logo: {
         alt: 'Primer Logo',
         src: 'https://goat-assets.production.core.primer.io/brand/icon/primer.svg',
       },
+      hideOnScroll: false,
       items: [
+        {
+          to: '/beta-program',
+          label: 'BETA',
+          position: 'left',
+          className: 'navbar-beta-item',
+        },
         {
           type: 'docSidebar',
           sidebarId: 'documentation',
@@ -75,6 +95,21 @@ const config: Config = {
           label: 'API',
         },
         {
+          href: '/showcase',
+          label: 'Showcase',
+          position: 'left',
+        },
+        {
+          href: '/changelog',
+          label: 'Changelog',
+          position: 'left',
+        },
+        {
+          href: 'https://primer.io/docs/',
+          label: 'Primer Docs',
+          position: 'right',
+        },
+        {
           href: 'https://github.com/primer-io/examples',
           label: 'GitHub',
           position: 'right',
@@ -83,17 +118,6 @@ const config: Config = {
     },
     footer: {
       style: 'dark',
-      links: [
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'GitHub',
-              href: 'https://github.com/primer-io/examples',
-            },
-          ],
-        },
-      ],
       copyright: `Copyright © ${new Date().getFullYear()} Primer. Built with Docusaurus.`,
     },
     prism: {

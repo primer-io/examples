@@ -13,7 +13,7 @@ function HomepageHeader(): ReactNode {
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className='container'>
         <Heading as='h1' className='hero__title'>
-          Primer Web SDK
+          Composable Checkout <span className={styles.betaBadge}>BETA</span>
         </Heading>
         <p className='hero__subtitle'>
           Build powerful, customizable checkout experiences with Web Components
@@ -21,9 +21,15 @@ function HomepageHeader(): ReactNode {
         <div className={styles.buttons}>
           <Link
             className='button button--secondary button--lg'
-            to='/docs/getting-started'
+            to='/documentation/getting-started'
           >
-            Quick Start Guide
+            Getting Started
+          </Link>
+          <Link
+            className='button button--secondary button--lg'
+            to='/beta-program'
+          >
+            About Beta
           </Link>
         </div>
       </div>
@@ -31,60 +37,43 @@ function HomepageHeader(): ReactNode {
   );
 }
 
-function CodePreview(): ReactNode {
-  const codeExample = `<primer-checkout clientToken={token}>
-  <!-- Use our components -->
-  <primer-main>
-    <primer-payment-method type="card" />
-  </primer-main>
-  
-  <!-- Or build your own UI -->
-  <div class="custom-checkout">
-    {paymentMethods.map(method => (
-      <primer-payment-method type={method.type} />
-    ))}
-  </div>
-</primer-checkout>`;
-
+function FeatureOverview(): ReactNode {
   return (
-    <div className={styles.codePreview}>
-      <CodeBlock language='jsx'>{codeExample}</CodeBlock>
-    </div>
-  );
-}
-
-function Features(): ReactNode {
-  return (
-    <section className={styles.features}>
+    <section className={styles.overview}>
       <div className='container'>
+        <div className='row'>
+          <div className='col col--12'>
+            <Heading as='h2' className={styles.overviewTitle}>
+              Why Composable Checkout?
+            </Heading>
+          </div>
+        </div>
         <div className='row'>
           <div className='col col--4'>
             <div className='text--center padding-horiz--md'>
-              <Heading as='h3'>Built with Web Components</Heading>
+              <Heading as='h3'>Web Component Power</Heading>
               <p>
-                Powered by Lit and modern Web Components, our SDK works
-                seamlessly with any framework while maintaining optimal
-                performance and minimal bundle size.
+                Built on modern web standards, our components provide maximum
+                flexibility and performance while maintaining framework
+                independence.
               </p>
             </div>
           </div>
           <div className='col col--4'>
             <div className='text--center padding-horiz--md'>
-              <Heading as='h3'>Total Layout Freedom</Heading>
+              <Heading as='h3'>Complete Design Control</Heading>
               <p>
-                Mix our components with your own HTML structure. Take full
-                control of the UI while we handle the complex payment logic and
-                PCI compliance behind the scenes.
+                Take full control of your checkout experience with a
+                comprehensive design token system and slot-based customization.
               </p>
             </div>
           </div>
           <div className='col col--4'>
             <div className='text--center padding-horiz--md'>
-              <Heading as='h3'>Framework Agnostic</Heading>
+              <Heading as='h3'>PCI Compliant</Heading>
               <p>
-                Native support for React, Vue, Angular, and any other modern
-                framework. No wrappers or adapters needed – just import and
-                start building.
+                Focus on building great experiences while we handle the complex
+                payment logic and security requirements behind the scenes.
               </p>
             </div>
           </div>
@@ -94,36 +83,110 @@ function Features(): ReactNode {
   );
 }
 
-function BetaAccess(): ReactNode {
+function CodeExample(): ReactNode {
+  const codeExample = `<primer-checkout clientToken="your-client-token">
+  <!-- Customizable checkout experience -->
+  <primer-main slot="main">
+    <div slot="payments">
+      <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
+      <primer-payment-method type="APPLE_PAY"></primer-payment-method>
+      <primer-payment-method type="GOOGLE_PAY"></primer-payment-method>
+    </div>
+  </primer-main>
+</primer-checkout>`;
+
   return (
-    <section className={styles.beta}>
+    <div className={styles.codeExample}>
+      <CodeBlock language='jsx'>{codeExample}</CodeBlock>
+    </div>
+  );
+}
+
+function BetaBanner(): ReactNode {
+  return (
+    <section className={styles.betaBanner}>
       <div className='container'>
         <div className='row'>
-          <div className='col col--6'>
-            <Heading as='h2'>Join the Beta Program</Heading>
-            <p>
-              Get early access to our next-generation SDK and help shape the
-              future of checkout experiences. Our beta program includes:
-            </p>
-            <ul>
-              <li>Direct access to our engineering team</li>
-              <li>Early preview of upcoming features</li>
-              <li>Priority support and implementation guidance</li>
-              <li>Influence on our product roadmap</li>
-            </ul>
-            <Link className='button button--primary button--lg'>
-              Request Beta Access
-            </Link>
+          <div className='col'>
+            <div className={styles.betaBannerContent}>
+              <Heading as='h2'>Currently in Beta</Heading>
+              <p>
+                Composable Checkout is in beta development. Join the beta
+                program to get early access, shape the future of the product,
+                and receive direct engineering support.
+              </p>
+              <Link
+                className='button button--primary button--lg'
+                to='/beta-program'
+              >
+                Learn More About the Beta
+              </Link>
+            </div>
           </div>
-          <div className='col col--6'>
-            <div className={styles.betaFeatures}>
-              <Heading as='h3'>Coming Soon</Heading>
-              <ul>
-                <li>Advanced styling and theming API</li>
-                <li>Enhanced payment method components</li>
-                <li>Improved TypeScript support</li>
-                <li>Mobile SDK for iOS and Android</li>
-              </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function GettingStarted(): ReactNode {
+  return (
+    <section className={styles.gettingStarted}>
+      <div className='container'>
+        <div className='row'>
+          <div className='col'>
+            <Heading as='h2'>Getting Started is Simple</Heading>
+            <div className={styles.stepsGrid}>
+              <div className={styles.step}>
+                <div className={styles.stepNumber}>1</div>
+                <Heading as='h3'>Install the SDK</Heading>
+                <p>
+                  Install via NPM or include via CDN to get started with
+                  Composable Checkout.
+                </p>
+                <div className={styles.stepCode}>
+                  <CodeBlock language='bash'>
+                    npm install @primer-io/primer-js
+                  </CodeBlock>
+                </div>
+              </div>
+
+              <div className={styles.step}>
+                <div className={styles.stepNumber}>2</div>
+                <Heading as='h3'>Add Components</Heading>
+                <p>
+                  Add the checkout components to your HTML and customize the
+                  layout to fit your needs.
+                </p>
+                <div className={styles.stepCode}>
+                  <CodeBlock language='html'>{`<primer-checkout client-token="...">
+  <primer-main slot="main"></primer-main>
+</primer-checkout>`}</CodeBlock>
+                </div>
+              </div>
+
+              <div className={styles.step}>
+                <div className={styles.stepNumber}>3</div>
+                <Heading as='h3'>Customize Appearance</Heading>
+                <p>
+                  Use CSS variables to style the components according to your
+                  brand guidelines.
+                </p>
+                <div className={styles.stepCode}>
+                  <CodeBlock language='css'>{`:root {
+  --primer-color-brand: #4a6cf7;
+  --primer-typography-brand: 'Inter', sans-serif;
+}`}</CodeBlock>
+                </div>
+              </div>
+            </div>
+            <div className={styles.getStartedCta}>
+              <Link
+                className='button button--primary button--lg'
+                to='/documentation/getting-started'
+              >
+                View Full Documentation
+              </Link>
             </div>
           </div>
         </div>
@@ -137,14 +200,15 @@ export default function Home(): ReactNode {
 
   return (
     <Layout
-      title='Primer Web SDK Documentation'
-      description="Build customizable, compliant checkout experiences with Primer's Web SDK. Powered by Web Components for maximum flexibility and performance."
+      title='Composable Checkout Documentation'
+      description="Build customizable, compliant checkout experiences with Primer's Composable Checkout. Powered by Web Components for maximum flexibility and performance."
     >
       <HomepageHeader />
       <main>
-        <CodePreview />
-        <Features />
-        <BetaAccess />
+        <FeatureOverview />
+        <CodeExample />
+        <BetaBanner />
+        <GettingStarted />
       </main>
     </Layout>
   );

@@ -31,7 +31,7 @@ Primer Composable Checkout is built on [Web Components](https://developer.mozill
 
 [Shadow DOM](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM) is like a protective bubble around each component that:
 - Keeps component styles from affecting your application
-- Prevents your application styles from breaking components
+- Prevents your application classes from breaking components
 - Enables consistent component appearance across different contexts
 
 ```html
@@ -45,10 +45,16 @@ Primer Composable Checkout is built on [Web Components](https://developer.mozill
 </primer-button>
 ```
 
+### Inheritable Properties
+
+Although css classes won't cascade into the shadow dom, inheritable properties like `color`, `text-align`, and CSS variables, will pierce the shadow dom as usual.
+
+[Why is my Web Component inheriting styles?](https://lamplightdev.com/blog/2019/03/26/why-is-my-web-component-inheriting-styles/)
+
 ### What This Means For You
 
 - **Reliability**: Components maintain their intended appearance
-- **No Style Conflicts**: Your CSS won't accidentally break components
+- **Reduced Style Conflicts**: Your CSS classes won't accidentally break components
 - **Predictable Behavior**: Components work consistently across different style environments
 
 ## CSS Custom Properties: Theming Through Boundaries
@@ -61,7 +67,7 @@ One challenge of Shadow DOM is styling components from the outside. This is wher
 
 ### How CSS Variables Work with Shadow DOM
 
-CSS Variables are unique in their ability to "pierce" through Shadow DOM boundaries, making them ideal for component styling:
+CSS Variables have the ability to "pierce" through Shadow DOM boundaries, making them ideal for component styling:
 
 ```html
 <!-- Define variables in parent document -->

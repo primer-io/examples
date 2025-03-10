@@ -212,13 +212,6 @@ function ShowcaseExamples() {
               real-time feedback. This feature is currently being built and will
               be available soon.
             </p>
-            <div className={styles.disclaimer}>
-              <p>
-                <strong>Coming Soon:</strong> This feature is actively being
-                developed and will provide developers with comprehensive options
-                for card form customization.
-              </p>
-            </div>
             <div className={styles.exampleLinks}>
               <Link
                 className={styles.exampleLink}

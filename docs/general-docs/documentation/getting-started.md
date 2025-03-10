@@ -82,24 +82,10 @@ loadPrimer();
 Create a basic checkout integration by adding the `primer-checkout` component to your page:
 
 ```html
-<primer-checkout
-  client-token="your-client-token"
-  options='{
-    "locale": "en-GB",
-    "card": {
-      "cardholderName": {
-        "required": true
-      }
-    }
-  }'
-></primer-checkout>
+<primer-checkout client-token="your-client-token"></primer-checkout>
 ```
 
-The component requires:
-- `client-token`: Your client session token (kebab-case in HTML attributes)
-- `options`: Configuration options for the checkout as a stringified JSON object
-
-For comprehensive details on all available options, refer to the [Checkout Component API Reference](/api/Components/primer-checkout-doc).
+For comprehensive details on all available attributes, refer to the [Checkout Component API Reference](/api/Components/primer-checkout-doc).
 
 ### Preventing Flash of Undefined Components
 

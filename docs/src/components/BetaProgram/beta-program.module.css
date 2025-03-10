@@ -2,92 +2,126 @@
  * CSS for the Beta Program page
  */
 
+/* Hero Section - Aligned with homepage */
 .betaPageHeader {
-  padding: 3rem 0;
-  text-align: center;
   position: relative;
   overflow: hidden;
-  background-color: #fff9e0;
-  border-bottom: 4px solid #f9d147;
-  color: #333;
+  color: var(--ifm-color-white);
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #2f7bf5 0%, #4456e3 100%);
 }
 
-.betaPageHeader h1 {
-  color: #333;
-  position: relative;
-  display: inline-block;
+.heroBgPattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+  z-index: 0;
 }
 
-.betaPageHeader .hero__subtitle {
-  color: #555;
-  max-width: 800px;
-  margin: 1rem auto 0;
-}
-
-@media screen and (max-width: 996px) {
-  .betaPageHeader {
-    padding: 2rem;
-  }
-}
-
-/* In-page navigation */
-.inPageNav {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.navLink {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  background-color: rgba(249, 209, 71, 0.2);
-  border-radius: 20px;
-  color: #333;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  text-decoration: none;
-}
-
-.navLink:hover {
-  background-color: rgba(249, 209, 71, 0.4);
-  transform: translateY(-2px);
-  text-decoration: none;
-}
-
-.buttons {
+.heroContent {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 2rem;
+  position: relative;
+  z-index: 1;
 }
 
-.codePreview {
-  margin: 3rem auto;
+.heroText {
+  flex: 1;
+  padding-right: 2rem;
+}
+
+.heroTextFull {
+  width: 100%;
   max-width: 800px;
-  padding: 0 1rem;
-}
-
-.features {
-  padding: 4rem 0;
-  background-color: var(--ifm-background-surface-color);
-}
-
-.features h3 {
-  margin-bottom: 1rem;
-}
-
-/* Beta Explanation styles */
-.betaExplanation {
-  padding: 4rem 0;
-  background-color: var(--ifm-background-surface-color);
-}
-
-.betaExplanation h2 {
-  margin-bottom: 1.5rem;
+  margin: 0 auto;
   text-align: center;
-  font-size: 2rem;
+}
+
+.heroTitle {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(90deg, #ffffff, #f0f0f0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.heroSubtitle {
+  font-size: 1.5rem;
+  line-height: 1.4;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.highlight {
+  position: relative;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.highlight::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.2);
+  z-index: -1;
+  border-radius: 4px;
+}
+
+.betaBadge {
+  display: inline-block;
+  background-color: #fff;
+  color: #4456e3;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.2rem 0.7rem;
+  border-radius: 20px;
+  margin-left: 0.7rem;
+  vertical-align: middle;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Section headers - Aligned with homepage */
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.sectionHeader h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: linear-gradient(
+    90deg,
+    var(--ifm-color-primary),
+    var(--ifm-color-primary-dark)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+.sectionHeader p {
+  font-size: 1.2rem;
+  color: var(--ifm-color-emphasis-700);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Beta Explanation Section */
+.betaExplanation {
+  padding: 5rem 0;
+  background-color: var(--ifm-background-surface-color);
 }
 
 .betaExplanationText {
@@ -96,6 +130,7 @@
   margin: 0 auto 2.5rem;
   font-size: 1.2rem;
   line-height: 1.6;
+  color: var(--ifm-color-emphasis-800);
 }
 
 .betaExplanationGrid {
@@ -107,27 +142,27 @@
 }
 
 .betaExplanationCard {
-  background-color: var(--ifm-background-surface-color);
-  border-radius: var(--ifm-border-radius);
+  background-color: var(--ifm-color-white);
+  border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  border: 1px solid var(--ifm-color-emphasis-200);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .betaExplanationCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
 
 .betaExplanationCard h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
   margin-bottom: 1rem;
-  color: var(--ifm-color-primary);
-  font-size: 1.4rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--ifm-color-emphasis-200);
 }
 
 .betaExplanationCard ul {
@@ -138,6 +173,7 @@
 .betaExplanationCard li {
   margin-bottom: 0.8rem;
   line-height: 1.5;
+  color: var(--ifm-color-emphasis-800);
 }
 
 .betaExplanationFooter {
@@ -147,39 +183,42 @@
   font-size: 1.1rem;
   padding: 1.5rem;
   background-color: var(--ifm-color-emphasis-100);
-  border-radius: var(--ifm-border-radius);
+  border-radius: 12px;
+  color: var(--ifm-color-emphasis-800);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-@media (max-width: 768px) {
-  .betaExplanationGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .betaExplanationCard {
-    padding: 1.25rem;
-  }
-}
-
-/* Beta section styles */
-.beta {
-  padding: 4rem 0;
-  background-color: #fff9e0;
-  border-top: 1px solid #f9d147;
-  border-bottom: 1px solid #f9d147;
-}
-
-.beta h2 {
+/* Icon styling for cards */
+.cardIcon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(
+    135deg,
+    var(--ifm-color-primary-lightest),
+    var(--ifm-color-primary)
+  );
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 1.5rem;
-  text-align: center;
-  color: #866a00;
+  font-size: 2rem;
+  color: white;
+}
+
+/* Beta Access Section */
+.beta {
+  padding: 5rem 0;
+  background-color: var(--ifm-color-emphasis-100);
 }
 
 .betaDescription {
   text-align: center;
   max-width: 800px;
   margin: 0 auto 2.5rem;
-  font-size: 1.1rem;
-  color: #333;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: var(--ifm-color-emphasis-800);
 }
 
 .betaGrid {
@@ -191,220 +230,121 @@
 }
 
 .betaCard {
-  background-color: var(--ifm-background-surface-color);
-  border-radius: var(--ifm-border-radius);
-  padding: 1.5rem 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background-color: var(--ifm-color-white);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .betaCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
 
 .betaCard h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
   margin-bottom: 1rem;
-  color: var(--ifm-color-primary);
-  font-size: 1.3rem;
 }
 
 .betaCard p {
+  color: var(--ifm-color-emphasis-700);
   margin-bottom: 0;
   font-size: 1.05rem;
   line-height: 1.5;
 }
 
-.betaNote {
-  text-align: center;
-  margin: 2rem auto 0;
-  padding: 1rem 2rem;
-  background-color: var(--ifm-color-emphasis-200);
-  border-radius: var(--ifm-border-radius);
+/* Beta Callout - Styled like homepage */
+.betaCalloutContent {
   max-width: 800px;
-  font-size: 1rem;
+  margin: 2rem auto 0;
+  padding: 3rem;
+  background-color: #fff9e0;
+  border-radius: 16px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
 }
 
-@media (max-width: 768px) {
+.betaBanner {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #f9d147;
+  color: #000;
+  font-weight: 700;
+  padding: 0.4rem 2rem;
+  border-radius: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.betaCalloutContent p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #866a00;
+  margin-bottom: 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0.5rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 996px) {
+  .heroContent {
+    flex-direction: column;
+  }
+
+  .heroText {
+    padding-right: 0;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1.2rem;
+  }
+
+  .betaExplanationGrid,
   .betaGrid {
     grid-template-columns: 1fr;
   }
 
+  .sectionHeader h2 {
+    font-size: 2rem;
+  }
+
+  .betaCalloutContent {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .betaPageHeader {
+    padding: 3rem 1.5rem;
+  }
+
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1rem;
+  }
+
+  .betaExplanationCard,
   .betaCard {
-    padding: 1.25rem;
+    padding: 1.5rem;
   }
-}
-
-/* Progress tracking styles */
-.progress {
-  padding: 4rem 0;
-  background-color: var(--ifm-background-surface-color);
-}
-
-.progress h2 {
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-.progress p {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto 2rem;
-}
-
-.progress p.progressNote {
-  margin-top: 1rem;
-}
-
-.progressGrid {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 18% 22% 30% 30%;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  background-color: var(--ifm-background-surface-color);
-}
-
-@media (max-width: 996px) {
-  .progressGrid {
-    grid-template-columns: 100%;
-    display: block;
-    overflow: auto;
-  }
-
-  .progressRow {
-    display: grid;
-    grid-template-columns: 100%;
-  }
-
-  .progressHeader,
-  .progressCell {
-    border-bottom: 1px solid var(--ifm-color-emphasis-200);
-  }
-
-  .progressHeader:not(:first-child),
-  .progressCell:not(:first-child) {
-    border-top: 1px dashed var(--ifm-color-emphasis-300);
-  }
-}
-
-.progressRow {
-  display: contents;
-}
-
-.progressHeader {
-  background-color: var(--ifm-color-primary);
-  color: white;
-  font-weight: bold;
-  padding: 1rem 1.25rem;
-  font-size: 1.1rem;
-}
-
-.progressCell {
-  padding: 0.9rem 1.25rem;
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
-  transition: background-color 0.2s ease;
-  vertical-align: top;
-}
-
-/* Last row has no bottom border */
-.progressRow:last-child .progressCell {
-  border-bottom: none;
-}
-
-/* Hover effect for rows */
-.progressRow:hover .progressCell {
-  background-color: var(--ifm-color-emphasis-100);
-}
-
-/* Feature cell styling */
-.progressRow .progressCell:first-child {
-  font-weight: 500;
-}
-
-/* Enhanced progress visualization */
-.progressStatus {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.progressBar {
-  height: 8px;
-  width: 100%;
-  background-color: var(--ifm-color-emphasis-300);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.progressBarFill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 0.3s ease;
-}
-
-/* Status colors - only for the progress bar fill */
-.statusComplete {
-  background-color: var(--ifm-color-success);
-}
-
-.statusNearlyComplete {
-  background-color: #4caf50;
-}
-
-.statusInProgress {
-  background-color: #2196f3;
-}
-
-.statusEarlyDevelopment {
-  background-color: #ff9800;
-}
-
-.statusPlanned {
-  background-color: #9e9e9e;
-}
-
-/* MDX content styling */
-.mdxContent ul {
-  margin: 0;
-  padding-left: 1.25rem;
-}
-
-.mdxContent p {
-  margin: 0 0 0.5rem;
-}
-
-.mdxContent p:last-child {
-  margin-bottom: 0;
-}
-
-.mdxContent a {
-  color: var(--ifm-color-primary);
-  text-decoration: underline;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-.mdxContent a:hover {
-  color: var(--ifm-color-primary-dark);
-  text-decoration: underline;
-}
-
-.importantNotes {
-  margin-top: 1rem;
-  padding: 0.75rem;
-  background-color: rgba(255, 243, 224, 0.5);
-  border-left: 3px solid #ff9800;
-  border-radius: 4px;
-  font-size: 0.9rem;
-}
-
-.no-content {
-  font-style: italic;
-  color: var(--ifm-color-emphasis-700);
 }

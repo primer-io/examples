@@ -2850,6 +2850,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@iconify/react@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "@iconify/react@npm:5.2.0"
+  dependencies:
+    "@iconify/types": "npm:^2.0.0"
+  peerDependencies:
+    react: ">=16"
+  checksum: 10/f73205b5956c365391cf0a8f734d6fdbdac2ff187c7aade19bc7262d8acf0a4ddc76ca883a5e73c505baf42e5720b6c588064667ba69d78de4f42869d944c29c
+  languageName: node
+  linkType: hard
+
+"@iconify/types@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@iconify/types@npm:2.0.0"
+  checksum: 10/1b3425ecbc0eef44f23d3f27355ae7ef306d5119c566f013ef1849995b016e1fdcc5af6b74c3bc0554485d70cf5179cb9c1095b14d662a55abcae1148e1a13c9
+  languageName: node
+  linkType: hard
+
 "@isaacs/fs-minipass@npm:^4.0.0":
   version: 4.0.1
   resolution: "@isaacs/fs-minipass@npm:4.0.1"
@@ -5230,6 +5248,7 @@ __metadata:
     "@docusaurus/preset-classic": "npm:3.7.0"
     "@docusaurus/tsconfig": "npm:3.7.0"
     "@docusaurus/types": "npm:3.7.0"
+    "@iconify/react": "npm:^5.2.0"
     "@mdx-js/react": "npm:3.1.0"
     clsx: "npm:2.1.1"
     prism-react-renderer: "npm:2.4.1"

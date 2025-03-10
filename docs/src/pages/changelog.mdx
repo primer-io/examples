@@ -1,8 +1,46 @@
 ---
 title: Changelog
-description: Coming soon
+description: Track the evolution of Composable Checkout through our version history
+sidebar_position: 99
 ---
 
+# Changelog
 
+This page documents all notable changes to Composable Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
-Coming soon
+## v0.0.2 - Initial Composable Checkout Release
+
+This major release marks the first public beta of the Composable Checkout library, introducing our core components and functionality.
+
+### Features
+
+- **Composable Card Form** with layout customizations and interactive validation
+- **Payment Method Support**:
+- Initial beta release for PayPal support
+- Apple Pay support
+- Google Pay support
+- **Localization Support**: Translations for all locales currently supported in SDK v2
+- **State Management**: Event dispatching and state handling across components
+- **Styling API**: Comprehensive CSS variables system for customizing the checkout appearance
+
+### Components
+
+- `<primer-checkout>`: Main container for all checkout components, handles SDK initialization
+- `<primer-main>`: Optional container for organizing payment methods and checkout states
+- `<primer-payment-method>`: Renders different payment method interfaces based on configuration
+- `<primer-card-form>`: Container for card input components with validation
+- `<primer-input-card-number>`: Secure input for card numbers with network detection
+- `<primer-input-card-expiry>`: Secure input for card expiration dates
+- `<primer-input-cvv>`: Secure input for card verification codes
+- `<primer-input-card-holder-name>`: Input for cardholder name
+- `<primer-card-form-submit>`: Submit button component for card forms
+- `<primer-button>`: Versatile button component for actions
+- `<primer-input>`: Base input component for text and other data
+- `<primer-input-label>`: Label component for form inputs
+- `<primer-input-error>`: Error message component with validation state
+- `<primer-input-wrapper>`: Container component for input, label and error elements
+
+## v0.0.1 - Initial Package Release
+
+- Initial NPM package setup
+- Empty release to reserve package name

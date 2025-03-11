@@ -5,21 +5,9 @@
 
 /* Hero Section */
 .heroBanner {
-  position: relative;
-  overflow: hidden;
   color: var(--ifm-color-white);
   padding: 4rem 0;
   background: linear-gradient(135deg, #2f7bf5 0%, #4456e3 100%);
-}
-
-.heroBgPattern {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  opacity: 0.1;
-  z-index: 0;
 }
 
 .heroContent {
@@ -47,7 +35,7 @@
 }
 
 .heroTitle {
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-weight: 800;
   letter-spacing: -0.5px;
   margin-bottom: 1.5rem;
@@ -89,7 +77,6 @@
 }
 
 .betaBadge {
-  display: inline-block;
   background-color: #fff;
   color: #4456e3;
   font-size: 0.9rem;

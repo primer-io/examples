@@ -8,7 +8,14 @@ sidebar_position: 99
 
 This page documents all notable changes to Composable Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
-## v0.0.2 - Initial Composable Checkout Release
+## v0.0.3 - TypeScript Types Bundling Fixes and NativePayments Buttons Height Fixes (11-Mar-2025)
+
+### Fixes
+
+- Fixed the bundling issue with TypeScript types, which were not generated correctly.
+- Applied small fixes to Apple Pay and Google Pay buttons to ensure they adjust their height based on stack configuration.
+
+## v0.0.2 - Initial Composable Checkout Release (07-Mar-2025)
 
 This major release marks the first public beta of the Composable Checkout library, introducing our core components and functionality.
 
@@ -16,9 +23,9 @@ This major release marks the first public beta of the Composable Checkout librar
 
 - **Composable Card Form** with layout customizations and interactive validation
 - **Payment Method Support**:
-- Initial beta release for PayPal support
-- Apple Pay support
-- Google Pay support
+  - Initial beta release for PayPal support
+  - Apple Pay support
+  - Google Pay support
 - **Localization Support**: Translations for all locales currently supported in SDK v2
 - **State Management**: Event dispatching and state handling across components
 - **Styling API**: Comprehensive CSS variables system for customizing the checkout appearance
@@ -44,3 +51,4 @@ This major release marks the first public beta of the Composable Checkout librar
 
 - Initial NPM package setup
 - Empty release to reserve package name
+

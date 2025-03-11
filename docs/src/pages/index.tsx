@@ -17,7 +17,7 @@ function HomepageHeader() {
         <div className={styles.heroContent}>
           <div className={styles.heroText}>
             <Heading as='h1' className={styles.heroTitle}>
-              Composable Checkout{' '}
+              Composable Checkout&nbsp;
               <Link to='/beta-program' className={styles.betaBadge}>
                 BETA
               </Link>

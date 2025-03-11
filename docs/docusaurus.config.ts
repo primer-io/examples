@@ -71,8 +71,11 @@ const config: Config = {
     navbar: {
       title: 'Composable Checkout',
       logo: {
-        alt: 'Primer Logo',
-        src: 'https://goat-assets.production.core.primer.io/brand/icon/primer.svg',
+        alt: 'Composable Checkout Logo',
+        src: '/img/composable_checkout_logo.svg',
+        style: {
+          color: '#FFA49B',
+        },
       },
       hideOnScroll: false,
       items: [

@@ -23,11 +23,11 @@ Welcome to Primer's Composable Checkout SDK! This guide will help you integrate 
 
 Before diving into the implementation, ensure your environment meets these requirements:
 
-| Requirement | Details |
-|------------|---------|
-| **Node.js** | Current LTS version recommended |
-| **Browsers** | Modern browsers (Chrome, Firefox, Safari, Edge) |
-| **Not Supported** | Internet Explorer 11, Classic Edge (legacy) |
+| Requirement       | Details                                         |
+|-------------------|-------------------------------------------------|
+| **Node.js**       | Current LTS version recommended                 |
+| **Browsers**      | Modern browsers (Chrome, Firefox, Safari, Edge) |
+| **Not Supported** | Internet Explorer 11, Classic Edge (legacy)     |
 
 :::note Why some browsers aren't supported
 Legacy browsers like Internet Explorer 11 aren't officially supported due to their non-standard DOM behavior and lack of support for modern Web Component features.
@@ -86,18 +86,6 @@ Create a basic checkout integration by adding the `primer-checkout` component to
 ```
 
 For comprehensive details on all available attributes, refer to the [Checkout Component API Reference](/api/Components/primer-checkout-doc).
-
-### Preventing Flash of Undefined Components
-
-To prevent any "flash" where custom code appears before Primer's components are ready, you can add CSS like this:
-
-```css
-primer-checkout:has(:not(:defined)) {
-  visibility: hidden;
-}
-```
-
-For smooth transitions, you can use advanced techniques like `customElements.whenDefined()`. See here for more details.
 
 ## Adding Styles
 
@@ -170,13 +158,15 @@ import { CustomElements } from '@primer-io/primer-js/dist/jsx/index';
 // Libraries will often have their own module names,
 // you will need to use when extending the IntrinsicElements interface. 
 // For example, Preact requires you to use the "preact"
-declare module react {
- {
+declare module "my-app" {
   namespace JSX {
     interface IntrinsicElements extends CustomElements {}
   }
 }
 ```
+:::note
+Libraries will often have their own module names you will need to use when extending the IntrinsicElements interface. For example, Preact requires you to use the "preact" module name instead of "my-app" (declare module "preact") and StencilJS uses "@stencil/core" (declare module "@stencil/core").
+:::
 
 ## Event Handling
 
@@ -240,6 +230,18 @@ The SDK provides flexible options for customizing your checkout experience. You 
 ```
 
 For more advanced customization options, including handling success and failure states, checkout flow customization, and more, refer to the [Layout Customizations Guide](/documentation/layout-customizations-guide).
+
+### Preventing Flash of Undefined Components
+
+To prevent any "flash" where custom code appears before Primer's components are ready, you can add CSS like this:
+
+```css
+primer-checkout:has(:not(:defined)) {
+  visibility: hidden;
+}
+```
+
+For smooth transitions, you can use advanced techniques like `customElements.whenDefined()`.
 
 ## Technical Limitations
 

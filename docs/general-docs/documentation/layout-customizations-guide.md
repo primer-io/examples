@@ -244,6 +244,37 @@ When styling custom layouts, use CSS custom properties for consistency:
 
 Using these properties ensures your custom layout maintains visual consistency with the checkout components.
 
+## Handling Flash of Undefined Components
+
+When using slot-based customizations, you might encounter a brief "flash" where your custom content appears before the Primer components are fully initialized. This occurs because web components are registered with JavaScript, which may load after your HTML is rendered.
+
+This is particularly noticeable when:
+- You've added custom UI in slots
+- The page loads and shows your custom content
+- The components initialize and potentially hide or rearrange your content
+
+To prevent this jarring visual experience, you can hide the components until they're fully defined:
+
+```css
+primer-checkout:has(:not(:defined)) {
+  visibility: hidden;
+}
+```
+
+This CSS rule hides the checkout container when it contains any undefined custom elements. Once all components are defined, the container becomes visible automatically. Using `visibility: hidden` instead of `display: none` preserves the layout space to minimize shifting when components appear.
+
+For more complex implementations, you could also use JavaScript to detect when all components are ready:
+
+```javascript
+Promise.allSettled([
+  customElements.whenDefined('primer-checkout'),
+  customElements.whenDefined('primer-payment-method'),
+  // Add other components you're using
+]).then(() => {
+  document.querySelector('.checkout-container').classList.add('ready');
+});
+```
+
 ## Best Practices for Layout Customization
 
 1. **Use Named Slots Correctly** - Always use the correct slot names to ensure content appears where expected
@@ -251,6 +282,7 @@ Using these properties ensures your custom layout maintains visual consistency w
 3. **Maintain Visual Consistency** - Use CSS custom properties for styling
 4. **Design Responsively** - Ensure your layout works on all device sizes
 5. **Test Thoroughly** - Validate behavior across different payment methods and scenarios
+6. **Prevent Component Flash** - Use CSS or JavaScript techniques to hide content until components are defined
 
 For detailed information on available components and their slots, refer to the component API documentation:
 - [Checkout Component](/api/Components/primer-checkout-doc/)

@@ -51,7 +51,7 @@ function ShowcaseExamples() {
             </p>
             <div className={styles.exampleLinks}>
               <Link
-                to='https://stackblitz.com/edit/primer-checkout-without-frameworks'
+                to='https://stackblitz.com/edit/primer-checkout-without-frameworks?file=index.htmls'
                 className={styles.exampleLink}
                 target='_blank'
                 rel='noopener noreferrer'
@@ -64,7 +64,7 @@ function ShowcaseExamples() {
           <div className={styles.exampleMedia}>
             <div className={styles.embedWrapper}>
               <iframe
-                src='https://stackblitz.com/edit/primer-checkout-without-frameworks?ctl=1&embed=1&file=index.html&view=preview'
+                src='https://stackblitz.com/edit/primer-checkout-without-frameworks?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
                 title='Basic Checkout Implementation'
                 className={styles.embedFrame}
                 loading='lazy'
@@ -72,7 +72,6 @@ function ShowcaseExamples() {
             </div>
           </div>
         </div>
-
         {/* Custom Styled Checkout */}
         <div className={styles.showcaseExample}>
           <div className={styles.exampleContent}>
@@ -97,15 +96,18 @@ function ShowcaseExamples() {
             <div className={styles.disclaimer}>
               <p>
                 <strong>Note:</strong> This is a beta implementation, and some
-                features may not work as expected. Native Payment Methods like
-                PayPal, Apple Pay, and Google Pay will not work with a dynamic
-                theme switcher like this—stylesheets must be preloaded for these
-                payment methods to display properly.
+                features may not work as expected. Additionally, native payment
+                method buttons such as PayPal, Apple Pay, and Google Pay have
+                strict styling limitations. Only the height can be adjusted, and
+                other customizations—such as border radius, colors, or
+                shadows—will not affect their visual appearance. Keep this in
+                mind when applying styles, as these payment methods enforce
+                specific design guidelines.
               </p>
             </div>
             <div className={styles.exampleLinks}>
               <Link
-                to='https://stackblitz.com/edit/custom-styled-checkout'
+                to='https://stackblitz.com/edit/primer-checkout-without-frameworks-yhbluksu?file=index.html'
                 className={styles.exampleLink}
                 target='_blank'
                 rel='noopener noreferrer'
@@ -118,7 +120,7 @@ function ShowcaseExamples() {
           <div className={styles.exampleMedia}>
             <div className={styles.embedWrapper}>
               <iframe
-                src='https://stackblitz.com/edit/primer-checkout-without-frameworks-yhbluksu?ctl=1&embed=1&file=src%2Fstyles.css&view=preview'
+                src='https://stackblitz.com/edit/primer-checkout-without-frameworks-yhbluksu?ctl=1&embed=1&file=.vscode%2Fsnippets.json&hideExplorer=1&hideNavigation=1&view=preview'
                 title='Custom-Styled Checkout Example'
                 className={styles.embedFrame}
                 loading='lazy'
@@ -126,122 +128,83 @@ function ShowcaseExamples() {
             </div>
           </div>
         </div>
-
-        {/* Custom Layout Implementation (WIP) */}
         <div className={styles.showcaseExample}>
           <div className={styles.exampleContent}>
             <Heading as='h2' className={styles.exampleTitle}>
-              Custom Layout Implementation{' '}
-              <Icon
-                icon='mdi:construction'
-                style={{
-                  verticalAlign: 'middle',
-                  marginLeft: '8px',
-                  color: '#FFA000',
-                }}
-              />
+              Custom Layout Implementation
             </Heading>
             <p className={styles.exampleDescription}>
-              <strong>Work in Progress:</strong> This upcoming showcase will
-              demonstrate how to create a fully customized checkout layout using
-              the flexibility of Composable Checkout. It uses slots to
-              reorganize the payment methods and add custom content sections.
+              This showcase demonstrates how to create a fully customized
+              checkout layout using Composable Checkout. You'll learn how to use
+              slots to reorganize payment methods, prioritize specific payment
+              options, and add custom styling.
             </p>
+
             <p className={styles.exampleDescription}>
-              By leveraging the slot-based architecture, you'll be able to
-              create unique checkout experiences while maintaining the core
-              functionality and security features of the Primer SDK. This
-              feature is currently under development.
+              The example will show how to place card payments at the top,
+              highlight PayPal with custom styling, and organize additional
+              payment methods in a clean grid layout - all while maintaining the
+              core functionality and security of Primer's SDK.
             </p>
             <div className={styles.exampleLinks}>
               <Link
+                to='https://stackblitz.com/edit/resct-no-wrappers?file=index.html'
                 className={styles.exampleLink}
-                style={{ opacity: 0.6, cursor: 'not-allowed' }}
-                onClick={(e) => e.preventDefault()}
+                target='_blank'
+                rel='noopener noreferrer'
               >
-                <Icon
-                  icon='mdi:page-layout-body'
-                  className={styles.exampleLinkIcon}
-                />
-                Coming Soon
+                <Icon icon='mdi:brush' className={styles.exampleLinkIcon} />
+                View on StackBlitz
               </Link>
             </div>
           </div>
           <div className={styles.exampleMedia}>
-            <div
-              className={styles.imageWrapper}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#f5f5f5',
-                height: '100%',
-                minHeight: '400px',
-              }}
-            >
-              <Icon
-                icon='mdi:page-layout-body'
-                style={{ fontSize: '120px', color: '#ccc' }}
-              />
+            <div className={styles.embedWrapper}>
+              <iframe
+                src='https://stackblitz.com/edit/resct-no-wrappers?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
+                title='Custom-Styled Checkout Example'
+                className={styles.embedFrame}
+                loading='lazy'
+              ></iframe>
             </div>
           </div>
         </div>
-
-        {/* Card Form Customizations (WIP) */}
         <div className={styles.showcaseExample}>
           <div className={styles.exampleContent}>
             <Heading as='h2' className={styles.exampleTitle}>
-              Card Form Customizations{' '}
-              <Icon
-                icon='mdi:construction'
-                style={{
-                  verticalAlign: 'middle',
-                  marginLeft: '8px',
-                  color: '#FFA000',
-                }}
-              />
+              Custom Card Form Layout
             </Heading>
             <p className={styles.exampleDescription}>
-              <strong>Work in Progress:</strong> This upcoming example will
-              showcase various ways to customize card form layouts to match your
-              branding and UX requirements.
+              See how to create a unique payment form layout with card number
+              and CVV on the same line, making efficient use of space while
+              maintaining a clean user experience.
             </p>
             <p className={styles.exampleDescription}>
-              You'll learn how to modify field arrangements, style card inputs
-              to match your brand design, and configure validations with
-              real-time feedback. This feature is currently being built and will
-              be available soon.
+              This example demonstrates a two-column checkout design with an
+              order summary sidebar, interactive discount code functionality,
+              and custom styling—all while leveraging Primer's secure card form
+              components.
             </p>
             <div className={styles.exampleLinks}>
               <Link
+                to='https://stackblitz.com/edit/resct-no-wrappers-txnkzptg?file=index.html'
                 className={styles.exampleLink}
-                style={{ opacity: 0.6, cursor: 'not-allowed' }}
-                onClick={(e) => e.preventDefault()}
+                target='_blank'
+                rel='noopener noreferrer'
               >
-                <Icon
-                  icon='mdi:credit-card-outline'
-                  className={styles.exampleLinkIcon}
-                />
-                Coming Soon
+                <Icon icon='mdi:brush' className={styles.exampleLinkIcon} />
+                View on StackBlitz
               </Link>
             </div>
           </div>
           <div className={styles.exampleMedia}>
-            <div
-              className={styles.imageWrapper}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#f5f5f5',
-                height: '100%',
-                minHeight: '400px',
-              }}
-            >
-              <Icon
-                icon='mdi:credit-card-outline'
-                style={{ fontSize: '120px', color: '#ccc' }}
-              />
+            <div className={styles.embedWrapper}>
+              <iframe
+                src='https://stackblitz.com/edit/resct-no-wrappers-txnkzptg?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
+                title='Custom Card Form Layout Example'
+                className={styles.embedFrame}
+                loading='lazy'
+              ></iframe>
             </div>
           </div>
         </div>

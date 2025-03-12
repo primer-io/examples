@@ -10,6 +10,24 @@ slug: /components/card-form/input-cvv
 
 The CVV Input component provides a secure, PCI-compliant field for collecting payment card security codes (CVV/CVC). It integrates with the card form validation system and maintains a consistent user experience.
 
+```mermaid
+flowchart TD
+    A[primer-input-cvv] --> B[Secure Iframe Input]
+    A --> C[Validation Integration]
+    A --> D[Focus Management]
+    B --> E[PCI-Compliant Entry]
+    C --> F[Error Handling]
+    D --> G[Visual State Updates]
+    
+    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style D fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style E fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style F fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style G fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+```
+
 This component extends the `AbstractCardInputComponent` class and uses a secure iframe-based input for PCI compliance.
 
 ## Usage
@@ -28,15 +46,37 @@ The CVV Input component must be used within a `primer-card-form` container:
 |---------------|---------------|----------|---------|----------------------------------------|
 | `label`       | `label`       | `string` | "CVV"   | The label displayed above the input    |
 | `placeholder` | `placeholder` | `string` | "123"   | Placeholder text shown when input is empty |
-| `ariaLabel`   | `aria-label`  | `string` | "CVV"   | Accessibility label for screen readers |
+| ``   | `aria-label`  | `string` | "CVV"   | Accessibility label for screen readers |
 
 ### Property Behavior
 
+<div class="property-behavior">
+
 - **`label`**: If not explicitly set, uses the localized default value ("CVV"). If set to an empty string `""`, reverts to the default.
 - **`placeholder`**: If not explicitly set, uses the default value ("123"). When explicitly set to an empty string `""`, no placeholder will be displayed.
-- **`ariaLabel`**: If not explicitly set, uses the value of `label`. If explicitly set to an empty string `""`, reverts to using the `label` value.
+- **`aria-label`**: If not explicitly set, uses the value of `label`. If explicitly set to an empty string `""`, reverts to using the `label` value.
+
+</div>
 
 ## Technical Implementation
+
+```mermaid
+sequenceDiagram
+    participant CVV as primer-input-cvv
+    participant Context as Card Form Context
+    participant Wrapper as primer-input-wrapper
+    
+    Note over CVV: Component initialization
+    CVV->>Context: Connect to context
+    Context->>CVV: Provide hosted input
+    
+    Note over CVV: Input focus
+    CVV->>Wrapper: Update focus state
+    
+    Note over CVV: Validation
+    Context->>CVV: Validation state changes
+    CVV->>CVV: Display error if needed
+```
 
 The CVV Input component:
 
@@ -64,7 +104,14 @@ The component renders the following DOM structure:
 
 ## Examples
 
-### Basic Usage
+<div class="tabs-container">
+<div class="tabs">
+<div class="tab basic active">Basic Usage</div>
+<div class="tab custom">Custom Labels</div>
+<div class="tab inline">Inline with Expiry</div>
+</div>
+
+<div class="tab-content basic active">
 
 ```html
 <primer-card-form>
@@ -72,7 +119,9 @@ The component renders the following DOM structure:
 </primer-card-form>
 ```
 
-### Custom Labels and Placeholder
+</div>
+
+<div class="tab-content custom">
 
 ```html
 <primer-card-form>
@@ -84,7 +133,9 @@ The component renders the following DOM structure:
 </primer-card-form>
 ```
 
-### Inline with Expiry Date
+</div>
+
+<div class="tab-content inline">
 
 ```html
 <primer-card-form>
@@ -99,11 +150,22 @@ The component renders the following DOM structure:
 </primer-card-form>
 ```
 
-## Notes
+</div>
+</div>
 
+## Key Considerations
+
+:::info Component Dependencies
 - The CVV Input component must be placed inside a `primer-card-form` component
+- For best UI experience, consider pairing this component with `primer-input-card-expiry` in a flex layout
+  :::
+
+:::tip Implementation Details
 - Input validation happens automatically when the form is submitted
 - Validation errors are displayed below the input field when they occur
-- For best UI experience, consider pairing this component with `primer-input-card-expiry` in a flex layout
 - The component handles focus events internally to update the wrapper's visual state
-- The CVV input is rendered in a secure iframe to prevent exposure of sensitive payment details
+  :::
+
+:::caution Security Note
+The CVV input is rendered in a secure iframe to prevent exposure of sensitive payment details, ensuring PCI compliance
+:::

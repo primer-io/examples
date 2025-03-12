@@ -10,6 +10,87 @@ description: The CardForm component provides a container for card input componen
 
 The `CardForm` component serves as a container for card input components. It handles payment card form submission, validation, and provides context to child components through a context provider system.
 
+```mermaid
+flowchart TD
+    A[primer-card-form] --> B[Context Provider]
+    A --> C[Form Submission]
+    A --> D[Validation]
+    B --> E[Hosted Inputs]
+    B --> F[Child Components]
+    C --> G[Multiple Submission Methods]
+    D --> H[Validation Rules]
+    
+    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style D fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style E fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style F fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style G fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style H fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+```
+
+## Component Architecture
+
+The Card Form component functions as both a container and a context provider. It manages the following:
+
+1. **Context Provision**: Creates and provides a context that contains:
+    - Secure hosted input elements for card data
+    - Validation state management
+    - Form state information
+    - Submission handlers
+
+2. **Form Management**: Handles HTML form creation, submission events, and validation flows
+
+3. **Component Orchestration**: Coordinates all card input components to work together seamlessly
+
+4. **Layout Options**: Provides both default and customizable layouts through the slot system
+
+## Component Hierarchy
+
+The Card Form component has a specific relationship with its child components:
+
+```mermaid
+flowchart TD
+    A[primer-card-form] --> B[Container]
+    A --> C[Context Provider]
+    
+    B --> D[primer-input-card-number]
+    B --> E[primer-input-card-expiry]
+    B --> F[primer-input-cvv]
+    B --> G[primer-input-card-holder-name]
+    B --> H[primer-card-form-submit]
+    
+    C --> I[Provides context to all child components]
+    I --> D & E & F & G
+    
+    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style D fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style E fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style F fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style G fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style H fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+```
+
+The relationship is structured as follows:
+
+1. **Parent-Child Relationship**: All card input components must be children of the `primer-card-form`, either:
+    - Through the default layout (when no custom content is provided)
+    - Through custom content in the `card-form-content` slot
+
+2. **Context-Consumer Relationship**: All card input components consume the context provided by `primer-card-form`:
+    - Input fields receive hosted input instances
+    - Components receive validation state
+    - Components can update shared card form data
+
+3. **Coordination Role**: The card form coordinates all aspects of the payment form, including:
+    - Creation of secure input fields
+    - Validation of card data
+    - Submission to payment processors
+    - Error handling and reporting
+
 ## Technical Implementation
 
 The Card Form component:
@@ -24,10 +105,13 @@ The Card Form component:
 
 The CardForm component can be used in two ways:
 
-1. **Default Layout**: The component provides a default layout with standard card input fields
-2. **Custom Layout**: You can provide your own layout using the `card-form-content` slot
+<div class="tabs-container">
+<div class="tabs">
+<div class="tab default active">Default Layout</div>
+<div class="tab custom">Custom Layout</div>
+</div>
 
-### Basic Usage (Default Layout)
+<div class="tab-content default active">
 
 ```html
 <primer-card-form></primer-card-form>
@@ -40,7 +124,9 @@ This renders a complete card form with:
 - Cardholder name input
 - Submit button
 
-### Custom Layout
+</div>
+
+<div class="tab-content custom">
 
 ```html
 <primer-card-form>
@@ -56,7 +142,28 @@ This renders a complete card form with:
 </primer-card-form>
 ```
 
+</div>
+</div>
+
 ## DOM Structure
+
+```mermaid
+flowchart TD
+    A[primer-card-form] -->|Default Content| B[form]
+    A -->|Custom Content| C["Your slotted content<br>(replaces default)"]
+    B --> D[div.card-form]
+    D --> E[primer-input-card-number]
+    D --> F[div.card-form-row]
+    F --> G[primer-input-card-expiry]
+    F --> H[primer-input-cvv]
+    D --> I[primer-input-card-holder-name]
+    B --> J[primer-card-form-submit]
+    
+    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style B fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style C fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+    style D fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+```
 
 When no custom content is provided, the component renders the following DOM structure:
 
@@ -91,37 +198,69 @@ With custom content, your slotted content replaces the default structure.
 
 ## Form Submission
 
-The CardForm component handles form submission automatically. You can trigger form submission in the following ways:
+The CardForm component handles form submission automatically. You can trigger form submission in multiple ways:
 
-1. **Using the primer-card-form-submit component**:
-   ```html
-   <primer-card-form-submit></primer-card-form-submit>
-   ```
-   This is the recommended approach as it provides localized button text and consistent styling.
+```mermaid
+flowchart LR
+    A[Form Submission Methods] --> B[primer-card-form-submit]
+    A --> C[HTML button type=submit]
+    A --> D[primer-button buttonType=submit]
+    A --> E[data-submit attribute]
+    A --> F[Programmatic Event]
+    
+    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style B fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style D fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style E fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style F fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+```
 
-2. **Using a native HTML button**:
-   ```html
-   <button type="submit">Pay Now</button>
-   ```
+<details>
+<summary><strong>1. Using the primer-card-form-submit component (Recommended)</strong></summary>
 
-3. **Using a primer-button component**:
-   ```html
-   <primer-button buttonType="submit">Pay Now</primer-button>
-   ```
+```html
+<primer-card-form-submit></primer-card-form-submit>
+```
 
-4. **Using the data-submit attribute**:
-   ```html
-   <button data-submit>Pay Now</button>
-   <!-- or -->
-   <primer-button data-submit>Pay Now</primer-button>
-   ```
+This is the recommended approach as it provides localized button text and consistent styling.
+</details>
 
-5. **Programmatically**:
-   ```javascript
-   // Dispatch a custom event to trigger form submission
-   document.querySelector('primer-card-form')
-     .dispatchEvent(new CustomEvent('primer-form-submit'));
-   ```
+<details>
+<summary><strong>2. Using a native HTML button</strong></summary>
+
+```html
+<button type="submit">Pay Now</button>
+```
+</details>
+
+<details>
+<summary><strong>3. Using a primer-button component</strong></summary>
+
+```html
+<primer-button buttonType="submit">Pay Now</primer-button>
+```
+</details>
+
+<details>
+<summary><strong>4. Using the data-submit attribute</strong></summary>
+
+```html
+<button data-submit>Pay Now</button>
+<!-- or -->
+<primer-button data-submit>Pay Now</primer-button>
+```
+</details>
+
+<details>
+<summary><strong>5. Programmatically</strong></summary>
+
+```javascript
+// Dispatch a custom event to trigger form submission
+document.querySelector('primer-card-form')
+  .dispatchEvent(new CustomEvent('primer-form-submit'));
+```
+</details>
 
 ## Validation
 
@@ -129,6 +268,24 @@ The CardForm component automatically handles validation of all card input fields
 
 1. The form is submitted
 2. Individual fields trigger validation events
+
+```mermaid
+sequenceDiagram
+    participant Form as primer-card-form
+    participant Manager as Card Manager
+    participant Inputs as Card Inputs
+    
+    Form->>Manager: validate()
+    alt Valid Inputs
+        Manager->>Form: Validation Success
+        Form->>Form: Submit Payment
+    else Invalid Inputs
+        Manager->>Form: Validation Errors
+        Form->>Form: Update Context
+        Form->>Inputs: Display Errors
+        Form->>Form: Emit primer-form-submit-errors
+    end
+```
 
 Validation errors are automatically passed to the respective input components to display appropriate error messages. The validation process:
 
@@ -141,10 +298,12 @@ Validation errors are automatically passed to the respective input components to
 
 The CardForm component serves as a context provider for all child input components. It provides:
 
-1. **Hosted Inputs**: Secure iframe-based inputs for card number, expiry, and CVV
-2. **Setter Methods**: Functions to update cardholder name and card network
-3. **Validation State**: Current validation errors for each input
-4. **Submission Methods**: Functions to submit the card payment
+:::info Key Context Items
+- **Hosted Inputs**: Secure iframe-based inputs for card number, expiry, and CVV
+- **Setter Methods**: Functions to update cardholder name and card network
+- **Validation State**: Current validation errors for each input
+- **Submission Methods**: Functions to submit the card payment
+  :::
 
 This context mechanism ensures secure handling of sensitive payment data.
 
@@ -158,9 +317,18 @@ The CardForm component is designed to work with the following child components:
 - [`primer-input-card-holder-name`](/components/card-form/input-card-holder-name): For entering the cardholder's name
 - [`primer-card-form-submit`](/components/card-form/card-form-submit): A submit button component (used in the default layout)
 
+### Child Component Dependencies
+
+All card form input components have a mandatory dependency on the `primer-card-form` context. They will not function correctly if used outside this context, as they require:
+
+1. Access to secure hosted inputs
+2. The validation system
+3. Card data aggregation for submission
+
 ## Examples
 
-### Complete Checkout Flow with CardForm
+<details>
+<summary><strong>Complete Checkout Flow with CardForm</strong></summary>
 
 ```html
 <primer-checkout clientToken="your-client-token" options={options}>
@@ -181,8 +349,10 @@ The CardForm component is designed to work with the following child components:
   </primer-main>
 </primer-checkout>
 ```
+</details>
 
-### Handling Form Submission Events
+<details>
+<summary><strong>Handling Form Submission Events</strong></summary>
 
 ```javascript
 const cardForm = document.querySelector('primer-card-form');
@@ -199,6 +369,7 @@ cardForm.addEventListener('primer-form-submit-errors', (event) => {
   // Handle errors (e.g., scroll to error, show notification)
 });
 ```
+</details>
 
 ## CSS Custom Properties
 
@@ -209,11 +380,16 @@ The CardForm component uses the following CSS custom properties for styling:
 | `--primer-space-small` | Spacing between inline elements (default: `8px`) |
 | `--primer-space-medium` | Spacing between block elements (default: `16px`) |
 
-## Notes
+## Key Considerations
 
+:::caution Important
 - The CardForm component must be used within a `primer-checkout` component
 - All card input components must be placed inside a CardForm component to function properly
 - CardForm automatically manages the hosted input elements for secure card data collection
-- The component uses `display: contents` to avoid creating additional DOM structure that might interfere with your layout
+  :::
+
+:::tip Implementation Notes
+- The component uses `display: contents` to avoid creating additional DOM structure
 - When no custom content is provided, a default form layout is rendered
 - Submit buttons are detected based on their attributes (type="submit" or data-submit)
+  :::

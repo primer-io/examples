@@ -16,127 +16,126 @@ description: Customizable styling variables for Composable Checkout
     line-height: 16px;
   }
 
-    .type-color {
-      background-color: rgba(230, 126, 34, 0.15);
-      color: #d35400;
-    }
+            .type-color {
+              background-color: rgba(230, 126, 34, 0.15);
+              color: #d35400;
+            }
 
-    .type-font {
-      background-color: rgba(155, 89, 182, 0.15);
-      color: #8e44ad;
-    }
+            .type-font {
+              background-color: rgba(155, 89, 182, 0.15);
+              color: #8e44ad;
+              white-space: nowrap;
+            }
 
-    .type-radius {
-      background-color: rgba(46, 204, 113, 0.15);
-      color: #27ae60;
-    }
+            .type-radius {
+              background-color: rgba(46, 204, 113, 0.15);
+              color: #27ae60;
+            }
 
-    .type-spacing {
-      background-color: rgba(52, 152, 219, 0.15);
-      color: #2980b9;
-    }
+            .type-spacing {
+              background-color: rgba(52, 152, 219, 0.15);
+              color: #2980b9;
+            }
 
-    .type-size {
-      background-color: rgba(241, 196, 15, 0.15);
-      color: #f39c12;
-    }
+            .type-size {
+              background-color: rgba(241, 196, 15, 0.15);
+              color: #f39c12;
+            }
 
-    .vars-table td:first-child code {
-      white-space: nowrap;
-    }
+            .vars-table td:first-child code {
+              white-space: nowrap;
+            }
 `}
 </style>
 
-
 # Composable Checkout Styling API
 
-Composable Checkout uses CSS Custom Properties (CSS Variables) to maintain a consistent design language across components. These variables provide a standardized way to customize the appearance of your checkout UI.
+Composable Checkout uses styling variables (implemented as CSS Variables) to maintain a consistent design language across components. These variables provide a standardized way to customize the appearance of your checkout UI.
+
+## Styling Methods
 
 You can apply styling in two ways:
 
-1. Using CSS Custom Properties directly in your stylesheets
-2. Using JSON properties through the `customStyles` attribute on components
+<div className="tabs-container">
+  <div className="tabs">
+    <div className="tab css active">CSS Variables Method</div>
+    <div className="tab json">JSON Properties Method</div>
+  </div>
 
-:::tip CSS Usage Example
+  <div className="tab-content css active">
 
-```css
-/* Example: Changing the primary brand color */
-:root {
+    ```css
+    /* Apply styling directly in your CSS */
+    :root {
     --primer-color-brand: #2f98ff;
-}
-```
+    --primer-radius-medium: 8px;
+    --primer-typography-brand: 'Inter', sans-serif;
+  }
+    ```
 
-:::
+  </div>
 
-:::tip JSON Usage Example
+  <div className="tab-content json">
 
-```html
-<primer-checkout
-  customStyles='{"primerColorBrand":"#2f98ff"}'
-></primer-checkout>
-```
+    ```html
+    <!-- Apply styling through component attributes -->
+    <primer-checkout
+      customStyles='{"primerColorBrand":"#2f98ff","primerRadiusMedium":"8px"}'
+    ></primer-checkout>
+    ```
 
-:::
+  </div>
+</div>
 
 ## CSS to JSON Conversion
 
-When using the JSON method, you'll need to convert the kebab-case CSS variables to camelCase properties:
+```mermaid
+flowchart LR
+    A["CSS Variable Format<br>--primer-color-brand"] --> B["Remove leading<br>dashes"]
+    B --> C["Convert to<br>camelCase"]
+    C --> D["JSON Property Format<br>primerColorBrand"]
+
+    style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style B fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style D fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+```
+
+When using the JSON method, convert kebab-case CSS variables to camelCase properties:
 
 1. Remove the leading dashes (`--`)
 2. Convert hyphens to camelCase by removing the hyphen and capitalizing the next letter
 
-Examples:
+**Examples:**
 - `--primer-color-brand` → `primerColorBrand`
 - `--primer-space-medium` → `primerSpaceMedium`
 - `--primer-typography-body-large-font` → `primerTypographyBodyLargeFont`
 
-## Core Variables
+## Core Styling Variables
 
-These core variables control the fundamental aspects of your checkout UI, from colors to spacing.
+These variables control the fundamental aspects of your checkout UI, from colors to spacing.
 
 <div className="vars-table">
 
   | CSS Variable | Type | Description | Default Value | Affects |
   |-------------|------|-------------|---------------|---------|
-  | `--primer-color-brand` | <span className="type-color">color</span> | Controls the brand color across the checkout | `#2F98FF` | Background color of the primary button, focus outline in all components |
-  | `--primer-typography-brand` | <span className="type-font">font family</span> | Controls the brand font family across the checkout | `Inter` | All typography styles |
-  | `--primer-color-background` | <span className="type-color">color</span> | Controls the background color across the checkout | `#FFFFFF` | Default background color of all components except the primary button |
-  | `--primer-radius-base` | <span className="type-radius">radius</span> | Controls the base radius unit across the checkout | `4px` | Border radii of all components |
-  | `--primer-space-base` | <span className="type-spacing">spacing</span> | Controls the base spacing unit across the checkout | `4px` | Spacings of all components |
-  | `--primer-size-base` | <span className="type-size">size</span> | Controls the base size unit across the checkout | `4px` | Asset size in the checkout like icons, card network, loader |
-  | `--primer-color-loader` | <span className="type-color">color</span> | Controls the loader color across the checkout | `var(--primer-color-brand)` | Background color of the loader component |
-  | `--primer-color-focus` | <span className="type-color">color</span> | Controls the interactive focus color across the checkout | `var(--primer-color-brand)` | Focus outline in all components |
+  | `--primer-color-brand` | <span className="type-color">color</span> | Controls the brand color across the checkout. | `#2F98FF` | Background color in primary primer-button, Focus outline in all components |
+  | `--primer-typography-brand` | <span className="type-font">font family</span> | Controls the brand font family across the checkout. | `Inter` | All typography styles |
+  | `--primer-color-background` | <span className="type-color">color</span> | Controls the background color across the checkout. | `#FFFFFF` | Default background color in all components except the primary primer-button |
+  | `--primer-color-focus` | <span className="type-color">color</span> | Controls the interactive focus color across the checkout. | `var(--primer-color-brand)` | Focus outline in all components |
 
 </div>
 
 ## Text Colors
 
-These variables control the appearance of text throughout your checkout UI.
-
 <div className="vars-table">
 
   | CSS Variable | Type | Description | Default Value | Affects |
   |-------------|------|-------------|---------------|---------|
-  | `--primer-color-text-primary` | <span className="type-color">color</span> | Controls the primary text color across the checkout | `#212121` | Input text color, input label text color, redirect payment method button label text, label text in buttons, title text in checkout state |
-  | `--primer-color-text-placeholder` | <span className="type-color">color</span> | Controls the placeholder text color across the checkout | `#9E9E9E` | Placeholder text color in input component |
-  | `--primer-color-text-secondary` | <span className="type-color">color</span> | Controls the secondary text color across the checkout | `#757575` | Description text color in checkout state component |
-  | `--primer-color-text-disabled` | <span className="type-color">color</span> | Controls the disabled text color across the checkout | `#BDBDBD` | Input text color in disabled state, placeholder text, input label text, button label text in disabled state |
-  | `--primer-color-text-negative` | <span className="type-color">color</span> | Controls the negative text color across the checkout | `#B4324B` | Error text color in input component |
-
-</div>
-
-## Spacing
-
-<div className="vars-table">
-
-  | CSS Variable | Type | Description | Default Value |
-  |-------------|------|-------------|---------------|
-  | `--primer-space-xxsmall` | <span className="type-spacing">spacing</span> | Controls the xx-small spacing across the checkout | `2px` |
-  | `--primer-space-xsmall` | <span className="type-spacing">spacing</span> | Controls the x-small spacing across the checkout | `4px` |
-  | `--primer-space-small` | <span className="type-spacing">spacing</span> | Controls the small spacing across the checkout | `8px` |
-  | `--primer-space-medium` | <span className="type-spacing">spacing</span> | Controls the medium spacing across the checkout | `12px` |
-  | `--primer-space-large` | <span className="type-spacing">spacing</span> | Controls the large spacing across the checkout | `16px` |
-  | `--primer-space-xlarge` | <span className="type-spacing">spacing</span> | Controls the x-large spacing across the checkout | `20px` |
+  | `--primer-color-text-primary` | <span className="type-color">color</span> | Controls the primary text color across the checkout. | `#212121` | Secondary/Tertiary primer-button label text, primer-input input text, primer-input-label text |
+  | `--primer-color-text-placeholder` | <span className="type-color">color</span> | Controls the placeholder text color across the checkout. | `#9E9E9E` | primer-input placeholder text |
+  | `--primer-color-text-disabled` | <span className="type-color">color</span> | Controls the disabled text color across the checkout. | `#BDBDBD` | (In disabled state) Secondary/Tertiary primer-button label text, primer-input input text, primer-input-label text |
+  | `--primer-color-text-negative` | <span className="type-color">color</span> | Controls the negative text color across the checkout. | `#B4324B` | primer-input-error text in primer-input |
 
 </div>
 
@@ -144,27 +143,22 @@ These variables control the appearance of text throughout your checkout UI.
 
 <div className="vars-table">
 
-  | CSS Variable | Type | Description | Default Value |
-  |-------------|------|-------------|---------------|
-  | `--primer-radius-xsmall` | <span className="type-radius">radius</span> | Controls the x-small border radius across the checkout | `2px` |
-  | `--primer-radius-small` | <span className="type-radius">radius</span> | Controls the small border radius across the checkout | `4px` |
-  | `--primer-radius-medium` | <span className="type-radius">radius</span> | Controls the medium border radius across the checkout | `8px` |
-  | `--primer-radius-large` | <span className="type-radius">radius</span> | Controls the large border radius across the checkout | `12px` |
+  | CSS Variable | Type | Description | Default Value | Affects |
+  |-------------|------|-------------|---------------|---------|
+  | `--primer-radius-small` | <span className="type-radius">radius</span> | Controls the small border radius across the checkout. | `4px` | primer-input-wrapper |
+  | `--primer-radius-medium` | <span className="type-radius">radius</span> | Controls the medium border radius across the checkout. | `8px` | Primary/Secondary primer-button |
 
 </div>
 
-## Sizes
+## Spacing
 
 <div className="vars-table">
 
-  | CSS Variable | Type | Description | Default Value |
-  |-------------|------|-------------|---------------|
-  | `--primer-size-small` | <span className="type-size">size</span> | Controls the small sizing unit across the checkout | `16px` |
-  | `--primer-size-medium` | <span className="type-size">size</span> | Controls the medium sizing unit across the checkout | `20px` |
-  | `--primer-size-large` | <span className="type-size">size</span> | Controls the large sizing unit across the checkout | `24px` |
-  | `--primer-size-xlarge` | <span className="type-size">size</span> | Controls the x-large sizing unit across the checkout | `32px` |
-  | `--primer-size-xxlarge` | <span className="type-size">size</span> | Controls the xx-large sizing unit across the checkout | `40px` |
-  | `--primer-size-xxxlarge` | <span className="type-size">size</span> | Controls the xxx-large sizing unit across the checkout | `56px` |
+  | CSS Variable | Type | Description | Default Value | Affects |
+  |-------------|------|-------------|---------------|---------|
+  | `--primer-space-xsmall` | <span className="type-spacing">spacing</span> | Controls the x-small spacing across the checkout. | `4px` | primer-input-wrapper (Spacing between primer-input-label & primer-input) |
+  | `--primer-space-small` | <span className="type-spacing">spacing</span> | Controls the small spacing across the checkout. | `8px` | primer-card-form, primer-input-card-number |
+  | `--primer-space-medium` | <span className="type-spacing">spacing</span> | Controls the medium spacing across the checkout. | `12px` | Paddings in primer-button, primer-input-wrapper, Spacings inside primer-card-form |
 
 </div>
 
@@ -176,27 +170,13 @@ The following variables control text appearance across components, ensuring cons
 
 <div className="vars-table">
 
-  | CSS Variable | Type | Description | Default Value |
-  |-------------|------|-------------|---------------|
-  | `--primer-typography-title-large-font` | <span className="type-font">font family</span> | Controls the font family of the title-large typography style | `var(--primer-typography-brand)` |
-  | `--primer-typography-title-large-weight` | <span className="type-font">font weight</span> | Controls the font weight of the title-large typography style | `550px` |
-  | `--primer-typography-title-large-size` | <span className="type-font">font size</span> | Controls the font size of the title-large typography style | `16px` |
-  | `--primer-typography-title-large-line-height` | <span className="type-font">line height</span> | Controls the line height of the title-large typography style | `20px` |
-  | `--primer-typography-title-large-letter-spacing` | <span className="type-font">letter spacing</span> | Controls the letter spacing of the title-large typography style | `-0.2px` |
-
-</div>
-
-### Title Extra Large
-
-<div className="vars-table">
-
-  | CSS Variable | Type | Description | Default Value |
-  |-------------|------|-------------|---------------|
-  | `--primer-typography-title-xlarge-font` | <span className="type-font">font family</span> | Controls the font family of the title-xlarge typography style | `var(--primer-typography-brand)` |
-  | `--primer-typography-title-xlarge-weight` | <span className="type-font">font weight</span> | Controls the font weight of the title-xlarge typography style | `550px` |
-  | `--primer-typography-title-xlarge-size` | <span className="type-font">font size</span> | Controls the font size of the title-xlarge typography style | `24px` |
-  | `--primer-typography-title-xlarge-line-height` | <span className="type-font">line height</span> | Controls the line height of the title-xlarge typography style | `32px` |
-  | `--primer-typography-title-xlarge-letter-spacing` | <span className="type-font">letter spacing</span> | Controls the letter spacing of the title-xlarge typography style | `-0.6px` |
+  | CSS Variable | Type | Description | Default Value | Affects |
+  |-------------|------|-------------|---------------|---------|
+  | `--primer-typography-title-large-font` | <span className="type-font">font family</span> | Controls the font family of the title-large typography style. | `var(--primer-typography-brand)` | Primary/Secondary/Tertiary primer-button label text |
+  | `--primer-typography-title-large-weight` | <span className="type-font">font weight</span> | Controls the font weight of the title-large typography style. | `550` | Primary/Secondary/Tertiary primer-button label text |
+  | `--primer-typography-title-large-size` | <span className="type-font">font size</span> | Controls the font size of the title-large typography style. | `16px` | Primary/Secondary/Tertiary primer-button label text |
+  | `--primer-typography-title-large-line-height` | <span className="type-font">line height</span> | Controls the line height of the title-large typography style. | `20px` | Primary/Secondary/Tertiary primer-button label text |
+  | `--primer-typography-title-large-letter-spacing` | <span className="type-font">letter spacing</span> | Controls the letter spacing of the title-large typography style. | `-0.2px` | Primary/Secondary/Tertiary primer-button label text |
 
 </div>
 
@@ -204,27 +184,13 @@ The following variables control text appearance across components, ensuring cons
 
 <div className="vars-table">
 
-  | CSS Variable | Type | Description | Default Value |
-  |-------------|------|-------------|---------------|
-  | `--primer-typography-body-large-font` | <span className="type-font">font family</span> | Controls the font family of the body-large typography style | `var(--primer-typography-brand)` |
-  | `--primer-typography-body-large-weight` | <span className="type-font">font weight</span> | Controls the font weight of the body-large typography style | `400px` |
-  | `--primer-typography-body-large-size` | <span className="type-font">font size</span> | Controls the font size of the body-large typography style | `16px` |
-  | `--primer-typography-body-large-line-height` | <span className="type-font">line height</span> | Controls the line height of the body-large typography style | `20px` |
-  | `--primer-typography-body-large-letter-spacing` | <span className="type-font">letter spacing</span> | Controls the letter spacing of the body-large typography style | `-0.2px` |
-
-</div>
-
-### Body Medium
-
-<div className="vars-table">
-
-  | CSS Variable | Type | Description | Default Value |
-  |-------------|------|-------------|---------------|
-  | `--primer-typography-body-medium-font` | <span className="type-font">font family</span> | Controls the font family of the body-medium typography style | `var(--primer-typography-brand)` |
-  | `--primer-typography-body-medium-weight` | <span className="type-font">font weight</span> | Controls the font weight of the body-medium typography style | `400px` |
-  | `--primer-typography-body-medium-size` | <span className="type-font">font size</span> | Controls the font size of the body-medium typography style | `14px` |
-  | `--primer-typography-body-medium-line-height` | <span className="type-font">line height</span> | Controls the line height of the body-medium typography style | `20px` |
-  | `--primer-typography-body-medium-letter-spacing` | <span className="type-font">letter spacing</span> | Controls the letter spacing of the body-medium typography style | `0px` |
+  | CSS Variable | Type | Description | Default Value | Affects |
+  |-------------|------|-------------|---------------|---------|
+  | `--primer-typography-body-large-font` | <span className="type-font">font family</span> | Controls the font family of the body-large typography style. | `var(--primer-typography-brand)` | Input/Placeholder text in primer-input |
+  | `--primer-typography-body-large-weight` | <span className="type-font">font weight</span> | Controls the font weight of the body-large typography style. | `400` | Input/Placeholder text in primer-input |
+  | `--primer-typography-body-large-size` | <span className="type-font">font size</span> | Controls the font size of the body-large typography style. | `16px` | Input/Placeholder text in primer-input |
+  | `--primer-typography-body-large-line-height` | <span className="type-font">line height</span> | Controls the line height of the body-large typography style. | `20px` | Input/Placeholder text in primer-input |
+  | `--primer-typography-body-large-letter-spacing` | <span className="type-font">letter spacing</span> | Controls the letter spacing of the body-large typography style. | `-0.2px` | Input/Placeholder text in primer-input |
 
 </div>
 
@@ -232,70 +198,104 @@ The following variables control text appearance across components, ensuring cons
 
 <div className="vars-table">
 
-  | CSS Variable | Type | Description | Default Value |
-  |-------------|------|-------------|---------------|
-  | `--primer-typography-body-small-font` | <span className="type-font">font family</span> | Controls the font family of the body-small typography style | `var(--primer-typography-brand)` |
-  | `--primer-typography-body-small-weight` | <span className="type-font">font weight</span> | Controls the font weight of the body-small typography style | `400px` |
-  | `--primer-typography-body-small-size` | <span className="type-font">font size</span> | Controls the font size of the body-small typography style | `12px` |
-  | `--primer-typography-body-small-line-height` | <span className="type-font">line height</span> | Controls the line height of the body-small typography style | `16px` |
-  | `--primer-typography-body-small-letter-spacing` | <span className="type-font">letter spacing</span> | Controls the letter spacing of the body-small typography style | `0px` |
+  | CSS Variable | Type | Description | Default Value | Affects |
+  |-------------|------|-------------|---------------|---------|
+  | `--primer-typography-body-small-font` | <span className="type-font">font family</span> | Controls the font family of the body-small typography style. | `var(--primer-typography-brand)` | primer-input-error, primer-input-label |
+  | `--primer-typography-body-small-weight` | <span className="type-font">font weight</span> | Controls the font weight of the body-small typography style. | `400` | primer-input-error, primer-input-label |
+  | `--primer-typography-body-small-size` | <span className="type-font">font size</span> | Controls the font size of the body-small typography style. | `12px` | primer-input-error, primer-input-label |
+  | `--primer-typography-body-small-line-height` | <span className="type-font">line height</span> | Controls the line height of the body-small typography style. | `16px` | primer-input-error, primer-input-label |
+  | `--primer-typography-body-small-letter-spacing` | <span className="type-font">letter spacing</span> | Controls the letter spacing of the body-small typography style. | `0` | primer-input-error, primer-input-label |
 
 </div>
 
-## Using Variables in Practice
+## Outlined Container
 
-You can apply styling variables in two ways: using CSS Custom Properties or by passing a JSON object through component attributes.
+These styling variables control the appearance of outlined containers like input wrappers and buttons.
 
-### CSS Custom Properties Method
+### Background Properties
 
-#### Component Customization
+<div className="vars-table">
 
-To customize a specific component:
+  | CSS Variable | Type | Description | Default Value | Affects |
+  |-------------|------|-------------|---------------|---------|
+  | `--primer-color-background-outlined-default` | <span className="type-color">color</span> | Controls the background color of the outlined container in default state. | `var(--primer-color-background)` | (In default state) Background color in primer-input-wrapper, secondary primer-button |
+  | `--primer-color-background-outlined-hover` | <span className="type-color">color</span> | Controls the background color of the outlined container in hover state. | `var(--primer-color-background-outlined-default)` | (In hover state) Background color in primer-input-wrapper, secondary primer-button |
+  | `--primer-color-background-outlined-active` | <span className="type-color">color</span> | Controls the background color of the outlined container in active state. | `var(--primer-color-background-outlined-default)` | (In active state) Background color in primer-input-wrapper, secondary primer-button |
+  | `--primer-color-background-outlined-error` | <span className="type-color">color</span> | Controls the background color of the outlined container in error state. | `var(--primer-color-background-outlined-default)` | (In error state) Background color in primer-input-wrapper |
+  | `--primer-color-background-outlined-disabled` | <span className="type-color">color</span> | Controls the background color of the outlined container in disabled state. | `#F5F5F5` | (In disabled state) Background color in primer-input-wrapper, secondary primer-button |
 
-```css
-/* Example: Customizing a specific button */
-primer-button {
-  --primer-color-brand: blue;
-  --primer-radius-medium: 8px;
-}
-```
+</div>
 
-#### Global Customization
+### Border Properties
 
-To customize all components:
+<div className="vars-table">
 
-```css
-:root {
-  /* Colors */
-  --primer-color-brand: #663399;
-  --primer-color-text-primary: #333333;
+  | CSS Variable | Type | Description | Default Value | Affects |
+  |-------------|------|-------------|---------------|---------|
+  | `--primer-color-border-outlined-default` | <span className="type-color">color</span> | Controls the border color of the outlined container in default state. | `#E0E0E0` | (In default state) Border color in primer-input-wrapper, secondary primer-button |
+  | `--primer-color-border-outlined-hover` | <span className="type-color">color</span> | Controls the border color of the outlined container in hover state. | `#BDBDBD` | (In hover state) Border color in primer-input-wrapper, secondary primer-button |
+  | `--primer-color-border-outlined-active` | <span className="type-color">color</span> | Controls the border color of the outlined container in active state. | `#9E9E9E` | (In active state) Border color in primer-input-wrapper, secondary primer-button |
+  | `--primer-color-border-outlined-focus` | <span className="type-color">color</span> | Controls the border color of the outlined container in focus state. | `var(--primer-color-focus)` | (In focus state) Border color in primer-input-wrapper, secondary primer-button |
+  | `--primer-color-border-outlined-error` | <span className="type-color">color</span> | Controls the border color of the outlined container in error state. | `#FF7279` | (In error state) Border color in primer-input-wrapper, secondary primer-button |
+  | `--primer-color-border-outlined-disabled` | <span className="type-color">color</span> | Controls the border color of the outlined container in disabled state. | `#EEEEEE` | (In disabled state) Border color in primer-input-wrapper, secondary primer-button |
 
-  /* Typography */
-  --primer-typography-body-large-font: 'Helvetica Neue', sans-serif;
+</div>
 
-  /* Spacing */
-  --primer-space-medium: 16px;
+## Using Styling Variables in Practice
 
-  /* Border Radius */
-  --primer-radius-medium: 8px;
-}
-```
+### CSS Variables Method
+
+:::info Implementation Options
+You can target specific components or apply global styling to all components in your checkout experience.
+:::
+
+<div className="tabs-container">
+  <div className="tabs">
+    <div className="tab specific active">Component-specific</div>
+    <div className="tab global">Global</div>
+  </div>
+
+  <div className="tab-content specific active">
+
+    ```css
+    /* Customizing a specific button */
+    primer-button {
+    --primer-color-brand: blue;
+    --primer-radius-medium: 8px;
+  }
+    ```
+
+  </div>
+
+  <div className="tab-content global">
+
+    ```css
+    /* Customizing all components */
+    :root {
+    /* Colors */
+    --primer-color-brand: #663399;
+    --primer-color-text-primary: #333333;
+
+    /* Typography */
+    --primer-typography-body-large-font: 'Helvetica Neue', sans-serif;
+
+    /* Spacing */
+    --primer-space-medium: 16px;
+
+    /* Border Radius */
+    --primer-radius-medium: 8px;
+  }
+    ```
+
+  </div>
+</div>
 
 ### JSON Properties Method
 
-You can also pass styling variables as a stringified JSON object through the `customStyles` attribute. This is particularly useful when working with JavaScript frameworks or when you need to apply styles programmatically.
-
-#### Example Usage:
-
-```html
-<!-- Direct HTML attribute usage -->
-<primer-checkout
-  customStyles='{"primerColorBrand":"#663399","primerRadiusMedium":"8px"}'
-></primer-checkout>
-```
+This approach is particularly useful when working with JavaScript frameworks or when you need to apply styling variables programmatically.
 
 ```javascript
-// JavaScript example
+// Create a styling object
 const myCustomStyles = {
   primerColorBrand: '#663399',
   primerColorTextPrimary: '#333333',
@@ -304,35 +304,89 @@ const myCustomStyles = {
   primerRadiusMedium: '8px',
 };
 
-// Pass as stringified JSON attribute
+// Apply to component
 const checkoutElement = document.querySelector('primer-checkout');
 checkoutElement.setAttribute('customStyles', JSON.stringify(myCustomStyles));
 ```
 
-The component will parse the JSON and automatically apply the styles as CSS Custom Properties internally.
+The component will parse the JSON and automatically apply the styles as CSS Variables internally.
 
 ## Theme Support
 
 Primer Composable Checkout supports both light and dark themes using CSS classes:
 
-```html
-<!-- Light theme (default) -->
-<div class="primer-light-theme">
-  <primer-checkout client-token="your-token"></primer-checkout>
-</div>
+```mermaid
+flowchart LR
+    A[Theme Selection] --> B[primer-light-theme]
+    A --> C[primer-dark-theme]
+    B --> D[Light Mode UI]
+    C --> E[Dark Mode UI]
 
-<!-- Dark theme -->
-<div class="primer-dark-theme">
-  <primer-checkout client-token="your-token"></primer-checkout>
-</div>
+    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style B fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style D fill:#ffffff,stroke:#cccccc,stroke-width:1px
+    style E fill:#171619,stroke:#424242,stroke-width:1px,color:#ffffff
 ```
 
-You can also use JavaScript to toggle between themes:
+<div className="tabs-container">
+  <div className="tabs">
+    <div className="tab light active">Light Theme Only</div>
+    <div className="tab dark">Dark Theme Only</div>
+    <div className="tab both">Support Both Themes</div>
+  </div>
 
-```javascript
-// Switch to dark theme
-document.getElementById('checkout-container').className = 'primer-dark-theme';
+  <div className="tab-content light active">
 
-// Switch to light theme
-document.getElementById('checkout-container').className = 'primer-light-theme';
-```
+    ```html
+    <!-- For light theme only -->
+    <link rel="stylesheet" href="https://sdk.primer.io/web/primer-js/v0-latest/styles.css" />
+    ```
+
+    This is the simplest approach if you only need to support a light theme in your checkout experience.
+
+  </div>
+
+  <div className="tab-content dark">
+
+    ```html
+    <!-- For dark theme only -->
+    <link rel="stylesheet" href="https://sdk.primer.io/web/primer-js/v0-latest/dark.css" />
+    ```
+
+    Use this approach if your site has a dark theme design exclusively.
+
+  </div>
+
+  <div className="tab-content both">
+
+    ```html
+    <!-- Include both stylesheets -->
+    <link rel="stylesheet" href="https://sdk.primer.io/web/primer-js/v0-latest/styles.css" />
+    <link rel="stylesheet" href="https://sdk.primer.io/web/primer-js/v0-latest/dark.css" />
+
+    <!-- Add the theme class to your checkout container -->
+    <div id="checkout-container" class="primer-light-theme">
+      <primer-checkout client-token="your-client-token">
+        <!-- Your checkout content -->
+      </primer-checkout>
+    </div>
+    ```
+
+    You can toggle between themes using JavaScript:
+
+    ```javascript
+    // Function to toggle between themes
+    function toggleTheme(isDark) {
+    const container = document.getElementById('checkout-container');
+    container.className = isDark ? 'primer-dark-theme' : 'primer-light-theme';
+  }
+
+    // Examples
+    toggleTheme(true);  // Switch to dark theme
+    toggleTheme(false); // Switch to light theme
+    ```
+
+    This approach allows you to support both light and dark themes, toggling between them as needed.
+  </div>
+</div>

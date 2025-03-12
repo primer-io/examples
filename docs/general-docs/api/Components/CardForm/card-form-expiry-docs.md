@@ -10,6 +10,24 @@ slug: /components/card-form/input-card-expiry
 
 The Card Expiry Input component provides a secure, PCI-compliant field for collecting payment card expiration dates. It formats the input automatically as MM/YY and integrates with the card form validation system.
 
+```mermaid
+flowchart TD
+    A[primer-input-card-expiry] --> B[Secure Input Field]
+    A --> C[Auto-Formatting]
+    A --> D[Validation]
+    C --> E[MM/YY Pattern]
+    D --> F[Date Validation]
+    D --> G[Error Handling]
+    
+    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style D fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style E fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style F fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style G fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+```
+
 This component extends the abstract card input class used by all card form inputs, providing consistent behavior and styling.
 
 ## Usage
@@ -24,19 +42,41 @@ The Card Expiry Input component must be used within a `primer-card-form` contain
 
 ## Properties
 
-| Property      | Attribute     | Type     | Default       | Description                            |
-|---------------|---------------|----------|---------------|----------------------------------------|
-| `label`       | `label`       | `string` | "Expiry Date" | The label displayed above the input    |
-| `placeholder` | `placeholder` | `string` | "MM/YY"       | Placeholder text shown when input is empty |
-| `ariaLabel`   | `aria-label`  | `string` | "Expiry Date" | Accessibility label for screen readers |
+| Attribute     | Type     | Default       | Description                            |
+|---------------|----------|---------------|----------------------------------------|
+| `label`       | `string` | "Expiry Date" | The label displayed above the input    |
+| `placeholder` | `string` | "MM/YY"       | Placeholder text shown when input is empty |
+| `aria-label`  | `string` | "Expiry Date" | Accessibility label for screen readers |
 
 ### Property Behavior
 
+<div class="property-behavior">
+
 - **`label`**: If not explicitly set, uses the localized default value ("Expiry Date"). If set to an empty string `""`, reverts to the default.
 - **`placeholder`**: If not explicitly set, uses the localized default value ("MM/YY"). If explicitly set to an empty string `""`, no placeholder will be displayed.
-- **`ariaLabel`**: If not explicitly set, uses the value of `label`. If explicitly set to an empty string `""`, reverts to the value of `label`.
+- **`aria-label`**: If not explicitly set, uses the value of `label`. If explicitly set to an empty string `""`, reverts to the value of `label`.
+
+</div>
 
 ## Technical Implementation
+
+```mermaid
+sequenceDiagram
+    participant Expiry as primer-input-card-expiry
+    participant Context as Card Form Context
+    participant Wrapper as primer-input-wrapper
+    
+    Note over Expiry: Component initialization
+    Expiry->>Context: Connect to context
+    Context->>Expiry: Provide hosted input
+    
+    Note over Expiry: User typing
+    Expiry->>Expiry: Format as MM/YY
+    
+    Note over Expiry: Validation
+    Context->>Expiry: Validation state changes
+    Expiry->>Expiry: Display error if needed
+```
 
 The Card Expiry Input component:
 
@@ -61,7 +101,14 @@ The component renders the following DOM structure:
 
 ## Examples
 
-### Basic Usage
+<div class="tabs-container">
+<div class="tabs">
+<div class="tab basic active">Basic Usage</div>
+<div class="tab custom">Custom Labels</div>
+<div class="tab inline">Inline with CVV</div>
+</div>
+
+<div class="tab-content basic active">
 
 ```html
 <primer-card-form>
@@ -69,7 +116,9 @@ The component renders the following DOM structure:
 </primer-card-form>
 ```
 
-### Custom Labels and Placeholder
+</div>
+
+<div class="tab-content custom">
 
 ```html
 <primer-card-form>
@@ -81,7 +130,9 @@ The component renders the following DOM structure:
 </primer-card-form>
 ```
 
-### Inline with CVV
+</div>
+
+<div class="tab-content inline">
 
 ```html
 <primer-card-form>
@@ -96,7 +147,34 @@ The component renders the following DOM structure:
 </primer-card-form>
 ```
 
+</div>
+</div>
+
 ## Validation
+
+```mermaid
+flowchart LR
+    A[Expiry Date Input] --> B{Validation Checks}
+    B --> C{Format Check}
+    B --> D{Month Check}
+    B --> E{Date Check}
+    C -->|Invalid| F[Format Error]
+    D -->|Invalid| G[Month Error]
+    E -->|Expired| H[Expiry Error]
+    C -->|Valid| I[Valid Input]
+    D -->|Valid| I
+    E -->|Valid| I
+    
+    style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+    style C fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+    style D fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+    style E fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+    style F fill:#ffebee,stroke:#f44336,stroke-width:1px
+    style G fill:#ffebee,stroke:#f44336,stroke-width:1px
+    style H fill:#ffebee,stroke:#f44336,stroke-width:1px
+    style I fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+```
 
 The component validates the expiry date format and checks that:
 - The date is correctly formatted as MM/YY
@@ -108,10 +186,15 @@ Validation errors are automatically displayed when:
 - The user enters an invalid date format
 - The expiry date has passed
 
-## Notes
+## Key Considerations
 
+:::info Component Dependencies
 - The Card Expiry Input component must be placed inside a `primer-card-form` component
+- For best UI experience, consider pairing this component with `primer-input-cvv` in a flex layout
+  :::
+
+:::tip Implementation Details
 - Input validation happens automatically when the form is submitted
 - Validation errors are displayed below the input field when they occur
-- For best UI experience, consider pairing this component with `primer-input-cvv` in a flex layout
 - The input automatically inserts the slash (/) between month and year as the user types
+  :::

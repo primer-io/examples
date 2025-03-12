@@ -8,17 +8,64 @@ slug: /components/input-wrapper
 # Input Wrapper Component
 ## \<primer-input-wrapper\>
 
-The Input Wrapper component provides a consistent container for input elements, handling focus states, error styling, and enhancing user interactions. It improves the user experience by making the entire wrapper clickable to focus the inner input.
+The Input Wrapper component creates a robust container for input elements, enhancing user interactions through intelligent focus management, error handling, and consistent styling.
 
-## Usage
+```mermaid
+flowchart TD
+    A[primer-input-wrapper] --> B[Input Container]
+    A --> C[Focus Management]
+    A --> D[Error Handling]
+    A --> E[Accessibility]
+    
+    B --> B1[Label Slot]
+    B --> B2[Input Slot]
+    B --> B3[Error Slot]
+    
+    C --> C1[Auto Focus]
+    C --> C2[Cursor Styling]
+    
+    D --> D1[Error States]
+    D --> D2[Visual Indicators]
+    
+    E --> E1[Clickable Area]
+    E --> E2[Input Detection]
+    
+    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style D fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+    style E fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+```
 
-The Input Wrapper component is designed to be used with input components and provides slots for labels, inputs, and error messages:
+## Key Features
+
+:::info Component Capabilities
+- **Enhanced Focus Handling**: Automatically focuses contained inputs
+- **Intuitive Interaction**: Entire wrapper is clickable
+- **Flexible Styling**: Supports focus and error states
+- **Comprehensive Input Support**: Works with standard and hosted inputs
+  :::
+
+## Usage Patterns
+
+### Basic Input Wrapper
 
 ```html
 <primer-input-wrapper>
   <primer-input-label slot="label">Email Address</primer-input-label>
   <primer-input slot="input" type="email" placeholder="you@example.com"></primer-input>
-  <span slot="error">Please enter a valid email address.</span>
+</primer-input-wrapper>
+```
+
+### With Error Handling
+
+```html
+<primer-input-wrapper has-error>
+  <primer-input-label slot="label">Password</primer-input-label>
+  <primer-input slot="input" type="password"></primer-input>
+  <primer-input-error slot="error">
+    Password must be at least 8 characters
+  </primer-input-error>
 </primer-input-wrapper>
 ```
 
@@ -29,6 +76,19 @@ The Input Wrapper component is designed to be used with input components and pro
 | `focusWithin` | `focus-within` | `boolean` | `false` | Indicates if the contained input is focused |
 | `hasError`    | `has-error`    | `boolean` | `false` | Applies error styling when true             |
 
+## Interaction Workflow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Wrapper as primer-input-wrapper
+    participant Input as primer-input
+    
+    User->>Wrapper: Click anywhere
+    Wrapper->>Input: Automatically focus
+    Wrapper->>Wrapper: Update visual state
+```
+
 ## Slots
 
 | Name    | Description                                           |
@@ -37,36 +97,16 @@ The Input Wrapper component is designed to be used with input components and pro
 | `input` | Container for the input element                       |
 | `error` | Container for error messages                          |
 
-## Events
+## Advanced Examples
 
-| Event Name     | Description                                         | Event Detail |
-|----------------|-----------------------------------------------------|--------------|
-| `wrapper-click` | Fired when the wrapper is clicked (not its children) | `{}`         |
+<div class="tabs-container">
+<div class="tabs">
+<div class="tab basic active">Basic Wrapper</div>
+<div class="tab error">Error State</div>
+<div class="tab nested">Nested Inputs</div>
+</div>
 
-## Features
-
-- **Enhanced Focus Behavior**: Clicking anywhere on the wrapper automatically focuses the contained input element
-- **Intuitive Cursor Styling**: The wrapper displays a text cursor to indicate text input functionality
-- **Automatic Input Detection**: Automatically detects and focuses `primer-input` elements when clicked
-- **Support for Hosted Inputs**: Works with both standard inputs and secure hosted iframe inputs
-- **Focus and Error States**: Visual indicators for focus and error states
-
-## CSS Custom Properties
-
-The Input Wrapper component uses these CSS custom properties for styling:
-
-| Property                                   | Description                             |
-|--------------------------------------------|-----------------------------------------|
-| `--primer-color-border-outlined-focus`     | Border color when focused               |
-| `--primer-color-border-outlined-error`     | Border color when in error state        |
-| `--primer-color-background-outlined-error` | Background color when in error state    |
-| `--primer-space-xsmall`                    | Spacing between wrapper elements        |
-| `--primer-space-medium`                    | Internal padding of the input container |
-| `--primer-radius-small`                    | Border radius for the input container   |
-
-## Examples
-
-### Basic Usage with Simple Input
+<div class="tab-content basic active">
 
 ```html
 <primer-input-wrapper>
@@ -74,27 +114,22 @@ The Input Wrapper component uses these CSS custom properties for styling:
   <primer-input slot="input" placeholder="Enter your full name"></primer-input>
 </primer-input-wrapper>
 ```
+</div>
 
-### With Error State and Message
+<div class="tab-content error">
 
 ```html
 <primer-input-wrapper has-error>
-  <primer-input-label slot="label">Password</primer-input-label>
-  <primer-input slot="input" type="password"></primer-input>
-  <span slot="error">Password must be at least 8 characters</span>
+  <primer-input-label slot="label">Email</primer-input-label>
+  <primer-input slot="input" type="email"></primer-input>
+  <primer-input-error slot="error">
+    Invalid email address
+  </primer-input-error>
 </primer-input-wrapper>
 ```
+</div>
 
-### With Card Form Inputs
-
-```html
-<primer-input-wrapper>
-  <primer-input-label slot="label">Card Number</primer-input-label>
-  <div slot="input" id="card-number-container"></div>
-</primer-input-wrapper>
-```
-
-### With Nested Input Components
+<div class="tab-content nested">
 
 ```html
 <primer-input-wrapper>
@@ -105,11 +140,45 @@ The Input Wrapper component uses these CSS custom properties for styling:
   </div>
 </primer-input-wrapper>
 ```
+</div>
+</div>
 
-## Notes
+## Styling Customization
 
-- The wrapper detects and automatically focuses `primer-input` elements when clicked
-- For hosted inputs (like secure card inputs), it dispatches a `wrapper-click` event that these components can listen for
-- The cursor changes to a text cursor (`cursor: text`) when hovering over the input area to indicate text input functionality
-- When a wrapper has an error, both the focus and hover states will display error styling
-- Use with `primer-input-label` for consistent label styling across your application
+<details>
+<summary>Customizable CSS Properties</summary>
+
+| Property                                   | Description                             |
+|--------------------------------------------|-----------------------------------------|
+| `--primer-color-border-outlined-focus`     | Border color when focused               |
+| `--primer-color-border-outlined-error`     | Border color when in error state        |
+| `--primer-color-background-outlined-error` | Background color when in error state    |
+| `--primer-space-xsmall`                    | Spacing between wrapper elements        |
+| `--primer-space-medium`                    | Internal padding of the input container |
+| `--primer-radius-small`                    | Border radius for the input container   |
+</details>
+
+## Best Practices
+
+:::tip Recommended Approaches
+- Always use with `primer-input-label` for consistent styling
+- Leverage the built-in focus and error state management
+- Use the flexible slot system for complex input layouts
+- Ensure proper ID matching between labels and inputs
+  :::
+
+## Potential Pitfalls
+
+:::warning Common Mistakes
+- Forgetting to set appropriate slots
+- Mismatching input and label IDs
+- Overriding default styling without considering accessibility
+- Neglecting error state handling
+  :::
+
+## Component Behavior Notes
+
+- Automatically detects and focuses `primer-input` elements
+- Dispatches `wrapper-click` event for hosted inputs
+- Changes cursor to indicate text input functionality
+  - Provides visual feedback for focus and error states

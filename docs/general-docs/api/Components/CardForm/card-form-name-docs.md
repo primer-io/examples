@@ -10,6 +10,24 @@ slug: /components/card-form/input-card-holder-name
 
 The Cardholder Name Input component provides a field for collecting the cardholder's name on a payment form. In the current implementation, this component renders a standard input field rather than a secure iframe, though this will change in future releases.
 
+```mermaid
+flowchart TD
+    A[primer-input-card-holder-name] --> B[Standard HTML Input]
+    A --> C[Context Integration]
+    A --> D[Validation]
+    B --> E[User Data Entry]
+    C --> F[Real-time Updates]
+    D --> G[Error Handling]
+    
+    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style D fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style E fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style F fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style G fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+```
+
 This component extends the abstract card input class used by all card form inputs, providing consistent behavior and styling.
 
 ## Usage
@@ -24,19 +42,42 @@ The Cardholder Name Input component must be used within a `primer-card-form` con
 
 ## Properties
 
-| Property      | Attribute     | Type     | Default           | Description                                |
-|---------------|---------------|----------|-------------------|--------------------------------------------|
-| `label`       | `label`       | `string` | "Cardholder Name" | The label displayed above the input        |
-| `placeholder` | `placeholder` | `string` | "Name on card"    | Placeholder text shown when input is empty |
-| `ariaLabel`   | `aria-label`  | `string` | "Cardholder Name" | Accessibility label for screen readers     |
+| Attribute     | Type     | Default           | Description                                |
+|---------------|----------|-------------------|--------------------------------------------|
+| `label`       | `string` | "Cardholder Name" | The label displayed above the input        |
+| `placeholder` | `string` | "Name on card"    | Placeholder text shown when input is empty |
+| `aria-label`  | `string` | "Cardholder Name" | Accessibility label for screen readers     |
 
 ### Property Behavior
 
+<div class="property-behavior">
+
 - **`label`**: If not explicitly set, uses the localized default value ("Cardholder Name"). If set to an empty string `""`, reverts to the default.
 - **`placeholder`**: If not explicitly set, uses the localized default value ("Name on card"). If explicitly set to an empty string `""`, no placeholder will be displayed.
-- **`ariaLabel`**: If not explicitly set, uses the value of `label`. If explicitly set to an empty string `""`, reverts to the value of `label`.
+- **``**: If not explicitly set, uses the value of `label`. If explicitly set to an empty string `""`, reverts to the value of `label`.
+
+</div>
 
 ## Technical Implementation
+
+```mermaid
+sequenceDiagram
+    participant CardholderName as primer-input-card-holder-name
+    participant Context as Card Form Context
+    participant HTMLInput as HTML Input Element
+    
+    Note over CardholderName: Component initialization
+    CardholderName->>Context: Connect to context
+    CardholderName->>HTMLInput: Create standard input
+    
+    Note over CardholderName: User typing
+    HTMLInput->>CardholderName: Input value changes
+    CardholderName->>Context: Update cardholder name in real-time
+    
+    Note over CardholderName: Validation
+    Context->>CardholderName: Validation state changes
+    CardholderName->>CardholderName: Display error if needed
+```
 
 The Cardholder Name Input component:
 
@@ -62,7 +103,14 @@ The component renders the following DOM structure:
 
 ## Examples
 
-### Basic Usage
+<div class="tabs-container">
+<div class="tabs">
+<div class="tab basic active">Basic Usage</div>
+<div class="tab custom">Custom Labels</div>
+<div class="tab complete">Complete Form</div>
+</div>
+
+<div class="tab-content basic active">
 
 ```html
 <primer-card-form>
@@ -70,7 +118,9 @@ The component renders the following DOM structure:
 </primer-card-form>
 ```
 
-### Custom Labels and Placeholder
+</div>
+
+<div class="tab-content custom">
 
 ```html
 <primer-card-form>
@@ -82,7 +132,9 @@ The component renders the following DOM structure:
 </primer-card-form>
 ```
 
-### Complete Form with Cardholder Name
+</div>
+
+<div class="tab-content complete">
 
 ```html
 <primer-card-form>
@@ -98,7 +150,22 @@ The component renders the following DOM structure:
 </primer-card-form>
 ```
 
+</div>
+</div>
+
 ## Data Handling
+
+```mermaid
+flowchart LR
+    A[User Input] --> B[Standard HTML Input]
+    B --> C[Component Processing]
+    C --> D[Card Form Context]
+    
+    style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+    style C fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+    style D fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+```
 
 Unlike the secure card details (number, expiry, CVV), the cardholder name:
 
@@ -112,10 +179,18 @@ In future iterations, the cardholder name input will be migrated to a secure ifr
 
 This migration will ensure consistent behavior across all input fields and provide better support for browser autocomplete features.
 
-## Notes
+## Key Considerations
 
+:::info Component Dependencies
 - The Cardholder Name Input component must be placed inside a `primer-card-form` component
 - Input validation happens automatically when the form is submitted
+  :::
+
+:::tip Implementation Details
 - Validation errors are displayed below the input field when they occur
 - The component updates the card form context in real-time with each character the user types
-- While this component currently uses a standard HTML input field, it will be migrated to a secure iframe in future versions, so do not build dependencies on its current implementation
+  :::
+
+:::warning Implementation Stability
+While this component currently uses a standard HTML input field, it will be migrated to a secure iframe in future versions, so do not build dependencies on its current implementation
+:::

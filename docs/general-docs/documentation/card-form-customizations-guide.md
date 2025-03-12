@@ -10,7 +10,36 @@ The Primer SDK's card form components provide a secure way to collect payment ca
 
 ## Card Form Component Architecture
 
-The card form uses a component-based architecture that separates concerns while maintaining security and compliance:
+The card form uses a component-based architecture that separates concerns while maintaining security and compliance. At the heart of this architecture is the parent-child relationship between components:
+
+```mermaid
+flowchart TD
+    A[primer-card-form] --> B[primer-input-card-number]
+    A --> C[primer-input-card-expiry]
+    A --> D[primer-input-cvv]
+    A --> E[primer-input-card-holder-name]
+    A --> F[primer-card-form-submit]
+    
+    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style B fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style D fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style E fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style F fill:#e3f2fd,stroke:#1976d2,stroke-width:1px
+```
+
+### Component Relationships
+
+The card form components have a strict hierarchical relationship:
+
+1. **Parent Container**: `<primer-card-form>` serves as both the container and context provider
+2. **Child Components**: Input fields and submit button must be descendants of the card form
+3. **Context Dependency**: Child components depend on the context provided by the parent
+
+### Card Form Components
+
+<details>
+<summary><strong>Card Form Components</strong></summary>
 
 - `<primer-card-form>` - The container that orchestrates validation and submission
 - `<primer-input-card-number>` - Secure field for card number collection with network detection
@@ -18,8 +47,14 @@ The card form uses a component-based architecture that separates concerns while 
 - `<primer-input-cvv>` - Secure field for security code collection
 - `<primer-input-card-holder-name>` - Field for cardholder name collection
 - `<primer-card-form-submit>` - Submit button with contextual styling
+</details>
 
-Each component is designed to work within the `<primer-card-form>` container, which provides validation context and event handling.
+Each component is designed to work within the `<primer-card-form>` container, which provides:
+
+- **Context**: Validation state, error handling, and form state
+- **Event Handling**: Form submission and validation events
+- **Hosted Inputs**: Secure iframe-based input fields for PCI compliance
+- **Layout Structure**: Default or customizable layout options
 
 ## Understanding Card Form Slot Customization
 
@@ -27,22 +62,72 @@ The card form uses a slot-based customization model to allow flexible layouts wi
 
 ### The `card-form-content` Slot
 
-The primary customization point is the `card-form-content` slot within the `<primer-card-form>` component. This slot allows you to:
+:::info Key Customization Point
+The primary customization point is the `card-form-content` slot within the `<primer-card-form>` component.
+:::
+
+This slot allows you to:
 
 1. Arrange input fields in your preferred order
 2. Group fields together (e.g., expiry and CVV in a row)
 3. Add custom elements alongside secure inputs
 4. Apply your own styling and layout
 
-```jsx
+```html
 <primer-card-form>
   <div slot="card-form-content">
-    {/* Your custom layout here */}
+    <!-- Your custom layout here -->
   </div>
 </primer-card-form>
 ```
 
 When you don't provide content for this slot, the card form automatically renders a default layout with all required fields.
+
+```mermaid
+flowchart LR
+    A[Your Custom Layout] -->|inserted into| B[card-form-content slot]
+    B -->|rendered within| C[primer-card-form]
+    D[Default Layout] -.->|fallback if no custom content| B
+    
+    style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+    style C fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style D fill:#e8eaf6,stroke:#3f51b5,stroke-width:1px,dash:5
+```
+
+## Component Dependency and Context
+
+All card form input components have a critical relationship with the parent card form:
+
+```mermaid
+flowchart TD
+    A[primer-card-form] --> B[Context Provider]
+    B --> C[Validation Context]
+    B --> D[Hosted Inputs]
+    B --> E[Form State]
+    
+    C & D & E --> F[primer-input-card-number]
+    C & D & E --> G[primer-input-card-expiry] 
+    C & D & E --> H[primer-input-cvv]
+    C & D & E --> I[primer-input-card-holder-name]
+    
+    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style D fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style E fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style F fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style G fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style H fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style I fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+```
+
+This relationship means:
+
+1. **Mandatory Containment**: Card input components must always be placed inside a `<primer-card-form>` component
+2. **Context Access**: Components access secure hosted inputs, validation state, and form management through the parent's context
+3. **Event Bubbling**: Events from child components bubble up to the parent for processing
+4. **Coordinated Validation**: The parent coordinates validation across all input components
 
 ## Customizing Input Field Appearance
 
@@ -52,11 +137,11 @@ Each card input component accepts properties that modify its appearance without 
 
 You can customize the visible text for each input:
 
-```jsx
+```html
 <primer-input-card-number
-  label="Card Number"           // Changes the label text
-  placeholder="1234 5678 9012 3456" // Changes the placeholder text
-  aria-label="Credit card number" // Changes the accessibility label
+  label="Card Number"           <!-- Changes the label text -->
+placeholder="1234 5678 9012 3456" <!-- Changes the placeholder text -->
+aria-label="Credit card number" <!-- Changes the accessibility label -->
 ></primer-input-card-number>
 ```
 
@@ -70,7 +155,7 @@ While you have complete freedom over the layout, certain patterns are common and
 
 The most common pattern is a vertical stack of inputs:
 
-```jsx
+```html
 <primer-card-form>
   <div slot="card-form-content">
     <primer-input-card-number></primer-input-card-number>
@@ -90,9 +175,31 @@ This pattern places related fields (expiry and CVV) side-by-side while keeping t
 
 The `<primer-card-form>` component handles form submission in several ways:
 
+```mermaid
+flowchart TD
+    A[Form Submission Trigger] --> B{Validation}
+    B -->|Valid| C[Submit Payment]
+    B -->|Invalid| D[Emit Validation Errors]
+    C --> E{Payment Result}
+    E -->|Success| F[Emit Success Event]
+    E -->|Error| G[Emit Error Event]
+    
+    style A fill:#e3f2fd,stroke:#1976d2,stroke-width:1px
+    style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+    style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style D fill:#ffebee,stroke:#f44336,stroke-width:1px
+    style E fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+    style F fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style G fill:#ffebee,stroke:#f44336,stroke-width:1px
+```
+
+<details>
+<summary><strong>Submission Trigger Methods</strong></summary>
+
 1. Through the `<primer-card-form-submit>` component (recommended)
 2. Through any HTML button with `type="submit"`
 3. Through any element with the `data-submit` attribute
+</details>
 
 When submission is triggered, the component:
 1. Validates all card inputs
@@ -104,7 +211,7 @@ When submission is triggered, the component:
 
 The card form follows an event-driven validation approach:
 
-```jsx
+```javascript
 // Listen for validation errors
 cardForm.addEventListener('primer-form-submit-errors', (event) => {
   const errors = event.detail;
@@ -120,16 +227,33 @@ cardForm.addEventListener('primer-form-submit-success', (event) => {
 
 These events bubble up to the `<primer-checkout>` component, allowing you to handle them at any level.
 
+```mermaid
+sequenceDiagram
+    participant CardForm as primer-card-form
+    participant Checkout as primer-checkout
+    participant YourApp
+    
+    Note over CardForm,YourApp: Validation failure scenario
+    CardForm->>Checkout: primer-form-submit-errors
+    Checkout->>YourApp: primer-form-submit-errors
+    Note right of YourApp: Handle validation errors
+    
+    Note over CardForm,YourApp: Successful submission
+    CardForm->>Checkout: primer-form-submit-success
+    Checkout->>YourApp: primer-form-submit-success
+    Note right of YourApp: Handle successful payment
+```
+
 ## Styling Card Form Components
 
 Card form components inherit styling from CSS custom properties defined at the checkout level:
 
 ```css
 :root {
-  /* These properties affect all components */
-  --primer-color-brand: #4a90e2;
-  --primer-radius-small: 4px;
-  --primer-typography-body-large-font: 'Your-Font', sans-serif;
+    /* These properties affect all components */
+    --primer-color-brand: #4a90e2;
+    --primer-radius-small: 4px;
+    --primer-typography-body-large-font: 'Your-Font', sans-serif;
 }
 ```
 
@@ -137,35 +261,38 @@ Card form components inherit styling from CSS custom properties defined at the c
 
 You can seamlessly integrate custom fields alongside the secure card inputs:
 
-```jsx
+```html
 <primer-card-form>
   <div slot="card-form-content">
     <primer-input-card-number></primer-input-card-number>
-    
-    {/* Custom field using primer-input */}
+
+    <!-- Custom field using primer-input -->
     <primer-input-wrapper>
       <primer-input-label slot="label">Billing Zip Code</primer-input-label>
       <primer-input slot="input" type="text" name="zip"></primer-input>
     </primer-input-wrapper>
-    
+
     <div style="display: flex; gap: 8px;">
       <primer-input-card-expiry></primer-input-card-expiry>
       <primer-input-cvv></primer-input-cvv>
     </div>
-    
+
     <primer-card-form-submit></primer-card-form-submit>
   </div>
 </primer-card-form>
 ```
 
+:::note
 The form container doesn't validate these custom fields directly, so you'll need to implement your own validation if needed.
+:::
 
 ## Avoiding Duplicate Card Form Rendering
 
 When customizing your card form layout, be aware of a common issue that can lead to duplicate card form elements:
 
-```jsx
-// ❌ INCORRECT: This will cause duplicate card forms to appear
+:::caution Common Issue
+```html
+<!-- ❌ INCORRECT: This will cause duplicate card forms to appear -->
 <primer-checkout client-token="your-token">
   <primer-main slot="main">
     <div slot="payments">
@@ -175,25 +302,29 @@ When customizing your card form layout, be aware of a common issue that can lead
           <!-- Card form inputs -->
         </div>
       </primer-card-form>
-      
+
       <!-- This will render ANOTHER card form, causing duplicates -->
       <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
     </div>
   </primer-main>
 </primer-checkout>
 ```
+:::
 
 **Important:** When using a custom card form, do not include `<primer-payment-method type="PAYMENT_CARD">` in your layout. The payment method component will render its own card form, resulting in duplicates.
 
 This is especially important when dynamically generating payment methods:
 
+<details>
+<summary><strong>Dynamic Payment Method Filtering Example</strong></summary>
+
 ```javascript
-// When dynamically rendering payment methods, filter out PAYMENT_CARD
+// When dynamically rendering payment methods, filter out PAYMENT_CARD if you're using a custom card form
 checkout.addEventListener('primer-payment-methods-updated', (event) => {
   const availableMethods = event.detail.toArray()
     // Filter out PAYMENT_CARD if you're using a custom card form
     .filter(method => method.type !== 'PAYMENT_CARD');
-  
+
   // Render the filtered payment methods
   availableMethods.forEach(method => {
     const element = document.createElement('primer-payment-method');
@@ -202,16 +333,54 @@ checkout.addEventListener('primer-payment-methods-updated', (event) => {
   });
 });
 ```
+</details>
+
+## Relationship with Payment Method Component
+
+The relationship between `<primer-card-form>` and `<primer-payment-method type="PAYMENT_CARD">` is important to understand:
+
+```mermaid
+flowchart TD
+    A[Payment Methods] --> B["primer-payment-method<br>type=PAYMENT_CARD"]
+    A --> C[Other Payment Methods]
+    
+    B -->|Internally creates| D[primer-card-form]
+    
+    E[Custom Layout] --> F[Your primer-card-form]
+    
+    subgraph "Choose only one approach"
+    B
+    F
+    end
+    
+    style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style B fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style D fill:#ffebee,stroke:#f44336,stroke-width:1px
+    style E fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style F fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+```
+
+Key points about this relationship:
+
+1. `<primer-payment-method type="PAYMENT_CARD">` internally creates its own `<primer-card-form>`
+2. You should use either:
+    - A custom `<primer-card-form>` (for full layout control)
+    - The `<primer-payment-method type="PAYMENT_CARD">` component (for automatic handling)
+3. Using both simultaneously will create duplicate forms and cause conflicts
 
 ## Best Practices
 
+:::tip Best Practices Summary
 1. **Maintain Security** - Always use the provided secure input components for card data
-2. **Avoid Duplicate Components** - Don't use `<primer-payment-method type="PAYMENT_CARD">` with a custom card form
-3. **Prioritize Clarity** - Keep layouts simple and focused on the payment task
-4. **Use Consistent Styling** - Maintain visual consistency with your site's design system
-5. **Handle Validation Properly** - Provide clear error messages and guidance
-6. **Consider Mobile First** - Design for small screens first, then enhance for larger devices
-7. **Test Thoroughly** - Validate behavior across browsers and device types
+2. **Respect Component Hierarchy** - Keep all card input components within the `primer-card-form`
+3. **Avoid Duplicate Components** - Don't use `<primer-payment-method type="PAYMENT_CARD">` with a custom card form
+4. **Prioritize Clarity** - Keep layouts simple and focused on the payment task
+5. **Use Consistent Styling** - Maintain visual consistency with your site's design system
+6. **Handle Validation Properly** - Provide clear error messages and guidance
+7. **Consider Mobile First** - Design for small screens first, then enhance for larger devices
+8. **Test Thoroughly** - Validate behavior across browsers and device types
+   :::
 
 For detailed information on individual components, refer to their API documentation:
 - [Card Form](/api/Components/CardForm/)

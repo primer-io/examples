@@ -10,6 +10,24 @@ description: The Payment Method component renders different payment method inter
 
 The `PaymentMethod` component renders the appropriate payment interface based on the specified payment method type. It automatically handles different payment method categories and only displays methods that are available in your checkout configuration.
 
+```mermaid
+flowchart TD
+    A[primer-payment-method] -->|type attribute| B{Is Payment<br>Method Available?}
+    B -->|Yes| C[Render Payment UI]
+    B -->|No| D[Render Nothing]
+    
+    C -->|PAYMENT_CARD| E[Card Payment Form]
+    C -->|APPLE_PAY| F[Apple Pay Button]
+    C -->|GOOGLE_PAY| G[Google Pay Button]
+    C -->|PAYPAL| H[PayPal Button]
+    C -->|Other Methods| I[Method-specific UI]
+    
+    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+    style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style D fill:#ffebee,stroke:#f44336,stroke-width:1px
+```
+
 ## Usage
 
 ```html
@@ -36,19 +54,52 @@ The `PaymentMethod` component renders the appropriate payment interface based on
 
 The `primer-payment-method` component only renders payment methods that are:
 
+```mermaid
+flowchart LR
+    A[Payment Method<br>Request] --> B{Specified by<br>type attribute?}
+    B -->|No| F[Won't Render]
+    B -->|Yes| C{Available in<br>configuration?}
+    C -->|No| F
+    C -->|Yes| D{Returned by<br>server?}
+    D -->|No| F
+    D -->|Yes| E[Render Payment<br>Method]
+    
+    style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+    style C fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+    style D fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+    style E fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style F fill:#ffebee,stroke:#f44336,stroke-width:1px
+```
+
 1. **Specified by the type attribute** - You declare which payment method you want to display
 2. **Available in your checkout configuration** - The method must be enabled in your Primer Checkout Builder settings
 3. **Returned by the server** - The method must be returned in the available payment methods list
 
+:::tip
 If a payment method isn't available (not configured or not returned by the server), the component simply won't render anything rather than showing an error. This makes it safe to include multiple payment method components even if some methods might not be available in all contexts.
+:::
 
 ### Dynamic Payment Method Discovery
 
 The best way to work with payment methods is to listen for the `primer-payment-methods-updated` event, which provides the complete list of available payment methods for your checkout configuration. This approach lets you dynamically render only the methods that are actually available.
 
+```mermaid
+sequenceDiagram
+    participant Checkout as primer-checkout
+    participant YourApp
+    participant PaymentMethod as primer-payment-method
+    
+    Checkout->>YourApp: primer-payment-methods-updated
+    Note right of YourApp: Get available methods
+    YourApp->>YourApp: Process available methods
+    YourApp->>PaymentMethod: Create components for<br>available methods
+```
+
 ## Examples
 
-### Best Practice: Dynamic Payment Method Rendering
+<details>
+<summary><strong>Best Practice: Dynamic Payment Method Rendering</strong></summary>
 
 This example shows how to listen for available payment methods and dynamically render them:
 
@@ -82,8 +133,10 @@ This example shows how to listen for available payment methods and dynamically r
   });
 </script>
 ```
+</details>
 
-### Custom Layout with Priority Ordering
+<details>
+<summary><strong>Custom Layout with Priority Ordering</strong></summary>
 
 This example shows how to create a custom layout where certain payment methods are prioritized:
 
@@ -151,8 +204,10 @@ This example shows how to create a custom layout where certain payment methods a
   });
 </script>
 ```
+</details>
 
-### Custom Payment Method with Options Configuration
+<details>
+<summary><strong>Custom Payment Method with Options Configuration</strong></summary>
 
 ```html
 <primer-checkout id="checkout" client-token="your-client-token">
@@ -177,36 +232,61 @@ This example shows how to create a custom layout where certain payment methods a
   };
 </script>
 ```
+</details>
 
 ## Available Payment Method Types
 
 The Primer SDK supports a wide range of payment methods. Here are some of the commonly used types:
 
-**Core Payment Types:**
+<div class="tabs-container">
+<div class="tabs">
+<div class="tab core active">Core Payment Types</div>
+<div class="tab banking">Online Banking</div>
+<div class="tab bnpl">Buy Now, Pay Later</div>
+<div class="tab regional">Regional Methods</div>
+<div class="tab crypto">Cryptocurrency</div>
+</div>
+
+<div class="tab-content core active">
+
 - `PAYMENT_CARD` - Standard card payments
 - `APPLE_PAY` - Apple Pay
 - `GOOGLE_PAY` - Google Pay
 - `PAYPAL` - PayPal payments
 - `KLARNA` - Klarna payments
 
-**Online Banking:**
+</div>
+
+<div class="tab-content banking">
+
 - Various iDEAL implementations: `ADYEN_IDEAL`, etc.
 - SOFORT implementations: `ADYEN_SOFORT`, `MOLLIE_SOFORT`, `PAY_NL_SOFORT_BANKING`, etc.
 
-**Buy Now, Pay Later:**
+</div>
+
+<div class="tab-content bnpl">
+
 - `CLEARPAY` - Clearpay/Afterpay
 - `HOOLAH` - Hoolah
 - `ATOME` - Atome
 
-**Regional Payment Methods:**
+</div>
+
+<div class="tab-content regional">
+
 - Multiple Bancontact implementations: `ADYEN_BANCONTACT_CARD`, `PAY_NL_BANCONTACT`, etc.
 - GiroPay implementations: `ADYEN_GIROPAY`, `BUCKAROO_GIROPAY`, etc.
 - Regional wallets: `RAPYD_GRABPAY`, `XENDIT_DANA`, etc.
 
-**Cryptocurrency:**
+</div>
+
+<div class="tab-content crypto">
+
 - `COINBASE` - Coinbase cryptocurrency payments
 - `OPENNODE` - OpenNode Bitcoin payments
 
+</div>
+</div>
 
 :::important Web Headless Support
 At the moment, the Composable Checkout supports only payment methods that are compatible with Primer's Web Headless SDK. Before implementing any payment method through Composable Checkout, developers should reference the [Available Payment Methods](https://primer.io/docs/payment-methods/available-payment-methods) documentation, which provides detailed information about which payment methods are supported in which regions and integrations.
@@ -246,10 +326,12 @@ Each payment method type can be configured through the `options` property of the
 </script>
 ```
 
-## Notes
+## Key Considerations
 
+:::info Summary
 - Payment methods must be configured in your Primer Checkout Builder settings to be displayed
 - If a payment method is specified but not available, the component won't render anything (no error)
 - The component automatically determines which payment interface to render based on the payment method's type
 - Always listen to the `primer-payment-methods-updated` event to get the current list of available payment methods
 - The component must be used within a `primer-checkout` context to access payment methods
+  :::

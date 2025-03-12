@@ -8,7 +8,6 @@ description: Learn how to install and set up Primer Composable Checkout in your 
 
 Welcome to Primer's Composable Checkout SDK! This guide will help you integrate our payment solution into your website or web application.
 
-
 :::tip What you'll learn
 - Set up a client session for Primer payments
 - Install and initialize the Primer Composable Checkout SDK
@@ -40,25 +39,30 @@ Before integrating Primer Composable Checkout, ensure you have completed these p
 1. You're [ready to process payments](https://primer.io/docs/payments/process-payments)
 2. [Universal Checkout is properly configured](https://primer.io/docs/payments/universal-checkout/configure-universal-checkout-without-code) in your Primer Dashboard
 
-
 ### Create a Client Session
 
 A **client session** is required to initialize the checkout experience. This session contains your order data and provides you with a **client token** needed to initialize the components.
 
-Here's how to create a client session:
+#### Steps to create a client session:
 
-1. **Generate an API key**
-    - Visit the [Primer Dashboard developer page](https://sandbox-dashboard.primer.io/developers/apiKeys)
-    - Create an API key with these scopes:
-        - `client_tokens:write`
-        - `transactions:authorize`
+<details>
+<summary><strong>1. Generate an API key</strong></summary>
 
-2. **Make a client session request**
-    - Make a POST request to the [Client Session API](https://primer.io/docs/api/api-reference/client-session-api/create-client-side-token)
-    - Include at minimum:
-        - `orderId`: Your reference for tracking this payment
-        - `currencyCode`: Three-letter currency code (e.g., "USD")
-        - `order.lineItems`: Details of items in the order
+- Visit the [Primer Dashboard developer page](https://sandbox-dashboard.primer.io/developers/apiKeys)
+- Create an API key with these scopes:
+    - `client_tokens:write`
+    - `transactions:authorize`
+</details>
+
+<details>
+<summary><strong>2. Make a client session request</strong></summary>
+
+- Make a POST request to the [Client Session API](https://primer.io/docs/api/api-reference/client-session-api/create-client-side-token)
+- Include at minimum:
+    - `orderId`: Your reference for tracking this payment
+    - `currencyCode`: Three-letter currency code (e.g., "USD")
+    - `order.lineItems`: Details of items in the order
+</details>
 
 The response will contain a `clientToken` that you'll use in the next steps to initialize Primer Composable Checkout.
 
@@ -89,39 +93,37 @@ For comprehensive details on all available attributes, refer to the [Checkout Co
 
 ## Adding Styles
 
-The Primer Composable Checkout SDK uses CSS Custom Properties to manage its visual appearance. To get started with styling, include the base stylesheet in your HTML:
+The Primer Composable Checkout SDK uses CSS Custom Properties to manage its visual appearance. To get started with styling, include the base stylesheet in your HTML.
 
-### Light Theme (Default)
+### Theme Implementation Options
 
-```html
-<link rel="stylesheet" href="https://sdk.primer.io/web/primer-js/v0-latest/styles.css" />
-```
+<div class="theme-options">
+<div class="tabs-container">
+<div class="tabs">
+<div class="tab light active">Light Theme</div>
+<div class="tab dark">Dark Theme</div>
+<div class="tab both">Support Both</div>
+</div>
 
-### Dark Theme (Optional)
-
-```html
-<link rel="stylesheet" href="https://sdk.primer.io/web/primer-js/v0-latest/dark.css" />
-```
-
-### Implementing Theme Support
-
-There are two main approaches to implementing themes:
-
-#### 1. Simple Theme Implementation
-
-For basic implementations, simply include the stylesheet for your desired theme:
+<div class="tab-content light active">
 
 ```html
 <!-- For light theme only -->
 <link rel="stylesheet" href="https://sdk.primer.io/web/primer-js/v0-latest/styles.css" />
+```
 
-<!-- OR for dark theme only -->
+</div>
+
+<div class="tab-content dark">
+
+```html
+<!-- For dark theme only -->
 <link rel="stylesheet" href="https://sdk.primer.io/web/primer-js/v0-latest/dark.css" />
 ```
 
-#### 2. Supporting Both Light and Dark Themes
+</div>
 
-To support both themes with automatic switching:
+<div class="tab-content both">
 
 ```html
 <!-- Include both stylesheets -->
@@ -136,7 +138,7 @@ To support both themes with automatic switching:
 </div>
 ```
 
-You can then switch themes by changing the class on your container:
+You can switch themes by changing the class on your container:
 
 ```javascript
 // Switch to dark theme
@@ -145,6 +147,52 @@ document.getElementById('checkout-container').className = 'primer-dark-theme';
 // Switch to light theme
 document.getElementById('checkout-container').className = 'primer-light-theme';
 ```
+
+</div>
+</div>
+</div>
+
+## Customizing with the Styling API
+
+The Primer Composable Checkout SDK provides a comprehensive Styling API that allows you to customize the visual appearance of all checkout components. This API uses CSS Custom Properties (CSS Variables) to maintain a consistent design language across components.
+
+```html
+<!-- Example of styling customization using CSS variables -->
+<style>
+  :root {
+    /* Brand color customization */
+    --primer-color-brand: #4a6cf7;
+    
+    /* Typography customization */
+    --primer-typography-brand: 'Montserrat', sans-serif;
+    
+    /* Border radius customization */
+    --primer-radius-medium: 8px;
+    
+    /* Spacing customization */
+    --primer-space-medium: 16px;
+  }
+</style>
+```
+
+You can customize nearly every aspect of the checkout UI, including:
+
+- Colors (brand colors, text colors, backgrounds)
+- Typography (font families, sizes, weights)
+- Border radius values
+- Spacing and sizing
+- Input and button appearances
+
+The Styling API also supports providing styles through a JSON object using the `custom-styles` attribute:
+
+```html
+<primer-checkout 
+  client-token="your-client-token"
+  custom-styles='{"primerColorBrand":"#4a6cf7","primerTypographyBrand":"Montserrat, sans-serif"}'>
+</primer-checkout>
+```
+
+For detailed information on all available styling variables and customization options, refer to the [Composable Checkout Styling API](/api/styling-api-docs).
 
 ## TypeScript Support
 
@@ -164,6 +212,7 @@ declare module "my-app" {
   }
 }
 ```
+
 :::note
 Libraries will often have their own module names you will need to use when extending the IntrinsicElements interface. For example, Preact requires you to use the "preact" module name instead of "my-app" (declare module "preact") and StencilJS uses "@stencil/core" (declare module "@stencil/core").
 :::
@@ -171,6 +220,27 @@ Libraries will often have their own module names you will need to use when exten
 ## Event Handling
 
 The SDK emits events to help you manage the checkout flow. All events bubble up through the DOM and can be listened to at the document level or on the checkout component.
+
+```mermaid
+flowchart TB
+    A[primer-checkout] --> B["primer-state-changed
+    (isProcessing, isSuccessful, error)"]
+    A --> C["primer-payment-methods-updated
+    (available payment methods)"]
+    A --> D["primer-checkout-initialized
+    (SDK instance)"]
+    A --> E["primer-form-submit-success
+    (successful submission)"]
+    A --> F["primer-form-submit-errors
+    (validation errors)"]
+    
+    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style D fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style E fill:#e8f5e9,stroke:#4caf50,stroke-width:1px
+    style F fill:#ffebee,stroke:#f44336,stroke-width:1px
+```
 
 ### Core Events
 
@@ -229,6 +299,22 @@ The SDK provides flexible options for customizing your checkout experience. You 
 </primer-checkout>
 ```
 
+```mermaid
+flowchart TD
+    A[primer-checkout] --> B[primer-main]
+    B --> C[Payments slot]
+    C --> D[primer-payment-method:
+    PAYMENT_CARD]
+    C --> E[primer-payment-method:
+    PAYPAL]
+    
+    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style B fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style C fill:#e3f2fd,stroke:#1976d2,stroke-width:1px
+    style D fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style E fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+```
+
 For more advanced customization options, including handling success and failure states, checkout flow customization, and more, refer to the [Layout Customizations Guide](/documentation/layout-customizations-guide).
 
 ### Preventing Flash of Undefined Components
@@ -247,6 +333,7 @@ For smooth transitions, you can use advanced techniques like `customElements.whe
 
 When working with the Primer Composable Checkout SDK, be aware of the following limitations:
 
+:::warning Key Limitations
 1. **Browser Compatibility**: The SDK uses modern web technologies and is not compatible with legacy browsers such as Internet Explorer 11.
 
 2. **Shadow DOM Isolation**: Since the SDK uses Shadow DOM for style encapsulation, direct CSS targeting of inner elements is not possible. Use the provided CSS variables for styling.
@@ -256,5 +343,6 @@ When working with the Primer Composable Checkout SDK, be aware of the following 
 4. **Security Contexts**: The SDK requires a secure context (HTTPS) for certain features like Apple Pay to function correctly.
 
 5. **Framework Integration**: While the SDK works with all modern frameworks, integration patterns may differ slightly based on your framework's approach to handling custom elements.
+   :::
 
 For more detailed information about the underlying technologies and design decisions, see our [Technology Overview](/documentation/components-technology).

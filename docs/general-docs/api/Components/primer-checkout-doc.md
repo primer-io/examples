@@ -14,6 +14,25 @@ The `Checkout` component serves as the main container for all Primer payment com
 
 The Checkout component can be used in three ways:
 
+```mermaid
+flowchart TD
+    A[Checkout Implementation Options] --> B[Drop-in Solution]
+    A --> C[Customized via primer-main]
+    A --> D[Fully Custom Implementation]
+    
+    B -->|"&lt;primer-checkout&gt; only"| E[Automatic display of<br>all payment methods]
+    C -->|"Use slots within<br>&lt;primer-main&gt;"| F[Customize specific<br>checkout sections]
+    D -->|"Replace &lt;primer-main&gt;<br>with custom content"| G[Complete control<br>over UI and flow]
+    
+    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style D fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+    style E fill:#e3f2fd,stroke:#1976d2,stroke-width:1px
+    style F fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style G fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+```
+
 ### 1. As a Drop-in Solution
 
 Simply add the component with a client token to render a complete, ready-to-use checkout experience:
@@ -89,7 +108,35 @@ For comprehensive layout customization options, see the [Layout Customizations G
 | `primer-card-submit-success`     | Fired when a card form is successfully submitted | Submission result         |
 | `primer-card-submit-errors`      | Fired when card form submission has errors       | Validation errors         |
 
+```mermaid
+sequenceDiagram
+    participant Checkout as primer-checkout
+    participant YourApp
+    
+    Note over Checkout,YourApp: Initialization Phase
+    Checkout->>YourApp: primer-checkout-initialized
+    
+    Note over Checkout,YourApp: Payment Method Discovery
+    Checkout->>YourApp: primer-payment-methods-updated
+    
+    Note over Checkout,YourApp: Payment Processing
+    YourApp->>Checkout: Submit Payment
+    Checkout->>YourApp: primer-state-changed (isProcessing: true)
+    
+    alt Success Path
+        Checkout->>YourApp: primer-card-submit-success
+        Checkout->>YourApp: primer-state-changed (isSuccessful: true)
+    else Error Path
+        Checkout->>YourApp: primer-card-submit-errors
+        Checkout->>YourApp: primer-state-changed (error: {...})
+    end
+```
+
 ## SDK Options
+
+:::caution Temporary Implementation
+The current SDK options structure documented here is temporary and will be changing. We will be moving away from the JSON-based configuration approach as we progress with the migration of our Headless SDK.
+:::
 
 The `options` property accepts a configuration object for the Primer SDK. When used as an HTML attribute, it must be a stringified JSON object. Remember that stringified JSON must use double quotes for property names and string values.
 
@@ -104,7 +151,8 @@ Here's a comprehensive overview of the available options:
 
 ### Payment Method-Specific Options
 
-#### Card Options
+<details>
+<summary><strong>Card Options</strong></summary>
 
 Controls the behavior of card payment methods.
 
@@ -118,8 +166,10 @@ Controls the behavior of card payment methods.
   }
 }
 ```
+</details>
 
-#### Apple Pay Options
+<details>
+<summary><strong>Apple Pay Options</strong></summary>
 
 Configures Apple Pay payment behavior.
 
@@ -141,8 +191,10 @@ Configures Apple Pay payment behavior.
   }
 }
 ```
+</details>
 
-#### Google Pay Options
+<details>
+<summary><strong>Google Pay Options</strong></summary>
 
 Configures Google Pay payment behavior.
 
@@ -155,8 +207,10 @@ Configures Google Pay payment behavior.
   }
 }
 ```
+</details>
 
-#### PayPal Options
+<details>
+<summary><strong>PayPal Options</strong></summary>
 
 Configures PayPal payment behavior.
 
@@ -168,6 +222,7 @@ Configures PayPal payment behavior.
   }
 }
 ```
+</details>
 
 ### Example of Complete Options Object
 
@@ -209,28 +264,57 @@ checkout.options = {
 
 ### Important Notes on JSON Formatting
 
+:::warning
 When passing options to the `primer-checkout` component as an HTML attribute:
 
 1. The entire options object must be a valid JSON string (use `JSON.stringify()` in JavaScript)
 2. Use double quotes (`"`) for property names and string values
 3. Do not include trailing commas
 4. Boolean values should be `true` or `false` (not strings)
+   :::
 
-Incorrect:
+<div class="tabs-container">
+<div class="tabs">
+<div class="tab incorrect">Incorrect ❌</div>
+<div class="tab correct">Correct ✅</div>
+</div>
+
+<div class="tab-content incorrect">
+
 ```html
-<!-- ❌ Invalid: Single quotes around property names, trailing comma -->
+<!-- Invalid: Single quotes around property names, trailing comma -->
 <primer-checkout options='{"locale": "en-GB", "apiVersion": "2.4",}'>
 ```
 
-Correct:
+</div>
+
+<div class="tab-content correct">
+
 ```html
-<!-- ✅ Valid: Proper JSON formatting -->
+<!-- Valid: Proper JSON formatting -->
 <primer-checkout options='{"locale":"en-GB","apiVersion":"2.4"}'>
 ```
+
+</div>
+</div>
 
 ## States
 
 The Checkout component manages several states:
+
+```mermaid
+stateDiagram-v2
+    [*] --> Loading: SDK Initialization
+    Loading --> Error: Initialization Failed
+    Loading --> Ready: SDK Initialized
+    Ready --> Processing: Payment Started
+    Processing --> Success: Payment Completed
+    Processing --> Failure: Payment Failed
+    
+    Success --> [*]
+    Failure --> Ready: User retries
+    Error --> [*]
+```
 
 1. **Loading state**: During SDK initialization
 2. **Error state**: When SDK initialization fails
@@ -248,7 +332,8 @@ You can apply tokens in two ways:
 1. Using CSS Custom Properties directly in your stylesheets
 2. Using JSON properties through the `custom-styles` attribute
 
-### CSS Usage Example
+<details>
+<summary><strong>CSS Usage Example</strong></summary>
 
 ```css
 /* Apply styling to all checkout components */
@@ -261,18 +346,22 @@ You can apply tokens in two ways:
   --primer-color-loader: #2f98ff;
   --primer-color-focus: #2f98ff;
 }
-
 ```
+</details>
 
-### JSON Usage Example
+<details>
+<summary><strong>JSON Usage Example</strong></summary>
 
 ```html
 <primer-checkout
   custom-styles='{"primerColorBrand":"#2f98ff","primerRadiusBase":"4px","primerTypographyBrand":"Inter, sans-serif","primerSpaceBase":"4px","primerSizeBase":"4px","primerColorLoader":"#2f98ff","primerColorFocus":"#2f98ff"}'
 ></primer-checkout>
 ```
+</details>
 
+:::tip
 Choose the approach that best fits your project structure. The CSS approach offers more flexibility with selectors and media queries, while the JSON approach keeps styling concerns directly with the component instance.
+:::
 
 ## Technical Implementation
 
@@ -286,15 +375,18 @@ The Checkout component:
 
 ## Examples
 
-### Basic Drop-in Implementation
+<details>
+<summary><strong>Basic Drop-in Implementation</strong></summary>
 
 The simplest implementation with default behavior and styling:
 
 ```html
 <primer-checkout client-token="your-client-token"></primer-checkout>
 ```
+</details>
 
-### Using primer-main with Customization
+<details>
+<summary><strong>Using primer-main with Customization</strong></summary>
 
 ```html
 <primer-checkout 
@@ -309,8 +401,10 @@ The simplest implementation with default behavior and styling:
   </primer-main>
 </primer-checkout>
 ```
+</details>
 
-### Fully Custom Implementation
+<details>
+<summary><strong>Fully Custom Implementation</strong></summary>
 
 ```html
 <primer-checkout 
@@ -323,8 +417,10 @@ The simplest implementation with default behavior and styling:
   </div>
 </primer-checkout>
 ```
+</details>
 
-### With Custom Styling
+<details>
+<summary><strong>With Custom Styling</strong></summary>
 
 ```html
 <primer-checkout
@@ -335,8 +431,10 @@ The simplest implementation with default behavior and styling:
   <primer-main slot="main"></primer-main>
 </primer-checkout>
 ```
+</details>
 
-### With API Version and Card Options
+<details>
+<summary><strong>With API Version and Card Options</strong></summary>
 
 ```html
 <primer-checkout 
@@ -346,8 +444,10 @@ The simplest implementation with default behavior and styling:
   <primer-main slot="main"></primer-main>
 </primer-checkout>
 ```
+</details>
 
-### Complete Checkout with Event Handling
+<details>
+<summary><strong>Complete Checkout with Event Handling</strong></summary>
 
 ```html
 <primer-checkout 
@@ -393,8 +493,10 @@ The simplest implementation with default behavior and styling:
   });
 </script>
 ```
+</details>
 
-### Dynamically Setting Options in JavaScript
+<details>
+<summary><strong>Dynamically Setting Options in JavaScript</strong></summary>
 
 ```html
 <primer-checkout id="checkout" client-token="your-client-token">
@@ -416,6 +518,7 @@ The simplest implementation with default behavior and styling:
   };
 </script>
 ```
+</details>
 
 ## Locale Support
 
@@ -430,7 +533,18 @@ The Checkout component supports internationalization through the `locale` option
 </primer-checkout>
 ```
 
+The full list of supported locales can be found in the [Localization and languages
+section](https://primer.io/docs/payments/universal-checkout/drop-in/customize-checkout/web#localization-and-languages).
+
+
+:::note
 If an unsupported locale is provided, the component will fall back to the default 'en-GB' locale with a warning message in the console.
+:::
+
+:::warning
+At present the Composable Checkout only supports left-to-right (LTR) languages.
+:::
+
 
 ## Disable Loader Option
 
@@ -447,16 +561,19 @@ You can disable the default loading spinner that appears during SDK initializati
 
 This is useful when you want to implement your own custom loading indicator or when integrating the checkout into a page that already has a loader.
 
-## Notes
+## Key Considerations
 
+:::info Summary of Key Points
 - The Checkout component functions as a complete checkout solution out of the box, requiring only a client token
 - Without custom layout, the component automatically displays all available payment methods
 - The `primer-main` component is optional - you can provide your own custom implementation in the `main` slot
 - When using a custom implementation instead of `primer-main`, you'll need to listen to checkout events to handle different checkout states
 - For custom layouts, use the `main` slot to provide your own content configuration
 - The component automatically handles loading states and error messages
-- For advanced customization, refer to the [Layout Customizations Guide](/documentation/layout-customizations-guide)
 - All Primer payment components must be used within the Checkout component
 - Unsupported locales will fall back to 'en-GB' with a console warning
 - When using the `options` property directly in JavaScript, you can pass it as an object; when using it as an HTML attribute, it must be a stringified JSON object
 - The `custom-styles` attribute accepts a stringified JSON object with camelCase property names that map to kebab-case CSS variables
+  :::
+
+For advanced customization, refer to the [Layout Customizations Guide](/documentation/layout-customizations-guide).

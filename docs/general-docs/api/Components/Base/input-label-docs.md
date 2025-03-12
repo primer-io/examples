@@ -8,16 +8,35 @@ slug: /components/input-label
 # Input Label Component
 ## \<primer-input-label\>
 
-The Input Label component provides a standardized way to label form elements with consistent styling and proper accessibility. It's designed to work with Primer input components and maintains design consistency across your forms.
+The Input Label component provides a standardized way to label form elements with consistent styling and proper accessibility. It's designed to work seamlessly with Primer input components to maintain design consistency across your forms.
 
-## Usage
+```mermaid
+flowchart TD
+    A[primer-input-label] --> B[Semantic Labeling]
+    A --> C[Accessibility]
+    A --> D[Styling Consistency]
+    
+    B --> E[Associates with Input]
+    C --> F[Screen Reader Support]
+    C --> G[Focus Management]
+    D --> H[Theme Variables]
+    
+    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+    style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style D fill:#fff8e1,stroke:#ffa000,stroke-width:1px
+```
+
+## Usage Patterns
+
+### Basic Label Association
 
 ```html
 <primer-input-label for="email-input">Email Address</primer-input-label>
 <primer-input id="email-input" type="email"></primer-input>
 ```
 
-Or, more commonly, within an input wrapper:
+### With Input Wrapper (Recommended)
 
 ```html
 <primer-input-wrapper>
@@ -33,15 +52,33 @@ Or, more commonly, within an input wrapper:
 | `for`      | `for`      | `string`  | `''`    | ID of the form control this label is associated with |
 | `disabled` | `disabled` | `boolean` | `false` | Whether the label should appear disabled             |
 
-## Slots
+## Accessibility Features
 
-| Name       | Description                         |
-|------------|-------------------------------------|
-| `default`  | Content of the label (text content) |
+:::info Accessibility Highlights
+- Generates a semantic `<label>` element
+- Properly associates with input fields via `for` attribute
+- Enables screen reader support
+- Allows direct input focus when label is clicked
+  :::
 
-## CSS Custom Properties
+```mermaid
+sequenceDiagram
+    participant User
+    participant Label as primer-input-label
+    participant Input as primer-input
+    participant ScreenReader
+    
+    User->>Label: Click
+    Label->>Input: Focus input
+    Input->>ScreenReader: Announce input state
+```
 
-The Input Label component uses these CSS custom properties for styling:
+## Styling Customization
+
+The Input Label component inherits styling from CSS custom properties:
+
+<details>
+<summary>Customizable Style Properties</summary>
 
 | Property                                        | Description                       |
 |-------------------------------------------------|-----------------------------------|
@@ -52,32 +89,35 @@ The Input Label component uses these CSS custom properties for styling:
 | `--primer-color-text-primary`                   | Text color for the label          |
 | `--primer-typography-body-small-font`           | Font family for the label         |
 | `--primer-color-text-disabled`                  | Text color when label is disabled |
+</details>
 
-## Accessibility
+## Example Implementations
 
-This component generates a semantic `<label>` element that is properly associated with its input field via the `for` attribute. This ensures:
+<div class="tabs-container">
+<div class="tabs">
+<div class="tab basic active">Basic Label</div>
+<div class="tab disabled">Disabled State</div>
+<div class="tab wrapper">With Input Wrapper</div>
+<div class="tab required">Required Field</div>
+</div>
 
-- Screen readers announce the label when users focus on the input
-- Clicking the label focuses the associated input (when properly linked via the `for` attribute)
-- The form remains accessible to all users
-
-## Examples
-
-### Basic Usage
+<div class="tab-content basic active">
 
 ```html
 <primer-input-label for="email">Email Address</primer-input-label>
 <primer-input id="email" type="email"></primer-input>
 ```
+</div>
 
-### With Disabled State
+<div class="tab-content disabled">
 
 ```html
 <primer-input-label for="username" disabled>Username</primer-input-label>
 <primer-input id="username" disabled></primer-input>
 ```
+</div>
 
-### Within Input Wrapper
+<div class="tab-content wrapper">
 
 ```html
 <primer-input-wrapper>
@@ -85,8 +125,9 @@ This component generates a semantic `<label>` element that is properly associate
   <primer-input slot="input" id="phone" type="tel"></primer-input>
 </primer-input-wrapper>
 ```
+</div>
 
-### With Required Field
+<div class="tab-content required">
 
 ```html
 <primer-input-wrapper>
@@ -101,10 +142,23 @@ This component generates a semantic `<label>` element that is properly associate
   ></primer-input>
 </primer-input-wrapper>
 ```
+</div>
+</div>
 
-## Notes
+## Best Practices
 
-- Always associate labels with inputs using the `for` attribute matched to the input's `id`
-- When using the `disabled` attribute, ensure the associated input is also disabled for consistency
-- Use the Input Label component inside the "label" slot of `primer-input-wrapper` for proper layout
-- The label uses smaller text than the input field to maintain proper visual hierarchy
+:::tip Key Recommendations
+- Always match the `for` attribute with the input's `id`
+- Use the `disabled` attribute consistently between label and input
+- Prefer using the Input Label inside the `primer-input-wrapper`'s label slot
+- Keep labels concise and descriptive
+  :::
+
+## Potential Pitfalls
+
+:::warning Common Mistakes to Avoid
+- Forgetting to set the `for` attribute
+- Mismatching label and input IDs
+- Inconsistent disabled states between label and input
+- Overriding default typography without considering accessibility
+  :::

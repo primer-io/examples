@@ -1,0 +1,36 @@
+{
+  "name": "primer-dropin-checkout",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Next.js implementation of Primer's Drop-in Universal Checkout",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@primer-io/checkout-web": "^2.50.5",
+    "@types/node": "20.6.2",
+    "@types/react": "18.2.22",
+    "@types/react-dom": "18.2.7",
+    "autoprefixer": "10.4.15",
+    "eslint": "8.49.0",
+    "eslint-config-next": "13.5.1",
+    "next": "^14.2.24",
+    "postcss": "8.4.31",
+    "react": "18",
+    "react-dom": "18",
+    "tailwindcss": "3.3.3",
+    "typescript": "5.2.2"
+  },
+  "keywords": [
+    "primer",
+    "payments",
+    "checkout",
+    "drop-in",
+    "nextjs"
+  ],
+  "author": "",
+  "license": "MIT"
+}

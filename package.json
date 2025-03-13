@@ -7,6 +7,10 @@
     "docs",
     "examples/*"
   ],
+  "nohoist": [
+    "**/react",
+    "**/react-dom"
+  ],
   "scripts": {
     "dev": "turbo run dev",
     "format": "prettier . --write"

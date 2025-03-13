@@ -2,7 +2,6 @@
 .turbo
 .yarn
 dist
-lib
 node_modules
 temp
 

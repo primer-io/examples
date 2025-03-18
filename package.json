@@ -9,7 +9,8 @@
   ],
   "nohoist": [
     "**/react",
-    "**/react-dom"
+    "**/react-dom",
+    "**/typescript"
   ],
   "scripts": {
     "dev": "turbo run dev",

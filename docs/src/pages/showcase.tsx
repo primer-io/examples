@@ -44,6 +44,15 @@ function ShowcaseExamples() {
               requiring additional structural changes.
             </p>
             <p className={styles.exampleDescription}>
+              A convenient style toggle feature is included, allowing merchants
+              to instantly see the effect of CSS variables in action. Simply
+              check the "Enable Custom Style Variables" box at the top of the
+              page to apply a custom theme and visualize how styling changes
+              affect the checkout experience in real-time. This makes it easy to
+              test and experiment with different styling options before
+              implementing them in your own project.
+            </p>
+            <p className={styles.exampleDescription}>
               While this serves as a foundational starting point, be aware that
               this is not a final implementation. Some features available in SDK
               v2 might be missing at this stage, but they will be progressively
@@ -51,7 +60,7 @@ function ShowcaseExamples() {
             </p>
             <div className={styles.exampleLinks}>
               <Link
-                to='https://stackblitz.com/edit/primer-checkout-without-frameworks?file=index.htmls'
+                to='https://stackblitz.com/edit/primer-checkout-without-frameworks?file=index.html'
                 className={styles.exampleLink}
                 target='_blank'
                 rel='noopener noreferrer'
@@ -66,7 +75,7 @@ function ShowcaseExamples() {
               <iframe
                 src='https://stackblitz.com/edit/primer-checkout-without-frameworks?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
                 title='Basic Checkout Implementation'
-                className={styles.embedFrame}
+                className={styles.embedFrameTall}
                 loading='lazy'
               ></iframe>
             </div>
@@ -79,19 +88,28 @@ function ShowcaseExamples() {
               Custom-Styled Checkout
             </Heading>
             <p className={styles.exampleDescription}>
-              This example demonstrates how to build a fully customizable
-              checkout while still using no framework—operating purely with HTML
-              and a minimal <code>main.ts</code> script. The goal is to showcase
-              the power of our exposed style tokens by offering four different
-              checkout versions, allowing users to toggle between them
-              seamlessly.
+              This playful example demonstrates the impressive flexibility of
+              Composable Checkout's style variables with a no-framework
+              approach—using just HTML and a minimal <code>main.ts</code>{' '}
+              script. Rather than showcasing built-in themes, this demo
+              illustrates how developers can create wildly different visual
+              experiences using the same underlying components and CSS
+              variables.
             </p>
             <p className={styles.exampleDescription}>
-              The implementation includes a native drop-down selector that
-              allows users to switch between four different pre-defined CSS
-              styles. It loads styling via CSS variables, keeping JavaScript
-              involvement to a bare minimum while demonstrating the flexibility
-              of the styling system.
+              With a simple drop-down selector, users can switch between ten
+              unique visual interpretations—from minimalist to cyberpunk to
+              kawaii—all powered by the same style variable system. The
+              JavaScript involvement is kept to a bare minimum, emphasizing how
+              CSS variables alone can transform your checkout appearance.
+            </p>
+            <p className={styles.exampleDescription}>
+              For comprehensive documentation on available style variables and
+              their proper implementation, please refer to the{' '}
+              <a href='/api/styling-api-docs'>
+                Composable Checkout Styling API
+              </a>{' '}
+              page.
             </p>
             <div className={styles.disclaimer}>
               <p>
@@ -107,7 +125,7 @@ function ShowcaseExamples() {
             </div>
             <div className={styles.exampleLinks}>
               <Link
-                to='https://stackblitz.com/edit/primer-checkout-without-frameworks-yhbluksu?file=index.html'
+                to='https://stackblitz.com/edit/custom-styled-checkout?file=index.html'
                 className={styles.exampleLink}
                 target='_blank'
                 rel='noopener noreferrer'
@@ -120,9 +138,9 @@ function ShowcaseExamples() {
           <div className={styles.exampleMedia}>
             <div className={styles.embedWrapper}>
               <iframe
-                src='https://stackblitz.com/edit/primer-checkout-without-frameworks-yhbluksu?ctl=1&embed=1&file=.vscode%2Fsnippets.json&hideExplorer=1&hideNavigation=1&view=preview'
+                src='https://stackblitz.com/edit/custom-styled-checkout?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
                 title='Custom-Styled Checkout Example'
-                className={styles.embedFrame}
+                className={styles.embedFrameTall}
                 loading='lazy'
               ></iframe>
             </div>

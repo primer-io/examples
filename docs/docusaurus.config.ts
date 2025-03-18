@@ -3,7 +3,6 @@ import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
-
 const config: Config = {
   title: 'Composable Checkout Docs',
   tagline:
@@ -31,7 +30,20 @@ const config: Config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
-  themes: ['@docusaurus/theme-mermaid'],
+  themes: [
+    '@docusaurus/theme-mermaid',
+    [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
+      {
+        hashed: true,
+        indexBlog: false,
+        indexPages: true,
+        docsDir: './general-docs',
+        forceIgnoreNoIndex: true,
+      },
+    ],
+  ],
   markdown: {
     mermaid: true,
   },
@@ -57,7 +69,6 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
-  plugins: [require.resolve('docusaurus-lunr-search')],
   themeConfig: {
     colorMode: {
       defaultMode: 'light',

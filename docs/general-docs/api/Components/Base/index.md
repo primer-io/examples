@@ -16,10 +16,10 @@ flowchart TD
     A --> D[primer-input-error]
     A --> E[primer-input-label]
     A --> F[primer-input-wrapper]
-    
+
     B & C & D & E & F --> G[Complex UI Components]
     G --> H[Complete Checkout Experience]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
@@ -40,6 +40,7 @@ Base Components serve several key purposes in the SDK architecture:
 <div class="col col--6">
 
 :::info Key Benefits
+
 - **Consistency**: They ensure visual and interactive elements behave predictably throughout the checkout experience
 - **Reusability**: They can be composed together to build more complex components and interfaces
 - **Maintainability**: Changes to these core components automatically propagate to all implementations
@@ -55,7 +56,7 @@ flowchart LR
     B --> C[All Derived Components]
     B --> D[Custom Implementations]
     B --> E[Default Checkout UI]
-    
+
     style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -71,7 +72,7 @@ flowchart LR
 The current Base Components collection includes:
 
 | Component                                             | Description                                               |
-|-------------------------------------------------------|-----------------------------------------------------------|
+| ----------------------------------------------------- | --------------------------------------------------------- |
 | [`<primer-button>`](/components/button)               | A versatile button component with multiple style variants |
 | [`<primer-input>`](/components/input)                 | A customizable input field for text and other data types  |
 | [`<primer-input-error>`](/components/input-error)     | A component for displaying validation error messages      |
@@ -86,12 +87,19 @@ These components often work together to create cohesive form experiences. For ex
 ```html
 <primer-input-wrapper>
   <primer-input-label slot="label">Email Address</primer-input-label>
-  <primer-input slot="input" type="email" placeholder="example@email.com"></primer-input>
-  <primer-input-error slot="error">Please enter a valid email address</primer-input-error>
+  <primer-input
+    slot="input"
+    type="email"
+    placeholder="example@email.com"
+  ></primer-input>
+  <primer-input-error slot="error"
+    >Please enter a valid email address</primer-input-error
+  >
 </primer-input-wrapper>
 ```
 
 This composition pattern allows for consistent form field styling and behavior throughout the checkout experience.
+
 </details>
 
 Additional base components may be added in future releases to expand the design system capabilities.
@@ -116,7 +124,7 @@ flowchart TD
     C --> D[primer-button]
     C --> E[primer-input]
     C --> F[primer-input-wrapper]
-    
+
     style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -176,6 +184,7 @@ These customizations will automatically propagate to all Base Components.
 Base Components can be used:
 
 :::tip Application Patterns
+
 - **Directly** within checkout forms when simple UI elements are needed
 - As **building blocks** for creating more complex, composite components
 - In **custom implementations** where standard form elements are required
@@ -186,11 +195,11 @@ flowchart LR
     A["Base Components<br>(Building Blocks)"] --> B["Standard Form Elements<br>(Direct Usage)"]
     A --> C["Complex Components<br>(Composition)"]
     A --> D["Custom Implementations<br>(Extensions)"]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
     style D fill:#fff8e1,stroke:#ffa000,stroke-width:1px
 ```
 
-For detailed implementation examples, refer to the documentation for each individual component. 
+For detailed implementation examples, refer to the documentation for each individual component.

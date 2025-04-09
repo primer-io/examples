@@ -281,32 +281,6 @@ function ComingSoonExamples() {
   );
 }
 
-function ContributeSection() {
-  return (
-    <section className={styles.contributeSection}>
-      <div className='container'>
-        <div className={styles.contributeContent}>
-          <Heading as='h2'>Contribute an Example</Heading>
-          <p className={styles.contributeDescription}>
-            Have you built something great with Composable Checkout? We'd love
-            to feature your implementation in our showcase. Submit your example
-            through our GitHub repository to help others learn from your
-            experience.
-          </p>
-          <Link
-            className='button button--primary button--lg'
-            to='https://github.com/primer-io/examples'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            Submit Your Example
-          </Link>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export default function Showcase() {
   const { siteConfig } = useDocusaurusContext();
 
@@ -319,7 +293,6 @@ export default function Showcase() {
       <main>
         <ShowcaseExamples />
         <ComingSoonExamples />
-        <ContributeSection />
       </main>
     </Layout>
   );

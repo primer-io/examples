@@ -36,7 +36,7 @@ function HomepageHeader() {
                 Start Building
               </Link>
               <Link
-                className='button button--outline button--lg'
+                className='button button--secondary button--lg'
                 to='/beta-program'
               >
                 Learn About Beta
@@ -295,7 +295,7 @@ export default function Home() {
       description="Build powerful, customizable checkout experiences with Primer's Composable Checkout. Maximum customization with minimal configuration."
     >
       <HomepageHeader />
-      <main>
+      <main className={styles.mainContent}>
         <CoreBenefits />
         <ComposableFeature />
         <StyleFeature />

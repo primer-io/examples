@@ -6,6 +6,7 @@ description: The CardForm component provides a container for card input componen
 ---
 
 # Card Form Component
+
 ## \<primer-card-form\>
 
 The `CardForm` component serves as a container for card input components. It handles payment card form submission, validation, and provides context to child components through a context provider system.
@@ -19,7 +20,7 @@ flowchart TD
     B --> F[Child Components]
     C --> G[Multiple Submission Methods]
     D --> H[Validation Rules]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
@@ -35,10 +36,11 @@ flowchart TD
 The Card Form component functions as both a container and a context provider. It manages the following:
 
 1. **Context Provision**: Creates and provides a context that contains:
-    - Secure hosted input elements for card data
-    - Validation state management
-    - Form state information
-    - Submission handlers
+
+   - Secure hosted input elements for card data
+   - Validation state management
+   - Form state information
+   - Submission handlers
 
 2. **Form Management**: Handles HTML form creation, submission events, and validation flows
 
@@ -54,16 +56,16 @@ The Card Form component has a specific relationship with its child components:
 flowchart TD
     A[primer-card-form] --> B[Container]
     A --> C[Context Provider]
-    
+
     B --> D[primer-input-card-number]
     B --> E[primer-input-card-expiry]
     B --> F[primer-input-cvv]
     B --> G[primer-input-card-holder-name]
     B --> H[primer-card-form-submit]
-    
+
     C --> I[Provides context to all child components]
     I --> D & E & F & G
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -77,19 +79,21 @@ flowchart TD
 The relationship is structured as follows:
 
 1. **Parent-Child Relationship**: All card input components must be children of the `primer-card-form`, either:
-    - Through the default layout (when no custom content is provided)
-    - Through custom content in the `card-form-content` slot
+
+   - Through the default layout (when no custom content is provided)
+   - Through custom content in the `card-form-content` slot
 
 2. **Context-Consumer Relationship**: All card input components consume the context provided by `primer-card-form`:
-    - Input fields receive hosted input instances
-    - Components receive validation state
-    - Components can update shared card form data
+
+   - Input fields receive hosted input instances
+   - Components receive validation state
+   - Components can update shared card form data
 
 3. **Coordination Role**: The card form coordinates all aspects of the payment form, including:
-    - Creation of secure input fields
-    - Validation of card data
-    - Submission to payment processors
-    - Error handling and reporting
+   - Creation of secure input fields
+   - Validation of card data
+   - Submission to payment processors
+   - Error handling and reporting
 
 ## Technical Implementation
 
@@ -118,6 +122,7 @@ The CardForm component can be used in two ways:
 ```
 
 This renders a complete card form with:
+
 - Card number input
 - Expiry date input
 - CVV input
@@ -158,7 +163,7 @@ flowchart TD
     F --> H[primer-input-cvv]
     D --> I[primer-input-card-holder-name]
     B --> J[primer-card-form-submit]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
     style C fill:#fff8e1,stroke:#ffa000,stroke-width:1px
@@ -186,13 +191,13 @@ With custom content, your slotted content replaces the default structure.
 ## Slots
 
 | Name                | Description                                                                                     |
-|---------------------|-------------------------------------------------------------------------------------------------|
+| ------------------- | ----------------------------------------------------------------------------------------------- |
 | `card-form-content` | Custom content slot for the card form. When provided, it replaces the default card form layout. |
 
 ## Events
 
 | Event Name                   | Description                                              | Event Detail                          |
-|------------------------------|----------------------------------------------------------|---------------------------------------|
+| ---------------------------- | -------------------------------------------------------- | ------------------------------------- |
 | `primer-form-submit-success` | Fired when the form is successfully submitted            | Contains the result of the submission |
 | `primer-form-submit-errors`  | Fired when there are validation errors during submission | Contains validation errors            |
 
@@ -207,7 +212,7 @@ flowchart LR
     A --> D[primer-button buttonType=submit]
     A --> E[data-submit attribute]
     A --> F[Programmatic Event]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -224,6 +229,7 @@ flowchart LR
 ```
 
 This is the recommended approach as it provides localized button text and consistent styling.
+
 </details>
 
 <details>
@@ -232,6 +238,7 @@ This is the recommended approach as it provides localized button text and consis
 ```html
 <button type="submit">Pay Now</button>
 ```
+
 </details>
 
 <details>
@@ -240,6 +247,7 @@ This is the recommended approach as it provides localized button text and consis
 ```html
 <primer-button buttonType="submit">Pay Now</primer-button>
 ```
+
 </details>
 
 <details>
@@ -250,6 +258,7 @@ This is the recommended approach as it provides localized button text and consis
 <!-- or -->
 <primer-button data-submit>Pay Now</primer-button>
 ```
+
 </details>
 
 <details>
@@ -257,9 +266,11 @@ This is the recommended approach as it provides localized button text and consis
 
 ```javascript
 // Dispatch a custom event to trigger form submission
-document.querySelector('primer-card-form')
+document
+  .querySelector('primer-card-form')
   .dispatchEvent(new CustomEvent('primer-form-submit'));
 ```
+
 </details>
 
 ## Validation
@@ -274,7 +285,7 @@ sequenceDiagram
     participant Form as primer-card-form
     participant Manager as Card Manager
     participant Inputs as Card Inputs
-    
+
     Form->>Manager: validate()
     alt Valid Inputs
         Manager->>Form: Validation Success
@@ -299,6 +310,7 @@ Validation errors are automatically passed to the respective input components to
 The CardForm component serves as a context provider for all child input components. It provides:
 
 :::info Key Context Items
+
 - **Hosted Inputs**: Secure iframe-based inputs for card number, expiry, and CVV
 - **Setter Methods**: Functions to update cardholder name and card network
 - **Validation State**: Current validation errors for each input
@@ -331,7 +343,7 @@ All card form input components have a mandatory dependency on the `primer-card-f
 <summary><strong>Complete Checkout Flow with CardForm</strong></summary>
 
 ```html
-<primer-checkout clientToken="your-client-token" options={options}>
+<primer-checkout clientToken="your-client-token" options="{options}">
   <primer-main slot="main">
     <div slot="payments">
       <primer-card-form>
@@ -349,6 +361,7 @@ All card form input components have a mandatory dependency on the `primer-card-f
   </primer-main>
 </primer-checkout>
 ```
+
 </details>
 
 <details>
@@ -369,26 +382,29 @@ cardForm.addEventListener('primer-form-submit-errors', (event) => {
   // Handle errors (e.g., scroll to error, show notification)
 });
 ```
+
 </details>
 
 ## CSS Custom Properties
 
 The CardForm component uses the following CSS custom properties for styling:
 
-| Property | Description |
-|----------|-------------|
-| `--primer-space-small` | Spacing between inline elements (default: `8px`) |
+| Property                | Description                                      |
+| ----------------------- | ------------------------------------------------ |
+| `--primer-space-small`  | Spacing between inline elements (default: `8px`) |
 | `--primer-space-medium` | Spacing between block elements (default: `16px`) |
 
 ## Key Considerations
 
 :::caution Important
+
 - The CardForm component must be used within a `primer-checkout` component
 - All card input components must be placed inside a CardForm component to function properly
 - CardForm automatically manages the hosted input elements for secure card data collection
   :::
 
 :::tip Implementation Notes
+
 - The component uses `display: contents` to avoid creating additional DOM structure
 - When no custom content is provided, a default form layout is rendered
 - Submit buttons are detected based on their attributes (type="submit" or data-submit)

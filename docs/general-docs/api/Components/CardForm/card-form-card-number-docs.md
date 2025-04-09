@@ -6,6 +6,7 @@ slug: /components/card-form/input-card-number
 ---
 
 # Card Number Input Component
+
 ## \<primer-input-card-number\>
 
 The Card Number Input component provides a secure, PCI-compliant field for collecting payment card numbers. It automatically detects and displays the card network (like Visa, Mastercard) as the user types, and supports validation.
@@ -17,7 +18,7 @@ flowchart TD
     A --> D[Validation]
     C --> E[Network Display]
     D --> F[Error Handling]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
@@ -41,7 +42,7 @@ The Card Number Input component must be used within a `primer-card-form` contain
 ## Properties
 
 | Attribute     | Type     | Default               | Description                                |
-|---------------|----------|-----------------------|--------------------------------------------|
+| ------------- | -------- | --------------------- | ------------------------------------------ |
 | `label`       | `string` | "Card Number"         | The label displayed above the input        |
 | `placeholder` | `string` | "4111 1111 1111 1111" | Placeholder text shown when input is empty |
 | `aria-label`  | `string` | "Card Number"         | Accessibility label for screen readers     |
@@ -63,17 +64,17 @@ sequenceDiagram
     participant CardNumber as primer-input-card-number
     participant Context as Card Form Context
     participant NetworkSelector as primer-card-network-selector
-    
+
     Note over CardNumber: Component initialization
     CardNumber->>Context: Connect to context
     Context->>CardNumber: Provide hosted input
-    
+
     Note over CardNumber: User enters card number
     CardNumber->>NetworkSelector: Update card digits
     NetworkSelector->>NetworkSelector: Detect network
     NetworkSelector->>CardNumber: Emit network-selected
     CardNumber->>Context: Update card network
-    
+
     Note over CardNumber: Validation
     Context->>CardNumber: Validation state changes
     CardNumber->>CardNumber: Display error if needed
@@ -117,7 +118,7 @@ This component doesn't emit custom events directly, but it listens for the `netw
 ## CSS Custom Properties
 
 | Property               | Description                                                                 |
-|------------------------|-----------------------------------------------------------------------------|
+| ---------------------- | --------------------------------------------------------------------------- |
 | `--primer-space-small` | Spacing between the card number input and network selector (default: `8px`) |
 
 ## Examples
@@ -147,7 +148,8 @@ This component doesn't emit custom events directly, but it listens for the `netw
   <primer-input-card-number
     label="Credit Card Number"
     placeholder="Enter your card number"
-    aria-label="Your credit card number">
+    aria-label="Your credit card number"
+  >
   </primer-input-card-number>
 </primer-card-form>
 ```
@@ -158,9 +160,7 @@ This component doesn't emit custom events directly, but it listens for the `netw
 
 ```html
 <primer-card-form>
-  <primer-input-card-number
-    label="Card Number"
-    placeholder="">
+  <primer-input-card-number label="Card Number" placeholder="">
   </primer-input-card-number>
 </primer-card-form>
 ```
@@ -197,7 +197,7 @@ flowchart LR
     B -->|Mastercard| D[Display Mastercard Logo]
     B -->|Amex| E[Display Amex Logo]
     B -->|Unknown| F[Display Generic Card Icon]
-    
+
     style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -215,11 +215,13 @@ The component automatically detects the card network (Visa, Mastercard, American
 ## Key Considerations
 
 :::info Component Dependencies
+
 - The Card Number Input component must be placed inside a `primer-card-form` component
 - It automatically includes a card network selector that shows detected card types
   :::
 
 :::tip Implementation Details
+
 - Input validation happens automatically when the form is submitted
 - Validation errors are displayed below the input field when they occur
 - The component uses a flex layout to position the card number input and network selector side by side

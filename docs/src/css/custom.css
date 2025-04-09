@@ -4,15 +4,105 @@
  * work well for content-centric websites.
  */
 
+/* Inter font family definitions */
+@font-face {
+  font-display: swap;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  src:
+    url('https://primer-production-core-dashboard-assets.s3.eu-west-1.amazonaws.com/website/fonts/Inter-Regular.woff2?v=3.19')
+      format('woff2'),
+    url('https://primer-production-core-dashboard-assets.s3.eu-west-1.amazonaws.com/website/fonts/Inter-Regular.woff?v=3.19')
+      format('woff');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  src:
+    url('https://primer-production-core-dashboard-assets.s3.eu-west-1.amazonaws.com/website/fonts/Inter-Medium.woff2?v=3.19')
+      format('woff2'),
+    url('https://primer-production-core-dashboard-assets.s3.eu-west-1.amazonaws.com/website/fonts/Inter-Medium.woff?v=3.19')
+      format('woff');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  src:
+    url('https://primer-production-core-dashboard-assets.s3.eu-west-1.amazonaws.com/website/fonts/Inter-SemiBold.woff2?v=3.19')
+      format('woff2'),
+    url('https://primer-production-core-dashboard-assets.s3.eu-west-1.amazonaws.com/website/fonts/Inter-SemiBold.woff?v=3.19')
+      format('woff');
+}
+
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #135496;
-  --ifm-color-primary-dark: #114c87;
-  --ifm-color-primary-darker: #10477f;
-  --ifm-color-primary-darkest: #0d3b69;
-  --ifm-color-primary-light: #155ca5;
-  --ifm-color-primary-lighter: #1661ad;
-  --ifm-color-primary-lightest: #196dc3;
+  --ifm-color-primary: #212121;
+  --ifm-color-primary-dark: #1e1e1e;
+  --ifm-color-primary-darker: #1c1c1c;
+  --ifm-color-primary-darkest: #171717;
+  --ifm-color-primary-light: #242424;
+  --ifm-color-primary-lighter: #262626;
+  --ifm-color-primary-lightest: #2b2b2b;
+
+  /* Set Inter as the default font family */
+  --ifm-font-family-base: 'Inter', sans-serif;
+  --ifm-heading-font-family: 'Inter', sans-serif;
+  --ifm-font-family-monospace:
+    SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+    monospace;
+}
+
+/* Apply Inter font to body as a fallback mechanism */
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Apply consistent heading styles across the site */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--ifm-color-primary);
+}
+
+/* Size adjustments for different heading levels */
+h1 {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1.25rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* General text styling */
+p {
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* Add a strong emphasis style */
+strong,
+b {
+  font-weight: 700;
 }
 
 .navbar-beta-item {
@@ -30,14 +120,4 @@
 .navbar-beta-item:hover {
   background-color: #f0c83d;
   color: #000 !important;
-}
-
-/* Dark mode keeps the same styling to ensure visibility */
-[data-theme='dark'] .navbar-beta-item {
-  background-color: #f9d147;
-  color: #000 !important;
-}
-
-[data-theme='dark'] .navbar-beta-item:hover {
-  background-color: #f0c83d;
 }

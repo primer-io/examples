@@ -7,9 +7,14 @@
 .showcaseHeader {
   position: relative;
   overflow: hidden;
-  color: var(--ifm-color-white);
+  color: var(--ifm-color-primary);
   padding: 3rem 0;
-  background: linear-gradient(135deg, #2f7bf5 0%, #4456e3 100%);
+  background: linear-gradient(
+    to bottom,
+    #e5fdf4 0%,  /* More saturated mint at top */
+    #edfef8 50%, /* Lighter mint in middle */
+    #fafffe 100% /* Almost white at bottom */
+  ); /* Primer vertical gradient - mint to white */
 }
 
 .showcaseHeaderContent {
@@ -26,7 +31,30 @@
   left: 0;
   right: 0;
   bottom: 0;
-  opacity: 0.1;
+  background-image:
+    radial-gradient(
+      circle at 10px 10px,
+      rgba(179, 247, 222, 0.2) 0%, /* Using #b3f7de with higher opacity */
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 30px 30px,
+      rgba(179, 247, 222, 0.2) 0%,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 50px 10px,
+      rgba(179, 247, 222, 0.2) 0%,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 10px 50px,
+      rgba(179, 247, 222, 0.2) 0%,
+      transparent 3px
+    );
+  background-size: 60px 60px;
+  opacity: 1;
+  pointer-events: none;
   z-index: 0;
 }
 
@@ -35,11 +63,8 @@
   font-weight: 800;
   letter-spacing: -0.5px;
   margin-bottom: 1rem;
-  background: linear-gradient(90deg, #ffffff, #f0f0f0);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: var(--ifm-color-primary);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .showcaseSubtitle {
@@ -74,7 +99,7 @@
   font-weight: 800;
   margin-bottom: 1.5rem;
   background: linear-gradient(
-    90deg,
+    135deg,
     var(--ifm-color-primary),
     var(--ifm-color-primary-dark)
   );
@@ -129,9 +154,20 @@
 .imageWrapper {
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  box-shadow: 
+    0 12px 25px rgba(0, 0, 0, 0.06),
+    0 3px 6px rgba(0, 0, 0, 0.04);
   background-color: var(--ifm-color-white);
   border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.embedWrapper:hover,
+.imageWrapper:hover {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 16px 30px rgba(0, 0, 0, 0.08),
+    0 6px 10px rgba(0, 0, 0, 0.05);
 }
 
 .embedFrameTall,
@@ -169,7 +205,7 @@
   font-weight: 800;
   margin-bottom: 1rem;
   background: linear-gradient(
-    90deg,
+    135deg,
     var(--ifm-color-primary),
     var(--ifm-color-primary-dark)
   );
@@ -193,35 +229,41 @@
 }
 
 .comingSoonCard {
-  background-color: var(--ifm-color-white);
+  background: linear-gradient(
+    135deg,
+    #e5fdf4 0%,
+    #ddfbf0 100%
+  ); /* Lighter variant of the primary gradient */
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid #B3F7DE; /* Thin dark green outline */
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.04),
+    0 1px 3px rgba(0, 0, 0, 0.03);
   transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .comingSoonCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.06),
+    0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .comingSoonIcon {
   width: 60px;
   height: 60px;
-  background: linear-gradient(
-    135deg,
-    var(--ifm-color-primary-lightest),
-    var(--ifm-color-primary)
-  );
+  background: transparent; /* Transparent background */
+  border: 2px solid #B3F7DE; /* Outline color */
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
   font-size: 2rem;
-  color: white;
+  color: var(--ifm-color-primary);
 }
 
 .comingSoonCard h3 {
@@ -239,17 +281,56 @@
 .contributeSection {
   padding: 5rem 0;
   background: linear-gradient(
-    135deg,
-    var(--ifm-color-primary-light) 0%,
-    var(--ifm-color-primary) 100%
-  );
-  color: white;
+    to bottom,
+    #fafffe 0%,  /* Almost white at top */
+    #edfef8 50%, /* Lighter mint in middle */
+    #e5fdf4 100% /* More saturated mint at bottom */
+  ); /* Primer vertical gradient - white to mint */
+  color: var(--ifm-color-primary);
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.contributeSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(
+      circle at 10px 10px,
+      rgba(179, 247, 222, 0.2) 0%, /* Using #b3f7de with higher opacity */
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 30px 30px,
+      rgba(179, 247, 222, 0.2) 0%,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 50px 10px,
+      rgba(179, 247, 222, 0.2) 0%,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 10px 50px,
+      rgba(179, 247, 222, 0.2) 0%,
+      transparent 3px
+    );
+  background-size: 60px 60px;
+  opacity: 1;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .contributeContent {
   max-width: 700px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1; /* Ensure content is above the pattern */
 }
 
 .contributeContent h2 {

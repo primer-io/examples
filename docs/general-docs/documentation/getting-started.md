@@ -9,6 +9,7 @@ description: Learn how to install and set up Primer Composable Checkout in your 
 Welcome to Primer's Composable Checkout SDK! This guide will help you integrate our payment solution into your website or web application.
 
 :::tip What you'll learn
+
 - Set up a client session for Primer payments
 - Install and initialize the Primer Composable Checkout SDK
 - Implement a basic checkout experience
@@ -23,7 +24,7 @@ Welcome to Primer's Composable Checkout SDK! This guide will help you integrate 
 Before diving into the implementation, ensure your environment meets these requirements:
 
 | Requirement       | Details                                         |
-|-------------------|-------------------------------------------------|
+| ----------------- | ----------------------------------------------- |
 | **Node.js**       | Current LTS version recommended                 |
 | **Browsers**      | Modern browsers (Chrome, Firefox, Safari, Edge) |
 | **Not Supported** | Internet Explorer 11, Classic Edge (legacy)     |
@@ -49,19 +50,14 @@ A **client session** is required to initialize the checkout experience. This ses
 <summary><strong>1. Generate an API key</strong></summary>
 
 - Visit the [Primer Dashboard developer page](https://sandbox-dashboard.primer.io/developers/apiKeys)
-- Create an API key with these scopes:
-    - `client_tokens:write`
-    - `transactions:authorize`
+- Create an API key with these scopes: - `client_tokens:write` - `transactions:authorize`
 </details>
 
 <details>
 <summary><strong>2. Make a client session request</strong></summary>
 
 - Make a POST request to the [Client Session API](https://primer.io/docs/api/api-reference/client-session-api/create-client-side-token)
-- Include at minimum:
-    - `orderId`: Your reference for tracking this payment
-    - `currencyCode`: Three-letter currency code (e.g., "USD")
-    - `order.lineItems`: Details of items in the order
+- Include at minimum: - `orderId`: Your reference for tracking this payment - `currencyCode`: Three-letter currency code (e.g., "USD") - `order.lineItems`: Details of items in the order
 </details>
 
 The response will contain a `clientToken` that you'll use in the next steps to initialize Primer Composable Checkout.
@@ -109,7 +105,10 @@ The Primer Composable Checkout SDK uses CSS Custom Properties to manage its visu
 
 ```html
 <!-- For light theme only -->
-<link rel="stylesheet" href="https://sdk.primer.io/web/primer-js/v0-latest/styles.css" />
+<link
+  rel="stylesheet"
+  href="https://sdk.primer.io/web/primer-js/v0-latest/styles.css"
+/>
 ```
 
 </div>
@@ -118,7 +117,10 @@ The Primer Composable Checkout SDK uses CSS Custom Properties to manage its visu
 
 ```html
 <!-- For dark theme only -->
-<link rel="stylesheet" href="https://sdk.primer.io/web/primer-js/v0-latest/dark.css" />
+<link
+  rel="stylesheet"
+  href="https://sdk.primer.io/web/primer-js/v0-latest/dark.css"
+/>
 ```
 
 </div>
@@ -127,8 +129,14 @@ The Primer Composable Checkout SDK uses CSS Custom Properties to manage its visu
 
 ```html
 <!-- Include both stylesheets -->
-<link rel="stylesheet" href="https://sdk.primer.io/web/primer-js/v0-latest/styles.css" />
-<link rel="stylesheet" href="https://sdk.primer.io/web/primer-js/v0-latest/dark.css" />
+<link
+  rel="stylesheet"
+  href="https://sdk.primer.io/web/primer-js/v0-latest/styles.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://sdk.primer.io/web/primer-js/v0-latest/dark.css"
+/>
 
 <!-- Add the theme class to your checkout container -->
 <div id="checkout-container" class="primer-light-theme">
@@ -162,13 +170,13 @@ The Primer Composable Checkout SDK provides a comprehensive Styling API that all
   :root {
     /* Brand color customization */
     --primer-color-brand: #4a6cf7;
-    
+
     /* Typography customization */
     --primer-typography-brand: 'Montserrat', sans-serif;
-    
+
     /* Border radius customization */
     --primer-radius-medium: 8px;
-    
+
     /* Spacing customization */
     --primer-space-medium: 16px;
   }
@@ -186,9 +194,10 @@ You can customize nearly every aspect of the checkout UI, including:
 The Styling API also supports providing styles through a JSON object using the `custom-styles` attribute:
 
 ```html
-<primer-checkout 
+<primer-checkout
   client-token="your-client-token"
-  custom-styles='{"primerColorBrand":"#4a6cf7","primerTypographyBrand":"Montserrat, sans-serif"}'>
+  custom-styles='{"primerColorBrand":"#4a6cf7","primerTypographyBrand":"Montserrat, sans-serif"}'
+>
 </primer-checkout>
 ```
 
@@ -204,9 +213,9 @@ You can define special types so that merchants can use Primer components in any 
 import { CustomElements } from '@primer-io/primer-js/dist/jsx/index';
 
 // Libraries will often have their own module names,
-// you will need to use when extending the IntrinsicElements interface. 
+// you will need to use when extending the IntrinsicElements interface.
 // For example, Preact requires you to use the "preact"
-declare module "my-app" {
+declare module 'my-app' {
   namespace JSX {
     interface IntrinsicElements extends CustomElements {}
   }
@@ -233,7 +242,7 @@ flowchart TB
     (successful submission)"]
     A --> F["primer-form-submit-errors
     (validation errors)"]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
@@ -307,7 +316,7 @@ flowchart TD
     PAYMENT_CARD]
     C --> E[primer-payment-method:
     PAYPAL]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style C fill:#e3f2fd,stroke:#1976d2,stroke-width:1px
@@ -334,6 +343,7 @@ For smooth transitions, you can use advanced techniques like `customElements.whe
 When working with the Primer Composable Checkout SDK, be aware of the following limitations:
 
 :::warning Key Limitations
+
 1. **Browser Compatibility**: The SDK uses modern web technologies and is not compatible with legacy browsers such as Internet Explorer 11.
 
 2. **Shadow DOM Isolation**: Since the SDK uses Shadow DOM for style encapsulation, direct CSS targeting of inner elements is not possible. Use the provided CSS variables for styling.

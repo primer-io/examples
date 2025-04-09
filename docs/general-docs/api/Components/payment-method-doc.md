@@ -6,6 +6,7 @@ description: The Payment Method component renders different payment method inter
 ---
 
 # Payment Method Component
+
 ## \<primer-payment-method\>
 
 The `PaymentMethod` component renders the appropriate payment interface based on the specified payment method type. It automatically handles different payment method categories and only displays methods that are available in your checkout configuration.
@@ -15,13 +16,13 @@ flowchart TD
     A[primer-payment-method] -->|type attribute| B{Is Payment<br>Method Available?}
     B -->|Yes| C[Render Payment UI]
     B -->|No| D[Render Nothing]
-    
+
     C -->|PAYMENT_CARD| E[Card Payment Form]
     C -->|APPLE_PAY| F[Apple Pay Button]
     C -->|GOOGLE_PAY| G[Google Pay Button]
     C -->|PAYPAL| H[PayPal Button]
     C -->|Other Methods| I[Method-specific UI]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -44,9 +45,9 @@ flowchart TD
 
 ## Properties
 
-| Name   | Type     | Description                                                             | Default     |
-|--------|----------|-------------------------------------------------------------------------|-------------|
-| `type` | `String` | The payment method type identifier (e.g., "PAYMENT_CARD", "PAYPAL")     | `undefined` |
+| Name   | Type     | Description                                                         | Default     |
+| ------ | -------- | ------------------------------------------------------------------- | ----------- |
+| `type` | `String` | The payment method type identifier (e.g., "PAYMENT_CARD", "PAYPAL") | `undefined` |
 
 ## Key Concepts
 
@@ -63,7 +64,7 @@ flowchart LR
     C -->|Yes| D{Returned by<br>server?}
     D -->|No| F
     D -->|Yes| E[Render Payment<br>Method]
-    
+
     style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px
     style C fill:#fff8e1,stroke:#ffa000,stroke-width:1px
@@ -89,7 +90,7 @@ sequenceDiagram
     participant Checkout as primer-checkout
     participant YourApp
     participant PaymentMethod as primer-payment-method
-    
+
     Checkout->>YourApp: primer-payment-methods-updated
     Note right of YourApp: Get available methods
     YourApp->>YourApp: Process available methods
@@ -114,16 +115,16 @@ This example shows how to listen for available payment methods and dynamically r
 
 <script>
   const checkout = document.getElementById('checkout');
-  
+
   checkout.addEventListener('primer-payment-methods-updated', (event) => {
     const paymentMethods = event.detail;
     const container = document.getElementById('payment-methods-container');
-    
+
     // Clear previous content
     container.innerHTML = '';
-    
+
     // Render all available payment methods
-    paymentMethods.toArray().forEach(method => {
+    paymentMethods.toArray().forEach((method) => {
       container.innerHTML += `
         <div class="payment-method-item">
           <primer-payment-method type="${method.type}"></primer-payment-method>
@@ -133,6 +134,7 @@ This example shows how to listen for available payment methods and dynamically r
   });
 </script>
 ```
+
 </details>
 
 <details>
@@ -148,7 +150,7 @@ This example shows how to create a custom layout where certain payment methods a
       <div class="primary-payment-method">
         <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
       </div>
-      
+
       <!-- Digital wallets section -->
       <div id="wallets-container" class="payment-section">
         <h3>Quick Checkout</h3>
@@ -157,7 +159,7 @@ This example shows how to create a custom layout where certain payment methods a
           <primer-payment-method type="GOOGLE_PAY"></primer-payment-method>
         </div>
       </div>
-      
+
       <!-- Other methods will be dynamically added here -->
       <div id="other-methods-container" class="payment-section"></div>
     </div>
@@ -166,32 +168,36 @@ This example shows how to create a custom layout where certain payment methods a
 
 <script>
   const checkout = document.getElementById('checkout');
-  
+
   // Define payment method categories
   const walletTypes = ['APPLE_PAY', 'GOOGLE_PAY'];
   const priorityTypes = ['PAYMENT_CARD', 'APPLE_PAY', 'GOOGLE_PAY'];
-  
+
   checkout.addEventListener('primer-payment-methods-updated', (event) => {
     const paymentMethods = event.detail;
     const allMethods = paymentMethods.toArray();
     const otherContainer = document.getElementById('other-methods-container');
     const walletsContainer = document.getElementById('wallets-container');
-    
+
     // Check if any wallet methods are available
-    const hasWallets = allMethods.some(method => walletTypes.includes(method.type));
-    
+    const hasWallets = allMethods.some((method) =>
+      walletTypes.includes(method.type),
+    );
+
     // Hide wallets container if no wallet methods are available
     if (!hasWallets) {
       walletsContainer.style.display = 'none';
     }
-    
+
     // Add other payment methods (excluding priority ones)
-    const otherMethods = allMethods.filter(method => !priorityTypes.includes(method.type));
-    
+    const otherMethods = allMethods.filter(
+      (method) => !priorityTypes.includes(method.type),
+    );
+
     if (otherMethods.length > 0) {
       otherContainer.innerHTML = '<h3>Other Payment Options</h3>';
-      
-      otherMethods.forEach(method => {
+
+      otherMethods.forEach((method) => {
         otherContainer.innerHTML += `
           <div class="payment-method-item">
             <primer-payment-method type="${method.type}"></primer-payment-method>
@@ -204,6 +210,7 @@ This example shows how to create a custom layout where certain payment methods a
   });
 </script>
 ```
+
 </details>
 
 <details>
@@ -220,18 +227,19 @@ This example shows how to create a custom layout where certain payment methods a
 
 <script>
   const checkout = document.getElementById('checkout');
-  
+
   // Configure card payment options
   checkout.options = {
     card: {
       cardholderName: {
-        required: true
+        required: true,
       },
-      allowedCardNetworks: ['visa', 'mastercard', 'amex']
-    }
+      allowedCardNetworks: ['visa', 'mastercard', 'amex'],
+    },
   };
 </script>
 ```
+
 </details>
 
 ## Available Payment Method Types
@@ -313,15 +321,15 @@ Each payment method type can be configured through the `options` property of the
     // Card payment configuration
     card: {
       cardholderName: {
-        required: true
-      }
+        required: true,
+      },
     },
-    
+
     // Google Pay configuration
     googlePay: {
       buttonTheme: 'dark',
-      buttonType: 'buy'
-    }
+      buttonType: 'buy',
+    },
   };
 </script>
 ```
@@ -329,6 +337,7 @@ Each payment method type can be configured through the `options` property of the
 ## Key Considerations
 
 :::info Summary
+
 - Payment methods must be configured in your Primer Checkout Builder settings to be displayed
 - If a payment method is specified but not available, the component won't render anything (no error)
 - The component automatically determines which payment interface to render based on the payment method's type

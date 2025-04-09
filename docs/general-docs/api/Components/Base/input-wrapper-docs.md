@@ -6,6 +6,7 @@ slug: /components/input-wrapper
 ---
 
 # Input Wrapper Component
+
 ## \<primer-input-wrapper\>
 
 The Input Wrapper component creates a robust container for input elements, enhancing user interactions through intelligent focus management, error handling, and consistent styling.
@@ -16,20 +17,20 @@ flowchart TD
     A --> C[Focus Management]
     A --> D[Error Handling]
     A --> E[Accessibility]
-    
+
     B --> B1[Label Slot]
     B --> B2[Input Slot]
     B --> B3[Error Slot]
-    
+
     C --> C1[Auto Focus]
     C --> C2[Cursor Styling]
-    
+
     D --> D1[Error States]
     D --> D2[Visual Indicators]
-    
+
     E --> E1[Clickable Area]
     E --> E2[Input Detection]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -40,6 +41,7 @@ flowchart TD
 ## Key Features
 
 :::info Component Capabilities
+
 - **Enhanced Focus Handling**: Automatically focuses contained inputs
 - **Intuitive Interaction**: Entire wrapper is clickable
 - **Flexible Styling**: Supports focus and error states
@@ -53,7 +55,11 @@ flowchart TD
 ```html
 <primer-input-wrapper>
   <primer-input-label slot="label">Email Address</primer-input-label>
-  <primer-input slot="input" type="email" placeholder="you@example.com"></primer-input>
+  <primer-input
+    slot="input"
+    type="email"
+    placeholder="you@example.com"
+  ></primer-input>
 </primer-input-wrapper>
 ```
 
@@ -72,7 +78,7 @@ flowchart TD
 ## Properties
 
 | Property      | Attribute      | Type      | Default | Description                                 |
-|---------------|----------------|-----------|---------|---------------------------------------------|
+| ------------- | -------------- | --------- | ------- | ------------------------------------------- |
 | `focusWithin` | `focus-within` | `boolean` | `false` | Indicates if the contained input is focused |
 | `hasError`    | `has-error`    | `boolean` | `false` | Applies error styling when true             |
 
@@ -83,7 +89,7 @@ sequenceDiagram
     participant User
     participant Wrapper as primer-input-wrapper
     participant Input as primer-input
-    
+
     User->>Wrapper: Click anywhere
     Wrapper->>Input: Automatically focus
     Wrapper->>Wrapper: Update visual state
@@ -91,11 +97,11 @@ sequenceDiagram
 
 ## Slots
 
-| Name    | Description                                           |
-|---------|-------------------------------------------------------|
+| Name    | Description                                                    |
+| ------- | -------------------------------------------------------------- |
 | `label` | Container for the input label (typically `primer-input-label`) |
-| `input` | Container for the input element                       |
-| `error` | Container for error messages                          |
+| `input` | Container for the input element                                |
+| `error` | Container for error messages                                   |
 
 ## Advanced Examples
 
@@ -114,6 +120,7 @@ sequenceDiagram
   <primer-input slot="input" placeholder="Enter your full name"></primer-input>
 </primer-input-wrapper>
 ```
+
 </div>
 
 <div class="tab-content error">
@@ -122,11 +129,10 @@ sequenceDiagram
 <primer-input-wrapper has-error>
   <primer-input-label slot="label">Email</primer-input-label>
   <primer-input slot="input" type="email"></primer-input>
-  <primer-input-error slot="error">
-    Invalid email address
-  </primer-input-error>
+  <primer-input-error slot="error"> Invalid email address </primer-input-error>
 </primer-input-wrapper>
 ```
+
 </div>
 
 <div class="tab-content nested">
@@ -140,6 +146,7 @@ sequenceDiagram
   </div>
 </primer-input-wrapper>
 ```
+
 </div>
 </div>
 
@@ -149,18 +156,20 @@ sequenceDiagram
 <summary>Customizable CSS Properties</summary>
 
 | Property                                   | Description                             |
-|--------------------------------------------|-----------------------------------------|
+| ------------------------------------------ | --------------------------------------- |
 | `--primer-color-border-outlined-focus`     | Border color when focused               |
 | `--primer-color-border-outlined-error`     | Border color when in error state        |
 | `--primer-color-background-outlined-error` | Background color when in error state    |
 | `--primer-space-xsmall`                    | Spacing between wrapper elements        |
 | `--primer-space-medium`                    | Internal padding of the input container |
 | `--primer-radius-small`                    | Border radius for the input container   |
+
 </details>
 
 ## Best Practices
 
 :::tip Recommended Approaches
+
 - Always use with `primer-input-label` for consistent styling
 - Leverage the built-in focus and error state management
 - Use the flexible slot system for complex input layouts
@@ -170,6 +179,7 @@ sequenceDiagram
 ## Potential Pitfalls
 
 :::warning Common Mistakes
+
 - Forgetting to set appropriate slots
 - Mismatching input and label IDs
 - Overriding default styling without considering accessibility

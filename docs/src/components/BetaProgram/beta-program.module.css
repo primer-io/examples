@@ -6,9 +6,14 @@
 .betaPageHeader {
   position: relative;
   overflow: hidden;
-  color: var(--ifm-color-white);
+  color: var(--ifm-color-primary);
   padding: 4rem 0;
-  background: linear-gradient(135deg, #2f7bf5 0%, #4456e3 100%);
+  background: linear-gradient(
+    to bottom,
+    #e5fdf4 0%,
+    /* More saturated mint at top */ #edfef8 50%,
+    /* Lighter mint in middle */ #fafffe 100% /* Almost white at bottom */
+  ); /* Primer vertical gradient - mint to white */
 }
 
 .heroBgPattern {
@@ -17,7 +22,30 @@
   left: 0;
   right: 0;
   bottom: 0;
-  opacity: 0.1;
+  background-image:
+    radial-gradient(
+      circle at 10px 10px,
+      rgba(179, 247, 222, 0.2) 0%,
+      /* Using #b3f7de with higher opacity */ transparent 3px
+    ),
+    radial-gradient(
+      circle at 30px 30px,
+      rgba(179, 247, 222, 0.2) 0%,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 50px 10px,
+      rgba(179, 247, 222, 0.2) 0%,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 10px 50px,
+      rgba(179, 247, 222, 0.2) 0%,
+      transparent 3px
+    );
+  background-size: 60px 60px;
+  opacity: 1;
+  pointer-events: none;
   z-index: 0;
 }
 
@@ -45,11 +73,8 @@
   font-weight: 800;
   letter-spacing: -0.5px;
   margin-bottom: 1.5rem;
-  background: linear-gradient(90deg, #ffffff, #f0f0f0);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: var(--ifm-color-primary);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .heroSubtitle {
@@ -62,7 +87,7 @@
 .highlight {
   position: relative;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--ifm-color-primary);
 }
 
 .highlight::after {
@@ -72,7 +97,10 @@
   left: 0;
   width: 100%;
   height: 8px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(
+    var(--ifm-color-primary-rgb),
+    0.2
+  ); /* Using primary color with transparency */
   z-index: -1;
   border-radius: 4px;
 }
@@ -80,7 +108,7 @@
 .betaBadge {
   display: inline-block;
   background-color: #fff;
-  color: #4456e3;
+  color: var(--ifm-color-primary);
   font-size: 0.9rem;
   font-weight: 700;
   padding: 0.2rem 0.7rem;
@@ -142,21 +170,30 @@
 }
 
 .betaExplanationCard {
-  background-color: var(--ifm-color-white);
+  background: linear-gradient(
+    135deg,
+    #e5fdf4 0%,
+    #ddfbf0 100%
+  ); /* Lighter variant of the primary gradient */
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid #b3f7de; /* Thin dark green outline */
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.04),
+    0 1px 3px rgba(0, 0, 0, 0.03);
   transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
 .betaExplanationCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.06),
+    0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .betaExplanationCard h3 {
@@ -188,22 +225,18 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* Icon styling for cards */
 .cardIcon {
   width: 60px;
   height: 60px;
-  background: linear-gradient(
-    135deg,
-    var(--ifm-color-primary-lightest),
-    var(--ifm-color-primary)
-  );
+  background: transparent; /* Transparent background */
+  border: 2px solid #b3f7de; /* Outline color */
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
   font-size: 2rem;
-  color: white;
+  color: var(--ifm-color-primary);
 }
 
 /* Beta Access Section */
@@ -230,21 +263,30 @@
 }
 
 .betaCard {
-  background-color: var(--ifm-color-white);
+  background: linear-gradient(
+    135deg,
+    #e5fdf4 0%,
+    #ddfbf0 100%
+  ); /* Lighter variant of the primary gradient */
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid #b3f7de; /* Thin dark green outline */
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.04),
+    0 1px 3px rgba(0, 0, 0, 0.03);
   transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
 .betaCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.06),
+    0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .betaCard h3 {
@@ -260,40 +302,122 @@
   line-height: 1.5;
 }
 
-/* Beta Callout - Styled like homepage */
 .betaCalloutContent {
   max-width: 800px;
   margin: 2rem auto 0;
   padding: 3rem;
-  background-color: #fff9e0;
+  padding-top: 4rem; /* Extra top padding to accommodate beta banner */
+  background: linear-gradient(
+    135deg,
+    #e5fdf4 0%,
+    #ddfbf0 100%
+  ); /* Lighter variant of the primary gradient */
   border-radius: 16px;
   text-align: center;
   position: relative;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.04),
+    0 2px 6px rgba(0, 0, 0, 0.03);
+  /* Removed overflow: hidden to prevent cutting off the banner */
+}
+
+/* Re-add the pattern as a normal element */
+.betaCalloutContent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(
+      circle at 10px 10px,
+      rgba(179, 247, 222, 0.2) 0%,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 30px 30px,
+      rgba(179, 247, 222, 0.2) 0%,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 50px 10px,
+      rgba(179, 247, 222, 0.2) 0%,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 10px 50px,
+      rgba(179, 247, 222, 0.2) 0%,
+      transparent 3px
+    );
+  background-size: 60px 60px;
+  opacity: 1;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 16px; /* Match the container border radius */
+}
+
+.betaCalloutPattern {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(
+      circle at 10px 10px,
+      rgba(179, 247, 222, 0.2) 0%,
+      /* Using #b3f7de with higher opacity */ transparent 3px
+    ),
+    radial-gradient(
+      circle at 30px 30px,
+      rgba(179, 247, 222, 0.2) 0%,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 50px 10px,
+      rgba(179, 247, 222, 0.2) 0%,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 10px 50px,
+      rgba(179, 247, 222, 0.2) 0%,
+      transparent 3px
+    );
+  background-size: 60px 60px;
+  opacity: 1;
+  pointer-events: none;
+  z-index: 0; /* Ensure it stays below content */
+  border-radius: 16px; /* Match the container border radius */
 }
 
 .betaBanner {
   position: absolute;
-  top: -15px;
+  top: -20px; /* Moved slightly higher for better visibility */
   left: 50%;
   transform: translateX(-50%);
-  background-color: #f9d147;
-  color: #000;
+  background-color: var(--ifm-color-primary);
+  color: #fff;
   font-weight: 700;
   padding: 0.4rem 2rem;
   border-radius: 30px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 2; /* Increased to ensure it appears above everything */
+  white-space: nowrap; /* Prevent wrapping of badge text */
 }
 
 .betaCalloutContent p {
   font-size: 1.1rem;
   line-height: 1.6;
-  color: #866a00;
+  color: var(--ifm-color-primary);
   margin-bottom: 0;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 0.5rem;
+  margin-top: 1rem; /* Increased from 0.5rem for better spacing */
+  position: relative;
+  z-index: 1; /* Ensure text appears above pattern */
 }
 
 /* Responsive Styles */
@@ -326,7 +450,14 @@
   }
 
   .betaCalloutContent {
-    padding: 2rem 1.5rem;
+    padding: 2.5rem 1.5rem; /* Increased top padding for banner */
+    padding-top: 3.5rem; /* Extra top padding for the banner */
+  }
+
+  .betaBanner {
+    padding: 0.3rem 1.5rem; /* Slightly smaller padding on mobile */
+    font-size: 0.95rem;
+    white-space: nowrap;
   }
 }
 

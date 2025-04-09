@@ -6,6 +6,7 @@ slug: /components/card-form/input-card-expiry
 ---
 
 # Card Expiry Input Component
+
 ## \<primer-input-card-expiry\>
 
 The Card Expiry Input component provides a secure, PCI-compliant field for collecting payment card expiration dates. It formats the input automatically as MM/YY and integrates with the card form validation system.
@@ -18,7 +19,7 @@ flowchart TD
     C --> E[MM/YY Pattern]
     D --> F[Date Validation]
     D --> G[Error Handling]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
@@ -42,11 +43,11 @@ The Card Expiry Input component must be used within a `primer-card-form` contain
 
 ## Properties
 
-| Attribute     | Type     | Default       | Description                            |
-|---------------|----------|---------------|----------------------------------------|
-| `label`       | `string` | "Expiry Date" | The label displayed above the input    |
+| Attribute     | Type     | Default       | Description                                |
+| ------------- | -------- | ------------- | ------------------------------------------ |
+| `label`       | `string` | "Expiry Date" | The label displayed above the input        |
 | `placeholder` | `string` | "MM/YY"       | Placeholder text shown when input is empty |
-| `aria-label`  | `string` | "Expiry Date" | Accessibility label for screen readers |
+| `aria-label`  | `string` | "Expiry Date" | Accessibility label for screen readers     |
 
 ### Property Behavior
 
@@ -65,14 +66,14 @@ sequenceDiagram
     participant Expiry as primer-input-card-expiry
     participant Context as Card Form Context
     participant Wrapper as primer-input-wrapper
-    
+
     Note over Expiry: Component initialization
     Expiry->>Context: Connect to context
     Context->>Expiry: Provide hosted input
-    
+
     Note over Expiry: User typing
     Expiry->>Expiry: Format as MM/YY
-    
+
     Note over Expiry: Validation
     Context->>Expiry: Validation state changes
     Expiry->>Expiry: Display error if needed
@@ -125,7 +126,8 @@ The component renders the following DOM structure:
   <primer-input-card-expiry
     label="Expiration Date"
     placeholder="Month/Year"
-    aria-label="Your card's expiration date">
+    aria-label="Your card's expiration date"
+  >
   </primer-input-card-expiry>
 </primer-card-form>
 ```
@@ -164,7 +166,7 @@ flowchart LR
     C -->|Valid| I[Valid Input]
     D -->|Valid| I
     E -->|Valid| I
-    
+
     style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px
     style C fill:#fff8e1,stroke:#ffa000,stroke-width:1px
@@ -177,11 +179,13 @@ flowchart LR
 ```
 
 The component validates the expiry date format and checks that:
+
 - The date is correctly formatted as MM/YY
 - The month is valid (01-12)
 - The date is not in the past
 
 Validation errors are automatically displayed when:
+
 - The form is submitted with invalid data
 - The user enters an invalid date format
 - The expiry date has passed
@@ -189,11 +193,13 @@ Validation errors are automatically displayed when:
 ## Key Considerations
 
 :::info Component Dependencies
+
 - The Card Expiry Input component must be placed inside a `primer-card-form` component
 - For best UI experience, consider pairing this component with `primer-input-cvv` in a flex layout
   :::
 
 :::tip Implementation Details
+
 - Input validation happens automatically when the form is submitted
 - Validation errors are displayed below the input field when they occur
 - The input automatically inserts the slash (/) between month and year as the user types

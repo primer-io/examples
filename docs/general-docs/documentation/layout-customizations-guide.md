@@ -17,7 +17,7 @@ The Composable Checkout SDK uses **slots** as the primary mechanism for layout c
 flowchart TD
     A[Your Custom Content] -->|inserted into| B[Named Slot]
     B -->|rendered within| C[Web Component]
-    
+
     style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px
     style C fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
@@ -50,7 +50,7 @@ flowchart TD
     B -->|slot: checkout-failure| E[Error Screen]
     C -->|can contain| F[primer-payment-method]
     C -->|can contain| G[primer-card-form]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -66,6 +66,7 @@ flowchart TD
 The root component that initializes the SDK and provides the checkout context.
 
 **Available Slots:**
+
 - `main` - The main content area for the checkout experience
 
 ```html
@@ -75,6 +76,7 @@ The root component that initializes the SDK and provides the checkout context.
   </div>
 </primer-checkout>
 ```
+
 </details>
 
 <details>
@@ -83,6 +85,7 @@ The root component that initializes the SDK and provides the checkout context.
 A pre-built component that manages checkout states and provides additional slots for customization.
 
 **Available Slots:**
+
 - `payments` - Contains payment method components
 - `checkout-complete` - Content shown on successful payment
 - `checkout-failure` - Content shown when payment fails
@@ -102,6 +105,7 @@ A pre-built component that manages checkout states and provides additional slots
   </primer-main>
 </primer-checkout>
 ```
+
 </details>
 
 ## Customization Approaches
@@ -125,6 +129,7 @@ This approach allows you to customize specific parts of the checkout while relyi
 ```
 
 :::tip Benefits of This Approach
+
 - `<primer-main>` handles state transitions (loading, success, error)
 - You only need to provide content for the slots you want to customize
 - Default content is used for any slots you don't provide
@@ -147,6 +152,7 @@ For complete control, you can bypass `<primer-main>` entirely and provide your o
 
 :::warning Implementation Responsibility
 When using this approach:
+
 - You must handle state management yourself through events
 - You have complete freedom over the layout and user flow
 - You're responsible for showing/hiding appropriate content based on checkout state
@@ -168,31 +174,33 @@ Using the wrong slot name or omitting it entirely can lead to content not appear
 When implementing a custom layout without `<primer-main>`, you'll need to listen for events to manage checkout states:
 
 ```javascript
-document.querySelector('primer-checkout').addEventListener('primer-state-changed', (event) => {
-  const state = event.detail;
+document
+  .querySelector('primer-checkout')
+  .addEventListener('primer-state-changed', (event) => {
+    const state = event.detail;
 
-  // Handle different checkout states
-  if (state.isProcessing) {
-    // Show loading indicator
-  } else if (state.isSuccessful) {
-    // Show success message
-  } else if (state.error) {
-    // Show error message
-  }
-});
+    // Handle different checkout states
+    if (state.isProcessing) {
+      // Show loading indicator
+    } else if (state.isSuccessful) {
+      // Show success message
+    } else if (state.error) {
+      // Show error message
+    }
+  });
 ```
 
 ```mermaid
 sequenceDiagram
     participant Checkout as primer-checkout
     participant Your App
-    
+
     Note over Checkout,Your App: Initialization
     Checkout->>Your App: primer-checkout-initialized
-    
+
     Note over Checkout,Your App: Payment Methods Discovery
     Checkout->>Your App: primer-payment-methods-updated
-    
+
     Note over Checkout,Your App: State Changes
     Checkout->>Your App: primer-state-changed (isProcessing: true)
     Note right of Your App: Show loading UI
@@ -237,7 +245,7 @@ When customizing your checkout layout, be careful not to render duplicate card f
   <primer-card-form>
     <!-- Custom card form content -->
   </primer-card-form>
-  
+
   <!-- This will render ANOTHER card form -->
   <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
 </div>
@@ -256,15 +264,16 @@ You can dynamically render payment methods by listening to the `primer-payment-m
 checkout.addEventListener('primer-payment-methods-updated', (event) => {
   const availableMethods = event.detail.toArray();
   const container = document.getElementById('payment-methods');
-  
+
   // Create payment method elements based on available methods
-  availableMethods.forEach(method => {
+  availableMethods.forEach((method) => {
     const element = document.createElement('primer-payment-method');
     element.setAttribute('type', method.type);
     container.appendChild(element);
   });
 });
 ```
+
 </details>
 
 This approach ensures you only display payment methods that are actually available.
@@ -278,20 +287,23 @@ This approach ensures you only display payment methods that are actually availab
 checkout.addEventListener('primer-payment-methods-updated', (event) => {
   let availableMethods = event.detail.toArray();
   const container = document.getElementById('payment-methods');
-  
+
   // If using a custom card form, filter out PAYMENT_CARD
   if (document.querySelector('primer-card-form')) {
-    availableMethods = availableMethods.filter(method => method.type !== 'PAYMENT_CARD');
+    availableMethods = availableMethods.filter(
+      (method) => method.type !== 'PAYMENT_CARD',
+    );
   }
-  
+
   // Create payment method elements based on filtered methods
-  availableMethods.forEach(method => {
+  availableMethods.forEach((method) => {
     const element = document.createElement('primer-payment-method');
     element.setAttribute('type', method.type);
     container.appendChild(element);
   });
 });
 ```
+
 </details>
 
 ## Styling Custom Layouts
@@ -323,7 +335,7 @@ sequenceDiagram
     participant HTML as HTML Parsing
     participant Components as Web Components Registration
     participant Display as Visual Display
-    
+
     HTML->>Display: Custom content rendered
     Note over Display: ❌ Components not yet defined
     HTML->>Components: JavaScript loads
@@ -332,6 +344,7 @@ sequenceDiagram
 ```
 
 This is particularly noticeable when:
+
 - You've added custom UI in slots
 - The page loads and shows your custom content
 - The components initialize and potentially hide or rearrange your content
@@ -360,11 +373,13 @@ Promise.allSettled([
   document.querySelector('.checkout-container').classList.add('ready');
 });
 ```
+
 </details>
 
 ## Best Practices for Layout Customization
 
 :::tip Best Practices Summary
+
 1. **Use Named Slots Correctly** - Always use the correct slot names to ensure content appears where expected
 2. **Listen for Relevant Events** - Handle checkout state through event listeners
 3. **Maintain Visual Consistency** - Use CSS custom properties for styling
@@ -374,6 +389,7 @@ Promise.allSettled([
    :::
 
 For detailed information on available components and their slots, refer to the component API documentation:
+
 - [Checkout Component](/api/Components/primer-checkout-doc/)
 - [Main Component](/api/Components/primer-main-doc/)
 - [Payment Method Component](/api/Components/payment-method-doc/)

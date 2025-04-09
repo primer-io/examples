@@ -86,7 +86,7 @@ const config: Config = {
       title: 'Composable Checkout',
       logo: {
         alt: 'Composable Checkout Logo',
-        src: '/img/composable_checkout_logo.svg',
+        src: 'https://goat-assets.production.core.primer.io/brand/icon/primer.svg',
         style: {
           color: '#FFA49B',
         },

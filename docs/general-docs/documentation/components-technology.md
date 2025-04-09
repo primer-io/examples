@@ -8,6 +8,7 @@ title: Technology
 This guide introduces the core technologies that power Primer Composable Checkout. While you won't need to implement these technologies directly, understanding them will help you better use and customize the checkout components in your projects.
 
 :::tip What you'll learn
+
 - The technologies that make Primer Composable Checkout work
 - How these technologies enable component isolation and customization
 - What these technical foundations mean for your development experience
@@ -27,7 +28,7 @@ flowchart TD
     A --> C[Shadow DOM]
     A --> D[HTML Templates]
     A --> E[ES Modules]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
@@ -59,17 +60,17 @@ flowchart LR
         A[Your Styles]
         B[Your HTML]
     end
-    
+
     subgraph "Shadow DOM (Component)"
         C[Component Styles]
         D[Component HTML]
     end
-    
+
     B --> E[primer-button]
     E --> D
     A -.- E
     A -.->|"Protected Boundary<br>(styles don't cross)"| C
-    
+
     style E fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
 ```
 
@@ -80,12 +81,13 @@ flowchart LR
 <!-- Your application styles won't affect the internal structure -->
 <primer-button>
   #shadow-root (open)
-    <!-- Protected internal component structure -->
-    <button class="primer-button">
-      <slot></slot>
-    </button>
+  <!-- Protected internal component structure -->
+  <button class="primer-button">
+    <slot></slot>
+  </button>
 </primer-button>
 ```
+
 </details>
 
 ### Inheritable Properties
@@ -116,7 +118,7 @@ One challenge of Shadow DOM is styling components from the outside. This is wher
 flowchart TD
     A["Your Application<br>:root { --primer-color-brand: #2f98ff; }"] --> B["Shadow DOM Boundary"]
     B --> C["Component Internal Styles<br>button { background-color: var(--primer-color-brand); }"]
-    
+
     style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px,stroke-dasharray: 5 5
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -141,12 +143,15 @@ CSS Variables have the ability to "pierce" through Shadow DOM boundaries, making
 <!-- Component accesses these variables from inside its Shadow DOM -->
 <primer-button>
   #shadow-root (open)
-    <button style="background-color: var(--primer-color-brand); 
-                   border-radius: var(--primer-radius-base);">
-      <slot></slot>
-    </button>
+  <button
+    style="background-color: var(--primer-color-brand); 
+                   border-radius: var(--primer-radius-base);"
+  >
+    <slot></slot>
+  </button>
 </primer-button>
 ```
+
 </details>
 
 Primer's design system leverages this capability with a comprehensive set of variables for colors, spacing, typography, and more:
@@ -154,11 +159,11 @@ Primer's design system leverages this capability with a comprehensive set of var
 ```css
 /* Examples of Primer's design tokens */
 :root {
-  --primer-color-brand: #2f98ff;            /* Primary brand color */
-  --primer-color-text-primary: #212121;     /* Main text color */
+  --primer-color-brand: #2f98ff; /* Primary brand color */
+  --primer-color-text-primary: #212121; /* Main text color */
   --primer-typography-brand: 'Inter', sans-serif; /* Brand font */
-  --primer-radius-small: 4px;               /* Small border radius */
-  --primer-space-xsmall: 4px;               /* Extra small spacing unit */
+  --primer-radius-small: 4px; /* Small border radius */
+  --primer-space-xsmall: 4px; /* Extra small spacing unit */
 }
 ```
 
@@ -172,7 +177,7 @@ This approach ensures visual consistency while enabling comprehensive customizat
 flowchart LR
     A["Your Content<br>&lt;div slot='payments'&gt;...&lt;/div&gt;"] -->|inserted into| B["Named Slot<br>&lt;slot name='payments'&gt;&lt;/slot&gt;"]
     C["Your Content<br>&lt;span&gt;Pay Now&lt;/span&gt;"] -->|inserted into| D["Default Slot<br>&lt;slot&gt;&lt;/slot&gt;"]
-    
+
     style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style B fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
     style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
@@ -206,6 +211,7 @@ Slots were introduced as part of the Web Components standard to solve a common p
   </div>
 </primer-card-form>
 ```
+
 </details>
 
 ### Types of Slots
@@ -280,6 +286,7 @@ Think of slots as labeled sections in your component. Just like you'd put specif
 ## Lit: Enhanced Functionality
 
 [Lit](https://lit.dev/) provides the reactive foundation for Primer Components, enabling them to:
+
 - Update efficiently when data changes
 - Handle events consistently
 - Manage component state effectively
@@ -308,7 +315,7 @@ flowchart TD
     B -->|"Behavior<br>(what it does)"| E[Customized Component]
     C -->|"Content & Layout<br>(what it contains)"| E
     D -->|"Visual Appearance<br>(how it looks)"| E
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -323,11 +330,11 @@ Together, these technologies create a flexible system that can adapt to your spe
 Primer Composable Checkout works in all modern browsers:
 
 | Browser | Support |
-|---------|---------|
-| Chrome  | ✅       |
-| Firefox | ✅       |
-| Safari  | ✅       |
-| Edge    | ✅       |
+| ------- | ------- |
+| Chrome  | ✅      |
+| Firefox | ✅      |
+| Safari  | ✅      |
+| Edge    | ✅      |
 
 :::note
 Primer Components handle browser compatibility for you - you don't need to worry about polyfills or compatibility layers.
@@ -336,6 +343,7 @@ Primer Components handle browser compatibility for you - you don't need to worry
 ## Key Takeaways
 
 Understanding these technologies helps you:
+
 - **Use Components Effectively**: Know where and how to customize
 - **Debug More Easily**: Understand component boundaries and behavior
 - **Build Better UIs**: Take advantage of component isolation and composition
@@ -343,6 +351,7 @@ Understanding these technologies helps you:
 
 :::tip Learn More
 For a deeper understanding of Web Components, check out the following resources:
+
 - [MDN Web Components Guide](https://developer.mozilla.org/en-US/docs/Web/API/Web_components)
 - [Using Custom Elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements)
 - [Shadow DOM on MDN](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM)

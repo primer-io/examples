@@ -6,6 +6,7 @@ slug: /components/card-form/card-form-submit
 ---
 
 # Card Form Submit Button Component
+
 ## \<primer-card-form-submit\>
 
 The Card Form Submit Button component provides a standardized submit button specifically designed for card payment forms. It includes localization support and consistent styling. Under the hood, it wraps a `primer-button` component to provide additional payment form-specific functionality.
@@ -18,7 +19,7 @@ flowchart TD
     B --> E[Consistent Styling]
     C --> F[Localized Button Text]
     D --> G[Submit Event Handling]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
@@ -42,7 +43,7 @@ The Card Form Submit Button component is designed to be used within a `primer-ca
 ## Properties
 
 | Property     | Attribute    | Type      | Default              | Description                                                                                                                                      |
-|--------------|--------------|-----------|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------ | ------------ | --------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `buttonText` | `buttonText` | `string`  | Localized "Pay" text | The text displayed on the button. If not explicitly set, falls back to a localized version of "Pay" based on the application's language settings |
 | `variant`    | `variant`    | `string`  | "primary"            | Button variant/style ("primary", etc.)                                                                                                           |
 | `disabled`   | `disabled`   | `boolean` | `false`              | Whether the button is disabled                                                                                                                   |
@@ -50,7 +51,7 @@ The Card Form Submit Button component is designed to be used within a `primer-ca
 ## Events
 
 | Event Name           | Description                      | Event Detail                            |
-|----------------------|----------------------------------|-----------------------------------------|
+| -------------------- | -------------------------------- | --------------------------------------- |
 | `primer-form-submit` | Fired when the button is clicked | `{ source: 'primer-card-form-submit' }` |
 
 ## Features
@@ -62,7 +63,7 @@ flowchart LR
     A --> D[Customization Options]
     A --> E[Automatic Integration]
     A --> F[Click Handling]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -88,12 +89,12 @@ sequenceDiagram
     participant Submit as primer-card-form-submit
     participant Button as primer-button
     participant CardForm as primer-card-form
-    
+
     Note over Submit: Component initialization
     Submit->>Button: Create with buttonType="submit"
     Submit->>Button: Add data-submit attribute
     Submit->>Button: Apply variant & text
-    
+
     Note over Submit: User clicks button
     Button->>Submit: Click event
     Submit->>Submit: Prevent default
@@ -106,11 +107,7 @@ sequenceDiagram
 This component uses `display: contents` which means it doesn't create a new box in the DOM layout. Instead, it renders the inner `primer-button` directly within the parent container. The rendered DOM looks like:
 
 ```html
-<primer-button 
-  buttonType="submit" 
-  variant="primary|secondary|etc" 
-  data-submit
->
+<primer-button buttonType="submit" variant="primary|secondary|etc" data-submit>
   Payment Text
 </primer-button>
 ```
@@ -140,9 +137,7 @@ This component uses `display: contents` which means it doesn't create a new box 
 ```html
 <primer-card-form>
   <!-- Card form inputs -->
-  <primer-card-form-submit 
-    buttonText="Complete Payment" 
-    variant="secondary">
+  <primer-card-form-submit buttonText="Complete Payment" variant="secondary">
   </primer-card-form-submit>
 </primer-card-form>
 ```
@@ -164,19 +159,23 @@ This component uses `display: contents` which means it doesn't create a new box 
 ## Key Considerations
 
 :::info Default Behavior
+
 - The Card Form Submit Button is automatically included in the default card form layout
 - When using a custom layout with the `card-form-content` slot, you'll need to add this component manually
   :::
 
 :::tip Submission Options
+
 - You can use either this component or a standard HTML button with `type="submit"` or the `data-submit` attribute
   :::
 
 :::note Text Localization
+
 - The button text is automatically localized by default, falling back to a localized version of "Pay" if not explicitly set
 - Setting the `buttonText` property to an empty string will revert to using the localized default text
   :::
 
 :::tip Implementation Detail
+
 - The component adds a `data-submit` attribute to the internal button, which can be used for styling or selection
   :::

@@ -19,7 +19,7 @@ flowchart TD
     A --> D[primer-input-cvv]
     A --> E[primer-input-card-holder-name]
     A --> F[primer-card-form-submit]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -88,7 +88,7 @@ flowchart LR
     A[Your Custom Layout] -->|inserted into| B[card-form-content slot]
     B -->|rendered within| C[primer-card-form]
     D[Default Layout] -.->|fallback if no custom content| B
-    
+
     style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px
     style C fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
@@ -105,12 +105,12 @@ flowchart TD
     B --> C[Validation Context]
     B --> D[Hosted Inputs]
     B --> E[Form State]
-    
+
     C & D & E --> F[primer-input-card-number]
-    C & D & E --> G[primer-input-card-expiry] 
+    C & D & E --> G[primer-input-card-expiry]
     C & D & E --> H[primer-input-cvv]
     C & D & E --> I[primer-input-card-holder-name]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
@@ -183,7 +183,7 @@ flowchart TD
     C --> E{Payment Result}
     E -->|Success| F[Emit Success Event]
     E -->|Error| G[Emit Error Event]
-    
+
     style A fill:#e3f2fd,stroke:#1976d2,stroke-width:1px
     style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -202,6 +202,7 @@ flowchart TD
 </details>
 
 When submission is triggered, the component:
+
 1. Validates all card inputs
 2. Emits validation errors if necessary
 3. Submits the payment if validation passes
@@ -232,12 +233,12 @@ sequenceDiagram
     participant CardForm as primer-card-form
     participant Checkout as primer-checkout
     participant YourApp
-    
+
     Note over CardForm,YourApp: Validation failure scenario
     CardForm->>Checkout: primer-form-submit-errors
     Checkout->>YourApp: primer-form-submit-errors
     Note right of YourApp: Handle validation errors
-    
+
     Note over CardForm,YourApp: Successful submission
     CardForm->>Checkout: primer-form-submit-success
     Checkout->>YourApp: primer-form-submit-success
@@ -250,10 +251,10 @@ Card form components inherit styling from CSS custom properties defined at the c
 
 ```css
 :root {
-    /* These properties affect all components */
-    --primer-color-brand: #4a90e2;
-    --primer-radius-small: 4px;
-    --primer-typography-body-large-font: 'Your-Font', sans-serif;
+  /* These properties affect all components */
+  --primer-color-brand: #4a90e2;
+  --primer-radius-small: 4px;
+  --primer-typography-body-large-font: 'Your-Font', sans-serif;
 }
 ```
 
@@ -291,6 +292,7 @@ The form container doesn't validate these custom fields directly, so you'll need
 When customizing your card form layout, be aware of a common issue that can lead to duplicate card form elements:
 
 :::caution Common Issue
+
 ```html
 <!-- ❌ INCORRECT: This will cause duplicate card forms to appear -->
 <primer-checkout client-token="your-token">
@@ -309,6 +311,7 @@ When customizing your card form layout, be aware of a common issue that can lead
   </primer-main>
 </primer-checkout>
 ```
+
 :::
 
 **Important:** When using a custom card form, do not include `<primer-payment-method type="PAYMENT_CARD">` in your layout. The payment method component will render its own card form, resulting in duplicates.
@@ -321,18 +324,20 @@ This is especially important when dynamically generating payment methods:
 ```javascript
 // When dynamically rendering payment methods, filter out PAYMENT_CARD if you're using a custom card form
 checkout.addEventListener('primer-payment-methods-updated', (event) => {
-  const availableMethods = event.detail.toArray()
+  const availableMethods = event.detail
+    .toArray()
     // Filter out PAYMENT_CARD if you're using a custom card form
-    .filter(method => method.type !== 'PAYMENT_CARD');
+    .filter((method) => method.type !== 'PAYMENT_CARD');
 
   // Render the filtered payment methods
-  availableMethods.forEach(method => {
+  availableMethods.forEach((method) => {
     const element = document.createElement('primer-payment-method');
     element.setAttribute('type', method.type);
     container.appendChild(element);
   });
 });
 ```
+
 </details>
 
 ## Relationship with Payment Method Component
@@ -343,16 +348,16 @@ The relationship between `<primer-card-form>` and `<primer-payment-method type="
 flowchart TD
     A[Payment Methods] --> B["primer-payment-method<br>type=PAYMENT_CARD"]
     A --> C[Other Payment Methods]
-    
+
     B -->|Internally creates| D[primer-card-form]
-    
+
     E[Custom Layout] --> F[Your primer-card-form]
-    
+
     subgraph "Choose only one approach"
     B
     F
     end
-    
+
     style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style B fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -365,13 +370,14 @@ Key points about this relationship:
 
 1. `<primer-payment-method type="PAYMENT_CARD">` internally creates its own `<primer-card-form>`
 2. You should use either:
-    - A custom `<primer-card-form>` (for full layout control)
-    - The `<primer-payment-method type="PAYMENT_CARD">` component (for automatic handling)
+   - A custom `<primer-card-form>` (for full layout control)
+   - The `<primer-payment-method type="PAYMENT_CARD">` component (for automatic handling)
 3. Using both simultaneously will create duplicate forms and cause conflicts
 
 ## Best Practices
 
 :::tip Best Practices Summary
+
 1. **Maintain Security** - Always use the provided secure input components for card data
 2. **Respect Component Hierarchy** - Keep all card input components within the `primer-card-form`
 3. **Avoid Duplicate Components** - Don't use `<primer-payment-method type="PAYMENT_CARD">` with a custom card form
@@ -383,4 +389,5 @@ Key points about this relationship:
    :::
 
 For detailed information on individual components, refer to their API documentation:
+
 - [Card Form](/api/Components/CardForm/)

@@ -6,6 +6,7 @@ slug: /components/card-form/input-cvv
 ---
 
 # CVV Input Component
+
 ## \<primer-input-cvv\>
 
 The CVV Input component provides a secure, PCI-compliant field for collecting payment card security codes (CVV/CVC). It integrates with the card form validation system and maintains a consistent user experience.
@@ -18,7 +19,7 @@ flowchart TD
     B --> E[PCI-Compliant Entry]
     C --> F[Error Handling]
     D --> G[Visual State Updates]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
@@ -42,11 +43,11 @@ The CVV Input component must be used within a `primer-card-form` container:
 
 ## Properties
 
-| Property      | Attribute     | Type     | Default | Description                            |
-|---------------|---------------|----------|---------|----------------------------------------|
-| `label`       | `label`       | `string` | "CVV"   | The label displayed above the input    |
+| Property      | Attribute     | Type     | Default | Description                                |
+| ------------- | ------------- | -------- | ------- | ------------------------------------------ |
+| `label`       | `label`       | `string` | "CVV"   | The label displayed above the input        |
 | `placeholder` | `placeholder` | `string` | "123"   | Placeholder text shown when input is empty |
-| ``   | `aria-label`  | `string` | "CVV"   | Accessibility label for screen readers |
+| ``            | `aria-label`  | `string` | "CVV"   | Accessibility label for screen readers     |
 
 ### Property Behavior
 
@@ -65,14 +66,14 @@ sequenceDiagram
     participant CVV as primer-input-cvv
     participant Context as Card Form Context
     participant Wrapper as primer-input-wrapper
-    
+
     Note over CVV: Component initialization
     CVV->>Context: Connect to context
     Context->>CVV: Provide hosted input
-    
+
     Note over CVV: Input focus
     CVV->>Wrapper: Update focus state
-    
+
     Note over CVV: Validation
     Context->>CVV: Validation state changes
     CVV->>CVV: Display error if needed
@@ -128,7 +129,8 @@ The component renders the following DOM structure:
   <primer-input-cvv
     label="Security Code"
     placeholder="CVV"
-    aria-label="Your card's security code">
+    aria-label="Your card's security code"
+  >
   </primer-input-cvv>
 </primer-card-form>
 ```
@@ -156,11 +158,13 @@ The component renders the following DOM structure:
 ## Key Considerations
 
 :::info Component Dependencies
+
 - The CVV Input component must be placed inside a `primer-card-form` component
 - For best UI experience, consider pairing this component with `primer-input-card-expiry` in a flex layout
   :::
 
 :::tip Implementation Details
+
 - Input validation happens automatically when the form is submitted
 - Validation errors are displayed below the input field when they occur
 - The component handles focus events internally to update the wrapper's visual state

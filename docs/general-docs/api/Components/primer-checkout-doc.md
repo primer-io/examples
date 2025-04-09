@@ -6,6 +6,7 @@ description: The Checkout component is the main container for all Primer payment
 ---
 
 # Checkout Component
+
 ## \<primer-checkout\>
 
 The `Checkout` component serves as the main container for all Primer payment components. It initializes the Primer SDK, manages the checkout state, and provides context to child components. This component can be used as a simple drop-in solution or as a foundation for a highly customized checkout experience.
@@ -19,11 +20,11 @@ flowchart TD
     A[Checkout Implementation Options] --> B[Drop-in Solution]
     A --> C[Customized via primer-main]
     A --> D[Fully Custom Implementation]
-    
+
     B -->|"&lt;primer-checkout&gt; only"| E[Automatic display of<br>all payment methods]
     C -->|"Use slots within<br>&lt;primer-main&gt;"| F[Customize specific<br>checkout sections]
     D -->|"Replace &lt;primer-main&gt;<br>with custom content"| G[Complete control<br>over UI and flow]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -55,7 +56,7 @@ Use the optional `primer-main` component with slots to customize specific parts 
       <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
       <primer-payment-method type="PAYPAL"></primer-payment-method>
     </div>
-    
+
     <!-- Custom completion screen -->
     <div slot="checkout-complete">
       <h2>Thank you for your purchase!</h2>
@@ -84,23 +85,23 @@ For comprehensive layout customization options, see the [Layout Customizations G
 
 ## Properties
 
-| Attribute        | Type      | Description                                                                            | Default |
-|------------------|-----------|----------------------------------------------------------------------------------------|---------|
-| `client-token`   | `String`  | Required. The client token obtained from your Primer backend integration.              | `''`    |
-| `options`        | `Object`  | Optional. Configuration options for the Primer SDK.                                    | `{}`    |
-| `custom-styles`  | `String`  | Optional. Stringified JSON object containing CSS custom properties for styling.        | `''`    |
-| `disable-loader` | `Boolean` | Optional. When true, disables the default loading spinner.                             | `false` |
+| Attribute        | Type      | Description                                                                     | Default |
+| ---------------- | --------- | ------------------------------------------------------------------------------- | ------- |
+| `client-token`   | `String`  | Required. The client token obtained from your Primer backend integration.       | `''`    |
+| `options`        | `Object`  | Optional. Configuration options for the Primer SDK.                             | `{}`    |
+| `custom-styles`  | `String`  | Optional. Stringified JSON object containing CSS custom properties for styling. | `''`    |
+| `disable-loader` | `Boolean` | Optional. When true, disables the default loading spinner.                      | `false` |
 
 ## Slots
 
-| Name   | Description                                                                                                            |
-|--------|------------------------------------------------------------------------------------------------------------------------|
+| Name   | Description                                                                                                                                                                                                                                                  |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `main` | Main content slot for checkout components. If no content is provided, a default `<primer-main>` component is rendered with all available payment methods. You can provide either a `<primer-main>` component or your own custom implementation in this slot. |
 
 ## Events
 
 | Event Name                       | Description                                      | Event Detail              |
-|----------------------------------|--------------------------------------------------|---------------------------|
+| -------------------------------- | ------------------------------------------------ | ------------------------- |
 | `primer-checkout-initialized`    | Fired when the SDK is successfully initialized   | SDK instance              |
 | `primer-payment-methods-updated` | Fired when payment methods are loaded            | Available payment methods |
 | `primer-state-changed`           | Fired when the checkout state changes            | Current state object      |
@@ -112,17 +113,17 @@ For comprehensive layout customization options, see the [Layout Customizations G
 sequenceDiagram
     participant Checkout as primer-checkout
     participant YourApp
-    
+
     Note over Checkout,YourApp: Initialization Phase
     Checkout->>YourApp: primer-checkout-initialized
-    
+
     Note over Checkout,YourApp: Payment Method Discovery
     Checkout->>YourApp: primer-payment-methods-updated
-    
+
     Note over Checkout,YourApp: Payment Processing
     YourApp->>Checkout: Submit Payment
     Checkout->>YourApp: primer-state-changed (isProcessing: true)
-    
+
     alt Success Path
         Checkout->>YourApp: primer-card-submit-success
         Checkout->>YourApp: primer-state-changed (isSuccessful: true)
@@ -145,7 +146,7 @@ Here's a comprehensive overview of the available options:
 ### Core Options
 
 | Option       | Type                | Description                                                        | Default          |
-|--------------|---------------------|--------------------------------------------------------------------|------------------|
+| ------------ | ------------------- | ------------------------------------------------------------------ | ---------------- |
 | `locale`     | `String`            | Forces the locale for UI elements. Formats: "en-US", "fr-FR", etc. | Browser's locale |
 | `apiVersion` | `"legacy" \| "2.4"` | API version to use when interacting with Primer backend.           | `"legacy"`       |
 
@@ -166,6 +167,7 @@ Controls the behavior of card payment methods.
   }
 }
 ```
+
 </details>
 
 <details>
@@ -178,12 +180,12 @@ Configures Apple Pay payment behavior.
   "applePay": {
     // Deprecated - use billingOptions.requiredBillingContactFields instead
     "captureBillingAddress": false,
-    
+
     "billingOptions": {
       // Required billing information to collect during checkout
       "requiredBillingContactFields": ["postalAddress", "phoneNumber", "emailAddress"]
     },
-    
+
     "shippingOptions": {
       // Required shipping information to collect during checkout
       "requiredShippingContactFields": ["postalAddress", "name", "phoneNumber", "emailAddress"]
@@ -191,6 +193,7 @@ Configures Apple Pay payment behavior.
   }
 }
 ```
+
 </details>
 
 <details>
@@ -207,6 +210,7 @@ Configures Google Pay payment behavior.
   }
 }
 ```
+
 </details>
 
 <details>
@@ -222,6 +226,7 @@ Configures PayPal payment behavior.
   }
 }
 ```
+
 </details>
 
 ### Example of Complete Options Object
@@ -229,8 +234,8 @@ Configures PayPal payment behavior.
 Here's an example of a complete options object with various settings:
 
 ```html
-<primer-checkout 
-  client-token="your-client-token" 
+<primer-checkout
+  client-token="your-client-token"
   options='{"locale":"en-GB","apiVersion":"2.4","card":{"cardholderName":{"required":true},"allowedCardNetworks":["visa","mastercard","amex"]},"applePay":{"billingOptions":{"requiredBillingContactFields":["postalAddress","emailAddress"]}},"googlePay":{"captureBillingAddress":true,"buttonTheme":"dark"}}'
 >
   <primer-main slot="main"></primer-main>
@@ -246,19 +251,19 @@ checkout.options = {
   apiVersion: '2.4',
   card: {
     cardholderName: {
-      required: true
+      required: true,
     },
-    allowedCardNetworks: ['visa', 'mastercard', 'amex']
+    allowedCardNetworks: ['visa', 'mastercard', 'amex'],
   },
   applePay: {
     billingOptions: {
-      requiredBillingContactFields: ['postalAddress', 'emailAddress']
-    }
+      requiredBillingContactFields: ['postalAddress', 'emailAddress'],
+    },
   },
   googlePay: {
     captureBillingAddress: true,
-    buttonTheme: 'dark'
-  }
+    buttonTheme: 'dark',
+  },
 };
 ```
 
@@ -283,7 +288,9 @@ When passing options to the `primer-checkout` component as an HTML attribute:
 
 ```html
 <!-- Invalid: Single quotes around property names, trailing comma -->
-<primer-checkout options='{"locale": "en-GB", "apiVersion": "2.4",}'>
+<primer-checkout
+  options='{"locale": "en-GB", "apiVersion": "2.4",}'
+></primer-checkout>
 ```
 
 </div>
@@ -292,7 +299,9 @@ When passing options to the `primer-checkout` component as an HTML attribute:
 
 ```html
 <!-- Valid: Proper JSON formatting -->
-<primer-checkout options='{"locale":"en-GB","apiVersion":"2.4"}'>
+<primer-checkout
+  options='{"locale":"en-GB","apiVersion":"2.4"}'
+></primer-checkout>
 ```
 
 </div>
@@ -310,7 +319,7 @@ stateDiagram-v2
     Ready --> Processing: Payment Started
     Processing --> Success: Payment Completed
     Processing --> Failure: Payment Failed
-    
+
     Success --> [*]
     Failure --> Ready: User retries
     Error --> [*]
@@ -347,6 +356,7 @@ You can apply tokens in two ways:
   --primer-color-focus: #2f98ff;
 }
 ```
+
 </details>
 
 <details>
@@ -357,6 +367,7 @@ You can apply tokens in two ways:
   custom-styles='{"primerColorBrand":"#2f98ff","primerRadiusBase":"4px","primerTypographyBrand":"Inter, sans-serif","primerSpaceBase":"4px","primerSizeBase":"4px","primerColorLoader":"#2f98ff","primerColorFocus":"#2f98ff"}'
 ></primer-checkout>
 ```
+
 </details>
 
 :::tip
@@ -383,16 +394,14 @@ The simplest implementation with default behavior and styling:
 ```html
 <primer-checkout client-token="your-client-token"></primer-checkout>
 ```
+
 </details>
 
 <details>
 <summary><strong>Using primer-main with Customization</strong></summary>
 
 ```html
-<primer-checkout 
-  client-token="your-client-token" 
-  options='{"locale":"en-GB"}'
->
+<primer-checkout client-token="your-client-token" options='{"locale":"en-GB"}'>
   <primer-main slot="main">
     <!-- Customize payment methods display -->
     <div slot="payments">
@@ -401,15 +410,14 @@ The simplest implementation with default behavior and styling:
   </primer-main>
 </primer-checkout>
 ```
+
 </details>
 
 <details>
 <summary><strong>Fully Custom Implementation</strong></summary>
 
 ```html
-<primer-checkout 
-  client-token="your-client-token"
->
+<primer-checkout client-token="your-client-token">
   <!-- Custom implementation without primer-main -->
   <div slot="main" class="custom-checkout">
     <h2>Complete Your Purchase</h2>
@@ -417,6 +425,7 @@ The simplest implementation with default behavior and styling:
   </div>
 </primer-checkout>
 ```
+
 </details>
 
 <details>
@@ -431,28 +440,30 @@ The simplest implementation with default behavior and styling:
   <primer-main slot="main"></primer-main>
 </primer-checkout>
 ```
+
 </details>
 
 <details>
 <summary><strong>With API Version and Card Options</strong></summary>
 
 ```html
-<primer-checkout 
-  client-token="your-client-token" 
+<primer-checkout
+  client-token="your-client-token"
   options='{"apiVersion":"2.4","locale":"en-GB","card":{"cardholderName":{"required":true}}}'
 >
   <primer-main slot="main"></primer-main>
 </primer-checkout>
 ```
+
 </details>
 
 <details>
 <summary><strong>Complete Checkout with Event Handling</strong></summary>
 
 ```html
-<primer-checkout 
+<primer-checkout
   id="checkout"
-  client-token="your-client-token" 
+  client-token="your-client-token"
   options='{"locale":"en-GB"}'
 >
   <primer-main slot="main">
@@ -468,13 +479,13 @@ The simplest implementation with default behavior and styling:
 
 <script>
   const checkout = document.getElementById('checkout');
-  
+
   // Listen for payment methods loading
   checkout.addEventListener('primer-payment-methods-updated', (event) => {
     const paymentMethods = event.detail;
     console.log('Available payment methods:', paymentMethods.toArray());
   });
-  
+
   // Listen for checkout state changes
   checkout.addEventListener('primer-state-changed', (event) => {
     const state = event.detail;
@@ -486,13 +497,14 @@ The simplest implementation with default behavior and styling:
       console.error('Error:', state.error.message);
     }
   });
-  
+
   // Listen for SDK initialization
   checkout.addEventListener('primer-checkout-initialized', (event) => {
     console.log('Checkout SDK initialized');
   });
 </script>
 ```
+
 </details>
 
 <details>
@@ -505,19 +517,20 @@ The simplest implementation with default behavior and styling:
 
 <script>
   const checkout = document.getElementById('checkout');
-  
+
   // Set options directly as an object
   checkout.options = {
     locale: 'en-GB',
     apiVersion: '2.4',
     card: {
       cardholderName: {
-        required: true
-      }
-    }
+        required: true,
+      },
+    },
   };
 </script>
 ```
+
 </details>
 
 ## Locale Support
@@ -525,17 +538,13 @@ The simplest implementation with default behavior and styling:
 The Checkout component supports internationalization through the `locale` option. Set the desired locale in the options object:
 
 ```html
-<primer-checkout 
-  client-token="your-client-token" 
-  options='{"locale":"fr-FR"}'
->
+<primer-checkout client-token="your-client-token" options='{"locale":"fr-FR"}'>
   <primer-main slot="main"></primer-main>
 </primer-checkout>
 ```
 
 The full list of supported locales can be found in the [Localization and languages
 section](https://primer.io/docs/payments/universal-checkout/drop-in/customize-checkout/web#localization-and-languages).
-
 
 :::note
 If an unsupported locale is provided, the component will fall back to the default 'en-GB' locale with a warning message in the console.
@@ -545,16 +554,12 @@ If an unsupported locale is provided, the component will fall back to the defaul
 At present the Composable Checkout only supports left-to-right (LTR) languages.
 :::
 
-
 ## Disable Loader Option
 
 You can disable the default loading spinner that appears during SDK initialization by using the `disable-loader` attribute:
 
 ```html
-<primer-checkout 
-  client-token="your-client-token" 
-  disable-loader
->
+<primer-checkout client-token="your-client-token" disable-loader>
   <primer-main slot="main"></primer-main>
 </primer-checkout>
 ```
@@ -564,6 +569,7 @@ This is useful when you want to implement your own custom loading indicator or w
 ## Key Considerations
 
 :::info Summary of Key Points
+
 - The Checkout component functions as a complete checkout solution out of the box, requiring only a client token
 - Without custom layout, the component automatically displays all available payment methods
 - The `primer-main` component is optional - you can provide your own custom implementation in the `main` slot

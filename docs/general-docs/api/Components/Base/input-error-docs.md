@@ -6,6 +6,7 @@ slug: /components/input-error
 ---
 
 # Input Error Component
+
 ## \<primer-input-error\>
 
 The Input Error component displays validation error messages with consistent styling and proper accessibility features. It's designed to work with Primer form components to provide clear feedback when validation fails.
@@ -16,19 +17,19 @@ flowchart TD
     A --> C[Accessibility<br>Features]
     A --> D[Error<br>Styling]
     A --> E[Form<br>Integration]
-    
+
     B --> B1[active<br>property]
-    
+
     C --> C1[role=alert]
     C --> C2[aria-live]
     C --> C3[for<br>attribute]
-    
+
     D --> D1[Consistent<br>styling]
     D --> D2[Theme<br>variables]
-    
+
     E --> E1[Slot-based<br>integration]
     E --> E2[input-wrapper<br>compatibility]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
@@ -50,7 +51,9 @@ flowchart TD
 
 ```html
 <primer-input-wrapper has-error>
-  <primer-input-label slot="label" for="password-input">Password</primer-input-label>
+  <primer-input-label slot="label" for="password-input"
+    >Password</primer-input-label
+  >
   <primer-input slot="input" id="password-input" type="password"></primer-input>
   <primer-input-error slot="error" for="password-input">
     Password must be at least 8 characters
@@ -61,15 +64,15 @@ flowchart TD
 ## Properties
 
 | Property | Attribute | Type      | Default | Description                                                  |
-|----------|-----------|-----------|---------|--------------------------------------------------------------|
+| -------- | --------- | --------- | ------- | ------------------------------------------------------------ |
 | `for`    | `for`     | `string`  | `''`    | ID of the form control this error message is associated with |
 | `active` | `active`  | `boolean` | `true`  | Whether the error is currently active/visible                |
 
 ## Slots
 
-| Name      | Description                                        |
-|-----------|----------------------------------------------------|
-| `default` | Content of the error message (text content)        |
+| Name      | Description                                 |
+| --------- | ------------------------------------------- |
+| `default` | Content of the error message (text content) |
 
 ## Accessibility
 
@@ -87,7 +90,7 @@ sequenceDiagram
     participant Validator
     participant Error as primer-input-error
     participant ScreenReader
-    
+
     Input->>Validator: validate() on blur
     alt Invalid Input
         Validator->>Error: set active=true
@@ -101,12 +104,12 @@ sequenceDiagram
 
 The Input Error component uses these CSS custom properties for styling:
 
-| Property                                  | Description                         |
-|-------------------------------------------|-------------------------------------|
-| `--primer-color-text-negative`            | Text color for error messages       |
-| `--primer-typography-body-small-size`     | Font size for error messages        |
-| `--primer-typography-body-small-line-height` | Line height for error messages   |
-| `--primer-typography-body-small-font`     | Font family for error messages      |
+| Property                                     | Description                    |
+| -------------------------------------------- | ------------------------------ |
+| `--primer-color-text-negative`               | Text color for error messages  |
+| `--primer-typography-body-small-size`        | Font size for error messages   |
+| `--primer-typography-body-small-line-height` | Line height for error messages |
+| `--primer-typography-body-small-font`        | Font family for error messages |
 
 ## Examples
 
@@ -120,6 +123,7 @@ The Input Error component uses these CSS custom properties for styling:
 ```
 
 This shows a simple error message associated with a credit card input field.
+
 </details>
 
 <details>
@@ -134,11 +138,11 @@ This shows a simple error message associated with a credit card input field.
 <script>
   const input = document.querySelector('#email');
   const error = document.querySelector('#email-error');
-  
+
   input.addEventListener('blur', () => {
     const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value);
     error.active = !isValid;
-    
+
     // Also update wrapper if being used
     const wrapper = input.closest('primer-input-wrapper');
     if (wrapper) {
@@ -149,6 +153,7 @@ This shows a simple error message associated with a credit card input field.
 ```
 
 This example shows how to programmatically toggle the visibility of an error message based on validation logic.
+
 </details>
 
 <details>
@@ -156,14 +161,21 @@ This example shows how to programmatically toggle the visibility of an error mes
 
 ```html
 <primer-input-wrapper id="password-wrapper">
-  <primer-input-label slot="label" for="password">Create Password</primer-input-label>
-  <primer-input 
-    slot="input" 
-    id="password" 
+  <primer-input-label slot="label" for="password"
+    >Create Password</primer-input-label
+  >
+  <primer-input
+    slot="input"
+    id="password"
     type="password"
     minlength="8"
   ></primer-input>
-  <primer-input-error slot="error" id="password-error" for="password" active="false">
+  <primer-input-error
+    slot="error"
+    id="password-error"
+    for="password"
+    active="false"
+  >
     Password must be at least 8 characters
   </primer-input-error>
 </primer-input-wrapper>
@@ -172,12 +184,12 @@ This example shows how to programmatically toggle the visibility of an error mes
   const input = document.querySelector('#password');
   const error = document.querySelector('#password-error');
   const wrapper = document.querySelector('#password-wrapper');
-  
+
   input.addEventListener('invalid', () => {
     error.active = true;
     wrapper.hasError = true;
   });
-  
+
   input.addEventListener('input', () => {
     if (input.validity.valid) {
       error.active = false;
@@ -188,6 +200,7 @@ This example shows how to programmatically toggle the visibility of an error mes
 ```
 
 This example demonstrates how to integrate the error component with input wrapper and handle validation events.
+
 </details>
 
 <details>
@@ -195,12 +208,10 @@ This example demonstrates how to integrate the error component with input wrappe
 
 ```html
 <primer-input-wrapper id="password-wrapper">
-  <primer-input-label slot="label" for="password">Create Password</primer-input-label>
-  <primer-input 
-    slot="input" 
-    id="password" 
-    type="password"
-  ></primer-input>
+  <primer-input-label slot="label" for="password"
+    >Create Password</primer-input-label
+  >
+  <primer-input slot="input" id="password" type="password"></primer-input>
   <div slot="error">
     <primer-input-error id="length-error" for="password" active="false">
       Password must be at least 8 characters
@@ -222,11 +233,11 @@ flowchart TD
     A[primer-input-wrapper] --> B[primer-input-label]
     A --> C[primer-input]
     A --> D[div slot=error]
-    
+
     D --> E[primer-input-error<br>Length]
     D --> F[primer-input-error<br>Uppercase]
     D --> G[primer-input-error<br>Number]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
@@ -235,6 +246,7 @@ flowchart TD
     style F fill:#ffebee,stroke:#d32f2f,stroke-width:1px
     style G fill:#ffebee,stroke:#d32f2f,stroke-width:1px
 ```
+
 </details>
 
 ## Common Integration Patterns
@@ -272,7 +284,7 @@ For standalone usage, place the error component near the related input:
 
 ```html
 <label for="email">Email Address</label>
-<input id="email" type="email">
+<input id="email" type="email" />
 <primer-input-error for="email">
   Please enter a valid email address
 </primer-input-error>
@@ -306,6 +318,7 @@ Toggle each error's `active` property individually based on specific validation 
 ## Notes
 
 :::tip Best Practices
+
 - The error is displayed by default when created (`active=true`)
 - Set `active="false"` to hide the error initially
 - When used inside a `primer-input-wrapper`, add the `has-error` attribute to the wrapper to apply error styling to the input field

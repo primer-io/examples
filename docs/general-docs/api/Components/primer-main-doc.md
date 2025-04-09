@@ -6,6 +6,7 @@ description: The Main component provides an optional container for payment metho
 ---
 
 # Main Component
+
 ## \<primer-main\>
 
 The `primer-main` component serves as an optional container for payment methods within the checkout flow. Similar to an HTML `<main>` tag that signals the main content of a page, `primer-main` acts as the main container of your checkout application, providing organized structure for different checkout states.
@@ -18,14 +19,14 @@ flowchart TD
     B -->|slot: payments| C[Payment Methods]
     B -->|slot: checkout-complete| D[Success State]
     B -->|slot: checkout-failure| E[Error State]
-    
+
     C -->|can contain| F[primer-payment-method]
     C -->|can contain| G[Custom Payment UI]
     D -->|defaults to| H[primer-checkout-complete]
     D -->|can be replaced with| I[Custom Success UI]
     E -->|defaults to| J[primer-checkout-failure]
     E -->|can be replaced with| K[Custom Error UI]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -89,7 +90,7 @@ This renders a complete list of all available payment methods automatically.
 ## Slots
 
 | Name                | Description                                                                                                  |
-|---------------------|--------------------------------------------------------------------------------------------------------------|
+| ------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `payments`          | Custom content slot for payment methods. When provided, it replaces the default payment methods list.        |
 | `checkout-complete` | Custom content slot for the checkout completion state. Defaults to the `primer-checkout-complete` component. |
 | `checkout-failure`  | Custom content slot for the checkout failure state. Defaults to the `primer-checkout-failure` component.     |
@@ -105,11 +106,11 @@ The Main component automatically manages different checkout states:
 ```mermaid
 stateDiagram-v2
     [*] --> PaymentSelection: Initial State
-    
+
     PaymentSelection --> Processing: Payment Started
     Processing --> Success: Payment Completed
     Processing --> Error: Payment Failed
-    
+
     Success --> [*]: Order Complete
     Error --> PaymentSelection: Retry
 ```
@@ -128,7 +129,7 @@ When using `primer-main`, you don't need to manually handle state transitions - 
 The Main component uses the following CSS custom properties for styling:
 
 | Property               | Description                                           |
-|------------------------|-------------------------------------------------------|
+| ---------------------- | ----------------------------------------------------- |
 | `--primer-space-small` | Spacing between payment method items (default: `8px`) |
 
 ## Examples
@@ -149,6 +150,7 @@ The Main component uses the following CSS custom properties for styling:
 ```
 
 This example shows how to create a custom success screen that appears after a successful payment, with a button that redirects customers to their orders page.
+
 </details>
 
 <details>
@@ -167,6 +169,7 @@ This example shows how to create a custom success screen that appears after a su
 ```
 
 This example demonstrates how to create a custom error screen that appears when a payment fails, with a button that reloads the page for the customer to try again.
+
 </details>
 
 <details>
@@ -183,14 +186,14 @@ This example demonstrates how to create a custom error screen that appears when 
         <primer-payment-method type="PAYPAL"></primer-payment-method>
       </div>
     </div>
-    
+
     <!-- Custom success state -->
     <div slot="checkout-complete">
       <h2>Thank you for your order!</h2>
       <p>Your payment has been processed successfully.</p>
       <button onclick="window.location.href='/orders'">View Your Orders</button>
     </div>
-    
+
     <!-- Custom error state -->
     <div slot="checkout-failure">
       <h2>Something went wrong</h2>
@@ -202,11 +205,13 @@ This example demonstrates how to create a custom error screen that appears when 
 ```
 
 This comprehensive example shows how to customize all three main slots within the `primer-main` component, creating a fully customized checkout experience while still leveraging the component's built-in state management.
+
 </details>
 
 ## Key Considerations
 
 :::info Summary
+
 - `primer-main` is an optional component that acts as a structured container within the `primer-checkout` component
 - When used, it automatically handles checkout completion and error states through its slot system
 - It can be bypassed entirely by placing custom content directly in the `main` slot of `primer-checkout`
@@ -219,16 +224,16 @@ sequenceDiagram
     participant Checkout as primer-checkout
     participant Main as primer-main
     participant PaymentMethod as primer-payment-method
-    
+
     Note over Checkout,PaymentMethod: Initialization Phase
     Checkout->>Main: Render inside main slot
     Main->>PaymentMethod: Render payment methods
-    
+
     Note over Checkout,PaymentMethod: Payment Processing
     PaymentMethod->>Checkout: Submit payment
     Checkout->>Main: Update state (isProcessing)
     Main->>Main: Show processing indicators
-    
+
     alt Payment Successful
         Checkout->>Main: Update state (isSuccessful)
         Main->>Main: Show checkout-complete slot

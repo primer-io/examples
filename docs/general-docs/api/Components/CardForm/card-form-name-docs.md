@@ -6,6 +6,7 @@ slug: /components/card-form/input-card-holder-name
 ---
 
 # Cardholder Name Input Component
+
 ## \<primer-input-card-holder-name\>
 
 The Cardholder Name Input component provides a field for collecting the cardholder's name on a payment form. In the current implementation, this component renders a standard input field rather than a secure iframe, though this will change in future releases.
@@ -18,7 +19,7 @@ flowchart TD
     B --> E[User Data Entry]
     C --> F[Real-time Updates]
     D --> G[Error Handling]
-    
+
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
@@ -43,7 +44,7 @@ The Cardholder Name Input component must be used within a `primer-card-form` con
 ## Properties
 
 | Attribute     | Type     | Default           | Description                                |
-|---------------|----------|-------------------|--------------------------------------------|
+| ------------- | -------- | ----------------- | ------------------------------------------ |
 | `label`       | `string` | "Cardholder Name" | The label displayed above the input        |
 | `placeholder` | `string` | "Name on card"    | Placeholder text shown when input is empty |
 | `aria-label`  | `string` | "Cardholder Name" | Accessibility label for screen readers     |
@@ -65,15 +66,15 @@ sequenceDiagram
     participant CardholderName as primer-input-card-holder-name
     participant Context as Card Form Context
     participant HTMLInput as HTML Input Element
-    
+
     Note over CardholderName: Component initialization
     CardholderName->>Context: Connect to context
     CardholderName->>HTMLInput: Create standard input
-    
+
     Note over CardholderName: User typing
     HTMLInput->>CardholderName: Input value changes
     CardholderName->>Context: Update cardholder name in real-time
-    
+
     Note over CardholderName: Validation
     Context->>CardholderName: Validation state changes
     CardholderName->>CardholderName: Display error if needed
@@ -127,7 +128,8 @@ The component renders the following DOM structure:
   <primer-input-card-holder-name
     label="Name on Card"
     placeholder="Enter your full name"
-    aria-label="Full name as it appears on your card">
+    aria-label="Full name as it appears on your card"
+  >
   </primer-input-card-holder-name>
 </primer-card-form>
 ```
@@ -160,7 +162,7 @@ flowchart LR
     A[User Input] --> B[Standard HTML Input]
     B --> C[Component Processing]
     C --> D[Card Form Context]
-    
+
     style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px
     style C fill:#fff8e1,stroke:#ffa000,stroke-width:1px
@@ -182,11 +184,13 @@ This migration will ensure consistent behavior across all input fields and provi
 ## Key Considerations
 
 :::info Component Dependencies
+
 - The Cardholder Name Input component must be placed inside a `primer-card-form` component
 - Input validation happens automatically when the form is submitted
   :::
 
 :::tip Implementation Details
+
 - Validation errors are displayed below the input field when they occur
 - The component updates the card form context in real-time with each character the user types
   :::

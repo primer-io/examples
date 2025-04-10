@@ -8,6 +8,53 @@ sidebar_position: 99
 
 This page documents all notable changes to Composable Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
+## v0.10.0 - Standalone Vaulting, New Payment Methods, and UX Improvements (10-Apr-2025)
+
+This release introduces significant enhancements including a standalone vaulting component, Klarna integration, improved error handling, and various UX improvements.
+
+### Key Highlights
+
+- **New Klarna Component**: Full Klarna support with collapsible design, inline pay button, and proper error message display
+- **Standalone Vaulting Component**: Place anywhere on your page with support for all current backend payment methods
+- **Improved UX**: Enhanced error validation, redesigned payment method styling, and better loader implementation
+
+### New Components and Features
+
+- **Klarna**:
+  - Fully integrated Klarna payment solution
+  - Collapsible design for better space utilization
+  - Inline pay button for streamlined checkout flow
+  - Improved error message display and handling
+  - Enhanced composability with other checkout elements
+
+- **Standalone Vaulting Component**:
+  - Can be placed anywhere on the page
+  - Supports all current backend payment methods
+  - Includes CVV recapture functionality through client session
+
+- **Payment Method Improvements**:
+  - Updated button styling, background colors, and icons
+  - Visual improvements for native payment methods
+  - New collapsible component for displaying alternative payment methods
+  - Flexible placement and configuration options
+
+### UX and Technical Improvements
+
+- **Enhanced Error Handling**:
+  - Card form validation now triggers on field blur instead of form submit
+  - More responsive feedback for users
+
+- **Improved Styling System**:
+  - Overhauled CSS token and style variable loading
+  - JavaScript-injected CSS tokens that preserve merchant customizations
+  - Styles properly scoped to primary checkout component
+
+- **Loader Enhancements**:
+  - CSS-only loader appears before JavaScript initialization
+  - Optional: merchants can disable or use custom loader designs
+
+Full documentation with detailed information will be available soon.
+
 ## v0.0.3 - TypeScript Types Bundling Fixes and NativePayments Buttons Height Fixes (11-Mar-2025)
 
 ### Fixes

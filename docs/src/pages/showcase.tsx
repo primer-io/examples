@@ -14,10 +14,10 @@ function ShowcaseHeader() {
       <div className='container'>
         <div className={styles.showcaseHeaderContent}>
           <Heading as='h1' className={styles.showcaseTitle}>
-            Composable Checkout Showcase
+            Checkout Components Showcase
           </Heading>
           <p className={styles.showcaseSubtitle}>
-            Explore practical examples of Composable Checkout implementations
+            Explore practical examples of Checkout Components implementations
           </p>
         </div>
       </div>
@@ -89,7 +89,7 @@ function ShowcaseExamples() {
             </Heading>
             <p className={styles.exampleDescription}>
               This playful example demonstrates the impressive flexibility of
-              Composable Checkout's style variables with a no-framework
+              Checkout Components' style variables with a no-framework
               approach—using just HTML and a minimal <code>main.ts</code>{' '}
               script. Rather than showcasing built-in themes, this demo
               illustrates how developers can create wildly different visual
@@ -107,7 +107,7 @@ function ShowcaseExamples() {
               For comprehensive documentation on available style variables and
               their proper implementation, please refer to the{' '}
               <a href='/api/styling-api-docs'>
-                Composable Checkout Styling API
+                Checkout Components Styling API
               </a>{' '}
               page.
             </p>
@@ -153,7 +153,7 @@ function ShowcaseExamples() {
             </Heading>
             <p className={styles.exampleDescription}>
               This showcase demonstrates how to create a fully customized
-              checkout layout using Composable Checkout. You'll learn how to use
+              checkout layout using Checkout Components. You'll learn how to use
               slots to reorganize payment methods, prioritize specific payment
               options, and add custom styling.
             </p>
@@ -249,7 +249,7 @@ function ComingSoonExamples() {
             </div>
             <Heading as='h3'>React Integration</Heading>
             <p>
-              A complete example of integrating Composable Checkout with React
+              A complete example of integrating Checkout Components with React
               applications, including state management and component wrappers
             </p>
           </div>
@@ -260,7 +260,7 @@ function ComingSoonExamples() {
             </div>
             <Heading as='h3'>Vue.js Integration</Heading>
             <p>
-              A complete example of integrating Composable Checkout with Vue.js
+              A complete example of integrating Checkout Components with Vue.js
               applications
             </p>
           </div>
@@ -271,7 +271,7 @@ function ComingSoonExamples() {
             </div>
             <Heading as='h3'>Angular Integration</Heading>
             <p>
-              Learn how to use Composable Checkout within an Angular application
+              Learn how to use Checkout Components within an Angular application
               framework
             </p>
           </div>
@@ -286,8 +286,8 @@ export default function Showcase() {
 
   return (
     <Layout
-      title='Showcase | Composable Checkout'
-      description="Explore practical examples and implementations of Primer's Composable Checkout SDK."
+      title='Showcase | Checkout Components'
+      description="Explore practical examples and implementations of Primer's Checkout Components SDK."
     >
       <ShowcaseHeader />
       <main>

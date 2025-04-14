@@ -1,19 +1,19 @@
 import Heading from '@theme/Heading';
 import { Icon } from '@iconify/react';
 import type { ReactNode } from 'react';
-import styles from './beta-program.module.css';
+import styles from './pilot-program.module.css';
 
 export default function BetaAccess(): ReactNode {
   return (
     <section className={styles.beta} id='join'>
       <div className='container'>
         <div className={styles.sectionHeader}>
-          <Heading as='h2'>Join the Beta Program</Heading>
+          <Heading as='h2'>Join the Pilot Program</Heading>
           <p>Get early access and shape the product's future</p>
         </div>
 
         <p className={styles.betaDescription}>
-          We're currently running a beta program for Composable Checkout to
+          We're currently running a beta program for Checkout Components to
           gather valuable feedback and refine the product before general
           release. Selected participants get early access to our technology and
           have a direct impact on the future of checkout experiences.
@@ -70,8 +70,8 @@ export default function BetaAccess(): ReactNode {
             <span>JOIN US</span>
           </div>
           <p>
-            We're currently manually selecting participants for our beta
-            program. If you're interested in joining, please contact your Primer
+            We're currently manually selecting participants for our Pilot
+            Program. If you're interested in joining, please contact your Primer
             representative for more information.
           </p>
         </div>

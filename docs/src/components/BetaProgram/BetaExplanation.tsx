@@ -1,19 +1,19 @@
 import Heading from '@theme/Heading';
 import { Icon } from '@iconify/react';
 import type { ReactNode } from 'react';
-import styles from './beta-program.module.css';
+import styles from './pilot-program.module.css';
 
 export default function BetaExplanation(): ReactNode {
   return (
     <section className={styles.betaExplanation} id='about'>
       <div className='container'>
         <div className={styles.sectionHeader}>
-          <Heading as='h2'>About the Beta Program</Heading>
+          <Heading as='h2'>About the Pilot Program</Heading>
           <p>A significant evolution in checkout technology</p>
         </div>
 
         <p className={styles.betaExplanationText}>
-          Composable Checkout represents a significant evolution in our checkout
+          Checkout Components represents a significant evolution in our checkout
           technology, currently in beta development. We're actively refining the
           product based on real-world feedback while expanding its capabilities.
           This beta program gives you early access to this powerful technology
@@ -89,9 +89,9 @@ export default function BetaExplanation(): ReactNode {
         <div className={styles.betaExplanationFooter}>
           Our development roadmap focuses on{' '}
           <strong>expanding capabilities</strong> rather than removing
-          functionality. As a beta participant, you'll have a direct channel to
+          functionality. As a pilot participant, you'll have a direct channel to
           our engineering team and the opportunity to shape the future of
-          Composable Checkout before its general release.
+          Checkout Components before its general release.
         </div>
       </div>
     </section>

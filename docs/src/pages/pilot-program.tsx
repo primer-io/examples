@@ -7,8 +7,8 @@ import type { ReactNode } from 'react';
 export default function BetaProgram(): ReactNode {
   return (
     <Layout
-      title='Composable Checkout Beta Program'
-      description="Join the beta program for Primer's Composable Checkout and shape the future of checkout experiences."
+      title='Checkout Components - Pilot Program'
+      description="Join the Pilot Program for Primer's Checkout Components and shape the future of checkout experiences."
     >
       <BetaHeader />
       <main>

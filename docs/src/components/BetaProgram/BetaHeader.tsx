@@ -1,7 +1,7 @@
 import Heading from '@theme/Heading';
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
-import styles from './beta-program.module.css';
+import styles from './pilot-program.module.css';
 
 export default function BetaHeader(): ReactNode {
   return (
@@ -10,7 +10,7 @@ export default function BetaHeader(): ReactNode {
         <div className={styles.heroContent}>
           <div className={styles.heroTextFull}>
             <Heading as='h1' className={styles.heroTitle}>
-              Join Composable Checkout Beta Program
+              Join Checkout Components Pilot Program
             </Heading>
             <p className={styles.heroSubtitle}>
               and help shape the future of

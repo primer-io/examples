@@ -4,7 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 const config: Config = {
-  title: 'Composable Checkout Docs',
+  title: 'Checkout Components Docs',
   tagline:
     'Shape extraordinary commerce experiences, process payments with precision, and accelerate growth without compromise.',
   favicon: 'img/favicon.ico',
@@ -77,13 +77,13 @@ const config: Config = {
     announcementBar: {
       id: 'beta_announcement',
       content:
-        '🚧 <b>BETA:</b> Composable Checkout is in beta. <a href="/beta-program">Learn what this means</a>.',
+        '🚧 <b>Pilot Program:</b> Checkout Components are in beta. <a href="/pilot-program">Learn what this means</a>.',
       backgroundColor: '#FFF8E1', // Light yellow background
       textColor: '#856404', // Darker text for contrast
       isCloseable: false, // Ensure users always see this notice
     },
     navbar: {
-      title: 'Composable Checkout',
+      title: 'Checkout Components',
       logo: {
         alt: 'Composable Checkout Logo',
         src: 'https://goat-assets.production.core.primer.io/brand/icon/primer.svg',
@@ -94,8 +94,8 @@ const config: Config = {
       hideOnScroll: false,
       items: [
         {
-          to: '/beta-program',
-          label: 'BETA',
+          to: '/pilot-program',
+          label: 'Pilot',
           position: 'left',
           className: 'navbar-beta-item',
         },

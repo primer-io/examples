@@ -17,9 +17,9 @@ function HomepageHeader() {
         <div className={styles.heroContent}>
           <div className={styles.heroText}>
             <Heading as='h1' className={styles.heroTitle}>
-              Composable Checkout&nbsp;
-              <Link to='/beta-program' className={styles.betaBadge}>
-                BETA
+              Checkout Components&nbsp;
+              <Link to='/pilot-program' className={styles.betaBadge}>
+               Pilot Program
               </Link>
             </Heading>
             <p className={styles.heroSubtitle}>
@@ -37,9 +37,9 @@ function HomepageHeader() {
               </Link>
               <Link
                 className='button button--secondary button--lg'
-                to='/beta-program'
+                to='/pilot-program'
               >
-                Learn About Beta
+                Learn About Pilot Program
               </Link>
             </div>
           </div>
@@ -58,7 +58,7 @@ function CoreBenefits() {
     <section className={styles.benefits}>
       <div className='container'>
         <div className={styles.sectionHeader}>
-          <Heading as='h2'>Why Choose Composable Checkout?</Heading>
+          <Heading as='h2'>Why Choose Checkout Components?</Heading>
           <p>Powerful flexibility with effortless integration</p>
         </div>
 
@@ -125,10 +125,9 @@ function ComposableFeature() {
           <div className={styles.featureContent}>
             <Heading as='h2'>Best of Both Worlds</Heading>
             <p className={styles.featureDescription}>
-              With Composable Checkout, we want you to offer your customers the
+              With Checkout Components, we want you to offer your customers the
               most tailored checkout experience. No more choosing between the
-              simplicity of Drop-in and the flexibility of Headless—Composable
-              Checkout combines the best of both worlds, giving you maximum
+              simplicity of Drop-in and the flexibility of Headless—Checkout Components combine the best of both worlds, giving you maximum
               customization with minimal configuration effort.
             </p>
             <Link
@@ -247,8 +246,8 @@ function ShowcaseSection() {
         <div className={styles.showcaseContent}>
           <Heading as='h2'>See It In Action</Heading>
           <p className={styles.showcaseDescription}>
-            Visit our Showcase to explore practical examples of Composable
-            Checkout implementations. Interact with live demos and see how
+            Visit our Showcase to explore practical examples of Checkout
+            Components implementations. Interact with live demos and see how
             different customization options affect the checkout experience.
           </p>
           <Link className='button button--outline button--lg' to='/showcase'>
@@ -266,19 +265,19 @@ function BetaCallout() {
       <div className='container'>
         <div className={styles.betaCalloutContent}>
           <div className={styles.betaBanner}>
-            <span>BETA</span>
+            <span>Pilot Program</span>
           </div>
-          <Heading as='h2'>Join the Beta Program</Heading>
+          <Heading as='h2'>Join the Pilot Program</Heading>
           <p>
-            Composable Checkout is currently in beta. Join our beta program to
+            Checkout Components is currently in beta. Join our Pilot Program to
             get early access, shape the future of the product, and receive
             direct support from our engineering team.
           </p>
           <Link
             className='button button--primary button--lg'
-            to='/beta-program'
+            to='/pilot-program'
           >
-            Learn About the Beta
+            Learn About the Pilot Program
           </Link>
         </div>
       </div>
@@ -291,8 +290,8 @@ export default function Home() {
 
   return (
     <Layout
-      title='Composable Checkout'
-      description="Build powerful, customizable checkout experiences with Primer's Composable Checkout. Maximum customization with minimal configuration."
+      title='Checkout Components'
+      description="Build powerful, customizable checkout experiences with Primer's Checkout Components. Maximum customization with minimal configuration."
     >
       <HomepageHeader />
       <main className={styles.mainContent}>

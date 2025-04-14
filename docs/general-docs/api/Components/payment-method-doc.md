@@ -297,7 +297,7 @@ The Primer SDK supports a wide range of payment methods. Here are some of the co
 </div>
 
 :::important Web Headless Support
-At the moment, the Composable Checkout supports only payment methods that are compatible with Primer's Web Headless SDK. Before implementing any payment method through Composable Checkout, developers should reference the [Available Payment Methods](https://primer.io/docs/payment-methods/available-payment-methods) documentation, which provides detailed information about which payment methods are supported in which regions and integrations.
+At the moment, the Checkout Components support only payment methods that are compatible with Primer's Web Headless SDK. Before implementing any payment method through Checkout Components, developers should reference the [Available Payment Methods](https://primer.io/docs/payment-methods/available-payment-methods) documentation, which provides detailed information about which payment methods are supported in which regions and integrations.
 
 The actual availability of payment methods depends on your Primer account configuration, merchant location, and the customer's country. The component will only render payment methods that are both specified in your code AND available in your checkout configuration.
 :::

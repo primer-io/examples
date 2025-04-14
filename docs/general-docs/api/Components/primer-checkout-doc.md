@@ -334,7 +334,7 @@ stateDiagram-v2
 
 ## CSS Custom Properties
 
-Composable Checkout uses CSS Custom Properties (CSS Variables) to maintain a consistent design language across components. These tokens provide a standardized way to customize the appearance of your UI components.
+Checkout Components use CSS Custom Properties (CSS Variables) to maintain a consistent design language across components. These tokens provide a standardized way to customize the appearance of your UI components.
 
 You can apply tokens in two ways:
 
@@ -551,7 +551,7 @@ If an unsupported locale is provided, the component will fall back to the defaul
 :::
 
 :::warning
-At present the Composable Checkout only supports left-to-right (LTR) languages.
+At present the Checkout Components only support left-to-right (LTR) languages.
 :::
 
 ## Disable Loader Option

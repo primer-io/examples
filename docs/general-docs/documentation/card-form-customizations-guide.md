@@ -97,30 +97,8 @@ flowchart LR
 
 ## Component Dependency and Context
 
-All card form input components have a critical relationship with the parent card form:
+All card form input components have a critical relationship with the parent card form.
 
-```mermaid
-flowchart TD
-    A[primer-card-form] --> B[Context Provider]
-    B --> C[Validation Context]
-    B --> D[Hosted Inputs]
-    B --> E[Form State]
-
-    C & D & E --> F[primer-input-card-number]
-    C & D & E --> G[primer-input-card-expiry]
-    C & D & E --> H[primer-input-cvv]
-    C & D & E --> I[primer-input-card-holder-name]
-
-    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
-    style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
-    style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
-    style D fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
-    style E fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
-    style F fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
-    style G fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
-    style H fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
-    style I fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
-```
 
 This relationship means:
 

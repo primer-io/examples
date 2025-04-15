@@ -8,7 +8,41 @@ sidebar_position: 99
 
 This page documents all notable changes to Composable Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
-## v0.10.0 - Standalone Vaulting, New Payment Methods, and UX Improvements (10-Apr-2025)
+## v0.1.4 - Experimental Stripe ACH Support (15-Apr-2025)
+
+### New Features
+
+- Introduced experimental UI for Stripe ACH
+- Added support for Stripe ACH configuration
+- New components visible when Stripe ACH configuration is passed
+- Early testing capability for Stripe ACH integration
+
+## v0.1.3 - Style Injection Logic Improvements (15-Apr-2025)
+
+### Enhancements
+
+- Moved the bulk of the style injection logic into the components themselves
+- Improved reinitialization of component logic
+- Enhanced stability during component lifecycle
+
+## v0.1.2 - NPM Build Optimizations (10-Apr-2025)
+
+### Enhancements
+
+- Improved NPM builds with properly bundled components
+- Significant improvements in loading times and compilation times
+- CDN now only used for handling business logic, while all components are part of the NPM package
+- Preparation for upcoming React wrapper library
+
+## v0.1.1 - Safari Compatibility Fixes (10-Apr-2025)
+
+### Fixes
+
+- Fixed styling and font display issues in Safari
+- Removed usage of Inter font in favor of system fonts
+- Improved cross-browser compatibility by limiting to system fonts for full support
+
+## v0.1.0 - Standalone Vaulting, New Payment Methods, and UX Improvements (10-Apr-2025)
 
 This release introduces significant enhancements including a standalone vaulting component, Klarna integration, improved error handling, and various UX improvements.
 
@@ -26,12 +60,10 @@ This release introduces significant enhancements including a standalone vaulting
   - Inline pay button for streamlined checkout flow
   - Improved error message display and handling
   - Enhanced composability with other checkout elements
-
 - **Standalone Vaulting Component**:
   - Can be placed anywhere on the page
   - Supports all current backend payment methods
   - Includes CVV recapture functionality through client session
-
 - **Payment Method Improvements**:
   - Updated button styling, background colors, and icons
   - Visual improvements for native payment methods
@@ -43,12 +75,9 @@ This release introduces significant enhancements including a standalone vaulting
 - **Enhanced Error Handling**:
   - Card form validation now triggers on field blur instead of form submit
   - More responsive feedback for users
-
 - **Improved Styling System**:
   - Overhauled CSS token and style variable loading
   - JavaScript-injected CSS tokens that preserve merchant customizations
-  - Styles properly scoped to primary checkout component
-
 - **Loader Enhancements**:
   - CSS-only loader appears before JavaScript initialization
   - Optional: merchants can disable or use custom loader designs
@@ -94,7 +123,7 @@ This major release marks the first public beta of the Composable Checkout librar
 - `<primer-input-error>`: Error message component with validation state
 - `<primer-input-wrapper>`: Container component for input, label and error elements
 
-## v0.0.1 - Initial Package Release
+## v0.0.1 - Initial Package Release (01-Mar-2025)
 
 - Initial NPM package setup
 - Empty release to reserve package name

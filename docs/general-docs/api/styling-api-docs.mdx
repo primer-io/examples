@@ -66,7 +66,7 @@ You can apply styling in two ways:
 
     ```css
     /* Apply styling directly in your CSS */
-    :root {
+    primer-checkout {
     --primer-color-brand: #2f98ff;
     --primer-radius-medium: 8px;
     --primer-typography-brand: 'Inter', sans-serif;
@@ -251,28 +251,8 @@ These styling variables control the appearance of outlined containers like input
 You can target specific components or apply global styling to all components in your checkout experience.
 :::
 
-<div className="tabs-container">
-  <div className="tabs">
-    <div className="tab specific active">Component-specific</div>
-    <div className="tab global">Global</div>
-  </div>
 
-  <div className="tab-content specific active">
-
-    ```css
-    /* Customizing a specific button */
-    primer-button {
-    --primer-color-brand: blue;
-    --primer-radius-medium: 8px;
-
-}
-```
-
-  </div>
-
-  <div className="tab-content global">
-
-    ```css
+```css
     /* Customizing all components */
     :root {
     /* Colors */
@@ -290,9 +270,6 @@ You can target specific components or apply global styling to all components in 
 
 }
 ```
-
-  </div>
-</div>
 
 ### JSON Properties Method
 
@@ -317,7 +294,7 @@ The component will parse the JSON and automatically apply the styles as CSS Vari
 
 ## Theme Support
 
-Primer Composable Checkout supports both light and dark themes using CSS classes:
+Primer Composable Checkout supports both light (default) and dark themes using CSS classes:
 
 ```mermaid
 flowchart LR
@@ -333,66 +310,27 @@ flowchart LR
     style E fill:#171619,stroke:#424242,stroke-width:1px,color:#ffffff
 ```
 
-<div className="tabs-container">
-  <div className="tabs">
-    <div className="tab light active">Light Theme Only</div>
-    <div className="tab dark">Dark Theme Only</div>
-    <div className="tab both">Support Both Themes</div>
-  </div>
 
-  <div className="tab-content light active">
+```html
+<!-- Add the theme class to your checkout container -->
+  <primer-checkout client-token="your-client-token" class="primer-dark-theme">
+    <!-- Your checkout content -->
+  </primer-checkout>
+```
 
-    ```html
-    <!-- For light theme only -->
-    <link rel="stylesheet" href="https://sdk.primer.io/web/primer-js/v0-latest/styles.css" />
-    ```
+You can toggle between themes using JavaScript:
 
-    This is the simplest approach if you only need to support a light theme in your checkout experience.
-
-  </div>
-
-  <div className="tab-content dark">
-
-    ```html
-    <!-- For dark theme only -->
-    <link rel="stylesheet" href="https://sdk.primer.io/web/primer-js/v0-latest/dark.css" />
-    ```
-
-    Use this approach if your site has a dark theme design exclusively.
-
-  </div>
-
-  <div className="tab-content both">
-
-    ```html
-    <!-- Include both stylesheets -->
-    <link rel="stylesheet" href="https://sdk.primer.io/web/primer-js/v0-latest/styles.css" />
-    <link rel="stylesheet" href="https://sdk.primer.io/web/primer-js/v0-latest/dark.css" />
-
-    <!-- Add the theme class to your checkout container -->
-    <div id="checkout-container" class="primer-light-theme">
-      <primer-checkout client-token="your-client-token">
-        <!-- Your checkout content -->
-      </primer-checkout>
-    </div>
-    ```
-
-    You can toggle between themes using JavaScript:
-
-    ```javascript
-    // Function to toggle between themes
-    function toggleTheme(isDark) {
-    const container = document.getElementById('checkout-container');
-    container.className = isDark ? 'primer-dark-theme' : 'primer-light-theme';
+```javascript
+// Function to toggle between themes
+function toggleTheme(isDark) {
+const container = document.querySelector('primer-checkout');
+container.className = isDark ? 'primer-dark-theme' : 'primer-light-theme';
 
 }
 
-    // Examples
-    toggleTheme(true);  // Switch to dark theme
-    toggleTheme(false); // Switch to light theme
-    ```
+// Examples
+toggleTheme(true);  // Switch to dark theme
+toggleTheme(false); // Switch to light theme
+```
 
-    This approach allows you to support both light and dark themes, toggling between them as needed.
-
-  </div>
-</div>
+This approach allows you to support both light and dark themes, toggling between them as needed.

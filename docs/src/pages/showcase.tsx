@@ -60,7 +60,7 @@ function ShowcaseExamples() {
             </p>
             <div className={styles.exampleLinks}>
               <Link
-                to='https://stackblitz.com/edit/primer-checkout-without-frameworks?file=index.html'
+                to='https://stackblitz.com/edit/composable-basic-example?file=index.html'
                 className={styles.exampleLink}
                 target='_blank'
                 rel='noopener noreferrer'

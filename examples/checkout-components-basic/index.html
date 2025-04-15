@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Primer Checkout Components</title>
+    <!-- Custom base styling -->
+    <link rel="stylesheet" href="./src/base.css" />
+    <style>
+      /* Custom styles that will only be applied when the checkbox is checked */
+      .custom-styles-enabled primer-checkout {
+        /* Core Variables */
+        --primer-color-brand: #ff00d7;
+
+        /* Text Colors */
+        --primer-color-text-primary: #6b0053;
+        --primer-color-text-placeholder: #6b0053;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="style-toggle">
+        <label>
+          <input type="checkbox" id="styleToggle" />
+          Enable Custom Style Variables
+        </label>
+        <p class="note">
+          Note: Some style changes may require a page reload to fully apply
+          across all components.
+        </p>
+      </div>
+      <primer-checkout id="checkout"></primer-checkout>
+    </main>
+
+    <!-- Load Primer SDK -->
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

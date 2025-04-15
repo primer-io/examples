@@ -89,76 +89,27 @@ For comprehensive details on all available attributes, refer to the [Checkout Co
 
 ## Adding Styles
 
-The Primer Composable Checkout SDK uses CSS Custom Properties to manage its visual appearance. To get started with styling, include the base stylesheet in your HTML.
+The Primer Composable Checkout SDK uses CSS Custom Properties to manage its visual appearance. The styles are loaded automatically when you call `loadPrimer();`
 
 ### Theme Implementation Options
 
-<div class="theme-options">
-<div class="tabs-container">
-<div class="tabs">
-<div class="tab light active">Light Theme</div>
-<div class="tab dark">Dark Theme</div>
-<div class="tab both">Support Both</div>
-</div>
-
-<div class="tab-content light active">
-
 ```html
-<!-- For light theme only -->
-<link
-  rel="stylesheet"
-  href="https://sdk.primer.io/web/primer-js/v0-latest/styles.css"
-/>
-```
-
-</div>
-
-<div class="tab-content dark">
-
-```html
-<!-- For dark theme only -->
-<link
-  rel="stylesheet"
-  href="https://sdk.primer.io/web/primer-js/v0-latest/dark.css"
-/>
-```
-
-</div>
-
-<div class="tab-content both">
-
-```html
-<!-- Include both stylesheets -->
-<link
-  rel="stylesheet"
-  href="https://sdk.primer.io/web/primer-js/v0-latest/styles.css"
-/>
-<link
-  rel="stylesheet"
-  href="https://sdk.primer.io/web/primer-js/v0-latest/dark.css"
-/>
-
 <!-- Add the theme class to your checkout container -->
-<div id="checkout-container" class="primer-light-theme">
-  <primer-checkout client-token="your-client-token">
+  <primer-checkout client-token="your-client-token"  class="primer-dark-theme">
     <!-- Your checkout content -->
   </primer-checkout>
-</div>
 ```
 
 You can switch themes by changing the class on your container:
 
 ```javascript
-// Switch to dark theme
-document.getElementById('checkout-container').className = 'primer-dark-theme';
-
 // Switch to light theme
-document.getElementById('checkout-container').className = 'primer-light-theme';
+document.querySelector('primer-checkout').className = 'primer-light-theme';
+
+// Switch to dark theme
+document.querySelector('primer-checkout').className = 'primer-dark-theme';
 ```
 
-</div>
-</div>
-</div>
 
 ## Customizing with the Styling API
 
@@ -167,7 +118,7 @@ The Primer Composable Checkout SDK provides a comprehensive Styling API that all
 ```html
 <!-- Example of styling customization using CSS variables -->
 <style>
-  :root {
+  primer-checkout {
     /* Brand color customization */
     --primer-color-brand: #4a6cf7;
 
@@ -186,7 +137,7 @@ The Primer Composable Checkout SDK provides a comprehensive Styling API that all
 You can customize nearly every aspect of the checkout UI, including:
 
 - Colors (brand colors, text colors, backgrounds)
-- Typography (font families, sizes, weights)
+- Typography (font families, sizes, weights)  - At the moment custom fonts will not work on iframes. The mechanism to set custom fonts on the whole checkout will come in future releases.
 - Border radius values
 - Spacing and sizing
 - Input and button appearances
@@ -326,17 +277,6 @@ flowchart TD
 
 For more advanced customization options, including handling success and failure states, checkout flow customization, and more, refer to the [Layout Customizations Guide](/documentation/layout-customizations-guide).
 
-### Preventing Flash of Undefined Components
-
-To prevent any "flash" where custom code appears before Primer's components are ready, you can add CSS like this:
-
-```css
-primer-checkout:has(:not(:defined)) {
-  visibility: hidden;
-}
-```
-
-For smooth transitions, you can use advanced techniques like `customElements.whenDefined()`.
 
 ## Technical Limitations
 

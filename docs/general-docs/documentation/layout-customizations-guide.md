@@ -88,7 +88,7 @@ A pre-built component that manages checkout states and provides additional slots
 
 - `payments` - Contains payment method components
 - `checkout-complete` - Content shown on successful payment
-- `checkout-failure` - Content shown when payment fails
+- `checkout-fail`ure` - Content shown when payment fails
 
 ```html
 <primer-checkout client-token="your-token">

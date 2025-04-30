@@ -50,9 +50,9 @@ The Card Form Submit Button component is designed to be used within a `primer-ca
 
 ## Events
 
-| Event Name           | Description                      | Event Detail                            |
-| -------------------- | -------------------------------- | --------------------------------------- |
-| `primer-form-submit` | Fired when the button is clicked | `{ source: 'primer-card-form-submit' }` |
+| Event Name            | Description                      | Event Detail                            |
+| --------------------- | -------------------------------- | --------------------------------------- |
+| `primer-card-submit` | Fired when the button is clicked | `{ source: 'primer-card-form-submit' }` |
 
 ## Features
 
@@ -98,7 +98,7 @@ sequenceDiagram
     Note over Submit: User clicks button
     Button->>Submit: Click event
     Submit->>Submit: Prevent default
-    Submit->>CardForm: Emit primer-form-submit
+    Submit->>CardForm: Emit primer-card-submit
     CardForm->>CardForm: Process submission
 ```
 

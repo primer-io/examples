@@ -192,14 +192,14 @@ The card form follows an event-driven validation approach:
 
 ```javascript
 // Listen for validation errors
-cardForm.addEventListener('primer-form-submit-errors', (event) => {
-  const errors = event.detail;
+cardForm.addEventListener('primer-card-submit-errors', (event) => {
+  const errors = event.detail.errors;
   // Handle validation errors
 });
 
 // Listen for successful submission
-cardForm.addEventListener('primer-form-submit-success', (event) => {
-  const result = event.detail;
+cardForm.addEventListener('primer-card-submit-success', (event) => {
+  const result = event.detail.result;
   // Handle successful submission
 });
 ```
@@ -213,13 +213,13 @@ sequenceDiagram
     participant YourApp
 
     Note over CardForm,YourApp: Validation failure scenario
-    CardForm->>Checkout: primer-form-submit-errors
-    Checkout->>YourApp: primer-form-submit-errors
+    CardForm->>Checkout: primer-card-submit-errors
+    Checkout->>YourApp: primer-card-submit-errors
     Note right of YourApp: Handle validation errors
 
     Note over CardForm,YourApp: Successful submission
-    CardForm->>Checkout: primer-form-submit-success
-    Checkout->>YourApp: primer-form-submit-success
+    CardForm->>Checkout: primer-card-submit-success
+    Checkout->>YourApp: primer-card-submit-success
     Note right of YourApp: Handle successful payment
 ```
 

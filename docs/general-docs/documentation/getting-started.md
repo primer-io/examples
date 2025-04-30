@@ -189,10 +189,22 @@ flowchart TB
     (available payment methods)"]
     A --> D["primer-checkout-initialized
     (SDK instance)"]
-    A --> E["primer-form-submit-success
+    
+    subgraph "Card Events"
+    E["primer-card-submit-success
     (successful submission)"]
-    A --> F["primer-form-submit-errors
+    F["primer-card-submit-errors
     (validation errors)"]
+    G["primer-card-network-change
+    (card network detected)"]
+    end
+    
+
+    
+    A --> E
+    A --> F
+    A --> G
+
 
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
@@ -200,6 +212,8 @@ flowchart TB
     style D fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style E fill:#e8f5e9,stroke:#4caf50,stroke-width:1px
     style F fill:#ffebee,stroke:#f44336,stroke-width:1px
+    style G fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+
 ```
 
 ### Core Events
@@ -230,15 +244,48 @@ checkout.addEventListener('primer-checkout-initialized', (event) => {
 
 ```javascript
 // Handle successful card submission
-checkout.addEventListener('primer-form-submit-success', (event) => {
-  const result = event.detail;
+checkout.addEventListener('primer-card-submit-success', (event) => {
+  const result = event.detail.result;
   // Handle success
 });
 
 // Handle card validation errors
-checkout.addEventListener('primer-form-submit-errors', (event) => {
-  const errors = event.detail;
+checkout.addEventListener('primer-card-submit-errors', (event) => {
+  const errors = event.detail.errors;
   // Handle validation errors
+});
+
+// Listen for card network changes
+checkout.addEventListener('primer-card-network-change', (event) => {
+  const network = event.detail;
+  // Handle card network detection/change
+});
+```
+
+### ACH Events
+
+For merchants using ACH (Automated Clearing House) payments, the SDK provides specific events to handle the ACH payment flow:
+
+```javascript
+// Handle ACH errors
+checkout.addEventListener('primer-ach-error', (event) => {
+  const error = event.detail.error;
+  // Handle ACH-specific errors
+});
+
+// Bank details collected successfully
+checkout.addEventListener('primer-ach-bank-details-collected', (event) => {
+  // Proceed with payment flow after bank details are collected
+});
+
+// ACH mandate confirmed by the customer
+checkout.addEventListener('primer-ach-mandate-confirmed', (event) => {
+  // Handle successful mandate confirmation
+});
+
+// ACH mandate declined by the customer
+checkout.addEventListener('primer-ach-mandate-declined', (event) => {
+  // Handle mandate decline
 });
 ```
 

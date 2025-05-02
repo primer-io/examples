@@ -108,6 +108,8 @@ For comprehensive layout customization options, see the [Layout Customizations G
 | `primer-card-network-change`     | Fired when card network detection changes        | Card network information  |
 | `primer-card-submit-success`     | Fired when a card form is successfully submitted | Submission result         |
 | `primer-card-submit-errors`      | Fired when card form submission has errors       | Validation errors         |
+| `primer-oncheckout-complete`     | Fired when checkout is completed successfully    | Payment payload           |
+| `primer-oncheckout-failure`      | Fired when checkout process fails                | Error details and payment |
 
 ```mermaid
 sequenceDiagram
@@ -127,9 +129,11 @@ sequenceDiagram
     alt Success Path
         Checkout->>YourApp: primer-card-submit-success
         Checkout->>YourApp: primer-state-changed (isSuccessful: true)
+        Checkout->>YourApp: primer-oncheckout-complete (payment)
     else Error Path
         Checkout->>YourApp: primer-card-submit-errors
         Checkout->>YourApp: primer-state-changed (error: {...})
+        Checkout->>YourApp: primer-oncheckout-failure (error, payment)
     end
 ```
 

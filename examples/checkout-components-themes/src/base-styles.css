@@ -1,0 +1,177 @@
+/* Base styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--page-background-color);
+  color: var(--page-text-color);
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.disclaimer {
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.theme-selector {
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.theme-selector label {
+  font-weight: 600;
+}
+
+.theme-selector select {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--select-border-color);
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: var(--select-background-color);
+  color: var(--select-text-color);
+  transition: all 0.3s ease;
+}
+
+/* Theme navigation arrows */
+.theme-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.theme-nav-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--select-border-color);
+  background-color: var(--select-background-color);
+  color: var(--select-text-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.theme-nav-btn:hover {
+  background-color: var(--primer-color-brand, #2f98ff);
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.theme-nav-btn:active {
+  transform: scale(0.95);
+}
+
+#checkout-container {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background-color: var(--checkout-background-color);
+  box-shadow: var(--checkout-box-shadow);
+  padding: 1rem;
+}
+
+.demo-info {
+  max-width: 800px;
+  margin: 3rem auto 0;
+  padding: 0 0 2rem;
+}
+
+.demo-info h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.demo-info p {
+  margin-bottom: 1.5rem;
+}
+
+.theme-details {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background-color: var(--info-background-color);
+}
+
+.theme-details h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.theme-details ul {
+  list-style-position: inside;
+  margin-left: 1rem;
+}
+
+.theme-details li {
+  margin-bottom: 0.5rem;
+}
+
+.error-message {
+  padding: 2rem;
+  text-align: center;
+  background-color: #fff8f8;
+  color: #d32f2f;
+  border-radius: 8px;
+}
+
+/* Page theme variables for all themes */
+/* Page theming variables */
+:root {
+  /* Light theme page variables */
+  --page-background-color: #f7f9fc;
+  --page-text-color: #333333;
+  --select-border-color: #dce0e5;
+  --select-background-color: #ffffff;
+  --select-text-color: #333333;
+  --checkout-background-color: #ffffff;
+  --checkout-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --checkout-padding: 0;
+  --info-background-color: #f0f7ff;
+}
+
+:root[data-theme='dark'] {
+  /* Dark theme page variables */
+  --page-background-color: #121212;
+  --page-text-color: #e0e0e0;
+  --select-border-color: #444444;
+  --select-background-color: #222222;
+  --select-text-color: #e0e0e0;
+  --checkout-background-color: #222222;
+  --checkout-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --checkout-padding: 0;
+  --info-background-color: #1a1a2e;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .theme-selector {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .theme-selector select {
+    width: 100%;
+  }
+}

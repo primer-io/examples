@@ -1,0 +1,68 @@
+/* Minimal Theme */
+.minimal-theme {
+  /* Core variables */
+  --primer-color-brand: #666666;
+  --primer-color-background: #ffffff;
+  --primer-color-focus: #666666;
+  --primer-typography-brand: 'Arial', sans-serif;
+  
+  /* Text colors */
+  --primer-color-text-primary: #333333;
+  --primer-color-text-placeholder: #aaaaaa;
+  --primer-color-text-disabled: #cccccc;
+  --primer-color-text-negative: #666666;
+  
+  /* Border radius */
+  --primer-radius-small: 2px;
+  --primer-radius-medium: 2px;
+  
+  /* Spacing */
+  --primer-space-xsmall: 4px;
+  --primer-space-small: 8px;
+  --primer-space-medium: 12px;
+  
+  /* Typography */
+  --primer-typography-title-large-font: var(--primer-typography-brand);
+  --primer-typography-title-large-weight: 400;
+  --primer-typography-title-large-size: 16px;
+  --primer-typography-title-large-line-height: 20px;
+  --primer-typography-title-large-letter-spacing: -0.2px;
+  
+  --primer-typography-body-large-font: var(--primer-typography-brand);
+  --primer-typography-body-large-weight: 400;
+  --primer-typography-body-large-size: 16px;
+  --primer-typography-body-large-line-height: 20px;
+  --primer-typography-body-large-letter-spacing: -0.2px;
+  
+  --primer-typography-body-small-font: var(--primer-typography-brand);
+  --primer-typography-body-small-weight: 400;
+  --primer-typography-body-small-size: 12px;
+  --primer-typography-body-small-line-height: 16px;
+  --primer-typography-body-small-letter-spacing: 0;
+  
+  /* Outlined container */
+  --primer-color-background-outlined-default: var(--primer-color-background);
+  --primer-color-background-outlined-hover: var(--primer-color-background);
+  --primer-color-background-outlined-active: var(--primer-color-background);
+  --primer-color-background-outlined-error: var(--primer-color-background);
+  --primer-color-background-outlined-disabled: #f5f5f5;
+  
+  --primer-color-border-outlined-default: #e6e6e6;
+  --primer-color-border-outlined-hover: #cccccc;
+  --primer-color-border-outlined-active: #aaaaaa;
+  --primer-color-border-outlined-focus: var(--primer-color-focus);
+  --primer-color-border-outlined-error: #888888;
+  --primer-color-border-outlined-disabled: #eeeeee;
+}
+
+:root[data-theme='minimal'] {
+  --page-background-color: #ffffff;
+  --page-text-color: #333333;
+  --select-border-color: #e5e5e5;
+  --select-background-color: #ffffff;
+  --select-text-color: #333333;
+  --checkout-background-color: #ffffff;
+  --checkout-box-shadow: none;
+  --checkout-padding: 0;
+  --info-background-color: #f8f8f8;
+}

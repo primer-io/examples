@@ -46,7 +46,10 @@ flowchart TD
 | ------------ | ------------ | ---------------------------------------- | ----------- | -------------------------------- |
 | `variant`    | `variant`    | `'primary' \| 'secondary' \| 'tertiary'` | `'primary'` | The button's visual style        |
 | `disabled`   | `disabled`   | `boolean`                                | `false`     | Whether the button is disabled   |
-| `buttonType` | `buttonType` | `'button' \| 'submit' \| 'reset'`        | `'button'`  | The button's HTML type attribute |
+| `buttonType` | `type`       | `'button' \| 'submit' \| 'reset'`        | `'button'`  | The button's HTML type attribute |
+| `loading`    | `loading`    | `boolean`                                | `false`     | Shows a loading spinner when true |
+| `selectionState` | `selection-state` | `'default' \| 'checked'`        | `'default'` | Selection state for selectable buttons |
+| `selectable` | `selectable` | `boolean`                                | `false`     | Whether button is selectable/checkable |
 
 ## Slots
 
@@ -150,10 +153,32 @@ When using `buttonType="submit"`, the button will trigger form submission just l
 <summary><strong>Disabled Button</strong></summary>
 
 ```html
-<primer-button disabled>Processing...</primer-button>
+<primer-button disabled>Unavailable</primer-button>
 ```
 
-Use the disabled state when an action is temporarily unavailable, such as during form processing or when required fields are not yet complete.
+Use the disabled state when an action is temporarily unavailable, such as when required fields are not yet complete.
+
+</details>
+
+<details>
+<summary><strong>Loading Button</strong></summary>
+
+```html
+<primer-button loading>Processing</primer-button>
+```
+
+Use the loading state to indicate that an action is in progress. This displays a spinner while maintaining the button's position in the layout. The button will also be automatically disabled while in the loading state.
+
+```javascript
+// Example of toggling loading state
+const button = document.querySelector('primer-button');
+button.loading = true;
+
+// Simulate API call
+setTimeout(() => {
+  button.loading = false;
+}, 2000);
+```
 
 </details>
 

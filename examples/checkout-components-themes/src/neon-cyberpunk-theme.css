@@ -1,0 +1,86 @@
+/* Neon Cyberpunk Theme - NEW CREATIVE THEME */
+.neon-cyberpunk-theme {
+  /* Core variables */
+  --primer-color-brand: #ff00ff;
+  --primer-color-background: #000000;
+  --primer-color-focus: #00ffff;
+  --primer-typography-brand: 'BlinkMacSystemFont', 'Segoe UI', sans-serif;
+  
+  /* Text colors */
+  --primer-color-text-primary: #00ffff;
+  --primer-color-text-placeholder: #8844ee;
+  --primer-color-text-disabled: #553399;
+  --primer-color-text-negative: #ff3377;
+  
+  /* Border radius */
+  --primer-radius-small: 2px;
+  --primer-radius-medium: 2px;
+  
+  /* Spacing */
+  --primer-space-xsmall: 4px;
+  --primer-space-small: 8px;
+  --primer-space-medium: 12px;
+  
+  /* Typography */
+  --primer-typography-title-large-font: var(--primer-typography-brand);
+  --primer-typography-title-large-weight: 600;
+  --primer-typography-title-large-size: 16px;
+  --primer-typography-title-large-line-height: 20px;
+  --primer-typography-title-large-letter-spacing: 1px;
+  
+  --primer-typography-body-large-font: var(--primer-typography-brand);
+  --primer-typography-body-large-weight: 400;
+  --primer-typography-body-large-size: 16px;
+  --primer-typography-body-large-line-height: 20px;
+  --primer-typography-body-large-letter-spacing: 0.5px;
+  
+  --primer-typography-body-small-font: var(--primer-typography-brand);
+  --primer-typography-body-small-weight: 400;
+  --primer-typography-body-small-size: 12px;
+  --primer-typography-body-small-line-height: 16px;
+  --primer-typography-body-small-letter-spacing: 0.5px;
+  
+  /* Outlined container */
+  --primer-color-background-outlined-default: #110011;
+  --primer-color-background-outlined-hover: #220022;
+  --primer-color-background-outlined-active: #330033;
+  --primer-color-background-outlined-error: #220011;
+  --primer-color-background-outlined-disabled: #111111;
+  
+  --primer-color-border-outlined-default: #ff00ff;
+  --primer-color-border-outlined-hover: #ff33ff;
+  --primer-color-border-outlined-active: #ff77ff;
+  --primer-color-border-outlined-focus: #00ffff;
+  --primer-color-border-outlined-error: #ff3377;
+  --primer-color-border-outlined-disabled: #553399;
+}
+
+:root[data-theme='neon-cyberpunk'] {
+  --page-background-color: #0a0a12;
+  --page-text-color: #00ffff;
+  --select-border-color: #ff00ff;
+  --select-background-color: #000000;
+  --select-text-color: #00ffff;
+  --checkout-background-color: #000000;
+  --checkout-box-shadow: 0 0 10px #ff00ff, 0 0 20px rgba(0, 255, 255, 0.3);
+  --checkout-padding: 16px;
+  --info-background-color: #0a0a1a;
+}
+
+/* Add some custom elements for the neon cyberpunk theme */
+:root[data-theme='neon-cyberpunk'] .theme-details {
+  border: 1px solid #ff00ff;
+  box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+  background-color: rgba(10, 10, 26, 0.8);
+}
+
+:root[data-theme='neon-cyberpunk'] .theme-selector select {
+  border: 1px solid #ff00ff;
+  box-shadow: 0 0 5px #ff00ff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+:root[data-theme='neon-cyberpunk'] #checkout-container {
+  border: 1px solid #ff00ff;
+}

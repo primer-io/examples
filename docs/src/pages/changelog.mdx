@@ -8,6 +8,51 @@ sidebar_position: 99
 
 This page documents all notable changes to Composable Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
+## v0.1.8 - Card Network Icon Enhancements (02-May-2025)
+
+### Fixes
+
+- Further improved icon display around card number input
+- Fixed card network selection icon visibility and alignment
+
+## v0.1.7 - Card Form Icon Display Fix (02-May-2025)
+
+### Fixes
+
+- Fixed the icon display next to the card number input in the card form component
+
+## v0.1.6 - Component Improvements and New Events (01-May-2025)
+
+### Enhancements
+
+- Fixed issues in the primary button component
+- Changed attribute names to better align with HTML conventions
+- Added new `hide-labels` property to the card form component
+
+### New Features
+
+- Introduced new checkout events for better integration:
+  - `primer-oncheckout-complete` event with payment payload
+  - `primer-oncheckout-failure` event with error details
+
+### Example Usage
+
+```jsx
+<primer-card-form hide-labels={true}>
+  {/* Form content */}
+</primer-card-form>
+```
+
+## v0.1.5 - Vault and Styling Improvements (30-Apr-2025)
+
+### Enhancements
+
+- Improved primary vault component functionality
+- Enhanced transitions and state change handling
+- Fixed custom styles applied through JSON objects
+- Implemented improvements to Klarna component logic
+- Fixed error display issues
+
 ## v0.1.4 - Experimental Stripe ACH Support (15-Apr-2025)
 
 ### New Features

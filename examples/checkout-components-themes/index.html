@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en" data-theme="default">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Our custom theme styles -->
+    <link rel="stylesheet" href="./src/all-themes.css" />
+    <title>Custom-Styled Checkout</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="theme-selector">
+        <label for="style-selector">Select Theme:</label>
+        <select id="style-selector">
+          <option value="light">Light Theme</option>
+          <option value="dark">Dark Theme</option>
+          <option value="minimal">Minimal</option>
+          <option value="high-contrast">High Contrast</option>
+          <option value="kawaii">Kawaii</option>
+          <option value="brutalist">Brutalist</option>
+          <option value="neon-cyberpunk">Neon Cyberpunk</option>
+          <option value="pimp-my-checkout">🔥 Pimp My Checkout 🔥</option>
+        </select>
+        <div class="theme-nav">
+          <button id="prev-theme" class="theme-nav-btn" aria-label="Previous theme">←</button>
+          <button id="next-theme" class="theme-nav-btn" aria-label="Next theme">→</button>
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        <strong>BETA DISCLAIMER:</strong> This is a beta implementation of
+        Composable Checkout. Some features may not work as expected.
+      </div>
+
+      <!-- Pimp My Checkout Logo - only visible when that theme is selected -->
+      <div class="pimp-logo-container">
+        <img
+          src="public/pimp-my-checkout.png"
+          alt="Pimp My Checkout"
+          class="pimp-logo"
+        />
+      </div>
+
+      <div id="checkout-container">
+        <primer-checkout></primer-checkout>
+      </div>
+
+      <div class="demo-info">
+        <h2>Custom-Styled Checkout</h2>
+        <p>
+          This example demonstrates the power of Composable Checkout's style
+          tokens by allowing you to toggle between eight different visual themes.
+          The implementation uses pure HTML with a minimal TypeScript script and
+          relies primarily on CSS variables.
+        </p>
+
+        <div class="theme-details">
+          <h3>Available Themes:</h3>
+          <ul>
+            <li>
+              <strong>Light Theme:</strong> The standard Primer checkout styling
+            </li>
+            <li>
+              <strong>Dark Theme:</strong> A dark-themed checkout for low-light
+              environments
+            </li>
+            <li>
+              <strong>Minimal:</strong> A clean, simplified design with subtle
+              styling
+            </li>
+            <li>
+              <strong>High Contrast:</strong> Enhanced visual contrast for
+              better accessibility
+            </li>
+            <li>
+              <strong>Kawaii:</strong> A cute, colorful design with playful
+              elements
+            </li>
+            <li>
+              <strong>Brutalist:</strong> Raw, minimal design with strong
+              contrast and bold elements
+            </li>
+            <li>
+              <strong>Neon Cyberpunk:</strong> Vibrant neon colors on dark
+              backgrounds with futuristic styling
+            </li>
+            <li>
+              <strong>Pimp My Checkout:</strong> Flashy, chrome-like styling
+              inspired by the TV show "Pimp My Ride" (Easter egg theme)
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

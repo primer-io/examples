@@ -19,7 +19,7 @@ function HomepageHeader() {
             <Heading as='h1' className={styles.heroTitle}>
               Checkout Components&nbsp;
               <Link to='/pilot-program' className={styles.betaBadge}>
-               Pilot Program
+                Pilot Program
               </Link>
             </Heading>
             <p className={styles.heroSubtitle}>
@@ -127,7 +127,8 @@ function ComposableFeature() {
             <p className={styles.featureDescription}>
               With Checkout Components, we want you to offer your customers the
               most tailored checkout experience. No more choosing between the
-              simplicity of Drop-in and the flexibility of Headless—Checkout Components combine the best of both worlds, giving you maximum
+              simplicity of Drop-in and the flexibility of Headless—Checkout
+              Components combine the best of both worlds, giving you maximum
               customization with minimal configuration effort.
             </p>
             <Link

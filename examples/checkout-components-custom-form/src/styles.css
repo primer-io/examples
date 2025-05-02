@@ -5,8 +5,9 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+    Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   line-height: 1.5;
   color: #333;
   background-color: #f8f9fb;
@@ -66,6 +67,92 @@ h1 {
   .payments-container {
     grid-template-columns: 1fr;
   }
+}
+
+/* Test Cards Styles */
+.test-cards {
+  grid-column: 1 / -1;
+  margin-bottom: 24px;
+  padding: 24px;
+  background-color: #f0f5ff;
+  border-radius: 10px;
+}
+
+.test-cards h2 {
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+  color: #2a3547;
+}
+
+.test-cards-subtitle {
+  color: #5c6b81;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.test-cards-table-container {
+  overflow-x: auto;
+}
+
+.test-cards-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.test-cards-table th {
+  text-align: left;
+  padding: 12px 8px;
+  border-bottom: 1px solid #e0e7ff;
+  color: #5c6b81;
+  font-weight: 600;
+}
+
+.test-cards-table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid #e4e9f2;
+  color: #2a3547;
+}
+
+.test-cards-table tr:last-child td {
+  border-bottom: none;
+}
+
+.card-number-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-number {
+  font-family: monospace;
+  letter-spacing: 0.5px;
+}
+
+.copy-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2f98ff;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.copy-button:hover {
+  background-color: rgba(47, 152, 255, 0.1);
+}
+
+.copy-button.copied {
+  color: #4caf50;
+}
+
+.copied-text {
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .order-summary {
@@ -128,6 +215,10 @@ h1 {
   flex: 1;
 }
 
+.cardholder-name {
+  flex: 2;
+}
+
 .card-number {
   flex: 2;
 }
@@ -177,24 +268,6 @@ h1 {
 .discount-success {
   color: #4caf50 !important;
   font-size: 0.85rem;
-}
-
-.pay-button {
-  margin-top: 8px;
-  padding: 14px;
-  background-color: #2f98ff;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  width: 100%;
-}
-
-.pay-button:hover {
-  background-color: #2280e6;
 }
 
 .secure-badge {

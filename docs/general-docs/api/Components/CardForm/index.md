@@ -196,8 +196,8 @@ With custom content, your slotted content replaces the default structure.
 
 ## Events
 
-| Event Name                    | Description                                              | Event Detail                          |
-| ----------------------------- | -------------------------------------------------------- | ------------------------------------- |
+| Event Name                   | Description                                              | Event Detail                          |
+| ---------------------------- | -------------------------------------------------------- | ------------------------------------- |
 | `primer-card-submit-success` | Fired when the form is successfully submitted            | Contains the result of the submission |
 | `primer-card-submit-errors`  | Fired when there are validation errors during submission | Contains validation errors            |
 

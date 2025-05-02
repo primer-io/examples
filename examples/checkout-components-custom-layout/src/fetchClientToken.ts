@@ -20,14 +20,11 @@ export type ClientTokenResponse =
  */
 export async function fetchClientToken(
   apiKey: string,
-  example?: string
+  example?: string,
 ): Promise<ClientTokenResponse> {
   try {
     // Build the URL with query parameters
-    const url = new URL(
-      'api/examples',
-      'https://primer-sdk-demo-git-feat-start-refactor-primer-io.vercel.app'
-    );
+    const url = new URL('api/examples', 'https://sdk-demo.primer.io');
 
     // Add example parameter if provided
     if (example) {
@@ -38,7 +35,7 @@ export async function fetchClientToken(
     const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
     });

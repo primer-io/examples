@@ -99,7 +99,6 @@ flowchart LR
 
 All card form input components have a critical relationship with the parent card form.
 
-
 This relationship means:
 
 1. **Mandatory Containment**: Card input components must always be placed inside a `<primer-card-form>` component

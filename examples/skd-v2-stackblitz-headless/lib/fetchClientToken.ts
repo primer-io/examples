@@ -26,7 +26,7 @@ export async function fetchClientToken(
     // Build the URL with query parameters
     const url = new URL(
       'api/examples',
-      'https://primer-sdk-demo-git-feat-start-refactor-primer-io.vercel.app'
+      'https://sdk-demo.primer.io'
     );
 
     // Add example parameter if provided

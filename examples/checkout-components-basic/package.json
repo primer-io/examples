@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@primer-io/primer-js": "0.1.4"
+    "@primer-io/primer-js": "0.1.8"
   },
   "devDependencies": {
     "typescript": "~5.7.2",

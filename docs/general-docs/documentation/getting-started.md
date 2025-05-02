@@ -95,9 +95,9 @@ The Primer Composable Checkout SDK uses CSS Custom Properties to manage its visu
 
 ```html
 <!-- Add the theme class to your checkout container -->
-  <primer-checkout client-token="your-client-token"  class="primer-dark-theme">
-    <!-- Your checkout content -->
-  </primer-checkout>
+<primer-checkout client-token="your-client-token" class="primer-dark-theme">
+  <!-- Your checkout content -->
+</primer-checkout>
 ```
 
 You can switch themes by changing the class on your container:
@@ -109,7 +109,6 @@ document.querySelector('primer-checkout').className = 'primer-light-theme';
 // Switch to dark theme
 document.querySelector('primer-checkout').className = 'primer-dark-theme';
 ```
-
 
 ## Customizing with the Styling API
 
@@ -137,7 +136,7 @@ The Primer Composable Checkout SDK provides a comprehensive Styling API that all
 You can customize nearly every aspect of the checkout UI, including:
 
 - Colors (brand colors, text colors, backgrounds)
-- Typography (font families, sizes, weights)  - At the moment custom fonts will not work on iframes. The mechanism to set custom fonts on the whole checkout will come in future releases.
+- Typography (font families, sizes, weights) - At the moment custom fonts will not work on iframes. The mechanism to set custom fonts on the whole checkout will come in future releases.
 - Border radius values
 - Spacing and sizing
 - Input and button appearances
@@ -181,40 +180,30 @@ Libraries will often have their own module names you will need to use when exten
 
 The SDK emits events to help you manage the checkout flow. All events bubble up through the DOM and can be listened to at the document level or on the checkout component.
 
-```mermaid
-flowchart TB
-    A[primer-checkout] --> B["primer-state-changed
-    (isProcessing, isSuccessful, error)"]
-    A --> C["primer-payment-methods-updated
-    (available payment methods)"]
-    A --> D["primer-checkout-initialized
-    (SDK instance)"]
-    
-    subgraph "Card Events"
-    E["primer-card-submit-success
-    (successful submission)"]
-    F["primer-card-submit-errors
-    (validation errors)"]
-    G["primer-card-network-change
-    (card network detected)"]
-    end
-    
+### Event Types Overview
 
-    
-    A --> E
-    A --> F
-    A --> G
+The `primer-checkout` component emits the following events:
 
+#### Core Events
+| Event Name | Description | Payload |
+|------------|-------------|---------|
+| `primer-state-changed` | Checkout state changes | isProcessing, isSuccessful, error |
+| `primer-payment-methods-updated` | Available payment methods loaded | Payment methods list |
+| `primer-checkout-initialized` | SDK successfully initialized | SDK instance |
 
-    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
-    style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
-    style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
-    style D fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
-    style E fill:#e8f5e9,stroke:#4caf50,stroke-width:1px
-    style F fill:#ffebee,stroke:#f44336,stroke-width:1px
-    style G fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
+#### Card Events
+| Event Name | Description | Payload |
+|------------|-------------|---------|
+| `primer-card-submit-success` | Card form submitted successfully | Submission result |
+| `primer-card-submit-errors` | Card validation errors | Validation errors |
+| `primer-card-network-change` | Card network detected | Card network info |
 
-```
+#### Checkout Events
+| Event Name | Description | Payload |
+|------------|-------------|---------|
+| `primer-oncheckout-complete` | Checkout completed successfully | Payment payload |
+| `primer-oncheckout-failure` | Checkout process failed | Error details, payment |
+
 
 ### Core Events
 
@@ -237,6 +226,23 @@ checkout.addEventListener('primer-payment-methods-updated', (event) => {
 checkout.addEventListener('primer-checkout-initialized', (event) => {
   const primerInstance = event.detail;
   // Access SDK methods
+});
+
+// Listen for checkout completion (new in v0.1.6)
+checkout.addEventListener('primer-oncheckout-complete', (event) => {
+  const { payment } = event.detail;
+  // Handle successful checkout completion
+  console.log('Checkout completed successfully:', payment);
+});
+
+// Listen for checkout failure (new in v0.1.6)
+checkout.addEventListener('primer-oncheckout-failure', (event) => {
+  const { error, payment } = event.detail;
+  // Handle checkout failure
+  console.error('Checkout failed:', error);
+  if (payment) {
+    console.log('Partial payment data:', payment);
+  }
 });
 ```
 
@@ -301,6 +307,8 @@ The SDK provides flexible options for customizing your checkout experience. You 
     <div slot="payments">
       <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
       <primer-payment-method type="PAYPAL"></primer-payment-method>
+      <!-- Include error message container to display payment failures -->
+      <primer-error-message-container></primer-error-message-container>
     </div>
   </primer-main>
 </primer-checkout>
@@ -314,16 +322,21 @@ flowchart TD
     PAYMENT_CARD]
     C --> E[primer-payment-method:
     PAYPAL]
+    C --> F[primer-error-message-container]
 
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style C fill:#e3f2fd,stroke:#1976d2,stroke-width:1px
     style D fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
     style E fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style F fill:#ffebee,stroke:#f44336,stroke-width:1px
 ```
 
-For more advanced customization options, including handling success and failure states, checkout flow customization, and more, refer to the [Layout Customizations Guide](/documentation/layout-customizations-guide).
+:::tip
+The `<primer-error-message-container>` component provides a ready-to-use solution for displaying payment failure messages. When using custom layouts, you can either include this component or build your own error handling using the checkout events (as shown in the Event Handling section).
+:::
 
+For more advanced customization options, including handling success and failure states, checkout flow customization, and more, refer to the [Layout Customizations Guide](/documentation/layout-customizations-guide).
 
 ## Technical Limitations
 

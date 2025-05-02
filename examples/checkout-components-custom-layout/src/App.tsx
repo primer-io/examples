@@ -8,6 +8,12 @@ interface InitializedPaymentMethod {
   name: string;
 }
 
+const CHECKOUT_CONFIG = {
+  paypal: {
+    buttonColor: 'blue',
+  },
+};
+
 function App() {
   const [clientToken, setClientToken] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -84,7 +90,11 @@ function App() {
     <div className='app'>
       <h1>Custom Checkout Layout</h1>
 
-      <primer-checkout client-token={clientToken} ref={checkoutRef}>
+      <primer-checkout
+        client-token={clientToken}
+        ref={checkoutRef}
+        options={CHECKOUT_CONFIG}
+      >
         <primer-main slot='main'>
           <div slot='payments' className='payment-methods'>
             {/* Card payment at the top */}
@@ -94,7 +104,7 @@ function App() {
                 <primer-payment-method type={card.type}></primer-payment-method>
               </div>
             )}
-
+            <primer-error-message-container></primer-error-message-container>
             {/* PayPal with special styling */}
             {payPal && (
               <div className='paypal-container'>

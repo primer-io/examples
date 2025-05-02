@@ -1,0 +1,114 @@
+/* Handcrafted Theme - NEW CREATIVE THEME */
+.handcrafted-theme {
+  /* Core variables */
+  --primer-color-brand: #8d6e63;
+  --primer-color-background: #f5f5f0;
+  --primer-color-focus: #8d6e63;
+  --primer-typography-brand: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+  
+  /* Text colors */
+  --primer-color-text-primary: #3e2723;
+  --primer-color-text-placeholder: #a1887f;
+  --primer-color-text-disabled: #bcaaa4;
+  --primer-color-text-negative: #c62828;
+  
+  /* Border radius */
+  --primer-radius-small: 0px;
+  --primer-radius-medium: 0px;
+  
+  /* Spacing */
+  --primer-space-xsmall: 4px;
+  --primer-space-small: 8px;
+  --primer-space-medium: 16px;
+  
+  /* Typography */
+  --primer-typography-title-large-font: var(--primer-typography-brand);
+  --primer-typography-title-large-weight: 600;
+  --primer-typography-title-large-size: 16px;
+  --primer-typography-title-large-line-height: 20px;
+  --primer-typography-title-large-letter-spacing: 0;
+  
+  --primer-typography-body-large-font: var(--primer-typography-brand);
+  --primer-typography-body-large-weight: 400;
+  --primer-typography-body-large-size: 16px;
+  --primer-typography-body-large-line-height: 20px;
+  --primer-typography-body-large-letter-spacing: 0;
+  
+  --primer-typography-body-small-font: var(--primer-typography-brand);
+  --primer-typography-body-small-weight: 400;
+  --primer-typography-body-small-size: 12px;
+  --primer-typography-body-small-line-height: 16px;
+  --primer-typography-body-small-letter-spacing: 0;
+  
+  /* Outlined container */
+  --primer-color-background-outlined-default: #f5f5f0;
+  --primer-color-background-outlined-hover: #efebe9;
+  --primer-color-background-outlined-active: #e0e0d9;
+  --primer-color-background-outlined-error: #ffebee;
+  --primer-color-background-outlined-disabled: #efebe9;
+  
+  --primer-color-border-outlined-default: #bcaaa4;
+  --primer-color-border-outlined-hover: #a1887f;
+  --primer-color-border-outlined-active: #8d6e63;
+  --primer-color-border-outlined-focus: var(--primer-color-focus);
+  --primer-color-border-outlined-error: #c62828;
+  --primer-color-border-outlined-disabled: #d7ccc8;
+}
+
+:root[data-theme='handcrafted'] {
+  --page-background-color: #f5f5f0;
+  --page-text-color: #3e2723;
+  --select-border-color: #8d6e63;
+  --select-background-color: #efebe9;
+  --select-text-color: #3e2723;
+  --checkout-background-color: #efebe9;
+  --checkout-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 2px 2px 0 #d7ccc8;
+  --checkout-padding: 16px;
+  --info-background-color: #efebe9;
+}
+
+/* Add some custom elements for the handcrafted theme */
+:root[data-theme='handcrafted'] .theme-details {
+  border: none;
+  background-color: #efebe9;
+  position: relative;
+  border-top: 1px solid #d7ccc8;
+  border-bottom: 1px solid #d7ccc8;
+  padding: 20px;
+}
+
+:root[data-theme='handcrafted'] .theme-details::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #d7ccc8;
+}
+
+:root[data-theme='handcrafted'] .theme-details::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #d7ccc8;
+}
+
+:root[data-theme='handcrafted'] .theme-selector select {
+  border: 1px solid #8d6e63;
+  background-color: #efebe9;
+  font-family: var(--primer-typography-brand);
+}
+
+:root[data-theme='handcrafted'] #checkout-container {
+  background-color: #efebe9;
+  border: 1px solid #d7ccc8;
+}
+
+:root[data-theme='handcrafted'] h2 {
+  font-family: var(--primer-typography-brand);
+  color: #5d4037;
+}

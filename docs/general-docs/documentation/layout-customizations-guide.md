@@ -50,6 +50,7 @@ flowchart TD
     B -->|slot: checkout-failure| E[Error Screen]
     C -->|can contain| F[primer-payment-method]
     C -->|can contain| G[primer-card-form]
+    C -->|should contain| H[primer-error-message-container]
 
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
@@ -58,6 +59,7 @@ flowchart TD
     style E fill:#ffebee,stroke:#f44336,stroke-width:1px
     style F fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
     style G fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style H fill:#ffebee,stroke:#f44336,stroke-width:1px
 ```
 
 <details>
@@ -145,6 +147,12 @@ For complete control, you can bypass `<primer-main>` entirely and provide your o
     <!-- Your completely custom checkout implementation -->
     <div id="payment-methods">
       <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
+      
+      <!-- Option 1: Use the pre-built error container component for payment failures -->
+      <primer-error-message-container></primer-error-message-container>
+      
+      <!-- Option 2: Or create your own error display element -->
+      <div id="my-custom-error" class="custom-error-message"></div>
     </div>
   </div>
 </primer-checkout>
@@ -156,6 +164,7 @@ When using this approach:
 - You must handle state management yourself through events
 - You have complete freedom over the layout and user flow
 - You're responsible for showing/hiding appropriate content based on checkout state
+- You need to handle payment failure display, either with the `<primer-error-message-container>` component or by implementing custom error handling with events
   :::
 
 ## Why Slot Names Matter
@@ -376,6 +385,96 @@ Promise.allSettled([
 
 </details>
 
+## Handling Payment Failure Messages in Custom Layouts
+
+When implementing custom layouts, you have two options for displaying payment failure messages:
+
+1. Use the pre-built `<primer-error-message-container>` component
+2. Implement custom error handling using the SDK events
+
+### Option 1: Using the Error Message Container Component
+
+The `<primer-error-message-container>` provides a convenient way to display payment failures without writing custom code:
+
+```html
+<!-- Approach 1: Using primer-main with custom content -->
+<primer-checkout client-token="your-token">
+  <primer-main slot="main">
+    <div slot="payments">
+      <!-- Your payment methods -->
+      <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
+      
+      <!-- Include error message container for payment failure display -->
+      <primer-error-message-container></primer-error-message-container>
+    </div>
+  </primer-main>
+</primer-checkout>
+
+<!-- Approach 2: Fully custom implementation -->
+<primer-checkout client-token="your-token">
+  <div slot="main" id="custom-checkout">
+    <!-- Your completely custom checkout implementation -->
+    <div id="payment-methods">
+      <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
+      
+      <!-- Include error message container for payment failure messages -->
+      <primer-error-message-container></primer-error-message-container>
+    </div>
+  </div>
+</primer-checkout>
+```
+
+If using the error message container, for optimal user experience, place it:
+1. Prominently where it will be visible after a payment attempt
+2. Where users will naturally look for feedback after submitting payment
+3. Within the same visual context as the payment method it relates to
+
+### Option 2: Custom Payment Failure Handling
+
+You can also implement your own payment failure handling using the SDK events:
+
+```javascript
+const checkout = document.querySelector('primer-checkout');
+
+// Option 1: Listen for the dedicated payment failure event
+checkout.addEventListener('primer-oncheckout-failure', (event) => {
+  const { error, payment } = event.detail;
+  
+  // Display the payment failure using your own UI
+  const customErrorElement = document.getElementById('my-custom-error');
+  customErrorElement.textContent = error.message;
+  customErrorElement.style.display = 'block';
+  
+  // Optionally, you can access partial payment data if available
+  if (payment) {
+    console.log('Partial payment data:', payment);
+  }
+});
+
+// Option 2: Listen for checkout state changes
+checkout.addEventListener('primer-state-changed', (event) => {
+  const { error, failure } = event.detail;
+  
+  if (error || failure) {
+    // Display the failure using your own UI
+    const customErrorElement = document.getElementById('my-custom-error');
+    customErrorElement.textContent = failure ? failure.message : error.message;
+    customErrorElement.style.display = 'block';
+  } else {
+    // Hide error when not present
+    document.getElementById('my-custom-error').style.display = 'none';
+  }
+});
+```
+
+This approach gives you complete control over payment failure presentation but requires you to implement the error handling logic yourself.
+
+:::info Important Distinction
+The `<primer-error-message-container>` specifically handles payment failures that occur after form submission, not card validation errors. Card validation is handled by the input components themselves and prevents form submission until valid.
+:::
+
+For more information about the error message container, see the [Error Message Container Component](/api/Components/error-message-container-doc) documentation.
+
 ## Best Practices for Layout Customization
 
 :::tip Best Practices Summary
@@ -386,6 +485,7 @@ Promise.allSettled([
 4. **Design Responsively** - Ensure your layout works on all device sizes
 5. **Test Thoroughly** - Validate behavior across different payment methods and scenarios
 6. **Prevent Component Flash** - Use CSS or JavaScript techniques to hide content until components are defined
+7. **Handle Payment Failures** - Either use the `<primer-error-message-container>` component or implement custom payment failure handling using events
    :::
 
 For detailed information on available components and their slots, refer to the component API documentation:
@@ -393,3 +493,4 @@ For detailed information on available components and their slots, refer to the c
 - [Checkout Component](/api/Components/primer-checkout-doc/)
 - [Main Component](/api/Components/primer-main-doc/)
 - [Payment Method Component](/api/Components/payment-method-doc/)
+- [Error Message Container](/api/Components/error-message-container-doc/)

@@ -1,0 +1,113 @@
+/* Brutalist Theme */
+.brutalist-theme {
+  /* Core variables */
+  --primer-color-brand: #000000;
+  --primer-color-background: #ffffff;
+  --primer-color-focus: #000000;
+  --primer-typography-brand: 'Courier New', monospace;
+
+  /* Text colors */
+  --primer-color-text-primary: #000000;
+  --primer-color-text-placeholder: #757575;
+  --primer-color-text-disabled: #9e9e9e;
+  --primer-color-text-negative: #b71c1c;
+
+  /* Border radius */
+  --primer-radius-small: 0px;
+  --primer-radius-medium: 0px;
+
+  /* Spacing */
+  --primer-space-xsmall: 4px;
+  --primer-space-small: 8px;
+  --primer-space-medium: 12px;
+
+  /* Typography */
+  --primer-typography-title-large-font: var(--primer-typography-brand);
+  --primer-typography-title-large-weight: 700;
+  --primer-typography-title-large-size: 16px;
+  --primer-typography-title-large-line-height: 20px;
+  --primer-typography-title-large-letter-spacing: 0;
+
+  --primer-typography-body-large-font: var(--primer-typography-brand);
+  --primer-typography-body-large-weight: 400;
+  --primer-typography-body-large-size: 16px;
+  --primer-typography-body-large-line-height: 20px;
+  --primer-typography-body-large-letter-spacing: 0;
+
+  --primer-typography-body-small-font: var(--primer-typography-brand);
+  --primer-typography-body-small-weight: 400;
+  --primer-typography-body-small-size: 12px;
+  --primer-typography-body-small-line-height: 16px;
+  --primer-typography-body-small-letter-spacing: 0;
+
+  /* Outlined container */
+  --primer-color-background-outlined-default: #ffffff;
+  --primer-color-background-outlined-hover: #ffffff;
+  --primer-color-background-outlined-active: #ffffff;
+  --primer-color-background-outlined-error: #ffebee;
+  --primer-color-background-outlined-disabled: #f4f4f4;
+
+  --primer-color-border-outlined-default: #000000;
+  --primer-color-border-outlined-hover: #000000;
+  --primer-color-border-outlined-active: #000000;
+  --primer-color-border-outlined-focus: var(--primer-color-focus);
+  --primer-color-border-outlined-error: #f44336;
+  --primer-color-border-outlined-disabled: #c0c0c0;
+}
+
+:root[data-theme='brutalist'] {
+  --page-background-color: #ffffff;
+  --page-text-color: #000000;
+  --select-border-color: #000000;
+  --select-background-color: #ffffff;
+  --select-text-color: #000000;
+  --checkout-background-color: #ffffff;
+  --checkout-box-shadow: 8px 8px 0 0 #000000;
+  --checkout-padding: 0;
+  --info-background-color: #ffffff;
+}
+
+/* Add some custom elements for the brutalist theme */
+:root[data-theme='brutalist'] .theme-details {
+  border: 3px solid #000000;
+  border-radius: 0;
+  position: relative;
+  top: -3px;
+  left: -3px;
+  box-shadow: 6px 6px 0 0 #000000;
+  margin-bottom: 24px;
+}
+
+:root[data-theme='brutalist'] .theme-selector select {
+  border: 3px solid #000000;
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Courier New', monospace;
+  box-shadow: 4px 4px 0 0 #000000;
+}
+
+:root[data-theme='brutalist'] #checkout-container {
+  border: 3px solid #000000;
+  border-radius: 0;
+}
+
+:root[data-theme='brutalist'] h2,
+:root[data-theme='brutalist'] h3 {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Courier New', monospace;
+  border-bottom: 3px solid #000;
+  display: inline-block;
+}
+
+:root[data-theme='brutalist'] .disclaimer {
+  border: 3px solid #000;
+  padding: 12px;
+  font-family: 'Courier New', monospace;
+  position: relative;
+  top: -3px;
+  left: -3px;
+  box-shadow: 6px 6px 0 0 #000000;
+  margin-bottom: 24px;
+}

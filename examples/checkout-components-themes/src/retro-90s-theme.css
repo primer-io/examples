@@ -1,0 +1,80 @@
+/* 90s Retro Theme */
+.retro-90s-theme {
+  /* Core variables */
+  --primer-color-brand: #00ccff;
+  --primer-color-background: #000000;
+  --primer-color-focus: #ff00ff;
+  --primer-typography-brand: 'VT323', 'Courier New', monospace;
+  
+  /* Text colors */
+  --primer-color-text-primary: #ffffff;
+  --primer-color-text-placeholder: #00ccff;
+  --primer-color-text-disabled: #663399;
+  --primer-color-text-negative: #ff6633;
+  
+  /* Border radius */
+  --primer-radius-small: 0px;
+  --primer-radius-medium: 0px;
+  
+  /* Spacing */
+  --primer-space-xsmall: 4px;
+  --primer-space-small: 8px;
+  --primer-space-medium: 12px;
+  
+  /* Typography */
+  --primer-typography-title-large-font: var(--primer-typography-brand);
+  --primer-typography-title-large-weight: 400;
+  --primer-typography-title-large-size: 16px;
+  --primer-typography-title-large-line-height: 20px;
+  --primer-typography-title-large-letter-spacing: 0;
+  
+  --primer-typography-body-large-font: var(--primer-typography-brand);
+  --primer-typography-body-large-weight: 400;
+  --primer-typography-body-large-size: 16px;
+  --primer-typography-body-large-line-height: 20px;
+  --primer-typography-body-large-letter-spacing: 0;
+  
+  --primer-typography-body-small-font: var(--primer-typography-brand);
+  --primer-typography-body-small-weight: 400;
+  --primer-typography-body-small-size: 12px;
+  --primer-typography-body-small-line-height: 16px;
+  --primer-typography-body-small-letter-spacing: 0;
+  
+  /* Outlined container */
+  --primer-color-background-outlined-default: #000000;
+  --primer-color-background-outlined-hover: #000033;
+  --primer-color-background-outlined-active: #000066;
+  --primer-color-background-outlined-error: #330000;
+  --primer-color-background-outlined-disabled: #202020;
+  
+  --primer-color-border-outlined-default: #ff00ff;
+  --primer-color-border-outlined-hover: #ff00ff;
+  --primer-color-border-outlined-active: #ff00ff;
+  --primer-color-border-outlined-focus: #ffff00;
+  --primer-color-border-outlined-error: #ff6633;
+  --primer-color-border-outlined-disabled: #663399;
+}
+
+:root[data-theme='retro-90s'] {
+  --page-background-color: #000066;
+  --page-text-color: #ffffff;
+  --select-border-color: #ff00ff;
+  --select-background-color: #000000;
+  --select-text-color: #00ccff;
+  --checkout-background-color: #000000;
+  --checkout-box-shadow: 0 0 0 3px #ff00ff, 0 0 0 6px #ffff00, 0 0 0 9px #00ccff;
+  --checkout-padding: 16px;
+  --info-background-color: #000033;
+}
+
+/* Add some custom elements for the 90s theme */
+:root[data-theme='retro-90s'] .theme-details {
+  border: 3px solid #ff00ff;
+  background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2300ccff' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 5v1H5v1H0V5z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+:root[data-theme='retro-90s'] .theme-selector select {
+  text-transform: uppercase;
+  font-weight: bold;
+  border-width: 3px;
+}

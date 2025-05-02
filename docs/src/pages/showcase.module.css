@@ -11,9 +11,9 @@
   padding: 3rem 0;
   background: linear-gradient(
     to bottom,
-    #e5fdf4 0%,  /* More saturated mint at top */
-    #edfef8 50%, /* Lighter mint in middle */
-    #fafffe 100% /* Almost white at bottom */
+    #e5fdf4 0%,
+    /* More saturated mint at top */ #edfef8 50%,
+    /* Lighter mint in middle */ #fafffe 100% /* Almost white at bottom */
   ); /* Primer vertical gradient - mint to white */
 }
 
@@ -34,8 +34,8 @@
   background-image:
     radial-gradient(
       circle at 10px 10px,
-      rgba(179, 247, 222, 0.2) 0%, /* Using #b3f7de with higher opacity */
-      transparent 3px
+      rgba(179, 247, 222, 0.2) 0%,
+      /* Using #b3f7de with higher opacity */ transparent 3px
     ),
     radial-gradient(
       circle at 30px 30px,
@@ -154,18 +154,20 @@
 .imageWrapper {
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 
+  box-shadow:
     0 12px 25px rgba(0, 0, 0, 0.06),
     0 3px 6px rgba(0, 0, 0, 0.04);
   background-color: var(--ifm-color-white);
   border: 1px solid rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .embedWrapper:hover,
 .imageWrapper:hover {
   transform: translateY(-3px);
-  box-shadow: 
+  box-shadow:
     0 16px 30px rgba(0, 0, 0, 0.08),
     0 6px 10px rgba(0, 0, 0, 0.05);
 }
@@ -236,8 +238,8 @@
   ); /* Lighter variant of the primary gradient */
   border-radius: 12px;
   padding: 2rem;
-  border: 1px solid #B3F7DE; /* Thin dark green outline */
-  box-shadow: 
+  border: 1px solid #b3f7de; /* Thin dark green outline */
+  box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.04),
     0 1px 3px rgba(0, 0, 0, 0.03);
   transition:
@@ -247,7 +249,7 @@
 
 .comingSoonCard:hover {
   transform: translateY(-3px);
-  box-shadow: 
+  box-shadow:
     0 8px 24px rgba(0, 0, 0, 0.06),
     0 2px 6px rgba(0, 0, 0, 0.04);
 }
@@ -256,7 +258,7 @@
   width: 60px;
   height: 60px;
   background: transparent; /* Transparent background */
-  border: 2px solid #B3F7DE; /* Outline color */
+  border: 2px solid #b3f7de; /* Outline color */
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -282,9 +284,10 @@
   padding: 5rem 0;
   background: linear-gradient(
     to bottom,
-    #fafffe 0%,  /* Almost white at top */
-    #edfef8 50%, /* Lighter mint in middle */
-    #e5fdf4 100% /* More saturated mint at bottom */
+    #fafffe 0%,
+    /* Almost white at top */ #edfef8 50%,
+    /* Lighter mint in middle */ #e5fdf4 100%
+      /* More saturated mint at bottom */
   ); /* Primer vertical gradient - white to mint */
   color: var(--ifm-color-primary);
   text-align: center;
@@ -302,8 +305,8 @@
   background-image:
     radial-gradient(
       circle at 10px 10px,
-      rgba(179, 247, 222, 0.2) 0%, /* Using #b3f7de with higher opacity */
-      transparent 3px
+      rgba(179, 247, 222, 0.2) 0%,
+      /* Using #b3f7de with higher opacity */ transparent 3px
     ),
     radial-gradient(
       circle at 30px 30px,

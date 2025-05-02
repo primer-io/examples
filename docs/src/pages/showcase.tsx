@@ -60,7 +60,7 @@ function ShowcaseExamples() {
             </p>
             <div className={styles.exampleLinks}>
               <Link
-                to='https://stackblitz.com/edit/composable-basic-example?file=index.html'
+                to='https://stackblitz.com/edit/checkout-components-basic?file=index.html'
                 className={styles.exampleLink}
                 target='_blank'
                 rel='noopener noreferrer'
@@ -73,7 +73,7 @@ function ShowcaseExamples() {
           <div className={styles.exampleMedia}>
             <div className={styles.embedWrapper}>
               <iframe
-                src='https://stackblitz.com/edit/primer-checkout-without-frameworks?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
+                src='https://stackblitz.com/edit/checkout-components-basic?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
                 title='Basic Checkout Implementation'
                 className={styles.embedFrameTall}
                 loading='lazy'
@@ -81,6 +81,68 @@ function ShowcaseExamples() {
             </div>
           </div>
         </div>
+
+        {/* Vaulted Payment Method Component */}
+        <div className={styles.showcaseExample}>
+          <div className={styles.exampleContent}>
+            <Heading as='h2' className={styles.exampleTitle}>
+              Vaulted Payment Method Component
+            </Heading>
+            <p className={styles.exampleDescription}>
+              This example demonstrates the vaulted payment method component in
+              its default state. Vaulting allows customers to save their payment
+              methods for future use, creating a smoother checkout experience
+              for returning customers.
+            </p>
+            <p className={styles.exampleDescription}>
+              The showcase includes a complete testing environment with test
+              cards that can be used to vault payment methods and experience the
+              flow. After successful payment, you can refresh the page to see
+              the vaulted payment method displayed, or use the "Reset Checkout
+              Session" button to start a new session.
+            </p>
+            <p className={styles.exampleDescription}>
+              This implementation features CVV recapture enabled by default
+              (which can be disabled through client session in production) and
+              demonstrates how easily merchants can integrate vaulted payments
+              into their checkout flow with minimal code.
+            </p>
+            <div className={styles.disclaimer}>
+              <p>
+                <strong>Note:</strong> This example is for demonstration
+                purposes only. In a production environment, you would typically
+                implement a proper authentication flow before displaying vaulted
+                payment methods to ensure the security of your customers' saved
+                payment information.
+              </p>
+            </div>
+            <div className={styles.exampleLinks}>
+              <Link
+                to='https://stackblitz.com/edit/checkout-components-vaulted?file=index.html'
+                className={styles.exampleLink}
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                <Icon
+                  icon='mdi:credit-card-outline'
+                  className={styles.exampleLinkIcon}
+                />
+                View on StackBlitz
+              </Link>
+            </div>
+          </div>
+          <div className={styles.exampleMedia}>
+            <div className={styles.embedWrapper}>
+              <iframe
+                src='https://stackblitz.com/edit/checkout-components-vaulted?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
+                title='Vaulted Payment Method Component'
+                className={styles.embedFrameTall}
+                loading='lazy'
+              ></iframe>
+            </div>
+          </div>
+        </div>
+
         {/* Custom Styled Checkout */}
         <div className={styles.showcaseExample}>
           <div className={styles.exampleContent}>
@@ -125,7 +187,7 @@ function ShowcaseExamples() {
             </div>
             <div className={styles.exampleLinks}>
               <Link
-                to='https://stackblitz.com/edit/custom-styled-checkout?file=index.html'
+                to='https://stackblitz.com/edit/checkout-components-themes?file=README.md'
                 className={styles.exampleLink}
                 target='_blank'
                 rel='noopener noreferrer'
@@ -138,7 +200,7 @@ function ShowcaseExamples() {
           <div className={styles.exampleMedia}>
             <div className={styles.embedWrapper}>
               <iframe
-                src='https://stackblitz.com/edit/custom-styled-checkout?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
+                src='https://stackblitz.com/edit/checkout-components-themes?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
                 title='Custom-Styled Checkout Example'
                 className={styles.embedFrameTall}
                 loading='lazy'
@@ -166,7 +228,7 @@ function ShowcaseExamples() {
             </p>
             <div className={styles.exampleLinks}>
               <Link
-                to='https://stackblitz.com/edit/resct-no-wrappers?file=index.html'
+                to='https://stackblitz.com/edit/checkout-components-custom-layout?file=index.html'
                 className={styles.exampleLink}
                 target='_blank'
                 rel='noopener noreferrer'
@@ -179,7 +241,7 @@ function ShowcaseExamples() {
           <div className={styles.exampleMedia}>
             <div className={styles.embedWrapper}>
               <iframe
-                src='https://stackblitz.com/edit/resct-no-wrappers?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
+                src='https://stackblitz.com/edit/checkout-components-custom-layout?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
                 title='Custom-Styled Checkout Example'
                 className={styles.embedFrame}
                 loading='lazy'
@@ -205,7 +267,7 @@ function ShowcaseExamples() {
             </p>
             <div className={styles.exampleLinks}>
               <Link
-                to='https://stackblitz.com/edit/resct-no-wrappers-txnkzptg?file=index.html'
+                to='https://stackblitz.com/edit/checkout-components-custom-form?file=index.html'
                 className={styles.exampleLink}
                 target='_blank'
                 rel='noopener noreferrer'
@@ -218,7 +280,7 @@ function ShowcaseExamples() {
           <div className={styles.exampleMedia}>
             <div className={styles.embedWrapper}>
               <iframe
-                src='https://stackblitz.com/edit/resct-no-wrappers-txnkzptg?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
+                src='https://stackblitz.com/edit/checkout-components-custom-form?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
                 title='Custom Card Form Layout Example'
                 className={styles.embedFrame}
                 loading='lazy'

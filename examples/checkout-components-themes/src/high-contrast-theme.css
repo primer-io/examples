@@ -1,0 +1,68 @@
+/* High Contrast Theme */
+.high-contrast-theme {
+  /* Core variables */
+  --primer-color-brand: #000000;
+  --primer-color-background: #ffffff;
+  --primer-color-focus: #000000;
+  --primer-typography-brand: 'Arial', sans-serif;
+  
+  /* Text colors */
+  --primer-color-text-primary: #000000;
+  --primer-color-text-placeholder: #333333;
+  --primer-color-text-disabled: #333333;
+  --primer-color-text-negative: #990000;
+  
+  /* Border radius */
+  --primer-radius-small: 0px;
+  --primer-radius-medium: 0px;
+  
+  /* Spacing */
+  --primer-space-xsmall: 4px;
+  --primer-space-small: 8px;
+  --primer-space-medium: 12px;
+  
+  /* Typography */
+  --primer-typography-title-large-font: var(--primer-typography-brand);
+  --primer-typography-title-large-weight: 700;
+  --primer-typography-title-large-size: 16px;
+  --primer-typography-title-large-line-height: 20px;
+  --primer-typography-title-large-letter-spacing: 0;
+  
+  --primer-typography-body-large-font: var(--primer-typography-brand);
+  --primer-typography-body-large-weight: 400;
+  --primer-typography-body-large-size: 16px;
+  --primer-typography-body-large-line-height: 20px;
+  --primer-typography-body-large-letter-spacing: 0;
+  
+  --primer-typography-body-small-font: var(--primer-typography-brand);
+  --primer-typography-body-small-weight: 400;
+  --primer-typography-body-small-size: 12px;
+  --primer-typography-body-small-line-height: 16px;
+  --primer-typography-body-small-letter-spacing: 0;
+  
+  /* Outlined container */
+  --primer-color-background-outlined-default: var(--primer-color-background);
+  --primer-color-background-outlined-hover: var(--primer-color-background);
+  --primer-color-background-outlined-active: var(--primer-color-background);
+  --primer-color-background-outlined-error: var(--primer-color-background);
+  --primer-color-background-outlined-disabled: #f5f5f5;
+  
+  --primer-color-border-outlined-default: #000000;
+  --primer-color-border-outlined-hover: #000000;
+  --primer-color-border-outlined-active: #000000;
+  --primer-color-border-outlined-focus: var(--primer-color-focus);
+  --primer-color-border-outlined-error: #cc0000;
+  --primer-color-border-outlined-disabled: #000000;
+}
+
+:root[data-theme='high-contrast'] {
+  --page-background-color: #ffffff;
+  --page-text-color: #000000;
+  --select-border-color: #000000;
+  --select-background-color: #ffffff;
+  --select-text-color: #000000;
+  --checkout-background-color: #ffffff;
+  --checkout-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  --checkout-padding: 1rem;
+  --info-background-color: #fffee0;
+}

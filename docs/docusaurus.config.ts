@@ -41,6 +41,7 @@ const config: Config = {
         indexPages: true,
         docsDir: './general-docs',
         forceIgnoreNoIndex: true,
+        ignoreFiles: ['llm-guide.md'],
       },
     ],
   ],

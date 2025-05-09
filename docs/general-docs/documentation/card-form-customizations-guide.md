@@ -1,6 +1,7 @@
 ---
 title: Card Form Customizations Guide
 sidebar_label: Card Form Customizations
+sidebar_position: 3
 description: Learn how to customize the card payment form in your Primer Composable Checkout experience
 ---
 

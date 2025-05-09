@@ -3220,14 +3220,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@iconify/react@npm:5.2.1":
-  version: 5.2.1
-  resolution: "@iconify/react@npm:5.2.1"
+"@iconify/react@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@iconify/react@npm:6.0.0"
   dependencies:
     "@iconify/types": "npm:^2.0.0"
   peerDependencies:
     react: ">=16"
-  checksum: 10/b08b7fd6c4aee69cc40a70744f7a976eb7d84b224d4d8392847121b0654ecc86f14e491c322fe64bc958bf3d09bcc2b3584ef16cb55df441971839165c4e2ff6
+  checksum: 10/050371be1a4748f9e2bb0c44f9b62a744ecddd2435d18ea7028b2442780cd150907d325c9c249397e7b774170f65549a7ea61e021b4da2a0f45e20c7dac04a3a
   languageName: node
   linkType: hard
 
@@ -6706,11 +6706,12 @@ __metadata:
     "@docusaurus/tsconfig": "npm:3.7.0"
     "@docusaurus/types": "npm:3.7.0"
     "@easyops-cn/docusaurus-search-local": "npm:^0.49.2"
-    "@iconify/react": "npm:5.2.1"
+    "@iconify/react": "npm:6.0.0"
     "@mdx-js/react": "npm:3.1.0"
     "@types/react": "npm:^19.1.2"
     "@types/react-dom": "npm:^19.1.2"
     clsx: "npm:2.1.1"
+    gray-matter: "npm:^4.0.3"
     prism-react-renderer: "npm:2.4.1"
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
@@ -14731,7 +14732,7 @@ __metadata:
   dependencies:
     docusaurus-lunr-search: "npm:3.6.0"
     prettier: "npm:^3.5.3"
-    turbo: "npm:2.5.0"
+    turbo: "npm:2.5.3"
   languageName: unknown
   linkType: soft
 
@@ -17042,58 +17043,58 @@ __metadata:
   languageName: node
   linkType: hard
 
-"turbo-darwin-64@npm:2.5.0":
-  version: 2.5.0
-  resolution: "turbo-darwin-64@npm:2.5.0"
+"turbo-darwin-64@npm:2.5.3":
+  version: 2.5.3
+  resolution: "turbo-darwin-64@npm:2.5.3"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-darwin-arm64@npm:2.5.0":
-  version: 2.5.0
-  resolution: "turbo-darwin-arm64@npm:2.5.0"
+"turbo-darwin-arm64@npm:2.5.3":
+  version: 2.5.3
+  resolution: "turbo-darwin-arm64@npm:2.5.3"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-linux-64@npm:2.5.0":
-  version: 2.5.0
-  resolution: "turbo-linux-64@npm:2.5.0"
+"turbo-linux-64@npm:2.5.3":
+  version: 2.5.3
+  resolution: "turbo-linux-64@npm:2.5.3"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-linux-arm64@npm:2.5.0":
-  version: 2.5.0
-  resolution: "turbo-linux-arm64@npm:2.5.0"
+"turbo-linux-arm64@npm:2.5.3":
+  version: 2.5.3
+  resolution: "turbo-linux-arm64@npm:2.5.3"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-windows-64@npm:2.5.0":
-  version: 2.5.0
-  resolution: "turbo-windows-64@npm:2.5.0"
+"turbo-windows-64@npm:2.5.3":
+  version: 2.5.3
+  resolution: "turbo-windows-64@npm:2.5.3"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-windows-arm64@npm:2.5.0":
-  version: 2.5.0
-  resolution: "turbo-windows-arm64@npm:2.5.0"
+"turbo-windows-arm64@npm:2.5.3":
+  version: 2.5.3
+  resolution: "turbo-windows-arm64@npm:2.5.3"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo@npm:2.5.0":
-  version: 2.5.0
-  resolution: "turbo@npm:2.5.0"
+"turbo@npm:2.5.3":
+  version: 2.5.3
+  resolution: "turbo@npm:2.5.3"
   dependencies:
-    turbo-darwin-64: "npm:2.5.0"
-    turbo-darwin-arm64: "npm:2.5.0"
-    turbo-linux-64: "npm:2.5.0"
-    turbo-linux-arm64: "npm:2.5.0"
-    turbo-windows-64: "npm:2.5.0"
-    turbo-windows-arm64: "npm:2.5.0"
+    turbo-darwin-64: "npm:2.5.3"
+    turbo-darwin-arm64: "npm:2.5.3"
+    turbo-linux-64: "npm:2.5.3"
+    turbo-linux-arm64: "npm:2.5.3"
+    turbo-windows-64: "npm:2.5.3"
+    turbo-windows-arm64: "npm:2.5.3"
   dependenciesMeta:
     turbo-darwin-64:
       optional: true
@@ -17109,7 +17110,7 @@ __metadata:
       optional: true
   bin:
     turbo: bin/turbo
-  checksum: 10/09a9a441bee424925444a9d3c071efe6139187257296a2b04a6474b719ce385a118c42677a67db1b77ca34f041a72a3fc152a60efcd96d407fd8d3a708c259a4
+  checksum: 10/7459eeae711992a23644dc658b40ca50b5f9a6db5a0f30d6663294ea509d18921b683060a5553771727e2c8d5c6381e0d95871c19cc869271be833109d06e8d0
   languageName: node
   linkType: hard
 

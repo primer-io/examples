@@ -1,6 +1,8 @@
 ---
 sidebar_position: 2
 title: Technology
+sidebar_label: Technology
+description: Understand the core web technologies that power Primer Composable Checkout components
 ---
 
 # Understanding Primer Components Technology

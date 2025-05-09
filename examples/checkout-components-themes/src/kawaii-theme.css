@@ -5,48 +5,48 @@
   --primer-color-background: #fff0f7;
   --primer-color-focus: #ff70b5;
   --primer-typography-brand: 'Comic Sans MS', cursive, sans-serif;
-  
+
   /* Text colors */
   --primer-color-text-primary: #994068;
   --primer-color-text-placeholder: #ff8dce;
   --primer-color-text-disabled: #ffadda;
   --primer-color-text-negative: #e83a8c;
-  
+
   /* Border radius */
   --primer-radius-small: 12px;
   --primer-radius-medium: 12px;
-  
+
   /* Spacing */
   --primer-space-xsmall: 4px;
   --primer-space-small: 8px;
   --primer-space-medium: 12px;
-  
+
   /* Typography */
   --primer-typography-title-large-font: var(--primer-typography-brand);
   --primer-typography-title-large-weight: 400;
   --primer-typography-title-large-size: 16px;
   --primer-typography-title-large-line-height: 20px;
   --primer-typography-title-large-letter-spacing: 0;
-  
+
   --primer-typography-body-large-font: var(--primer-typography-brand);
   --primer-typography-body-large-weight: 400;
   --primer-typography-body-large-size: 16px;
   --primer-typography-body-large-line-height: 20px;
   --primer-typography-body-large-letter-spacing: 0;
-  
+
   --primer-typography-body-small-font: var(--primer-typography-brand);
   --primer-typography-body-small-weight: 400;
   --primer-typography-body-small-size: 12px;
   --primer-typography-body-small-line-height: 16px;
   --primer-typography-body-small-letter-spacing: 0;
-  
+
   /* Outlined container */
   --primer-color-background-outlined-default: #ffffff;
   --primer-color-background-outlined-hover: #fff0f7;
   --primer-color-background-outlined-active: #fff0f7;
   --primer-color-background-outlined-error: #fff0f0;
   --primer-color-background-outlined-disabled: #ffe6f3;
-  
+
   --primer-color-border-outlined-default: #ffcce6;
   --primer-color-border-outlined-hover: #ffadda;
   --primer-color-border-outlined-active: #ff8dce;

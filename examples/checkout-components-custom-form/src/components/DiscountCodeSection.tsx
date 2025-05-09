@@ -6,11 +6,13 @@ interface DiscountCodeSectionProps {
 
 /**
  * DiscountCodeSection - Component for handling discount code entry and validation
- * 
+ *
  * This component provides a clean UI for entering and applying discount codes,
  * with appropriate loading and success states.
  */
-export const DiscountCodeSection: FC<DiscountCodeSectionProps> = ({ onApplyDiscount }) => {
+export const DiscountCodeSection: FC<DiscountCodeSectionProps> = ({
+  onApplyDiscount,
+}) => {
   const [applyingDiscount, setApplyingDiscount] = useState<boolean>(false);
   const [discountApplied, setDiscountApplied] = useState<boolean>(false);
   const discountInputRef = useRef<HTMLInputElement | null>(null);
@@ -34,7 +36,7 @@ export const DiscountCodeSection: FC<DiscountCodeSectionProps> = ({ onApplyDisco
       if (discountInputRef.current) {
         discountInputRef.current.disabled = true;
       }
-      
+
       // Call the callback if provided
       if (onApplyDiscount) {
         onApplyDiscount(discountCode);
@@ -45,9 +47,7 @@ export const DiscountCodeSection: FC<DiscountCodeSectionProps> = ({ onApplyDisco
   return (
     <div className='form-row discount-row'>
       <primer-input-wrapper>
-        <primer-input-label slot='label'>
-          Discount Code
-        </primer-input-label>
+        <primer-input-label slot='label'>Discount Code</primer-input-label>
         <div slot='input' className='discount-field'>
           <primer-input
             id='discount-code'

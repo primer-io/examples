@@ -60,7 +60,7 @@ flowchart TD
     B -->|automatic| C[primer-vault-manager]
     B -->|automatic| D[primer-show-other-payments]
     D -->|contains| E[Other Payment Methods]
-    
+
     style C fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style D fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
     style E fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
@@ -77,17 +77,17 @@ stateDiagram-v2
     [*] --> Loading: Loading Saved Methods
     Loading --> Empty: No Saved Methods
     Loading --> MethodsList: Has Saved Methods
-    
+
     MethodsList --> EditMode: Edit Button Clicked
     EditMode --> MethodsList: Done Button Clicked
-    
+
     MethodsList --> DeleteConfirmation: Delete Button Clicked
     DeleteConfirmation --> MethodsList: Cancel/Confirm
-    
+
     MethodsList --> Processing: Submit Payment
     Processing --> Success: Payment Complete
     Processing --> Error: Payment Failed
-    
+
 ```
 
 1. **Loading state**: While fetching saved payment methods
@@ -156,7 +156,7 @@ When implementing a custom layout, you need to manually include both the Vault M
     <div slot="payments">
       <!-- Manually add the vault manager -->
       <primer-vault-manager></primer-vault-manager>
-      
+
       <!-- Manually add the show-other-payments component to maintain the optimal UX -->
       <primer-show-other-payments>
         <div slot="other-payments" class="payment-methods-list">
@@ -174,19 +174,18 @@ This example demonstrates how to maintain the same user experience as the defaul
 
 </details>
 
-
 ## Key Considerations
 
 :::info Summary of Key Points
 
 - The Vault Manager component is automatically integrated when the vault feature is enabled
 - In the default layout, other payment methods are automatically collapsed using the Show Other Payments component
-- When implementing a custom layout, you must manually add both components to maintain the same user experience 
+- When implementing a custom layout, you must manually add both components to maintain the same user experience
 - Proper client session configuration is essential for the vault feature to work correctly
 - CVV recapture can be enabled for enhanced security with saved card payments
 - The component automatically handles different states: loading, empty, edit mode, and delete confirmation
 - Error handling is built in with clear user feedback
-:::
+  :::
 
 ## Related Documentation
 

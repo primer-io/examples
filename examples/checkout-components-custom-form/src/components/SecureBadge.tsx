@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 /**
  * SecureBadge - A simple component that displays a secure payment badge
- * 
+ *
  * This component shows a lock icon with text to reassure users about
  * the security of their payment information.
  */
@@ -20,14 +20,7 @@ export const SecureBadge: FC = () => {
         strokeLinecap='round'
         strokeLinejoin='round'
       >
-        <rect
-          x='3'
-          y='11'
-          width='18'
-          height='11'
-          rx='2'
-          ry='2'
-        ></rect>
+        <rect x='3' y='11' width='18' height='11' rx='2' ry='2'></rect>
         <path d='M7 11V7a5 5 0 0 1 10 0v4'></path>
       </svg>
       <span>Secure payment</span>

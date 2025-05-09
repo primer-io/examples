@@ -147,10 +147,10 @@ For complete control, you can bypass `<primer-main>` entirely and provide your o
     <!-- Your completely custom checkout implementation -->
     <div id="payment-methods">
       <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
-      
+
       <!-- Option 1: Use the pre-built error container component for payment failures -->
       <primer-error-message-container></primer-error-message-container>
-      
+
       <!-- Option 2: Or create your own error display element -->
       <div id="my-custom-error" class="custom-error-message"></div>
     </div>
@@ -403,7 +403,7 @@ The `<primer-error-message-container>` provides a convenient way to display paym
     <div slot="payments">
       <!-- Your payment methods -->
       <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
-      
+
       <!-- Include error message container for payment failure display -->
       <primer-error-message-container></primer-error-message-container>
     </div>
@@ -416,7 +416,7 @@ The `<primer-error-message-container>` provides a convenient way to display paym
     <!-- Your completely custom checkout implementation -->
     <div id="payment-methods">
       <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
-      
+
       <!-- Include error message container for payment failure messages -->
       <primer-error-message-container></primer-error-message-container>
     </div>
@@ -425,6 +425,7 @@ The `<primer-error-message-container>` provides a convenient way to display paym
 ```
 
 If using the error message container, for optimal user experience, place it:
+
 1. Prominently where it will be visible after a payment attempt
 2. Where users will naturally look for feedback after submitting payment
 3. Within the same visual context as the payment method it relates to
@@ -439,12 +440,12 @@ const checkout = document.querySelector('primer-checkout');
 // Option 1: Listen for the dedicated payment failure event
 checkout.addEventListener('primer-oncheckout-failure', (event) => {
   const { error, payment } = event.detail;
-  
+
   // Display the payment failure using your own UI
   const customErrorElement = document.getElementById('my-custom-error');
   customErrorElement.textContent = error.message;
   customErrorElement.style.display = 'block';
-  
+
   // Optionally, you can access partial payment data if available
   if (payment) {
     console.log('Partial payment data:', payment);
@@ -454,7 +455,7 @@ checkout.addEventListener('primer-oncheckout-failure', (event) => {
 // Option 2: Listen for checkout state changes
 checkout.addEventListener('primer-state-changed', (event) => {
   const { error, failure } = event.detail;
-  
+
   if (error || failure) {
     // Display the failure using your own UI
     const customErrorElement = document.getElementById('my-custom-error');

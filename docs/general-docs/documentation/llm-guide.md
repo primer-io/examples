@@ -12,6 +12,7 @@ description: Learn how to integrate and use Large Language Models with Primer Co
 This guide contains our comprehensive documentation consolidated onto a single page. The goal is to provide an easy way for you to give Large Language Models (LLMs) of your choosing context on how to use our components.
 
 You can either:
+
 - Download the file from [GitHub](https://github.com/your-org/your-repo/path-to-file) and paste it into your LLM conversation
 - Or simply share the link to this page with your LLM
 
@@ -32,6 +33,7 @@ Now, create a basic implementation using TypeScript and add custom layout where 
 ```
 
 This prompt directs the LLM to:
+
 1. Review the documentation on our components
 2. Create a TypeScript implementation
 3. Customize the payment method order (PayPal first, CardForm second, followed by other methods)
@@ -50,4 +52,3 @@ Feel free to modify this prompt to match your specific implementation needs.
 This placeholder will be replaced with auto-generated documentation content.
 
 <!-- DOCUMENTATION_CONTENT_END -->
-

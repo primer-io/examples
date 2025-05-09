@@ -12,6 +12,7 @@ node_modules
 temp
 examples/.github
 .changeset
+build
 
 # files
 **/coverage/*

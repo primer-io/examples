@@ -42,14 +42,14 @@ flowchart TD
 
 ## Properties
 
-| Property     | Attribute    | Type                                     | Default     | Description                      |
-| ------------ | ------------ | ---------------------------------------- | ----------- | -------------------------------- |
-| `variant`    | `variant`    | `'primary' \| 'secondary' \| 'tertiary'` | `'primary'` | The button's visual style        |
-| `disabled`   | `disabled`   | `boolean`                                | `false`     | Whether the button is disabled   |
-| `buttonType` | `type`       | `'button' \| 'submit' \| 'reset'`        | `'button'`  | The button's HTML type attribute |
-| `loading`    | `loading`    | `boolean`                                | `false`     | Shows a loading spinner when true |
-| `selectionState` | `selection-state` | `'default' \| 'checked'`        | `'default'` | Selection state for selectable buttons |
-| `selectable` | `selectable` | `boolean`                                | `false`     | Whether button is selectable/checkable |
+| Property         | Attribute         | Type                                     | Default     | Description                            |
+| ---------------- | ----------------- | ---------------------------------------- | ----------- | -------------------------------------- |
+| `variant`        | `variant`         | `'primary' \| 'secondary' \| 'tertiary'` | `'primary'` | The button's visual style              |
+| `disabled`       | `disabled`        | `boolean`                                | `false`     | Whether the button is disabled         |
+| `buttonType`     | `type`            | `'button' \| 'submit' \| 'reset'`        | `'button'`  | The button's HTML type attribute       |
+| `loading`        | `loading`         | `boolean`                                | `false`     | Shows a loading spinner when true      |
+| `selectionState` | `selection-state` | `'default' \| 'checked'`                 | `'default'` | Selection state for selectable buttons |
+| `selectable`     | `selectable`      | `boolean`                                | `false`     | Whether button is selectable/checkable |
 
 ## Slots
 

@@ -3,13 +3,13 @@ import { CopyButton } from './CopyButton';
 
 /**
  * TestCardsTable - Component that displays test card information for merchants
- * 
+ *
  * This component shows a table of test cards that can be used for testing the checkout process.
  * It includes copy functionality to easily copy card numbers to clipboard.
  */
 export const TestCardsTable: FC = () => {
   const [copiedCard, setCopiedCard] = useState<string | null>(null);
-  
+
   // Cards data - could be moved to a separate file or fetched from an API
   const testCards = [
     {
@@ -17,15 +17,15 @@ export const TestCardsTable: FC = () => {
       number: '4000 0025 0000 1001',
       numberRaw: '4000002500001001',
       cvv: 'Any 3 digits',
-      expiry: 'Any future date'
+      expiry: 'Any future date',
     },
     {
       type: 'Cartes Bancaires/Mastercard',
       number: '5555 5525 0000 1001',
       numberRaw: '5555552500001001',
       cvv: 'Any 3 digits',
-      expiry: 'Any future date'
-    }
+      expiry: 'Any future date',
+    },
   ];
 
   // Function to copy card number to clipboard
@@ -40,7 +40,9 @@ export const TestCardsTable: FC = () => {
   return (
     <div className='test-cards'>
       <h2>Test Cards</h2>
-      <p className='test-cards-subtitle'>Use these cards for testing purposes only</p>
+      <p className='test-cards-subtitle'>
+        Use these cards for testing purposes only
+      </p>
       <div className='test-cards-table-container'>
         <table className='test-cards-table'>
           <thead>
@@ -58,10 +60,10 @@ export const TestCardsTable: FC = () => {
                 <td>
                   <div className='card-number-container'>
                     <span className='card-number'>{card.number}</span>
-                    <CopyButton 
-                      cardNumber={card.numberRaw} 
-                      isCopied={copiedCard === card.numberRaw} 
-                      onCopy={copyCardNumber} 
+                    <CopyButton
+                      cardNumber={card.numberRaw}
+                      isCopied={copiedCard === card.numberRaw}
+                      onCopy={copyCardNumber}
                     />
                   </div>
                 </td>

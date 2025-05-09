@@ -13,10 +13,14 @@ interface OrderSummaryProps {
 
 /**
  * OrderSummary - Component that displays the order details in a summarized format
- * 
+ *
  * This component shows the items in the order, the tax, and the total amount.
  */
-export const OrderSummary: FC<OrderSummaryProps> = ({ items, taxAmount, totalAmount }) => {
+export const OrderSummary: FC<OrderSummaryProps> = ({
+  items,
+  taxAmount,
+  totalAmount,
+}) => {
   return (
     <div className='order-summary'>
       <h2>Order Summary</h2>

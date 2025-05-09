@@ -19,9 +19,9 @@ The Show Other Payments component is automatically integrated with the default c
 flowchart TD
     A[primer-vault-manager] -->|displays| B[Saved Payment Methods]
     C[primer-show-other-payments] -->|toggles| D[Other Payment Methods]
-    
+
     B --- C
-    
+
     style A fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -38,8 +38,8 @@ This component serves to declutter the checkout interface by:
 
 ## Slots
 
-| Name            | Description                                                                                      |
-| --------------- | ------------------------------------------------------------------------------------------------ |
+| Name             | Description                                                                  |
+| ---------------- | ---------------------------------------------------------------------------- |
 | `other-payments` | Container slot for alternative payment methods that will be made collapsible |
 
 ## Technical Implementation
@@ -85,7 +85,7 @@ When using a custom layout, you need to explicitly include the component:
     <div slot="payments">
       <!-- Display vault manager for saved payment methods -->
       <primer-vault-manager></primer-vault-manager>
-      
+
       <!-- Wrap other payment methods in the show-other-payments component -->
       <primer-show-other-payments>
         <div slot="other-payments" class="payment-methods-list">
@@ -121,7 +121,7 @@ The component handles several distinct states:
 - The component works in conjunction with the Vault Manager component
 - It automatically expands when no saved payment methods are available
 - The collapse/expand behavior provides a cleaner checkout interface while maintaining access to all payment options
-:::
+  :::
 
 ## Related Documentation
 

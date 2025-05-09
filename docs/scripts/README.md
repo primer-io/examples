@@ -11,15 +11,18 @@ The `generate-llm-guide.js` script automatically combines all documentation and 
 The script:
 
 1. Organizes content in two main sections:
+
    - **Documentation Guides** first (from `docs/general-docs/documentation`)
    - **API Reference** second (from `docs/general-docs/api`)
 
 2. Within each section, orders files by:
+
    - `sidebar_position` from frontmatter (if available)
    - For files without a position, it checks if their folder has an `index.md` with a position
    - Falls back to alphabetical order for files without positions
 
 3. Processes each file:
+
    - Removes frontmatter
    - Cleans up internal links that would break in a single-page context
    - Adds a horizontal rule and source comment separator

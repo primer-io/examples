@@ -5,48 +5,48 @@
   --primer-color-background: #fcfdf7;
   --primer-color-focus: #2c5f2d;
   --primer-typography-brand: 'Georgia', serif;
-  
+
   /* Text colors */
   --primer-color-text-primary: #2c3c1f;
   --primer-color-text-placeholder: #729656;
   --primer-color-text-disabled: #97b07c;
   --primer-color-text-negative: #8b452e;
-  
+
   /* Border radius */
   --primer-radius-small: 6px;
   --primer-radius-medium: 6px;
-  
+
   /* Spacing */
   --primer-space-xsmall: 4px;
   --primer-space-small: 8px;
   --primer-space-medium: 12px;
-  
+
   /* Typography */
   --primer-typography-title-large-font: var(--primer-typography-brand);
   --primer-typography-title-large-weight: 500;
   --primer-typography-title-large-size: 16px;
   --primer-typography-title-large-line-height: 20px;
   --primer-typography-title-large-letter-spacing: 0;
-  
+
   --primer-typography-body-large-font: var(--primer-typography-brand);
   --primer-typography-body-large-weight: 400;
   --primer-typography-body-large-size: 16px;
   --primer-typography-body-large-line-height: 20px;
   --primer-typography-body-large-letter-spacing: 0;
-  
+
   --primer-typography-body-small-font: var(--primer-typography-brand);
   --primer-typography-body-small-weight: 400;
   --primer-typography-body-small-size: 12px;
   --primer-typography-body-small-line-height: 16px;
   --primer-typography-body-small-letter-spacing: 0;
-  
+
   /* Outlined container */
   --primer-color-background-outlined-default: #fcfdf7;
   --primer-color-background-outlined-hover: #f5f8e8;
   --primer-color-background-outlined-active: #f0f7e9;
   --primer-color-background-outlined-error: #f7efe5;
   --primer-color-background-outlined-disabled: #e9f0d9;
-  
+
   --primer-color-border-outlined-default: #bad4a2;
   --primer-color-border-outlined-hover: #97b07c;
   --primer-color-border-outlined-active: #729656;

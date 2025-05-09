@@ -5,48 +5,48 @@
   --primer-color-background: #000000;
   --primer-color-focus: #ff00ff;
   --primer-typography-brand: 'VT323', 'Courier New', monospace;
-  
+
   /* Text colors */
   --primer-color-text-primary: #ffffff;
   --primer-color-text-placeholder: #00ccff;
   --primer-color-text-disabled: #663399;
   --primer-color-text-negative: #ff6633;
-  
+
   /* Border radius */
   --primer-radius-small: 0px;
   --primer-radius-medium: 0px;
-  
+
   /* Spacing */
   --primer-space-xsmall: 4px;
   --primer-space-small: 8px;
   --primer-space-medium: 12px;
-  
+
   /* Typography */
   --primer-typography-title-large-font: var(--primer-typography-brand);
   --primer-typography-title-large-weight: 400;
   --primer-typography-title-large-size: 16px;
   --primer-typography-title-large-line-height: 20px;
   --primer-typography-title-large-letter-spacing: 0;
-  
+
   --primer-typography-body-large-font: var(--primer-typography-brand);
   --primer-typography-body-large-weight: 400;
   --primer-typography-body-large-size: 16px;
   --primer-typography-body-large-line-height: 20px;
   --primer-typography-body-large-letter-spacing: 0;
-  
+
   --primer-typography-body-small-font: var(--primer-typography-brand);
   --primer-typography-body-small-weight: 400;
   --primer-typography-body-small-size: 12px;
   --primer-typography-body-small-line-height: 16px;
   --primer-typography-body-small-letter-spacing: 0;
-  
+
   /* Outlined container */
   --primer-color-background-outlined-default: #000000;
   --primer-color-background-outlined-hover: #000033;
   --primer-color-background-outlined-active: #000066;
   --primer-color-background-outlined-error: #330000;
   --primer-color-background-outlined-disabled: #202020;
-  
+
   --primer-color-border-outlined-default: #ff00ff;
   --primer-color-border-outlined-hover: #ff00ff;
   --primer-color-border-outlined-active: #ff00ff;
@@ -62,7 +62,8 @@
   --select-background-color: #000000;
   --select-text-color: #00ccff;
   --checkout-background-color: #000000;
-  --checkout-box-shadow: 0 0 0 3px #ff00ff, 0 0 0 6px #ffff00, 0 0 0 9px #00ccff;
+  --checkout-box-shadow:
+    0 0 0 3px #ff00ff, 0 0 0 6px #ffff00, 0 0 0 9px #00ccff;
   --checkout-padding: 16px;
   --info-background-color: #000033;
 }

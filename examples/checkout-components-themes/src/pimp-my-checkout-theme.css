@@ -5,39 +5,39 @@
   --primer-color-background: #000000;
   --primer-color-focus: #ffcc00;
   --primer-typography-brand: 'Impact', 'Arial Black', sans-serif;
-  
+
   /* Text colors */
   --primer-color-text-primary: #ffcc00;
   --primer-color-text-placeholder: #ff9900;
   --primer-color-text-disabled: #777777;
   --primer-color-text-negative: #ff3300;
   --primer-color-text-link: #ff9900;
-  
+
   /* Border radius */
   --primer-radius-small: 8px;
   --primer-radius-medium: 12px;
   --primer-radius-large: 16px;
-  
+
   /* Typography */
   --primer-typography-title-large-font: var(--primer-typography-brand);
   --primer-typography-title-large-weight: 700;
   --primer-typography-title-large-size: 20px;
   --primer-typography-title-large-line-height: 24px;
   --primer-typography-title-large-letter-spacing: 0.5px;
-  
+
   --primer-typography-body-large-font: var(--primer-typography-brand);
   --primer-typography-body-large-weight: 700;
   --primer-typography-body-large-size: 16px;
   --primer-typography-body-large-line-height: 20px;
   --primer-typography-body-large-letter-spacing: 0.2px;
-  
+
   /* Outlined container */
   --primer-color-background-outlined-default: #111111;
   --primer-color-background-outlined-hover: #222222;
   --primer-color-background-outlined-active: #333333;
   --primer-color-background-outlined-error: #330000;
   --primer-color-background-outlined-disabled: #222222;
-  
+
   --primer-color-border-outlined-default: #ff6600;
   --primer-color-border-outlined-hover: #ff9900;
   --primer-color-border-outlined-active: #ffcc00;
@@ -54,7 +54,8 @@
   --select-background-color: #111111;
   --select-text-color: #ffcc00;
   --checkout-background-color: #111111;
-  --checkout-box-shadow: 0 8px 30px rgba(255, 102, 0, 0.8), 0 0 20px rgba(255, 204, 0, 0.5);
+  --checkout-box-shadow:
+    0 8px 30px rgba(255, 102, 0, 0.8), 0 0 20px rgba(255, 204, 0, 0.5);
   --checkout-padding: 0;
   --info-background-color: #222222;
 }
@@ -78,7 +79,8 @@
 
 /* Flame animation for the logo */
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -102,16 +104,22 @@
 
 /* Enhanced glow effect for the checkout container */
 :root[data-theme='pimp-my-checkout'] #checkout-container {
-  box-shadow: 0 0 25px rgba(255, 102, 0, 0.8), 0 0 40px rgba(255, 204, 0, 0.4);
+  box-shadow:
+    0 0 25px rgba(255, 102, 0, 0.8),
+    0 0 40px rgba(255, 204, 0, 0.4);
   border: 1px solid rgba(255, 102, 0, 0.5);
   animation: pulse-glow 3s infinite alternate;
 }
 
 @keyframes pulse-glow {
   0% {
-    box-shadow: 0 0 25px rgba(255, 102, 0, 0.7), 0 0 40px rgba(255, 204, 0, 0.3);
+    box-shadow:
+      0 0 25px rgba(255, 102, 0, 0.7),
+      0 0 40px rgba(255, 204, 0, 0.3);
   }
   100% {
-    box-shadow: 0 0 35px rgba(255, 102, 0, 0.9), 0 0 60px rgba(255, 204, 0, 0.5);
+    box-shadow:
+      0 0 35px rgba(255, 102, 0, 0.9),
+      0 0 60px rgba(255, 204, 0, 0.5);
   }
 }

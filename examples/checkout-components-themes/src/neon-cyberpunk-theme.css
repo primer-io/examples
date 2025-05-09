@@ -5,48 +5,48 @@
   --primer-color-background: #000000;
   --primer-color-focus: #00ffff;
   --primer-typography-brand: 'BlinkMacSystemFont', 'Segoe UI', sans-serif;
-  
+
   /* Text colors */
   --primer-color-text-primary: #00ffff;
   --primer-color-text-placeholder: #8844ee;
   --primer-color-text-disabled: #553399;
   --primer-color-text-negative: #ff3377;
-  
+
   /* Border radius */
   --primer-radius-small: 2px;
   --primer-radius-medium: 2px;
-  
+
   /* Spacing */
   --primer-space-xsmall: 4px;
   --primer-space-small: 8px;
   --primer-space-medium: 12px;
-  
+
   /* Typography */
   --primer-typography-title-large-font: var(--primer-typography-brand);
   --primer-typography-title-large-weight: 600;
   --primer-typography-title-large-size: 16px;
   --primer-typography-title-large-line-height: 20px;
   --primer-typography-title-large-letter-spacing: 1px;
-  
+
   --primer-typography-body-large-font: var(--primer-typography-brand);
   --primer-typography-body-large-weight: 400;
   --primer-typography-body-large-size: 16px;
   --primer-typography-body-large-line-height: 20px;
   --primer-typography-body-large-letter-spacing: 0.5px;
-  
+
   --primer-typography-body-small-font: var(--primer-typography-brand);
   --primer-typography-body-small-weight: 400;
   --primer-typography-body-small-size: 12px;
   --primer-typography-body-small-line-height: 16px;
   --primer-typography-body-small-letter-spacing: 0.5px;
-  
+
   /* Outlined container */
   --primer-color-background-outlined-default: #110011;
   --primer-color-background-outlined-hover: #220022;
   --primer-color-background-outlined-active: #330033;
   --primer-color-background-outlined-error: #220011;
   --primer-color-background-outlined-disabled: #111111;
-  
+
   --primer-color-border-outlined-default: #ff00ff;
   --primer-color-border-outlined-hover: #ff33ff;
   --primer-color-border-outlined-active: #ff77ff;

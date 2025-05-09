@@ -185,25 +185,27 @@ The SDK emits events to help you manage the checkout flow. All events bubble up 
 The `primer-checkout` component emits the following events:
 
 #### Core Events
-| Event Name | Description | Payload |
-|------------|-------------|---------|
-| `primer-state-changed` | Checkout state changes | isProcessing, isSuccessful, error |
-| `primer-payment-methods-updated` | Available payment methods loaded | Payment methods list |
-| `primer-checkout-initialized` | SDK successfully initialized | SDK instance |
+
+| Event Name                       | Description                      | Payload                           |
+| -------------------------------- | -------------------------------- | --------------------------------- |
+| `primer-state-changed`           | Checkout state changes           | isProcessing, isSuccessful, error |
+| `primer-payment-methods-updated` | Available payment methods loaded | Payment methods list              |
+| `primer-checkout-initialized`    | SDK successfully initialized     | SDK instance                      |
 
 #### Card Events
-| Event Name | Description | Payload |
-|------------|-------------|---------|
+
+| Event Name                   | Description                      | Payload           |
+| ---------------------------- | -------------------------------- | ----------------- |
 | `primer-card-submit-success` | Card form submitted successfully | Submission result |
-| `primer-card-submit-errors` | Card validation errors | Validation errors |
-| `primer-card-network-change` | Card network detected | Card network info |
+| `primer-card-submit-errors`  | Card validation errors           | Validation errors |
+| `primer-card-network-change` | Card network detected            | Card network info |
 
 #### Checkout Events
-| Event Name | Description | Payload |
-|------------|-------------|---------|
-| `primer-oncheckout-complete` | Checkout completed successfully | Payment payload |
-| `primer-oncheckout-failure` | Checkout process failed | Error details, payment |
 
+| Event Name                   | Description                     | Payload                |
+| ---------------------------- | ------------------------------- | ---------------------- |
+| `primer-oncheckout-complete` | Checkout completed successfully | Payment payload        |
+| `primer-oncheckout-failure`  | Checkout process failed         | Error details, payment |
 
 ### Core Events
 

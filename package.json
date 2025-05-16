@@ -1,7 +1,7 @@
 {
   "name": "primer-playground",
   "version": "0.0.0-semantic-release",
-  "packageManager": "yarn@4.5.0",
+  "packageManager": "yarn@4.9.1",
   "workspaces": [
     "packages/*",
     "docs",
@@ -16,13 +16,13 @@
   ],
   "scripts": {
     "dev": "turbo run dev",
-    "format": "prettier . --write"
+    "lint:es": "turbo run lint",
+    "lint:ts": "turbo run check-types",
+    "format": "prettier . --write",
+    "lint:format": "prettier . --check"
   },
   "devDependencies": {
     "prettier": "^3.5.3",
     "turbo": "2.5.3"
-  },
-  "dependencies": {
-    "docusaurus-lunr-search": "3.6.0"
   }
 }

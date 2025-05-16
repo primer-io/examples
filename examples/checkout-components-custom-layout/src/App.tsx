@@ -1,12 +1,7 @@
+import { InitializedPaymentMethod } from '@primer-io/primer-js';
 import { useEffect, useRef, useState } from 'react';
 import './styles.css';
 import { fetchClientToken } from './fetchClientToken.ts';
-
-// Define types for payment methods
-interface InitializedPaymentMethod {
-  type: string;
-  name: string;
-}
 
 const CHECKOUT_CONFIG = {
   paypal: {
@@ -49,38 +44,29 @@ function App() {
   useEffect(() => {
     if (!checkoutRef.current || !clientToken) return;
 
-    const handlePaymentMethodsUpdate = (event: any) => {
-      const paymentMethods = event.detail;
-
-      // Get specific payment methods
-      const cardMethod = paymentMethods.get('PAYMENT_CARD');
-      const payPalMethod = paymentMethods.get('PAYPAL');
-
-      // Get other payment methods, filtering out card and PayPal
-      const others = paymentMethods
-        .toArray()
-        .filter(
-          (method: InitializedPaymentMethod) =>
-            method.type !== 'PAYMENT_CARD' && method.type !== 'PAYPAL',
-        );
-
-      setCard(cardMethod);
-      setPayPal(payPalMethod);
-      setOtherMethods(others);
-    };
-
     checkoutRef.current.addEventListener(
       'primer-payment-methods-updated',
-      handlePaymentMethodsUpdate,
-    );
+      (event) => {
+        const paymentMethods = event.detail;
 
-    return () => {
-      checkoutRef.current?.removeEventListener(
-        'primer-payment-methods-updated',
-        handlePaymentMethodsUpdate,
-      );
-    };
-  }, [clientToken, checkoutRef.current]);
+        // Get specific payment methods
+        const cardMethod = paymentMethods.get('PAYMENT_CARD');
+        const payPalMethod = paymentMethods.get('PAYPAL');
+
+        // Get other payment methods, filtering out card and PayPal
+        const others = paymentMethods
+          .toArray()
+          .filter(
+            (method) =>
+              method.type !== 'PAYMENT_CARD' && method.type !== 'PAYPAL',
+          );
+
+        setCard(cardMethod);
+        setPayPal(payPalMethod);
+        setOtherMethods(others);
+      },
+    );
+  }, [clientToken]);
 
   if (isLoading) {
     return <div className='loading'>Loading checkout...</div>;

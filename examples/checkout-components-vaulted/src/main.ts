@@ -91,10 +91,10 @@ import { createExplanationElement } from './explanation.ts';
   const main = document.querySelector('main')!;
 
   // Insert explanation first
-  main.insertBefore(createExplanationElement(), checkout);
+  main.insertBefore(createExplanationElement(), checkout as Node | null);
 
   // Add the refresh button between explanation and checkout
-  main.insertBefore(createRefreshButton(), checkout);
+  main.insertBefore(createRefreshButton(), checkout as Node | null);
 
   // Initialize checkout on page load
   await initializeCheckout();

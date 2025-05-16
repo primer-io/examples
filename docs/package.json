@@ -5,7 +5,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "dev": "docusaurus start --port 9000",
-    "build": "yarn generate-llm-guide && docusaurus build",
+    "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -13,7 +13,7 @@
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "node_modules/.bin/tsc",
-    "generate-llm-guide": "node scripts/generate-llm-guide.js"
+    "check-types": "tsc --noemit -p tsconfig.json"
   },
   "dependencies": {
     "@docusaurus/core": "3.7.0",

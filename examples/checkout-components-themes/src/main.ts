@@ -1,4 +1,4 @@
-import { loadPrimer } from '@primer-io/primer-js';
+import { loadPrimer, PrimerCheckoutComponent } from '@primer-io/primer-js';
 import { fetchClientToken } from './fetchClientToken';
 
 (async function () {
@@ -140,7 +140,9 @@ import { fetchClientToken } from './fetchClientToken';
   // Function to initialize the checkout
   function initializeCheckout(token: string) {
     // Create checkout element
-    const checkoutElement = document.createElement('primer-checkout');
+    const checkoutElement = document.createElement(
+      'primer-checkout',
+    ) as HTMLElement & PrimerCheckoutComponent;
     checkoutElement.clientToken = token;
 
     // Clear container and append element
@@ -157,7 +159,9 @@ import { fetchClientToken } from './fetchClientToken';
     }
 
     // Create and initialize a new checkout component
-    const newCheckout = document.createElement('primer-checkout');
+    const newCheckout = document.createElement(
+      'primer-checkout',
+    ) as HTMLElement & PrimerCheckoutComponent;
 
     // Get the current theme
     const currentTheme = styleSelector.value;

@@ -1,4 +1,7 @@
-import { InitializedPaymentMethod } from '@primer-io/primer-js';
+import {
+  InitializedPaymentMethod,
+  PrimerCheckoutComponent,
+} from '@primer-io/primer-js';
 import { useEffect, useRef, useState } from 'react';
 import './styles.css';
 import { fetchClientToken } from './fetchClientToken.ts';
@@ -22,7 +25,7 @@ function App() {
     [],
   );
 
-  const checkoutRef = useRef<HTMLElementTagNameMap['primer-checkout']>(null);
+  const checkoutRef = useRef<PrimerCheckoutComponent>(null);
 
   // Fetch client token on component mount
   useEffect(() => {
@@ -44,28 +47,25 @@ function App() {
   useEffect(() => {
     if (!checkoutRef.current || !clientToken) return;
 
-    checkoutRef.current.addEventListener(
-      'primer-payment-methods-updated',
-      (event) => {
-        const paymentMethods = event.detail;
+    checkoutRef.current.addEventListener('primer:methods-update', (event) => {
+      const paymentMethods = event.detail;
 
-        // Get specific payment methods
-        const cardMethod = paymentMethods.get('PAYMENT_CARD');
-        const payPalMethod = paymentMethods.get('PAYPAL');
+      // Get specific payment methods
+      const cardMethod = paymentMethods.get('PAYMENT_CARD');
+      const payPalMethod = paymentMethods.get('PAYPAL');
 
-        // Get other payment methods, filtering out card and PayPal
-        const others = paymentMethods
-          .toArray()
-          .filter(
-            (method) =>
-              method.type !== 'PAYMENT_CARD' && method.type !== 'PAYPAL',
-          );
+      // Get other payment methods, filtering out card and PayPal
+      const others = paymentMethods
+        .toArray()
+        .filter(
+          (method) =>
+            method.type !== 'PAYMENT_CARD' && method.type !== 'PAYPAL',
+        );
 
-        setCard(cardMethod);
-        setPayPal(payPalMethod);
-        setOtherMethods(others);
-      },
-    );
+      setCard(cardMethod);
+      setPayPal(payPalMethod);
+      setOtherMethods(others);
+    });
   }, [clientToken]);
 
   if (isLoading) {

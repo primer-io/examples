@@ -42,7 +42,7 @@ function App() {
 
   useEffect(() => {
     if (clientToken && checkoutRef.current) {
-      checkoutRef.current.addEventListener('primer-state-changed', (event) => {
+      checkoutRef.current.addEventListener('primer:state-change', (event) => {
         setIsProcessing(!!event.detail?.isProcessing);
       });
     }

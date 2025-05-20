@@ -1,4 +1,4 @@
-import { loadPrimer } from '@primer-io/primer-js';
+import { loadPrimer, PrimerCheckoutComponent } from '@primer-io/primer-js';
 import { fetchClientToken } from './fetchClientToken.ts';
 import { createExplanationElement } from './explanation.ts';
 
@@ -8,7 +8,9 @@ import { createExplanationElement } from './explanation.ts';
   await loadPrimer();
 
   // Reference to checkout element
-  const checkout = document.querySelector('primer-checkout');
+  const checkout = document.querySelector(
+    'primer-checkout',
+  ) as PrimerCheckoutComponent | null;
 
   // Function to initialize or reinitialize the checkout with a new token
   async function initializeCheckout() {

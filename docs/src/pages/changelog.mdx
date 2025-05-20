@@ -8,6 +8,35 @@ sidebar_position: 99
 
 This page documents all notable changes to Composable Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
+## v0.2.0 - Event System Overhaul & PrimerJS API Introduction (19-May-2025)
+
+### Breaking Changes
+
+- Renamed all DOM events to follow the `primer:*` namespace format:
+  - `primer-state-changed` → `primer:state-change`
+  - `primer-payment-methods-updated` → `primer:methods-update`
+  - `primer-checkout-initialized` → `primer:ready`
+  - `primer-card-submit-success` → `primer:card-success`
+  - `primer-card-submit-errors` → `primer:card-error`
+  - `primer-card-network-change` → `primer:card-network-change`
+- Removed `primer-oncheckout-complete` and `primer-oncheckout-failure` events
+- Replaced direct access to the headless SDK instance with a new PrimerJS class
+- Consolidated payment success and failure callbacks into a single `onPaymentComplete` callback
+
+### New Features
+
+- Introduced the PrimerJS class with type-safe API surface:
+  - `refreshSession()` method for refreshing client session
+  - `getPaymentMethods()` method for retrieving available payment methods
+  - `onPaymentStart` callback for payment process initiation
+  - `onPaymentPrepare` callback with handler for intercepting payment creation
+  - `onPaymentComplete` unified callback for payment completion results
+
+### Documentation
+
+- Added [migration guide](documentation/migration-guides/v01-to-v02) for transitioning from v0.1.x to v0.2.x
+- Updated examples and API reference documentation
+
 ## v0.1.8 - Card Network Icon Enhancements (02-May-2025)
 
 ### Fixes

@@ -185,7 +185,7 @@ When implementing a custom layout without `<primer-main>`, you'll need to listen
 ```javascript
 document
   .querySelector('primer-checkout')
-  .addEventListener('primer-state-changed', (event) => {
+  .addEventListener('primer:state-change', (event) => {
     const state = event.detail;
 
     // Handle different checkout states
@@ -205,24 +205,24 @@ sequenceDiagram
     participant Your App
 
     Note over Checkout,Your App: Initialization
-    Checkout->>Your App: primer-checkout-initialized
+    Checkout->>Your App: primer:ready
 
     Note over Checkout,Your App: Payment Methods Discovery
-    Checkout->>Your App: primer-payment-methods-updated
+    Checkout->>Your App: primer:methods-update
 
     Note over Checkout,Your App: State Changes
-    Checkout->>Your App: primer-state-changed (isProcessing: true)
+    Checkout->>Your App: primer:state-change (isProcessing: true)
     Note right of Your App: Show loading UI
-    Checkout->>Your App: primer-state-changed (isSuccessful: true)
+    Checkout->>Your App: primer:state-change (isSuccessful: true)
     Note right of Your App: Show success UI
 ```
 
 <details>
 <summary><strong>Key events to listen for</strong></summary>
 
-- `primer-state-changed` - Fired when checkout state changes
-- `primer-payment-methods-updated` - Fired when available payment methods are loaded
-- `primer-checkout-initialized` - Fired when the SDK is ready
+- `primer:state-change` - Fired when checkout state changes
+- `primer:methods-update` - Fired when available payment methods are loaded
+- `primer:ready` - Fired when the SDK is ready
 </details>
 
 ## Configuring Payment Methods
@@ -264,13 +264,13 @@ If you're using a custom card form implementation, you should **not** include th
 
 ### Dynamic Payment Method Rendering
 
-You can dynamically render payment methods by listening to the `primer-payment-methods-updated` event:
+You can dynamically render payment methods by listening to the `primer:methods-update` event:
 
 <details>
 <summary><strong>Example: Dynamic Payment Method Rendering</strong></summary>
 
 ```javascript
-checkout.addEventListener('primer-payment-methods-updated', (event) => {
+checkout.addEventListener('primer:methods-update', (event) => {
   const availableMethods = event.detail.toArray();
   const container = document.getElementById('payment-methods');
 
@@ -293,7 +293,7 @@ This approach ensures you only display payment methods that are actually availab
 **Important:** If you're using a custom card form, you should filter out the `PAYMENT_CARD` type to avoid duplicate card forms:
 
 ```javascript
-checkout.addEventListener('primer-payment-methods-updated', (event) => {
+checkout.addEventListener('primer:methods-update', (event) => {
   let availableMethods = event.detail.toArray();
   const container = document.getElementById('payment-methods');
 
@@ -432,28 +432,29 @@ If using the error message container, for optimal user experience, place it:
 
 ### Option 2: Custom Payment Failure Handling
 
-You can also implement your own payment failure handling using the SDK events:
+You can also implement your own payment failure handling using the SDK events and the new PrimerJS API:
 
 ```javascript
 const checkout = document.querySelector('primer-checkout');
 
-// Option 1: Listen for the dedicated payment failure event
-checkout.addEventListener('primer-oncheckout-failure', (event) => {
-  const { error, payment } = event.detail;
-
-  // Display the payment failure using your own UI
-  const customErrorElement = document.getElementById('my-custom-error');
-  customErrorElement.textContent = error.message;
-  customErrorElement.style.display = 'block';
-
-  // Optionally, you can access partial payment data if available
-  if (payment) {
-    console.log('Partial payment data:', payment);
-  }
+// Listen for the checkout ready event
+checkout.addEventListener('primer:ready', ({ detail: primer }) => {
+  // Set up the payment complete callback
+  primer.onPaymentComplete = ({ payment, status, error }) => {
+    if (status === 'error') {
+      // Display the payment failure using your own UI
+      const customErrorElement = document.getElementById('my-custom-error');
+      customErrorElement.textContent = error.message;
+      customErrorElement.style.display = 'block';
+    } else {
+      // Hide error element for success/pending states
+      document.getElementById('my-custom-error').style.display = 'none';
+    }
+  };
 });
 
 // Option 2: Listen for checkout state changes
-checkout.addEventListener('primer-state-changed', (event) => {
+checkout.addEventListener('primer:state-change', (event) => {
   const { error, failure } = event.detail;
 
   if (error || failure) {

@@ -192,13 +192,13 @@ The card form follows an event-driven validation approach:
 
 ```javascript
 // Listen for validation errors
-cardForm.addEventListener('primer-card-submit-errors', (event) => {
+cardForm.addEventListener('primer:card-error', (event) => {
   const errors = event.detail.errors;
   // Handle validation errors
 });
 
 // Listen for successful submission
-cardForm.addEventListener('primer-card-submit-success', (event) => {
+cardForm.addEventListener('primer:card-success', (event) => {
   const result = event.detail.result;
   // Handle successful submission
 });
@@ -213,13 +213,13 @@ sequenceDiagram
     participant YourApp
 
     Note over CardForm,YourApp: Validation failure scenario
-    CardForm->>Checkout: primer-card-submit-errors
-    Checkout->>YourApp: primer-card-submit-errors
+    CardForm->>Checkout: primer:card-error
+    Checkout->>YourApp: primer:card-error
     Note right of YourApp: Handle validation errors
 
     Note over CardForm,YourApp: Successful submission
-    CardForm->>Checkout: primer-card-submit-success
-    Checkout->>YourApp: primer-card-submit-success
+    CardForm->>Checkout: primer:card-success
+    Checkout->>YourApp: primer:card-success
     Note right of YourApp: Handle successful payment
 ```
 
@@ -301,7 +301,7 @@ This is especially important when dynamically generating payment methods:
 
 ```javascript
 // When dynamically rendering payment methods, filter out PAYMENT_CARD if you're using a custom card form
-checkout.addEventListener('primer-payment-methods-updated', (event) => {
+checkout.addEventListener('primer:methods-update', (event) => {
   const availableMethods = event.detail
     .toArray()
     // Filter out PAYMENT_CARD if you're using a custom card form

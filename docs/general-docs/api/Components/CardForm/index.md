@@ -196,10 +196,10 @@ With custom content, your slotted content replaces the default structure.
 
 ## Events
 
-| Event Name                   | Description                                              | Event Detail                          |
-| ---------------------------- | -------------------------------------------------------- | ------------------------------------- |
-| `primer-card-submit-success` | Fired when the form is successfully submitted            | Contains the result of the submission |
-| `primer-card-submit-errors`  | Fired when there are validation errors during submission | Contains validation errors            |
+| Event Name            | Description                                              | Event Detail                          |
+| --------------------- | -------------------------------------------------------- | ------------------------------------- |
+| `primer:card-success` | Fired when the form is successfully submitted            | Contains the result of the submission |
+| `primer:card-error`   | Fired when there are validation errors during submission | Contains validation errors            |
 
 ## Form Submission
 
@@ -268,7 +268,7 @@ This is the recommended approach as it provides localized button text and consis
 // Dispatch a custom event to trigger form submission
 document
   .querySelector('primer-card-form')
-  .dispatchEvent(new CustomEvent('primer-card-submit'));
+  .dispatchEvent(new CustomEvent('primer:card-submit'));
 ```
 
 </details>
@@ -294,7 +294,7 @@ sequenceDiagram
         Manager->>Form: Validation Errors
         Form->>Form: Update Context
         Form->>Inputs: Display Errors
-        Form->>Form: Emit primer-card-submit-errors
+        Form->>Form: Emit primer:card-error
     end
 ```
 
@@ -302,7 +302,7 @@ Validation errors are automatically passed to the respective input components to
 
 1. Calls the `validate()` method on the card manager
 2. If validation fails, updates the context with validation errors
-3. Dispatches a `primer-card-submit-errors` event with the errors
+3. Dispatches a `primer:card-error` event with the errors
 4. Child components receive the errors and display appropriate messages
 
 ## Context Provider
@@ -371,13 +371,13 @@ All card form input components have a mandatory dependency on the `primer-card-f
 const cardForm = document.querySelector('primer-card-form');
 
 // Listen for successful submissions
-cardForm.addEventListener('primer-card-submit-success', (event) => {
+cardForm.addEventListener('primer:card-success', (event) => {
   console.log('Payment successful!', event.detail.result);
   // Handle successful payment (e.g., show confirmation, redirect)
 });
 
 // Listen for validation errors
-cardForm.addEventListener('primer-card-submit-errors', (event) => {
+cardForm.addEventListener('primer:card-error', (event) => {
   console.error('Validation errors:', event.detail.errors);
   // Handle errors (e.g., scroll to error, show notification)
 });

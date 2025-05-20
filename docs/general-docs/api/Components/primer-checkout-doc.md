@@ -11,6 +11,10 @@ description: The Checkout component is the main container for all Primer payment
 
 The `Checkout` component serves as the main container for all Primer payment components. It initializes the Primer SDK, manages the checkout state, and provides context to child components. This component can be used as a simple drop-in solution or as a foundation for a highly customized checkout experience.
 
+:::warning Single Instance Limitation
+Currently, only one instance of `<primer-checkout>` can be used per application. Multiple checkout configurations on a single page are not supported in the current version. This limitation may be addressed in future releases as we progress with engine rewrites.
+:::
+
 ## Usage
 
 The Checkout component can be used in three ways:
@@ -100,16 +104,14 @@ For comprehensive layout customization options, see the [Layout Customizations G
 
 ## Events
 
-| Event Name                       | Description                                      | Event Detail              |
-| -------------------------------- | ------------------------------------------------ | ------------------------- |
-| `primer-checkout-initialized`    | Fired when the SDK is successfully initialized   | SDK instance              |
-| `primer-payment-methods-updated` | Fired when payment methods are loaded            | Available payment methods |
-| `primer-state-changed`           | Fired when the checkout state changes            | Current state object      |
-| `primer-card-network-change`     | Fired when card network detection changes        | Card network information  |
-| `primer-card-submit-success`     | Fired when a card form is successfully submitted | Submission result         |
-| `primer-card-submit-errors`      | Fired when card form submission has errors       | Validation errors         |
-| `primer-oncheckout-complete`     | Fired when checkout is completed successfully    | Payment payload           |
-| `primer-oncheckout-failure`      | Fired when checkout process fails                | Error details and payment |
+| Event Name                   | Description                                      | Event Detail              |
+| ---------------------------- | ------------------------------------------------ | ------------------------- |
+| `primer:ready`               | Fired when the SDK is successfully initialized   | PrimerJS instance         |
+| `primer:methods-update`      | Fired when payment methods are loaded            | Available payment methods |
+| `primer:state-change`        | Fired when the checkout state changes            | Current state object      |
+| `primer:card-network-change` | Fired when card network detection changes        | Card network information  |
+| `primer:card-success`        | Fired when a card form is successfully submitted | Submission result         |
+| `primer:card-error`          | Fired when card form submission has errors       | Validation errors         |
 
 ```mermaid
 sequenceDiagram
@@ -117,23 +119,21 @@ sequenceDiagram
     participant YourApp
 
     Note over Checkout,YourApp: Initialization Phase
-    Checkout->>YourApp: primer-checkout-initialized
+    Checkout->>YourApp: primer:ready
 
     Note over Checkout,YourApp: Payment Method Discovery
-    Checkout->>YourApp: primer-payment-methods-updated
+    Checkout->>YourApp: primer:methods-update
 
     Note over Checkout,YourApp: Payment Processing
     YourApp->>Checkout: Submit Payment
-    Checkout->>YourApp: primer-state-changed (isProcessing: true)
+    Checkout->>YourApp: primer:state-change (isProcessing: true)
 
     alt Success Path
-        Checkout->>YourApp: primer-card-submit-success
-        Checkout->>YourApp: primer-state-changed (isSuccessful: true)
-        Checkout->>YourApp: primer-oncheckout-complete (payment)
+        Checkout->>YourApp: primer:card-success
+        Checkout->>YourApp: primer:state-change (isSuccessful: true)
     else Error Path
-        Checkout->>YourApp: primer-card-submit-errors
-        Checkout->>YourApp: primer-state-changed (error: {...})
-        Checkout->>YourApp: primer-oncheckout-failure (error, payment)
+        Checkout->>YourApp: primer:card-error
+        Checkout->>YourApp: primer:state-change (error: {...})
     end
 ```
 
@@ -485,13 +485,13 @@ The simplest implementation with default behavior and styling:
   const checkout = document.getElementById('checkout');
 
   // Listen for payment methods loading
-  checkout.addEventListener('primer-payment-methods-updated', (event) => {
+  checkout.addEventListener('primer:methods-update', (event) => {
     const paymentMethods = event.detail;
     console.log('Available payment methods:', paymentMethods.toArray());
   });
 
   // Listen for checkout state changes
-  checkout.addEventListener('primer-state-changed', (event) => {
+  checkout.addEventListener('primer:state-change', (event) => {
     const state = event.detail;
     if (state.isSuccessful) {
       console.log('Payment completed successfully');
@@ -503,7 +503,7 @@ The simplest implementation with default behavior and styling:
   });
 
   // Listen for SDK initialization
-  checkout.addEventListener('primer-checkout-initialized', (event) => {
+  checkout.addEventListener('primer:ready', (event) => {
     console.log('Checkout SDK initialized');
   });
 </script>
@@ -575,6 +575,7 @@ This is useful when you want to implement your own custom loading indicator or w
 :::info Summary of Key Points
 
 - The Checkout component functions as a complete checkout solution out of the box, requiring only a client token
+- Currently, only one instance of `<primer-checkout>` can be used per application (this limitation may be addressed in future releases)
 - Without custom layout, the component automatically displays all available payment methods
 - The `primer-main` component is optional - you can provide your own custom implementation in the `main` slot
 - When using a custom implementation instead of `primer-main`, you'll need to listen to checkout events to handle different checkout states

@@ -85,6 +85,10 @@ Create a basic checkout integration by adding the `primer-checkout` component to
 <primer-checkout client-token="your-client-token"></primer-checkout>
 ```
 
+:::warning Single Instance Limitation
+Currently, only one instance of `<primer-checkout>` can be used per application. Multiple checkout configurations on a single page are not supported in the current version. This limitation may be addressed in future releases as we progress with engine rewrites.
+:::
+
 For comprehensive details on all available attributes, refer to the [Checkout Component API Reference](/api/Components/primer-checkout-doc).
 
 ## Adding Styles
@@ -180,32 +184,29 @@ Libraries will often have their own module names you will need to use when exten
 
 The SDK emits events to help you manage the checkout flow. All events bubble up through the DOM and can be listened to at the document level or on the checkout component.
 
+:::warning Version 0.2.0 Breaking Changes
+If you're updating from v0.1.x to v0.2.x, please note that all event names have changed to follow the `primer:*` namespace format. For detailed information on these changes and how to migrate, see the [Migration Guide from v0.1.x to v0.2.x](migration-guides/v01-to-v02).
+:::
+
 ### Event Types Overview
 
 The `primer-checkout` component emits the following events:
 
 #### Core Events
 
-| Event Name                       | Description                      | Payload                           |
-| -------------------------------- | -------------------------------- | --------------------------------- |
-| `primer-state-changed`           | Checkout state changes           | isProcessing, isSuccessful, error |
-| `primer-payment-methods-updated` | Available payment methods loaded | Payment methods list              |
-| `primer-checkout-initialized`    | SDK successfully initialized     | SDK instance                      |
+| Event Name              | Description                      | Payload                           |
+| ----------------------- | -------------------------------- | --------------------------------- |
+| `primer:state-change`   | Checkout state changes           | isProcessing, isSuccessful, error |
+| `primer:methods-update` | Available payment methods loaded | Payment methods list              |
+| `primer:ready`          | SDK successfully initialized     | PrimerJS instance                 |
 
 #### Card Events
 
 | Event Name                   | Description                      | Payload           |
 | ---------------------------- | -------------------------------- | ----------------- |
-| `primer-card-submit-success` | Card form submitted successfully | Submission result |
-| `primer-card-submit-errors`  | Card validation errors           | Validation errors |
-| `primer-card-network-change` | Card network detected            | Card network info |
-
-#### Checkout Events
-
-| Event Name                   | Description                     | Payload                |
-| ---------------------------- | ------------------------------- | ---------------------- |
-| `primer-oncheckout-complete` | Checkout completed successfully | Payment payload        |
-| `primer-oncheckout-failure`  | Checkout process failed         | Error details, payment |
+| `primer:card-success`        | Card form submitted successfully | Submission result |
+| `primer:card-error`          | Card validation errors           | Validation errors |
+| `primer:card-network-change` | Card network detected            | Card network info |
 
 ### Core Events
 
@@ -213,38 +214,34 @@ The `primer-checkout` component emits the following events:
 const checkout = document.querySelector('primer-checkout');
 
 // Listen for SDK state changes
-checkout.addEventListener('primer-state-changed', (event) => {
+checkout.addEventListener('primer:state-change', (event) => {
   const { isProcessing, isSuccessful, error } = event.detail;
   // Handle state changes
 });
 
 // Listen for available payment methods
-checkout.addEventListener('primer-payment-methods-updated', (event) => {
+checkout.addEventListener('primer:methods-update', (event) => {
   const paymentMethods = event.detail.toArray();
   // Handle payment methods list
 });
 
-// Access SDK instance
-checkout.addEventListener('primer-checkout-initialized', (event) => {
-  const primerInstance = event.detail;
-  // Access SDK methods
-});
+// Access PrimerJS instance
+checkout.addEventListener('primer:ready', (event) => {
+  const primer = event.detail;
 
-// Listen for checkout completion (new in v0.1.6)
-checkout.addEventListener('primer-oncheckout-complete', (event) => {
-  const { payment } = event.detail;
-  // Handle successful checkout completion
-  console.log('Checkout completed successfully:', payment);
-});
-
-// Listen for checkout failure (new in v0.1.6)
-checkout.addEventListener('primer-oncheckout-failure', (event) => {
-  const { error, payment } = event.detail;
-  // Handle checkout failure
-  console.error('Checkout failed:', error);
-  if (payment) {
-    console.log('Partial payment data:', payment);
-  }
+  // Configure payment completion handler
+  primer.onPaymentComplete = ({ payment, status, error }) => {
+    if (status === 'success') {
+      console.log('✅ Payment successful', payment);
+      // Handle successful payment
+    } else if (status === 'pending') {
+      console.log('⏳ Payment pending', payment);
+      // Handle pending payment
+    } else if (status === 'error') {
+      console.error('❌ Payment failed', error);
+      // Handle payment failure
+    }
+  };
 });
 ```
 
@@ -252,19 +249,19 @@ checkout.addEventListener('primer-oncheckout-failure', (event) => {
 
 ```javascript
 // Handle successful card submission
-checkout.addEventListener('primer-card-submit-success', (event) => {
+checkout.addEventListener('primer:card-success', (event) => {
   const result = event.detail.result;
   // Handle success
 });
 
 // Handle card validation errors
-checkout.addEventListener('primer-card-submit-errors', (event) => {
+checkout.addEventListener('primer:card-error', (event) => {
   const errors = event.detail.errors;
   // Handle validation errors
 });
 
 // Listen for card network changes
-checkout.addEventListener('primer-card-network-change', (event) => {
+checkout.addEventListener('primer:card-network-change', (event) => {
   const network = event.detail;
   // Handle card network detection/change
 });

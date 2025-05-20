@@ -55,26 +55,27 @@ The `primer-error-message-container` component provides a convenient way to disp
 <div class="tab-content events">
 
 ```javascript
-// Alternative approach using event listeners for custom payment failure handling
+// Alternative approach using the PrimerJS API for custom payment failure handling
 const checkout = document.querySelector('primer-checkout');
 
-// Option 1: Listen for the dedicated payment failure event
-checkout.addEventListener('primer-oncheckout-failure', (event) => {
-  const { error, payment } = event.detail;
-
-  // Display the payment failure using your own UI
-  const errorElement = document.getElementById('custom-error-display');
-  errorElement.textContent = error.message;
-  errorElement.style.display = 'block';
-
-  // Optionally, you can access partial payment data if available
-  if (payment) {
-    console.log('Partial payment data:', payment);
-  }
+// Listen for the checkout ready event
+checkout.addEventListener('primer:ready', ({ detail: primer }) => {
+  // Set up the payment complete callback
+  primer.onPaymentComplete = ({ payment, status, error }) => {
+    if (status === 'error') {
+      // Display the payment failure using your own UI
+      const errorElement = document.getElementById('custom-error-display');
+      errorElement.textContent = error.message;
+      errorElement.style.display = 'block';
+    } else {
+      // Hide error element for success/pending states
+      document.getElementById('custom-error-display').style.display = 'none';
+    }
+  };
 });
 
-// Option 2: Listen for checkout state changes
-checkout.addEventListener('primer-state-changed', (event) => {
+// Listen for checkout state changes
+checkout.addEventListener('primer:state-change', (event) => {
   const { error, failure } = event.detail;
 
   if (error || failure) {
@@ -113,10 +114,10 @@ The component doesn't require any properties or attributes to function. It autom
 
 This component doesn't emit any events directly, but it displays errors emitted by other components in the checkout flow:
 
-| Event Source      | Event Name                  | What It Displays                                          |
-| ----------------- | --------------------------- | --------------------------------------------------------- |
-| `primer-checkout` | `primer-oncheckout-failure` | Payment failure details                                   |
-| `primer-checkout` | `primer-state-changed`      | General checkout errors (via error or failure properties) |
+| Event Source      | Event Name            | What It Displays                                          |
+| ----------------- | --------------------- | --------------------------------------------------------- |
+| `primer-checkout` | `primer:ready`        | Connects to the PrimerJS instance for error handling      |
+| `primer-checkout` | `primer:state-change` | General checkout errors (via error or failure properties) |
 
 ## CSS Custom Properties
 
@@ -158,12 +159,15 @@ sequenceDiagram
 
     Note over Checkout,ErrorContainer: Payment Failure Flow
 
-    Checkout->>ErrorContainer: primer-oncheckout-failure (error, payment)
+    Checkout->>ErrorContainer: primer:ready (primer)
+    ErrorContainer->>ErrorContainer: Connect to PrimerJS instance
+    Note over Checkout,ErrorContainer: When payment fails
+    Checkout->>ErrorContainer: onPaymentComplete (status: 'error')
     ErrorContainer->>ErrorContainer: Process error message
     ErrorContainer->>User: Display formatted payment failure message
 
     Note over Checkout,ErrorContainer: Alternative Flow
-    Checkout->>ErrorContainer: primer-state-changed (error/failure)
+    Checkout->>ErrorContainer: primer:state-change (error/failure)
     ErrorContainer->>ErrorContainer: Extract failure details
     ErrorContainer->>User: Display payment error message
 ```
@@ -182,7 +186,7 @@ Card validation errors are handled by the card input components themselves and p
 
 1. **Strategic Placement**: Position the error container prominently where users will look after attempting payment.
 2. **Visual Integration**: Use consistent styling with the rest of your checkout for a cohesive experience.
-3. **Consider Alternatives**: For highly customized UIs, you may prefer implementing your own error handling with the `primer-oncheckout-failure` event.
+3. **Consider Alternatives**: For highly customized UIs, you may prefer implementing your own error handling with the `primer:state-change` event and PrimerJS API.
 4. **Accessibility First**: The component includes proper ARIA attributes, but ensure your layout maintains focus management for error states.
 5. **Clear Messaging**: The component handles formatting error messages from the server, but consider how they fit within your overall checkout flow.
    :::

@@ -1,0 +1,12 @@
+{
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "sequential-thinking",
+    "playwright",
+    "Context7",
+    "puppeteer"
+  ],
+  "permissions": {
+    "allow": ["Bash(grep:*)"]
+  }
+}

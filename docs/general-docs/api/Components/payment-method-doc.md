@@ -37,7 +37,7 @@ flowchart TD
     <div slot="payments">
       <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
       <primer-payment-method type="PAYPAL"></primer-payment-method>
-      <primer-payment-method type="GOOGLE_PAY"></primer-payment-method>
+      <primer-payment-method type="GOOGLE_PAY" disabled></primer-payment-method>
     </div>
   </primer-main>
 </primer-checkout>
@@ -45,9 +45,10 @@ flowchart TD
 
 ## Properties
 
-| Name   | Type     | Description                                                         | Default     |
-| ------ | -------- | ------------------------------------------------------------------- | ----------- |
-| `type` | `String` | The payment method type identifier (e.g., "PAYMENT_CARD", "PAYPAL") | `undefined` |
+| Name       | Type      | Description                                                         | Default     |
+| ---------- | --------- | ------------------------------------------------------------------- | ----------- |
+| `type`     | `String`  | The payment method type identifier (e.g., "PAYMENT_CARD", "PAYPAL") | `undefined` |
+| `disabled` | `Boolean` | When true, disables the payment method making it non-interactive    | `false`     |
 
 ## Key Concepts
 
@@ -95,6 +96,55 @@ sequenceDiagram
     Note right of YourApp: Get available methods
     YourApp->>YourApp: Process available methods
     YourApp->>PaymentMethod: Create components for<br>available methods
+```
+
+## Disabled State
+
+The `disabled` attribute allows you to disable specific payment methods, making them unclickable and non-interactive. This is useful for:
+
+- Temporarily disabling payment methods during checkout flow
+- Preventing interaction while processing other payments
+- Implementing conditional payment method availability
+
+```html
+<!-- Disable specific payment methods -->
+<primer-payment-method type="PAYPAL" disabled></primer-payment-method>
+<primer-payment-method type="GOOGLE_PAY" disabled></primer-payment-method>
+<primer-payment-method type="APPLE_PAY" disabled></primer-payment-method>
+```
+
+### React Integration
+
+In React applications, you can conditionally apply the disabled attribute:
+
+```jsx
+// Conditional disabling in React
+<primer-payment-method
+  type="PAYPAL"
+  {...(isProcessing && { disabled: true })}
+/>
+
+// Or with explicit boolean
+<primer-payment-method
+  type="GOOGLE_PAY"
+  disabled={!isPaymentMethodAvailable}
+/>
+```
+
+### JavaScript Control
+
+You can dynamically enable/disable payment methods using JavaScript:
+
+```javascript
+const paymentMethod = document.querySelector(
+  'primer-payment-method[type="PAYPAL"]',
+);
+
+// Disable the payment method
+paymentMethod.setAttribute('disabled', '');
+
+// Enable the payment method
+paymentMethod.removeAttribute('disabled');
 ```
 
 ## Examples
@@ -242,6 +292,50 @@ This example shows how to create a custom layout where certain payment methods a
 
 </details>
 
+<details>
+<summary><strong>Disabling Payment Methods During Processing</strong></summary>
+
+```html
+<primer-checkout id="checkout" client-token="your-client-token">
+  <primer-main slot="main">
+    <div slot="payments" id="payment-methods">
+      <primer-payment-method
+        type="PAYMENT_CARD"
+        id="card-payment"
+      ></primer-payment-method>
+      <primer-payment-method
+        type="PAYPAL"
+        id="paypal-payment"
+      ></primer-payment-method>
+      <primer-payment-method
+        type="GOOGLE_PAY"
+        id="googlepay-payment"
+      ></primer-payment-method>
+    </div>
+  </primer-main>
+</primer-checkout>
+
+<script>
+  const checkout = document.getElementById('checkout');
+
+  // Listen for payment state changes
+  checkout.addEventListener('primer:state-change', (event) => {
+    const state = event.detail;
+    const paymentMethods = document.querySelectorAll('primer-payment-method');
+
+    if (state.isProcessing) {
+      // Disable all payment methods during processing
+      paymentMethods.forEach((pm) => pm.setAttribute('disabled', ''));
+    } else {
+      // Re-enable payment methods when not processing
+      paymentMethods.forEach((pm) => pm.removeAttribute('disabled'));
+    }
+  });
+</script>
+```
+
+</details>
+
 ## Available Payment Method Types
 
 The Primer SDK supports a wide range of payment methods. Here are some of the commonly used types:
@@ -343,4 +437,7 @@ Each payment method type can be configured through the `options` property of the
 - The component automatically determines which payment interface to render based on the payment method's type
 - Always listen to the `primer-payment-methods-updated` event to get the current list of available payment methods
 - The component must be used within a `primer-checkout` context to access payment methods
+- The `disabled` attribute makes payment methods non-interactive but they remain visible
+- Disabled payment methods prevent user interaction and form submission
+- Visual feedback for disabled state is handled by individual button components
   :::

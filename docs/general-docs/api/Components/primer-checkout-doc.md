@@ -96,6 +96,79 @@ For comprehensive layout customization options, see the [Layout Customizations G
 | `custom-styles`  | `String`  | Optional. Stringified JSON object containing CSS custom properties for styling. | `''`    |
 | `disable-loader` | `Boolean` | Optional. When true, disables the default loading spinner.                      | `false` |
 
+## Setting Attributes in JavaScript
+
+:::warning Important: setAttribute() Required for Most Attributes
+When setting attributes programmatically in JavaScript, most attributes must be set using `setAttribute()` rather than direct property assignment. This is because the component's attribute change processing is triggered only through the DOM attribute system.
+:::
+
+### Attributes that MUST use setAttribute()
+
+The following attributes require `setAttribute()` to work correctly:
+
+```javascript
+const checkoutElement = document.querySelector('primer-checkout');
+
+// ✅ Correct - use setAttribute()
+checkoutElement.setAttribute('client-token', 'your-client-token');
+checkoutElement.setAttribute('custom-styles', JSON.stringify(themeStyles));
+checkoutElement.setAttribute('loader-disabled', 'true');
+
+// ❌ Incorrect - direct property assignment not supported
+checkoutElement.clientToken = 'your-client-token'; // Won't work
+checkoutElement.customStyles = JSON.stringify(themeStyles); // Won't work
+checkoutElement.disableLoader = true; // Won't work
+```
+
+### Exception: The options Property
+
+The `options` property is an exception and should be set directly as a property:
+
+```javascript
+// ✅ Correct - options is set as a property, not an attribute
+checkoutElement.options = {
+  locale: 'en-GB',
+  apiVersion: '2.4',
+};
+
+// ❌ Incorrect - options cannot be set as an attribute
+checkoutElement.setAttribute('options', JSON.stringify(options)); // Won't work
+```
+
+### Why setAttribute() is Required
+
+Using `setAttribute()` is required because:
+
+1. **Attribute Change Processing**: The component watches for attribute changes through the DOM's mutation system
+2. **Type Conversion**: The component automatically handles string-to-type conversion for attributes
+3. **Lifecycle Integration**: Attribute changes trigger the component's internal update mechanisms
+
+### Complete Example
+
+```javascript
+// Initialize checkout element
+const checkoutElement = document.querySelector('primer-checkout');
+
+// Set required attributes using setAttribute()
+checkoutElement.setAttribute('client-token', 'your-client-token');
+
+// Set optional styling
+const customStyles = {
+  primerColorBrand: '#4a6cf7',
+  primerTypographyBrand: 'Inter, sans-serif',
+};
+checkoutElement.setAttribute('custom-styles', JSON.stringify(customStyles));
+
+// Disable loader if needed
+checkoutElement.setAttribute('loader-disabled', 'true');
+
+// Set options as a property (not an attribute)
+checkoutElement.options = {
+  locale: 'en-GB',
+  apiVersion: '2.4',
+};
+```
+
 ## Slots
 
 | Name   | Description                                                                                                                                                                                                                                                  |
@@ -112,6 +185,10 @@ For comprehensive layout customization options, see the [Layout Customizations G
 | `primer:card-network-change` | Fired when card network detection changes        | Card network information  |
 | `primer:card-success`        | Fired when a card form is successfully submitted | Submission result         |
 | `primer:card-error`          | Fired when card form submission has errors       | Validation errors         |
+
+:::info Card Form Events
+For detailed information about card form events, including the triggerable `primer:card-submit` event and payload interfaces, see the [Card Form Component documentation](/api/Components/CardForm/).
+:::
 
 ```mermaid
 sequenceDiagram
@@ -149,10 +226,11 @@ Here's a comprehensive overview of the available options:
 
 ### Core Options
 
-| Option       | Type                | Description                                                        | Default          |
-| ------------ | ------------------- | ------------------------------------------------------------------ | ---------------- |
-| `locale`     | `String`            | Forces the locale for UI elements. Formats: "en-US", "fr-FR", etc. | Browser's locale |
-| `apiVersion` | `"legacy" \| "2.4"` | API version to use when interacting with Primer backend.           | `"legacy"`       |
+| Option             | Type                | Description                                                        | Default          |
+| ------------------ | ------------------- | ------------------------------------------------------------------ | ---------------- |
+| `locale`           | `String`            | Forces the locale for UI elements. Formats: "en-US", "fr-FR", etc. | Browser's locale |
+| `apiVersion`       | `"legacy" \| "2.4"` | API version to use when interacting with Primer backend.           | `"legacy"`       |
+| `disabledPayments` | `Boolean`           | When true, disables all payment methods globally.                  | `false`          |
 
 ### Payment Method-Specific Options
 
@@ -166,8 +244,7 @@ Controls the behavior of card payment methods.
   "card": {
     "cardholderName": {
       "required": true  // Whether the cardholder name is required
-    },
-    "allowedCardNetworks": ["visa", "mastercard", "amex"]  // Limit accepted card types
+    }
   }
 }
 ```
@@ -177,22 +254,26 @@ Controls the behavior of card payment methods.
 <details>
 <summary><strong>Apple Pay Options</strong></summary>
 
-Configures Apple Pay payment behavior.
+Configures Apple Pay payment behavior and button appearance.
 
 ```javascript
 {
   "applePay": {
+    "buttonType": "plain",           // "plain", "buy", "set-up", "donate", "check-out", "book", "subscribe"
+    "buttonStyle": "black",          // "white", "white-outline", "black"
+
     // Deprecated - use billingOptions.requiredBillingContactFields instead
     "captureBillingAddress": false,
 
     "billingOptions": {
       // Required billing information to collect during checkout
-      "requiredBillingContactFields": ["postalAddress", "phoneNumber", "emailAddress"]
+      "requiredBillingContactFields": ["postalAddress", "phoneNumber", "emailAddress", "name", "phoneticName"]
     },
 
     "shippingOptions": {
       // Required shipping information to collect during checkout
-      "requiredShippingContactFields": ["postalAddress", "name", "phoneNumber", "emailAddress"]
+      "requiredShippingContactFields": ["postalAddress", "name", "phoneNumber", "emailAddress", "phoneticName"],
+      "requireShippingMethod": false   // Whether shipping method selection is required
     }
   }
 }
@@ -203,14 +284,20 @@ Configures Apple Pay payment behavior.
 <details>
 <summary><strong>Google Pay Options</strong></summary>
 
-Configures Google Pay payment behavior.
+Configures Google Pay payment behavior and button appearance.
 
 ```javascript
 {
   "googlePay": {
+    "buttonType": "long",            // "long", "short", "book", "buy", "checkout", "donate", "order", "pay", "plain", "subscribe"
+    "buttonColor": "default",        // "default", "black", "white"
+    "buttonSizeMode": "fill",        // "fill" or "static"
     "captureBillingAddress": false,  // Whether to prompt for billing address
-    "buttonTheme": "dark",           // "dark" or "light" button theme
-    "buttonType": "buy"              // "buy", "checkout", "order", "plain", etc.
+    "shippingAddressParameters": {
+      "phoneNumberRequired": false   // Whether phone number is required in shipping address
+    },
+    "emailRequired": false,          // Whether email address is required
+    "requireShippingMethod": false,  // Whether shipping method selection is required
   }
 }
 ```
@@ -220,13 +307,104 @@ Configures Google Pay payment behavior.
 <details>
 <summary><strong>PayPal Options</strong></summary>
 
-Configures PayPal payment behavior.
+Configures PayPal payment behavior and button appearance.
 
 ```javascript
 {
   "paypal": {
-    "captureBillingAddress": false,  // Whether to capture billing address
-    "captureShippingAddress": false  // Whether to capture shipping address
+    "buttonColor": "gold",           // "gold", "blue", "silver", "white", "black"
+    "buttonShape": "pill",           // "pill" or "rect"
+    "buttonSize": "medium",          // "small", "medium", "large", "responsive"
+    "buttonHeight": 40,              // Custom button height in pixels
+    "buttonLabel": "checkout",       // "checkout", "credit", "pay", "buynow", "paypal", "installment"
+    "buttonTagline": false,          // Whether to show PayPal tagline
+    "paymentFlow": "DEFAULT",        // "DEFAULT" or "PREFER_VAULT"
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>Klarna Options</strong></summary>
+
+Configures Klarna payment behavior.
+
+```javascript
+{
+  "klarna": {
+    "paymentFlow": "DEFAULT",        // "DEFAULT" or "PREFER_VAULT"
+    "recurringPaymentDescription": "Monthly subscription", // Description for recurring payments
+    "allowedPaymentCategories": ["pay_now", "pay_later", "pay_over_time"], // Allowed Klarna payment categories
+    "buttonOptions": {
+      "text": "Pay with Klarna"         // Custom button text
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>3D Secure Options</strong></summary>
+
+Configures 3D Secure authentication behavior.
+
+```javascript
+{
+  "threeDsOptions": {
+    "enabled": true,                 // Whether 3DS is enabled
+    "preferred": false               // Whether 3DS is preferred over other auth methods
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>Vaulting Options</strong></summary>
+
+Configures payment method vaulting (saving for future use).
+
+```javascript
+{
+  "vault": {
+    "enabled": true,                 // Enable payment method vaulting
+    "showEmptyState": true           // Show empty state when no vaulted methods exist
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>Stripe Options</strong></summary>
+
+Configures Stripe-specific payment options.
+
+```javascript
+{
+  "stripe": {
+    "mandateData": {
+      "fullMandateText": "Custom mandate text for direct debits",
+      "merchantName": "Your Business Name"
+    },
+    "publishableKey": "pk_test_..."  // Stripe publishable key
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>Submit Button Options</strong></summary>
+
+Configures the submit button behavior.
+
+```javascript
+{
+  "submitButton": {
+    "amountVisible": true            // Whether to show the payment amount on the submit button
   }
 }
 ```
@@ -240,7 +418,7 @@ Here's an example of a complete options object with various settings:
 ```html
 <primer-checkout
   client-token="your-client-token"
-  options='{"locale":"en-GB","apiVersion":"2.4","card":{"cardholderName":{"required":true},"allowedCardNetworks":["visa","mastercard","amex"]},"applePay":{"billingOptions":{"requiredBillingContactFields":["postalAddress","emailAddress"]}},"googlePay":{"captureBillingAddress":true,"buttonTheme":"dark"}}'
+  options='{"locale":"en-GB","apiVersion":"2.4","disabledPayments":false,"card":{"cardholderName":{"required":true}},"applePay":{"buttonStyle":"black","billingOptions":{"requiredBillingContactFields":["postalAddress","emailAddress"]}},"googlePay":{"buttonColor":"black","captureBillingAddress":true},"paypal":{"buttonColor":"blue","buttonShape":"pill","buttonLabel":"checkout"},"klarna":{"allowedPaymentCategories":["pay_now","pay_later"]},"vault":{"enabled":true}}'
 >
   <primer-main slot="main"></primer-main>
 </primer-checkout>
@@ -250,23 +428,37 @@ When using JavaScript:
 
 ```javascript
 const checkout = document.querySelector('primer-checkout');
+
+// ✅ Correct - The options property is set directly as an object
 checkout.options = {
   locale: 'en-GB',
   apiVersion: '2.4',
+  disabledPayments: false,
   card: {
     cardholderName: {
       required: true,
     },
-    allowedCardNetworks: ['visa', 'mastercard', 'amex'],
   },
   applePay: {
+    buttonStyle: 'black',
     billingOptions: {
       requiredBillingContactFields: ['postalAddress', 'emailAddress'],
     },
   },
   googlePay: {
+    buttonColor: 'black',
     captureBillingAddress: true,
-    buttonTheme: 'dark',
+  },
+  paypal: {
+    buttonColor: 'blue',
+    buttonShape: 'pill',
+    buttonLabel: 'checkout',
+  },
+  klarna: {
+    allowedPaymentCategories: ['pay_now', 'pay_later'],
+  },
+  vault: {
+    enabled: true,
   },
 };
 ```
@@ -462,6 +654,29 @@ The simplest implementation with default behavior and styling:
 </details>
 
 <details>
+<summary><strong>Disabling All Payment Methods Globally</strong></summary>
+
+```html
+<!-- Disable all payment methods through global configuration -->
+<primer-checkout
+  client-token="your-client-token"
+  options='{"disabledPayments":true}'
+>
+  <primer-main slot="main"></primer-main>
+</primer-checkout>
+
+<!-- Using JavaScript -->
+<script>
+  const checkout = document.querySelector('primer-checkout');
+  checkout.options = {
+    disabledPayments: true,
+  };
+</script>
+```
+
+</details>
+
+<details>
 <summary><strong>Complete Checkout with Event Handling</strong></summary>
 
 ```html
@@ -512,17 +727,27 @@ The simplest implementation with default behavior and styling:
 </details>
 
 <details>
-<summary><strong>Dynamically Setting Options in JavaScript</strong></summary>
+<summary><strong>Dynamically Setting Attributes and Options in JavaScript</strong></summary>
 
 ```html
-<primer-checkout id="checkout" client-token="your-client-token">
+<primer-checkout id="checkout">
   <primer-main slot="main"></primer-main>
 </primer-checkout>
 
 <script>
   const checkout = document.getElementById('checkout');
 
-  // Set options directly as an object
+  // ✅ Set client-token using setAttribute()
+  checkout.setAttribute('client-token', 'your-client-token');
+
+  // ✅ Set custom styles using setAttribute()
+  const customStyles = {
+    primerColorBrand: '#4a6cf7',
+    primerTypographyBrand: 'Inter, sans-serif',
+  };
+  checkout.setAttribute('custom-styles', JSON.stringify(customStyles));
+
+  // ✅ Set options directly as a property (not an attribute)
   checkout.options = {
     locale: 'en-GB',
     apiVersion: '2.4',
@@ -585,6 +810,7 @@ This is useful when you want to implement your own custom loading indicator or w
 - Unsupported locales will fall back to 'en-GB' with a console warning
 - When using the `options` property directly in JavaScript, you can pass it as an object; when using it as an HTML attribute, it must be a stringified JSON object
 - The `custom-styles` attribute accepts a stringified JSON object with camelCase property names that map to kebab-case CSS variables
+- **Important**: Most attributes (`client-token`, `custom-styles`, `loader-disabled`) must be set using `setAttribute()` in JavaScript, not direct property assignment. The `options` property is an exception and should be set directly as a property.
   :::
 
 For advanced customization, refer to the [Layout Customizations Guide](/documentation/layout-customizations-guide).

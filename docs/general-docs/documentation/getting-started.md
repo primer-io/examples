@@ -248,6 +248,16 @@ checkout.addEventListener('primer:ready', (event) => {
 ### Card Form Events
 
 ```javascript
+// Trigger card form submission programmatically
+const cardForm = document.querySelector('primer-card-form');
+cardForm.dispatchEvent(
+  new CustomEvent('primer:card-submit', {
+    bubbles: true,
+    composed: true,
+    detail: { source: 'custom-submit-button' },
+  }),
+);
+
 // Handle successful card submission
 checkout.addEventListener('primer:card-success', (event) => {
   const result = event.detail.result;

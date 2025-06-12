@@ -26,6 +26,48 @@ function ShowcaseHeader() {
   );
 }
 
+function ShowcaseDisclaimer() {
+  return (
+    <section className={styles.showcaseDisclaimer}>
+      <div className='container'>
+        <div className={styles.disclaimerCard}>
+          <div className={styles.disclaimerHeader}>
+            <Icon
+              icon='mdi:information-outline'
+              className={styles.disclaimerIcon}
+            />
+            <Heading as='h3' className={styles.disclaimerTitle}>
+              StackBlitz Showcase Environment Requirements
+            </Heading>
+          </div>
+          <div className={styles.disclaimerContent}>
+            <div className={styles.disclaimerSection}>
+              <p>
+                <strong>StackBlitz Showcase Environment:</strong> These
+                interactive examples run in StackBlitz, which has browser
+                compatibility requirements. For the best showcase experience,
+                use <strong>Chromium-based browsers</strong> (Chrome, Edge,
+                Brave). Safari support is limited to version 16.4+ and Firefox
+                may have reduced functionality in the StackBlitz environment.
+              </p>
+            </div>
+            <div className={styles.disclaimerSection}>
+              <p>
+                <strong>Payment Method Limitations:</strong> Some payment
+                methods like <strong>Google Pay</strong> and{' '}
+                <strong>Apple Pay</strong> may not work properly in these
+                StackBlitz showcases due to cross-origin restrictions. These are{' '}
+                <strong>StackBlitz environment limitations only</strong> - our
+                Checkout Components work fully in production environments.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function ShowcaseExamples() {
   return (
     <section className={styles.showcaseExamples}>
@@ -37,26 +79,14 @@ function ShowcaseExamples() {
               Basic Checkout Implementation
             </Heading>
             <p className={styles.exampleDescription}>
-              This example showcases how little code is needed to get the most
-              basic checkout working. It is structurally similar to the SDK v2
-              drop-in solution. However, from the beginning, it utilizes web
-              components, allowing for seamless layout customization without
-              requiring additional structural changes.
+              A minimal checkout implementation using web components. Features a
+              style toggle to demonstrate CSS variable customization in
+              real-time.
             </p>
             <p className={styles.exampleDescription}>
-              A convenient style toggle feature is included, allowing merchants
-              to instantly see the effect of CSS variables in action. Simply
-              check the "Enable Custom Style Variables" box at the top of the
-              page to apply a custom theme and visualize how styling changes
-              affect the checkout experience in real-time. This makes it easy to
-              test and experiment with different styling options before
-              implementing them in your own project.
-            </p>
-            <p className={styles.exampleDescription}>
-              While this serves as a foundational starting point, be aware that
-              this is not a final implementation. Some features available in SDK
-              v2 might be missing at this stage, but they will be progressively
-              introduced.
+              This foundational example shows how little code is needed for a
+              working checkout, with the flexibility to customize layouts
+              without structural changes.
             </p>
             <div className={styles.exampleLinks}>
               <Link
@@ -89,33 +119,14 @@ function ShowcaseExamples() {
               Vaulted Payment Method Component
             </Heading>
             <p className={styles.exampleDescription}>
-              This example demonstrates the vaulted payment method component in
-              its default state. Vaulting allows customers to save their payment
-              methods for future use, creating a smoother checkout experience
-              for returning customers.
+              Demonstrates saving and reusing payment methods for returning
+              customers. Includes test cards and a complete testing environment
+              with CVV recapture.
             </p>
             <p className={styles.exampleDescription}>
-              The showcase includes a complete testing environment with test
-              cards that can be used to vault payment methods and experience the
-              flow. After successful payment, you can refresh the page to see
-              the vaulted payment method displayed, or use the "Reset Checkout
-              Session" button to start a new session.
+              Try vaulting a payment method, then refresh or use "Reset Checkout
+              Session" to see the saved payment method in action.
             </p>
-            <p className={styles.exampleDescription}>
-              This implementation features CVV recapture enabled by default
-              (which can be disabled through client session in production) and
-              demonstrates how easily merchants can integrate vaulted payments
-              into their checkout flow with minimal code.
-            </p>
-            <div className={styles.disclaimer}>
-              <p>
-                <strong>Note:</strong> This example is for demonstration
-                purposes only. In a production environment, you would typically
-                implement a proper authentication flow before displaying vaulted
-                payment methods to ensure the security of your customers' saved
-                payment information.
-              </p>
-            </div>
             <div className={styles.exampleLinks}>
               <Link
                 to='https://stackblitz.com/edit/checkout-components-vaulted?file=index.html'
@@ -150,41 +161,16 @@ function ShowcaseExamples() {
               Custom-Styled Checkout
             </Heading>
             <p className={styles.exampleDescription}>
-              This playful example demonstrates the impressive flexibility of
-              Checkout Components' style variables with a no-framework
-              approach—using just HTML and a minimal <code>main.ts</code>{' '}
-              script. Rather than showcasing built-in themes, this demo
-              illustrates how developers can create wildly different visual
-              experiences using the same underlying components and CSS
-              variables.
+              Explore ten unique visual themes—from minimalist to cyberpunk to
+              kawaii—all powered by CSS variables. Switch between themes using
+              the dropdown selector to see the styling flexibility in action.
             </p>
             <p className={styles.exampleDescription}>
-              With a simple drop-down selector, users can switch between ten
-              unique visual interpretations—from minimalist to cyberpunk to
-              kawaii—all powered by the same style variable system. The
-              JavaScript involvement is kept to a bare minimum, emphasizing how
-              CSS variables alone can transform your checkout appearance.
+              Built with vanilla HTML and minimal JavaScript to emphasize how
+              CSS variables alone can transform your checkout appearance. See
+              the <a href='/api/styling-api-docs'>Styling API documentation</a>{' '}
+              for complete variable reference.
             </p>
-            <p className={styles.exampleDescription}>
-              For comprehensive documentation on available style variables and
-              their proper implementation, please refer to the{' '}
-              <a href='/api/styling-api-docs'>
-                Checkout Components Styling API
-              </a>{' '}
-              page.
-            </p>
-            <div className={styles.disclaimer}>
-              <p>
-                <strong>Note:</strong> This is a beta implementation, and some
-                features may not work as expected. Additionally, native payment
-                method buttons such as PayPal, Apple Pay, and Google Pay have
-                strict styling limitations. Only the height can be adjusted, and
-                other customizations—such as border radius, colors, or
-                shadows—will not affect their visual appearance. Keep this in
-                mind when applying styles, as these payment methods enforce
-                specific design guidelines.
-              </p>
-            </div>
             <div className={styles.exampleLinks}>
               <Link
                 to='https://stackblitz.com/edit/checkout-components-themes?file=README.md'
@@ -214,17 +200,9 @@ function ShowcaseExamples() {
               Custom Layout Implementation
             </Heading>
             <p className={styles.exampleDescription}>
-              This showcase demonstrates how to create a fully customized
-              checkout layout using Checkout Components. You'll learn how to use
-              slots to reorganize payment methods, prioritize specific payment
-              options, and add custom styling.
-            </p>
-
-            <p className={styles.exampleDescription}>
-              The example will show how to place card payments at the top,
-              highlight PayPal with custom styling, and organize additional
-              payment methods in a clean grid layout - all while maintaining the
-              core functionality and security of Primer's SDK.
+              Learn to create custom checkout layouts using slots to reorganize
+              payment methods. Features card payments at the top, highlighted
+              PayPal styling, and clean grid organization.
             </p>
             <div className={styles.exampleLinks}>
               <Link
@@ -255,15 +233,9 @@ function ShowcaseExamples() {
               Custom Card Form Layout
             </Heading>
             <p className={styles.exampleDescription}>
-              See how to create a unique payment form layout with card number
-              and CVV on the same line, making efficient use of space while
-              maintaining a clean user experience.
-            </p>
-            <p className={styles.exampleDescription}>
-              This example demonstrates a two-column checkout design with an
-              order summary sidebar, interactive discount code functionality,
-              and custom styling—all while leveraging Primer's secure card form
-              components.
+              Compact card form with number and CVV on the same line, plus a
+              two-column design featuring order summary sidebar and discount
+              codes.
             </p>
             <div className={styles.exampleLinks}>
               <Link
@@ -353,6 +325,7 @@ export default function Showcase() {
     >
       <ShowcaseHeader />
       <main>
+        <ShowcaseDisclaimer />
         <ShowcaseExamples />
         <ComingSoonExamples />
       </main>

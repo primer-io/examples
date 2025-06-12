@@ -1,6 +1,6 @@
 import { loadPrimer, PrimerCheckoutComponent } from '@primer-io/primer-js';
-import { fetchClientToken } from './fetchClientToken.ts';
 import { createExplanationElement } from './explanation.ts';
+import { fetchClientToken } from './fetchClientToken.ts';
 
 // Initialize everything
 (async function () {
@@ -8,9 +8,9 @@ import { createExplanationElement } from './explanation.ts';
   await loadPrimer();
 
   // Reference to checkout element
-  const checkout = document.querySelector(
-    'primer-checkout',
-  ) as PrimerCheckoutComponent | null;
+  const checkout = document.querySelector('primer-checkout') as
+    | (PrimerCheckoutComponent & HTMLElement)
+    | null;
 
   // Function to initialize or reinitialize the checkout with a new token
   async function initializeCheckout() {
@@ -28,8 +28,10 @@ import { createExplanationElement } from './explanation.ts';
     const response = await fetchClientToken('a1b2c3d4e5f6g7h8i9j0', 'vaulted');
 
     if (response.success && checkout) {
-      // Apply new token to checkout
-      checkout.clientToken = response.clientToken;
+      // ✅ Use setAttribute() for client-token
+      checkout.setAttribute('client-token', response.clientToken);
+
+      // ✅ Options property is set directly (not an attribute)
       checkout.options = {
         vault: {
           enabled: true,

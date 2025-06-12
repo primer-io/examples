@@ -143,11 +143,13 @@ import { fetchClientToken } from './fetchClientToken';
     const checkoutElement = document.createElement(
       'primer-checkout',
     ) as HTMLElement & PrimerCheckoutComponent;
-    checkoutElement.clientToken = token;
+
+    // ✅ Use setAttribute() for client-token
+    checkoutElement.setAttribute('client-token', token);
 
     // Clear container and append element
     checkoutContainer.innerHTML = '';
-    checkoutContainer.appendChild(checkoutElement as unknown as HTMLElement);
+    checkoutContainer.appendChild(checkoutElement);
   }
 
   // Function to reinitialize the checkout
@@ -174,7 +176,8 @@ import { fetchClientToken } from './fetchClientToken';
 
     // Set a tiny timeout to ensure the DOM has fully processed the removal
     setTimeout(() => {
-      newCheckout.clientToken = token;
+      // ✅ Use setAttribute() for client-token
+      newCheckout.setAttribute('client-token', token);
       checkoutContainer.appendChild(newCheckout as unknown as HTMLElement);
     }, 50);
   }

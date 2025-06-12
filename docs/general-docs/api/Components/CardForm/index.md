@@ -134,7 +134,7 @@ This renders a complete card form with:
 <div class="tab-content custom">
 
 ```html
-<primer-card-form>
+<primer-card-form disabled>
   <div slot="card-form-content">
     <primer-input-card-holder-name></primer-input-card-holder-name>
     <primer-input-card-number></primer-input-card-number>
@@ -188,6 +188,12 @@ When no custom content is provided, the component renders the following DOM stru
 
 With custom content, your slotted content replaces the default structure.
 
+## Properties
+
+| Name       | Type      | Description                                               | Default |
+| ---------- | --------- | --------------------------------------------------------- | ------- |
+| `disabled` | `Boolean` | When true, disables the card form and prevents submission | `false` |
+
 ## Slots
 
 | Name                | Description                                                                                     |
@@ -196,10 +202,66 @@ With custom content, your slotted content replaces the default structure.
 
 ## Events
 
-| Event Name            | Description                                              | Event Detail                          |
-| --------------------- | -------------------------------------------------------- | ------------------------------------- |
-| `primer:card-success` | Fired when the form is successfully submitted            | Contains the result of the submission |
-| `primer:card-error`   | Fired when there are validation errors during submission | Contains validation errors            |
+| Event Name            | Type            | Description                                              | Event Detail             |
+| --------------------- | --------------- | -------------------------------------------------------- | ------------------------ |
+| `primer:card-submit`  | **Triggerable** | **Triggers card form submission programmatically**       | **CardSubmitPayload**    |
+| `primer:card-success` | Listener        | Fired when the form is successfully submitted            | CardSubmitSuccessPayload |
+| `primer:card-error`   | Listener        | Fired when there are validation errors during submission | CardSubmitErrorsPayload  |
+
+### Event Payload Interfaces
+
+#### CardSubmitPayload (Triggerable Event)
+
+```typescript
+interface CardSubmitPayload {
+  source?: string; // Optional identifier of the trigger source
+}
+```
+
+#### CardSubmitSuccessPayload
+
+```typescript
+interface CardSubmitSuccessPayload {
+  result: unknown; // The successful submission result
+}
+```
+
+#### CardSubmitErrorsPayload
+
+```typescript
+interface CardSubmitErrorsPayload {
+  errors: unknown | InputValidationError[];
+}
+```
+
+## Disabled State
+
+The `disabled` attribute prevents card form submission and makes the form non-interactive:
+
+```html
+<!-- Disabled card form -->
+<primer-card-form disabled></primer-card-form>
+
+<!-- Conditionally disabled in JavaScript -->
+<primer-card-form id="card-form"></primer-card-form>
+<script>
+  const cardForm = document.getElementById('card-form');
+
+  // Disable during processing
+  if (isProcessing) {
+    cardForm.setAttribute('disabled', '');
+  } else {
+    cardForm.removeAttribute('disabled');
+  }
+</script>
+```
+
+When disabled:
+
+- Form submission is prevented
+- Submit button becomes non-interactive
+- Input fields remain functional for data entry
+- Visual feedback is provided through the submit button
 
 ## Form Submission
 
@@ -262,14 +324,65 @@ This is the recommended approach as it provides localized button text and consis
 </details>
 
 <details>
-<summary><strong>5. Programmatically</strong></summary>
+<summary><strong>5. Programmatically via primer:card-submit Event</strong></summary>
+
+You can trigger card form submission programmatically by dispatching a `primer:card-submit` event:
 
 ```javascript
-// Dispatch a custom event to trigger form submission
-document
-  .querySelector('primer-card-form')
-  .dispatchEvent(new CustomEvent('primer:card-submit'));
+// Basic programmatic submission
+const cardForm = document.querySelector('primer-card-form');
+cardForm.dispatchEvent(
+  new CustomEvent('primer:card-submit', {
+    bubbles: true,
+    composed: true,
+    detail: { source: 'external-button' },
+  }),
+);
 ```
+
+**Advanced Example: Custom Submit Button with Event Handling**
+
+```html
+<primer-card-form>
+  <div slot="card-form-content">
+    <primer-input-card-number></primer-input-card-number>
+    <primer-input-card-expiry></primer-input-card-expiry>
+    <primer-input-cvv></primer-input-cvv>
+    <button type="button" id="custom-submit" class="custom-pay-button">
+      Pay Now
+    </button>
+  </div>
+</primer-card-form>
+
+<script>
+  // Set up custom submit button
+  document.getElementById('custom-submit').addEventListener('click', () => {
+    const cardForm = document.querySelector('primer-card-form');
+    cardForm.dispatchEvent(
+      new CustomEvent('primer:card-submit', {
+        bubbles: true,
+        composed: true,
+        detail: { source: 'custom-pay-button' },
+      }),
+    );
+  });
+
+  // Handle submission results
+  document.addEventListener('primer:card-success', (event) => {
+    console.log('Payment successful:', event.detail.result);
+    // Handle success
+  });
+
+  document.addEventListener('primer:card-error', (event) => {
+    console.log('Validation errors:', event.detail.errors);
+    // Handle errors
+  });
+</script>
+```
+
+:::tip Using the Source Parameter
+Include a meaningful `source` identifier when triggering `primer:card-submit` events. This helps with debugging and allows you to handle submissions differently based on the trigger source.
+:::
 
 </details>
 
@@ -401,6 +514,7 @@ The CardForm component uses the following CSS custom properties for styling:
 - The CardForm component must be used within a `primer-checkout` component
 - All card input components must be placed inside a CardForm component to function properly
 - CardForm automatically manages the hosted input elements for secure card data collection
+- When disabled, the form prevents submission but input fields remain functional
   :::
 
 :::tip Implementation Notes
@@ -408,4 +522,5 @@ The CardForm component uses the following CSS custom properties for styling:
 - The component uses `display: contents` to avoid creating additional DOM structure
 - When no custom content is provided, a default form layout is rendered
 - Submit buttons are detected based on their attributes (type="submit" or data-submit)
+- The `disabled` attribute is passed to the card form submit button through context
   :::

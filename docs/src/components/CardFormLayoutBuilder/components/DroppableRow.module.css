@@ -1,0 +1,132 @@
+/**
+ * Styles for DroppableRow
+ */
+
+.row {
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.row.dragging {
+  border: 2px solid #2196f3;
+  background-color: #f3f8ff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.row.isOver {
+  border: 3px solid #4caf50;
+  background-color: #f1f8e9;
+  box-shadow: 0 8px 16px rgba(76, 175, 80, 0.15);
+}
+
+.dragHandle {
+  position: absolute;
+  top: -10px;
+  left: 12px;
+  background-color: #2196f3;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease;
+}
+
+.dragHandle.isOver {
+  background-color: #4caf50;
+}
+
+.removeButton {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.content {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  min-height: 70px;
+  padding-top: 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.content.empty {
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  border: 1px dashed #dee2e6;
+}
+
+.content.empty.isOver {
+  background-color: #e8f5e8;
+  border: 2px dashed #4caf50;
+}
+
+.content.filled {
+  align-items: stretch;
+  justify-content: flex-start;
+  background-color: transparent;
+  border: none;
+}
+
+.emptyState {
+  color: #6c757d;
+  font-style: italic;
+  text-align: center;
+  width: 100%;
+  padding: 1.5rem;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.2s ease;
+}
+
+.emptyState.isOver {
+  color: #2e7d32;
+}
+
+.emptyStateIcon {
+  opacity: 0.5;
+  display: flex;
+  justify-content: center;
+}
+
+.emptyStateText {
+  font-weight: normal;
+}
+
+.emptyStateText.isOver {
+  font-weight: 600;
+}
+
+.emptyStateHint {
+  font-size: 12px;
+  opacity: 0.7;
+}

@@ -5,9 +5,25 @@ sidebar_position: 3
 description: Learn how to customize the card payment form in your Primer Composable Checkout experience
 ---
 
+import CardFormLayoutBuilder from '@site/src/components/CardFormLayoutBuilder/CardFormLayoutBuilder';
+
 # Card Form Customizations Guide
 
 The Primer SDK's card form components provide a secure way to collect payment card information while offering extensive customization options. This guide explains the fundamental concepts behind card form customization and how to tailor it to match your brand's requirements.
+
+## Interactive Card Form Layout Builder
+
+Experience the power of drag-and-drop form building! The interactive builder below lets merchants visually design their card form layouts without writing code.
+
+**🎯 Key Features:**
+
+- **Drag & Drop**: Drag components from the palette directly into layout rows
+- **Live Preview**: See your HTML code update in real-time as you build
+- **Component Configuration**: Click the gear icon (⚙) to customize labels, placeholders, and accessibility attributes
+- **Reordering**: Drag rows vertically and components horizontally to perfect your layout
+- **Visual Feedback**: Clear visual cues show drag states and drop zones
+
+<CardFormLayoutBuilder />
 
 ## Card Form Component Architecture
 
@@ -48,6 +64,7 @@ The card form components have a strict hierarchical relationship:
 - `<primer-input-cvv>` - Secure field for security code collection
 - `<primer-input-card-holder-name>` - Field for cardholder name collection
 - `<primer-card-form-submit>` - Submit button with contextual styling
+
 </details>
 
 Each component is designed to work within the `<primer-card-form>` container, which provides:
@@ -177,6 +194,7 @@ flowchart TD
 1. Through the `<primer-card-form-submit>` component (recommended)
 2. Through any HTML button with `type="submit"`
 3. Through any element with the `data-submit` attribute
+
 </details>
 
 When submission is triggered, the component:

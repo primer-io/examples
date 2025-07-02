@@ -33,6 +33,58 @@ Before diving into the implementation, ensure your environment meets these requi
 Legacy browsers like Internet Explorer 11 aren't officially supported due to their non-standard DOM behavior and lack of support for modern Web Component features.
 :::
 
+## Server-Side Rendering Limitations
+
+:::warning Important SSR Limitation
+Primer Composable Checkout is **not supported in server-side rendering (SSR) frameworks out of the box**. The library relies on browser-specific APIs and must only be loaded on the client side.
+:::
+
+When using SSR frameworks like Next.js, Nuxt.js, or SvelteKit, you must ensure that Primer is only loaded in the browser environment. Here's how to handle this:
+
+### Next.js Example
+
+```javascript
+import { useEffect } from 'react';
+import { loadPrimer } from '@primer-io/primer-js';
+
+function MyCheckoutComponent() {
+  useEffect(() => {
+    // Only run on client side
+    if (typeof window !== 'undefined') {
+      console.log('🔧 Loading Primer components');
+      try {
+        loadPrimer();
+        console.log('✅ Primer components loaded successfully');
+      } catch (error: any) {
+        console.error('❌ Failed to load Primer components:', error);
+      }
+    }
+  }, []);
+
+  return (
+    <div>
+      {/* Your checkout components here */}
+      <primer-checkout client-token="your-client-token">
+        {/* Checkout content */}
+      </primer-checkout>
+    </div>
+  );
+}
+```
+
+### General SSR Framework Guidelines
+
+For other SSR frameworks, follow these principles:
+
+1. **Client-Side Only**: Always wrap `loadPrimer()` in client-side detection logic
+2. **Use Framework Patterns**: Utilize your framework's client-side lifecycle methods (useEffect, onMounted, etc.)
+3. **Error Handling**: Include proper error handling for loading failures
+4. **Component Placement**: Only render Primer components after successful client-side initialization
+
+:::tip Framework-Specific Solutions
+Each SSR framework has its own patterns for client-side code execution. Consult your framework's documentation for the recommended approach to client-side-only code execution.
+:::
+
 ## Before You Start
 
 Before integrating Primer Composable Checkout, ensure you have completed these prerequisites:
@@ -188,6 +240,47 @@ The SDK emits events to help you manage the checkout flow. All events bubble up 
 If you're updating from v0.1.x to v0.2.x, please note that all event names have changed to follow the `primer:*` namespace format. For detailed information on these changes and how to migrate, see the [Migration Guide from v0.1.x to v0.2.x](migration-guides/v01-to-v02).
 :::
 
+### Selecting the Checkout Component
+
+To listen for events or interact with the checkout programmatically, first select the primary checkout component:
+
+```javascript
+const checkout = document.querySelector('primer-checkout');
+```
+
+:::note Component Presence Required
+The checkout component must be present in the DOM before you can interact with it. Ensure your code runs after the component is loaded.
+:::
+
+### Alternative: Document-Level Event Listening
+
+All Primer events bubble up through the DOM, which means you can also listen for them at the document level. This approach is equally valid and may be preferred in some application architectures:
+
+```javascript
+// Alternative: Listen at document level (also valid)
+document.addEventListener('primer:state-change', (event) => {
+  const { isProcessing, isSuccessful, error } = event.detail;
+  // Handle state changes
+});
+
+document.addEventListener('primer:card-success', (event) => {
+  const result = event.detail.result;
+  // Handle card success
+});
+
+document.addEventListener('primer:card-error', (event) => {
+  const errors = event.detail.errors;
+  // Handle card errors
+});
+
+// All other Primer events work the same way...
+```
+
+**When to use each approach:**
+
+- **Component-level** (`checkout.addEventListener`): When you want to scope listeners to specific checkout instances or organize event handling per component
+- **Document-level** (`document.addEventListener`): When you prefer centralized event handling or want to ensure you catch all events regardless of component location
+
 ### Event Types Overview
 
 The `primer-checkout` component emits the following events:
@@ -245,18 +338,10 @@ checkout.addEventListener('primer:ready', (event) => {
 });
 ```
 
-### Card Form Events
+### Card Events
 
 ```javascript
-// Trigger card form submission programmatically
-const cardForm = document.querySelector('primer-card-form');
-cardForm.dispatchEvent(
-  new CustomEvent('primer:card-submit', {
-    bubbles: true,
-    composed: true,
-    detail: { source: 'custom-submit-button' },
-  }),
-);
+const checkout = document.querySelector('primer-checkout');
 
 // Handle successful card submission
 checkout.addEventListener('primer:card-success', (event) => {
@@ -274,33 +359,6 @@ checkout.addEventListener('primer:card-error', (event) => {
 checkout.addEventListener('primer:card-network-change', (event) => {
   const network = event.detail;
   // Handle card network detection/change
-});
-```
-
-### ACH Events
-
-For merchants using ACH (Automated Clearing House) payments, the SDK provides specific events to handle the ACH payment flow:
-
-```javascript
-// Handle ACH errors
-checkout.addEventListener('primer-ach-error', (event) => {
-  const error = event.detail.error;
-  // Handle ACH-specific errors
-});
-
-// Bank details collected successfully
-checkout.addEventListener('primer-ach-bank-details-collected', (event) => {
-  // Proceed with payment flow after bank details are collected
-});
-
-// ACH mandate confirmed by the customer
-checkout.addEventListener('primer-ach-mandate-confirmed', (event) => {
-  // Handle successful mandate confirmation
-});
-
-// ACH mandate declined by the customer
-checkout.addEventListener('primer-ach-mandate-declined', (event) => {
-  // Handle mandate decline
 });
 ```
 

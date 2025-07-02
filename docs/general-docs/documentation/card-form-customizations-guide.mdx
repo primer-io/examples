@@ -204,25 +204,128 @@ When submission is triggered, the component:
 3. Submits the payment if validation passes
 4. Emits success or error events based on the outcome
 
-## Event-Driven Validation
+## Event-Driven Integration
 
-The card form follows an event-driven validation approach:
+The card form follows an event-driven approach for both validation handling and programmatic control. This section covers how to listen for events and trigger actions programmatically.
+
+### Selecting Card Form Components
+
+To interact with card form components programmatically, you need to select them from the DOM:
 
 ```javascript
+// Select the main checkout component
+const checkout = document.querySelector('primer-checkout');
+
+// Select a specific card form (if using custom layout)
+const cardForm = document.querySelector('primer-card-form');
+```
+
+:::note Component Presence Required
+Components must be present in the DOM before you can interact with them. Ensure your code runs after the components are loaded and rendered in the UI.
+:::
+
+### Event Listening
+
+```javascript
+const checkout = document.querySelector('primer-checkout');
+
 // Listen for validation errors
-cardForm.addEventListener('primer:card-error', (event) => {
+checkout.addEventListener('primer:card-error', (event) => {
   const errors = event.detail.errors;
   // Handle validation errors
 });
 
 // Listen for successful submission
-cardForm.addEventListener('primer:card-success', (event) => {
+checkout.addEventListener('primer:card-success', (event) => {
   const result = event.detail.result;
   // Handle successful submission
+});
+
+// Listen for card network changes
+checkout.addEventListener('primer:card-network-change', (event) => {
+  const network = event.detail;
+  // Handle card network detection/change
 });
 ```
 
 These events bubble up to the `<primer-checkout>` component, allowing you to handle them at any level.
+
+### Programmatic Form Submission
+
+You can trigger card form submission programmatically by dispatching a `primer:card-submit` event to the card form component:
+
+```javascript
+// Select the card form component
+const cardForm = document.querySelector('primer-card-form');
+
+// Trigger submission programmatically
+cardForm.dispatchEvent(
+  new CustomEvent('primer:card-submit', {
+    bubbles: true,
+    composed: true,
+    detail: { source: 'custom-submit-button' },
+  }),
+);
+```
+
+:::important Component Must Be Present
+Programmatic submission only works when the `primer-card-form` component is present in the UI. This approach is useful for:
+
+- Custom submit buttons outside the card form
+- Triggering submission from other UI elements
+- Integrating with external form validation systems
+  :::
+
+**Complete Example: Custom Submit Button with Event Handling**
+
+```html
+<primer-checkout client-token="your-client-token">
+  <primer-main slot="main">
+    <div slot="payments">
+      <primer-card-form>
+        <div slot="card-form-content">
+          <primer-input-card-number></primer-input-card-number>
+          <primer-input-card-expiry></primer-input-card-expiry>
+          <primer-input-cvv></primer-input-cvv>
+          <!-- Custom submit button -->
+          <button type="button" id="custom-submit" class="custom-pay-button">
+            Pay Now
+          </button>
+        </div>
+      </primer-card-form>
+    </div>
+  </primer-main>
+</primer-checkout>
+
+<script>
+  // Set up custom submit button
+  document.getElementById('custom-submit').addEventListener('click', () => {
+    const cardForm = document.querySelector('primer-card-form');
+    if (cardForm) {
+      cardForm.dispatchEvent(
+        new CustomEvent('primer:card-submit', {
+          bubbles: true,
+          composed: true,
+          detail: { source: 'custom-pay-button' },
+        }),
+      );
+    }
+  });
+
+  // Handle submission results
+  const checkout = document.querySelector('primer-checkout');
+
+  checkout.addEventListener('primer:card-success', (event) => {
+    console.log('Payment successful:', event.detail.result);
+    // Handle success (e.g., redirect to confirmation page)
+  });
+
+  checkout.addEventListener('primer:card-error', (event) => {
+    console.log('Validation errors:', event.detail.errors);
+    // Handle errors (e.g., show error messages)
+  });
+</script>
+```
 
 ```mermaid
 sequenceDiagram

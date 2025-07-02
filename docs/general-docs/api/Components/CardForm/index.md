@@ -368,12 +368,14 @@ cardForm.dispatchEvent(
   });
 
   // Handle submission results
-  document.addEventListener('primer:card-success', (event) => {
+  const checkout = document.querySelector('primer-checkout');
+
+  checkout.addEventListener('primer:card-success', (event) => {
     console.log('Payment successful:', event.detail.result);
     // Handle success
   });
 
-  document.addEventListener('primer:card-error', (event) => {
+  checkout.addEventListener('primer:card-error', (event) => {
     console.log('Validation errors:', event.detail.errors);
     // Handle errors
   });
@@ -481,16 +483,16 @@ All card form input components have a mandatory dependency on the `primer-card-f
 <summary><strong>Handling Form Submission Events</strong></summary>
 
 ```javascript
-const cardForm = document.querySelector('primer-card-form');
+const checkout = document.querySelector('primer-checkout');
 
 // Listen for successful submissions
-cardForm.addEventListener('primer:card-success', (event) => {
+checkout.addEventListener('primer:card-success', (event) => {
   console.log('Payment successful!', event.detail.result);
   // Handle successful payment (e.g., show confirmation, redirect)
 });
 
 // Listen for validation errors
-cardForm.addEventListener('primer:card-error', (event) => {
+checkout.addEventListener('primer:card-error', (event) => {
   console.error('Validation errors:', event.detail.errors);
   // Handle errors (e.g., scroll to error, show notification)
 });

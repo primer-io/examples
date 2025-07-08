@@ -8,6 +8,21 @@ sidebar_position: 99
 
 This page documents all notable changes to Composable Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
+## v0.3.3 - Vault Initialization Fix (08-Jul-2025)
+
+🔧 **Bug Fix**:
+
+- Fixed vault manager initialization where vault would initialize even when disabled, causing unnecessary API calls and performance issues
+- Vault now uses lazy initialization and only creates when `vault.enabled` is true
+- Components now initialize gracefully when customer ID is missing - vault initialization fails silently without preventing other components from working
+
+📈 **Performance Improvements**:
+
+- Eliminated unnecessary API calls when vault is disabled
+- Improved SDK initialization speed when vault functionality is not needed
+
+---
+
 ## v0.3.2 - Payment Method Container Component (07-Jul-2025)
 
 ### ✨ New Components

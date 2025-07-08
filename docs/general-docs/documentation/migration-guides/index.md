@@ -11,3 +11,4 @@ This section provides guides to help you migrate your code between different ver
 ## Available Guides
 
 - [Migrating from v0.1.x to v0.2.x](./v01-to-v02) - Covers the event consolidation, PrimerJS class introduction, and callback changes
+- [Migrating from Event Listeners to Payment Method Container](./event-listeners-to-payment-method-container) - Learn how to simplify payment method layouts using the new declarative container component

@@ -338,6 +338,10 @@ checkout.addEventListener('primer:ready', (event) => {
 });
 ```
 
+:::tip New Payment Method Container
+For most use cases involving payment method layout and filtering, the new `primer-payment-method-container` component eliminates the need for manual `primer:methods-update` event handling. See the [Payment Method Container API documentation](/api/Components/payment-method-container-doc) for the simpler declarative approach.
+:::
+
 ### Card Events
 
 ```javascript
@@ -404,6 +408,30 @@ The `<primer-error-message-container>` component provides a ready-to-use solutio
 :::
 
 For more advanced customization options, including handling success and failure states, checkout flow customization, and more, refer to the [Layout Customizations Guide](/documentation/layout-customizations-guide).
+
+### Payment Method Configuration
+
+#### Using Payment Method Container (Recommended)
+
+For most use cases, the new `primer-payment-method-container` component provides a simpler declarative approach:
+
+```html
+<!-- Include specific payment methods -->
+<primer-payment-method-container
+  include="APPLE_PAY,GOOGLE_PAY"
+></primer-payment-method-container>
+
+<!-- Exclude specific payment methods -->
+<primer-payment-method-container
+  exclude="PAYMENT_CARD"
+></primer-payment-method-container>
+```
+
+See [API documentation](/api/Components/payment-method-container-doc) for complete usage guide.
+
+#### Alternative: Event-Driven Approach
+
+For advanced use cases requiring complex payment method handling, you can use the traditional event-driven approach with `primer:methods-update` events as shown in the Event Handling section above.
 
 ## Technical Limitations
 

@@ -8,6 +8,45 @@ sidebar_position: 99
 
 This page documents all notable changes to Composable Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
+## v0.3.2 - Payment Method Container Component (07-Jul-2025)
+
+### ✨ New Components
+
+- **Payment Method Container**: Introduced `primer-payment-method-container` component for simplified payment method layouts
+  - **Declarative filtering**: Use `include` and `exclude` attributes to control which payment methods are rendered
+  - **Eliminates verbose event listeners**: No more complex `primer:methods-update` event handling for basic layouts
+  - **Automatic updates**: Container automatically responds to payment method availability changes
+  - **Developer experience**: Significantly reduces boilerplate code for custom payment layouts
+
+### 📚 Documentation Updates
+
+- **API Documentation**: Added comprehensive [Payment Method Container API documentation](/api/Components/payment-method-container-doc)
+- **Getting Started Guide**: Updated to emphasize declarative container approach over verbose event listeners
+- **Layout Customization Guide**: Added examples using the new container component as the recommended approach
+
+### Migration Benefits
+
+- **Before**: Complex event listeners with manual filtering and state management
+- **After**: Simple HTML attributes for payment method organization
+- **Backward Compatible**: Existing event-driven implementations continue to work unchanged
+
+### Example Usage
+
+```html
+<!-- Simple sectioned layout -->
+<primer-payment-method-container
+  include="APPLE_PAY,GOOGLE_PAY"
+></primer-payment-method-container>
+<primer-payment-method-container
+  exclude="PAYMENT_CARD,APPLE_PAY,GOOGLE_PAY"
+></primer-payment-method-container>
+```
+
+📖 **Documentation & Migration**:
+
+- [📚 API Documentation](/api/Components/payment-method-container-doc) - Complete component reference
+- [🔄 Migration Guide](/documentation/migration-guides/event-listeners-to-payment-method-container) - Step-by-step migration from event listeners
+
 ## v0.3.1 - Payment Type Updates (20-Jun-2025)
 
 ### 🔧 Payment Type Enhancements

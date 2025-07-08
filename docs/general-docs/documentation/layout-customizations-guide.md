@@ -262,9 +262,33 @@ When customizing your checkout layout, be careful not to render duplicate card f
 
 If you're using a custom card form implementation, you should **not** include the `PAYMENT_CARD` payment method in your layout.
 
-### Dynamic Payment Method Rendering
+### Declarative Payment Method Filtering (Recommended)
 
-You can dynamically render payment methods by listening to the `primer:methods-update` event:
+The `primer-payment-method-container` component provides a declarative way to organize payment methods:
+
+```html
+<!-- Sectioned layout example -->
+<div slot="payments">
+  <!-- Quick pay options -->
+  <primer-payment-method-container
+    include="APPLE_PAY,GOOGLE_PAY"
+  ></primer-payment-method-container>
+
+  <!-- Alternative methods -->
+  <primer-payment-method-container
+    exclude="PAYMENT_CARD,APPLE_PAY,GOOGLE_PAY"
+  ></primer-payment-method-container>
+
+  <!-- Card form -->
+  <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
+</div>
+```
+
+This approach automatically filters available payment methods without requiring event listeners or manual state management. See the [Payment Method Container API documentation](/api/Components/payment-method-container-doc) for complete usage guide.
+
+### Alternative: Event-Driven Dynamic Rendering
+
+You can also dynamically render payment methods by listening to the `primer:methods-update` event:
 
 <details>
 <summary><strong>Example: Dynamic Payment Method Rendering</strong></summary>

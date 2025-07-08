@@ -1,8 +1,4 @@
-import {
-  InitializedPaymentMethod,
-  PrimerCheckoutComponent,
-} from '@primer-io/primer-js';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './styles.css';
 import { fetchClientToken } from './fetchClientToken.ts';
 
@@ -15,17 +11,6 @@ const CHECKOUT_CONFIG = {
 function App() {
   const [clientToken, setClientToken] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [card, setCard] = useState<InitializedPaymentMethod | undefined>(
-    undefined,
-  );
-  const [payPal, setPayPal] = useState<InitializedPaymentMethod | undefined>(
-    undefined,
-  );
-  const [otherMethods, setOtherMethods] = useState<InitializedPaymentMethod[]>(
-    [],
-  );
-
-  const checkoutRef = useRef<PrimerCheckoutComponent>(null);
 
   // Fetch client token on component mount
   useEffect(() => {
@@ -43,31 +28,6 @@ function App() {
     getToken();
   }, []);
 
-  // Add event listener for payment methods update
-  useEffect(() => {
-    if (!checkoutRef.current || !clientToken) return;
-
-    checkoutRef.current.addEventListener('primer:methods-update', (event) => {
-      const paymentMethods = event.detail;
-
-      // Get specific payment methods
-      const cardMethod = paymentMethods.get('PAYMENT_CARD');
-      const payPalMethod = paymentMethods.get('PAYPAL');
-
-      // Get other payment methods, filtering out card and PayPal
-      const others = paymentMethods
-        .toArray()
-        .filter(
-          (method) =>
-            method.type !== 'PAYMENT_CARD' && method.type !== 'PAYPAL',
-        );
-
-      setCard(cardMethod);
-      setPayPal(payPalMethod);
-      setOtherMethods(others);
-    });
-  }, [clientToken]);
-
   if (isLoading) {
     return <div className='loading'>Loading checkout...</div>;
   }
@@ -76,46 +36,28 @@ function App() {
     <div className='app'>
       <h1>Custom Checkout Layout</h1>
 
-      <primer-checkout
-        client-token={clientToken}
-        ref={checkoutRef}
-        options={CHECKOUT_CONFIG}
-      >
+      <primer-checkout client-token={clientToken} options={CHECKOUT_CONFIG}>
         <primer-main slot='main'>
           <div slot='payments' className='payment-methods'>
             {/* Card payment at the top */}
-            {card && (
-              <div className='card-container'>
-                <h2>Pay with Card</h2>
-                <primer-payment-method type={card.type}></primer-payment-method>
-              </div>
-            )}
-            <primer-error-message-container></primer-error-message-container>
-            {/* PayPal with special styling */}
-            {payPal && (
-              <div className='paypal-container'>
-                <h2>Quick Checkout</h2>
-                <primer-payment-method
-                  type={payPal.type}
-                ></primer-payment-method>
-              </div>
-            )}
+            <div className='card-container'>
+              <h2>Pay with Card</h2>
+              <primer-payment-method type='PAYMENT_CARD'></primer-payment-method>
+            </div>
 
-            {/* Other payment methods */}
-            {otherMethods.length > 0 && (
-              <div className='other-methods'>
-                <h2>Alternative Payment Methods</h2>
-                <div className='methods-grid'>
-                  {otherMethods.map((method) => (
-                    <div key={method.type} className='method-item'>
-                      <primer-payment-method
-                        type={method.type}
-                      ></primer-payment-method>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            <primer-error-message-container></primer-error-message-container>
+
+            {/* PayPal with special styling */}
+            <div className='paypal-container'>
+              <h2>Quick Checkout</h2>
+              <primer-payment-method type='PAYPAL'></primer-payment-method>
+            </div>
+
+            {/* Other payment methods using container */}
+            <div className='other-methods'>
+              <h2>Alternative Payment Methods</h2>
+              <primer-payment-method-container exclude='PAYMENT_CARD,PAYPAL'></primer-payment-method-container>
+            </div>
           </div>
         </primer-main>
       </primer-checkout>

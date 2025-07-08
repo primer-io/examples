@@ -1,7 +1,7 @@
 ---
 title: Card Form
 sidebar_label: <primer-card-form>
-sidebar_position: 3
+sidebar_position: 4
 description: The CardForm component provides a container for card input components, handling form submission and validation.
 ---
 

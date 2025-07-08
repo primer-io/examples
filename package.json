@@ -19,10 +19,21 @@
     "lint:es": "turbo run lint",
     "lint:ts": "turbo run check-types",
     "format": "prettier . --write",
-    "lint:format": "prettier . --check"
+    "lint:format": "prettier . --check",
+    "prepare": "simple-git-hooks"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs,json,css,scss,html,md}": [
+      "prettier --write"
+    ]
   },
   "devDependencies": {
+    "lint-staged": "^16.1.2",
     "prettier": "^3.5.3",
+    "simple-git-hooks": "^2.13.0",
     "turbo": "2.5.3"
   }
 }

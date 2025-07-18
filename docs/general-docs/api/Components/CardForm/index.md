@@ -509,6 +509,10 @@ The CardForm component uses the following CSS custom properties for styling:
 | `--primer-space-small`  | Spacing between inline elements (default: `8px`) |
 | `--primer-space-medium` | Spacing between block elements (default: `16px`) |
 
+## Co-branded Card Schemes Support
+
+The `<primer-card-form>` component has been built to support co-branded card schemes like Cartes Bancaires (CB) natively. When the card networks detect a co-branded card, the network switcher will display automatically. No additional configuration is needed on the Primer.js side.
+
 ## Key Considerations
 
 :::caution Important

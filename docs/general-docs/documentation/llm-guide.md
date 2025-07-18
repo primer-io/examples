@@ -67,7 +67,7 @@ Here are some effective prompt examples for using our documentation with LLMs:
 ### Using the Raw Link
 
 ```
-Please visit https://context7.com/primer-io/examples and use the documentation to implement a checkout flow with Primer's components that includes PayPal as the first payment method and CardForm as the second.
+Please visit https://context7.com/primer-io/examples/llms.txt and use the documentation to implement a checkout flow with Primer's components that includes PayPal as the first payment method and CardForm as the second.
 ```
 
 ### Using Context7 MCP Server

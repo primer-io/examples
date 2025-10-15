@@ -140,18 +140,6 @@
   width: 100%; /* Ensure the container takes full width */
 }
 
-.betaBadge {
-  background-color: #fff;
-  color: #4456e3;
-  font-size: 0.9rem;
-  font-weight: 700;
-  padding: 0.2rem 0.7rem;
-  border-radius: 20px;
-  margin-left: 0.7rem;
-  vertical-align: middle;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 /* Core Benefits Section */
 .benefits {
   padding: 5rem 0;
@@ -455,73 +443,6 @@
   opacity: 0.9;
 }
 
-/* Beta Callout Section */
-.betaCallout {
-  padding: 5rem 0;
-  background-color: var(--ifm-color-white);
-}
-
-.betaCalloutContent {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 3rem 1.5rem; /* Default padding for larger screens */
-  padding-top: 4rem; /* Extra top padding to accommodate beta banner */
-  background-color: var(--ifm-color-emphasis-100);
-  border-radius: 16px;
-  text-align: center;
-  position: relative;
-  box-shadow:
-    0 8px 20px rgba(0, 0, 0, 0.04),
-    0 2px 6px rgba(0, 0, 0, 0.03);
-  word-wrap: break-word; /* Ensure long words wrap properly */
-  overflow-wrap: break-word; /* Modern property for word wrapping */
-  hyphens: auto; /* Enable hyphenation for better word breaks */
-  box-sizing: border-box; /* Ensure padding is included in width */
-  width: 100%; /* Ensure it's responsive */
-  max-width: calc(100% - 1rem); /* Reduce margin to prevent overflow */
-  /* Removed overflow: hidden to prevent cutting off the beta banner */
-}
-
-.betaBanner {
-  position: absolute;
-  top: -20px; /* Moved slightly higher to ensure visibility */
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: var(--ifm-color-primary); /* Updated to use primary color */
-  color: white;
-  font-weight: 700;
-  padding: 0.4rem 2rem;
-  border-radius: 30px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  white-space: nowrap; /* Prevent wrapping of badge text */
-  z-index: 2; /* Ensure it appears above the pattern */
-}
-
-.betaCalloutContent h2 {
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: var(--ifm-color-primary); /* Updated to use primary color */
-  margin-bottom: 1.5rem;
-  margin-top: 1rem;
-  word-wrap: break-word; /* Ensure long words wrap properly */
-  position: relative;
-  z-index: 1; /* Ensure text appears above pattern */
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-}
-
-.betaCalloutContent p {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: var(--ifm-color-primary); /* Updated to use primary color */
-  margin-bottom: 2rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-  z-index: 1; /* Ensure text appears above pattern */
-}
-
 /* Add medium screen breakpoint for better tablet support */
 @media (max-width: 1200px) and (min-width: 997px) {
   .benefitsGrid {
@@ -605,15 +526,6 @@
     font-size: 2rem;
   }
 
-  .betaCalloutContent {
-    padding: 2rem 1.5rem;
-    margin: 0 1rem; /* Add margin for small screens */
-  }
-
-  .betaCalloutContent h2 {
-    font-size: 1.8rem;
-  }
-
   .codeExampleWrapper {
     max-width: 100%; /* Ensure code example is responsive */
     margin: 0 1rem; /* Add some margin */
@@ -658,20 +570,10 @@
     padding: 3rem 1rem;
   }
 
-  /* Adjusted beta callout padding */
-  .betaCallout {
-    padding: 3rem 0.5rem;
-  }
-
   .benefitCard {
     padding: 1.5rem; /* Increased from 1rem to ensure consistent padding */
     margin-bottom: 1rem; /* Added margin for better spacing between cards */
     min-width: 0; /* Prevent content from forcing card width */
-  }
-
-  .betaCalloutContent {
-    padding: 1.75rem 1rem; /* Reduced horizontal padding */
-    margin: 0 0.5rem; /* Reduced side margins */
   }
 
   .benefitIcon {
@@ -745,39 +647,5 @@
   .heroCta a {
     width: 100%; /* Full width buttons */
     text-align: center;
-  }
-
-  .betaBanner {
-    padding: 0.3rem 1.5rem; /* Smaller banner on tiny screens */
-    font-size: 0.9rem;
-  }
-
-  .betaCalloutContent {
-    padding: 2rem 0.75rem; /* Reduced padding for very small screens */
-    max-width: calc(100% - 0.5rem); /* Minimized margins */
-    margin: 0 0.25rem; /* Tiny margins for very small screens */
-  }
-
-  .betaCalloutContent h2 {
-    font-size: 1.5rem; /* Slightly smaller for better fit */
-    margin-bottom: 0.75rem; /* Reduced spacing */
-  }
-
-  .betaCalloutContent p {
-    font-size: 0.95rem; /* Smaller for very tiny screens */
-    margin-bottom: 1.5rem; /* Reduced spacing */
-  }
-
-  /* Make the beta button more compact */
-  .betaCalloutContent .button--lg {
-    padding: 0.6rem 1rem; /* More compact padding */
-    font-size: 0.95rem; /* Smaller text */
-    white-space: normal; /* Allow text to wrap */
-    height: auto; /* Allow multi-line text */
-    min-height: 40px; /* Ensure minimum touchable height */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    max-width: 100%; /* Ensure it doesn't overflow */
   }
 }

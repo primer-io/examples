@@ -75,14 +75,6 @@ const config: Config = {
       defaultMode: 'light',
       disableSwitch: true,
     },
-    announcementBar: {
-      id: 'beta_announcement',
-      content:
-        '🚧 <b>Pilot Program:</b> Checkout Components are in beta. <a href="/pilot-program">Learn what this means</a>.',
-      backgroundColor: '#FFF8E1', // Light yellow background
-      textColor: '#856404', // Darker text for contrast
-      isCloseable: false, // Ensure users always see this notice
-    },
     navbar: {
       title: 'Checkout Components',
       logo: {
@@ -94,12 +86,6 @@ const config: Config = {
       },
       hideOnScroll: false,
       items: [
-        {
-          to: '/pilot-program',
-          label: 'Pilot',
-          position: 'left',
-          className: 'navbar-beta-item',
-        },
         {
           type: 'docSidebar',
           sidebarId: 'documentation',

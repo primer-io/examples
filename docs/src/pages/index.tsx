@@ -17,10 +17,7 @@ function HomepageHeader() {
         <div className={styles.heroContent}>
           <div className={styles.heroText}>
             <Heading as='h1' className={styles.heroTitle}>
-              Checkout Components&nbsp;
-              <Link to='/pilot-program' className={styles.betaBadge}>
-                Pilot Program
-              </Link>
+              Checkout Components
             </Heading>
             <p className={styles.heroSubtitle}>
               The next-generation checkout experience that combines the{' '}
@@ -34,12 +31,6 @@ function HomepageHeader() {
                 to='/documentation/getting-started'
               >
                 Start Building
-              </Link>
-              <Link
-                className='button button--secondary button--lg'
-                to='/pilot-program'
-              >
-                Learn About Pilot Program
               </Link>
             </div>
           </div>
@@ -260,32 +251,6 @@ function ShowcaseSection() {
   );
 }
 
-function BetaCallout() {
-  return (
-    <section className={styles.betaCallout}>
-      <div className='container'>
-        <div className={styles.betaCalloutContent}>
-          <div className={styles.betaBanner}>
-            <span>Pilot Program</span>
-          </div>
-          <Heading as='h2'>Join the Pilot Program</Heading>
-          <p>
-            Checkout Components is currently in beta. Join our Pilot Program to
-            get early access, shape the future of the product, and receive
-            direct support from our engineering team.
-          </p>
-          <Link
-            className='button button--primary button--lg'
-            to='/pilot-program'
-          >
-            Learn About the Pilot Program
-          </Link>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export default function Home() {
   const { siteConfig } = useDocusaurusContext();
 
@@ -301,7 +266,6 @@ export default function Home() {
         <StyleFeature />
         <CodeExample />
         <ShowcaseSection />
-        <BetaCallout />
       </main>
     </Layout>
   );

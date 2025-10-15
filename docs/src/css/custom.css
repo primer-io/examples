@@ -104,20 +104,3 @@ strong,
 b {
   font-weight: 700;
 }
-
-.navbar-beta-item {
-  background-color: #f9d147;
-  color: #000 !important;
-  font-weight: bold;
-  padding: 0.25rem 0.6rem;
-  border-radius: 8px;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-  font-size: 0.8rem;
-  transition: background-color 0.2s ease;
-}
-
-.navbar-beta-item:hover {
-  background-color: #f0c83d;
-  color: #000 !important;
-}

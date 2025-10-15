@@ -22,3 +22,9 @@ temp
 .npmrc
 
 examples/react-web-components/src/clientToken.ts
+
+.claude/
+
+.serena/
+
+temporary/

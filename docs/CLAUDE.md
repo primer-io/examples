@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Architecture
 
-This is a monorepo for Primer's Composable Checkout documentation and examples using Turbo and Yarn workspaces:
+This is a monorepo for Primer's Primer Checkout documentation and examples using Turbo and Yarn workspaces:
 
 - `/docs` - Docusaurus documentation site for SDK Components
 - `/examples` - Multiple standalone integration examples using `@primer-io/primer-js`

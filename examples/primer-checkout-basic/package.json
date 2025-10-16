@@ -1,12 +1,11 @@
 {
-  "name": "checkout-components-vaulted",
+  "name": "primer-checkout-basic",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "check-types": "tsc --noemit -p tsconfig.json",
     "preview": "vite preview"
   },
   "dependencies": {

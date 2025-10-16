@@ -2,16 +2,16 @@
 title: Layout Customizations Guide
 sidebar_label: Layout Customizations
 sidebar_position: 4
-description: Learn how to customize the layout of your checkout experience with Primer Composable Checkout
+description: Learn how to customize the layout of your checkout experience with Primer Checkout
 ---
 
 # Layout Customizations Guide
 
-Primer Composable Checkout provides a flexible, slot-based architecture that allows you to customize the checkout layout while maintaining the core payment functionality. This guide explains the fundamental concepts behind layout customization and how to implement your own checkout experience.
+Primer Checkout provides a flexible, slot-based architecture that allows you to customize the checkout layout while maintaining the core payment functionality. This guide explains the fundamental concepts behind layout customization and how to implement your own checkout experience.
 
 ## Understanding Slot-Based Architecture
 
-The Composable Checkout SDK uses **slots** as the primary mechanism for layout customization. Slots are named placeholders in components where you can insert your own content.
+Primer Checkout uses **slots** as the primary mechanism for layout customization. Slots are named placeholders in components where you can insert your own content.
 
 ```mermaid
 flowchart TD

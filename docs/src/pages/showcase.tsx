@@ -14,10 +14,10 @@ function ShowcaseHeader() {
       <div className='container'>
         <div className={styles.showcaseHeaderContent}>
           <Heading as='h1' className={styles.showcaseTitle}>
-            Checkout Components Showcase
+            Primer Checkout Showcase
           </Heading>
           <p className={styles.showcaseSubtitle}>
-            Explore practical examples of Checkout Components implementations
+            Explore practical examples of Primer Checkout implementations
           </p>
         </div>
       </div>
@@ -57,8 +57,8 @@ function ShowcaseDisclaimer() {
                 methods like <strong>Google Pay</strong> and{' '}
                 <strong>Apple Pay</strong> may not work properly in these
                 StackBlitz showcases due to cross-origin restrictions. These are{' '}
-                <strong>StackBlitz environment limitations only</strong> - our
-                Checkout Components work fully in production environments.
+                <strong>StackBlitz environment limitations only</strong> -
+                Primer Checkout works fully in production environments.
               </p>
             </div>
           </div>
@@ -90,7 +90,7 @@ function ShowcaseExamples() {
             </p>
             <div className={styles.exampleLinks}>
               <Link
-                to='https://stackblitz.com/edit/checkout-components-basic?file=index.html'
+                to='https://stackblitz.com/edit/primer-checkout-basic?file=index.html'
                 className={styles.exampleLink}
                 target='_blank'
                 rel='noopener noreferrer'
@@ -103,7 +103,7 @@ function ShowcaseExamples() {
           <div className={styles.exampleMedia}>
             <div className={styles.embedWrapper}>
               <iframe
-                src='https://stackblitz.com/edit/checkout-components-basic?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
+                src='https://stackblitz.com/edit/primer-checkout-basic?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
                 title='Basic Checkout Implementation'
                 className={styles.embedFrameTall}
                 loading='lazy'
@@ -129,7 +129,7 @@ function ShowcaseExamples() {
             </p>
             <div className={styles.exampleLinks}>
               <Link
-                to='https://stackblitz.com/edit/checkout-components-vaulted?file=index.html'
+                to='https://stackblitz.com/edit/primer-checkout-vaulted?file=index.html'
                 className={styles.exampleLink}
                 target='_blank'
                 rel='noopener noreferrer'
@@ -145,7 +145,7 @@ function ShowcaseExamples() {
           <div className={styles.exampleMedia}>
             <div className={styles.embedWrapper}>
               <iframe
-                src='https://stackblitz.com/edit/checkout-components-vaulted?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
+                src='https://stackblitz.com/edit/primer-checkout-vaulted?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
                 title='Vaulted Payment Method Component'
                 className={styles.embedFrameTall}
                 loading='lazy'
@@ -173,7 +173,7 @@ function ShowcaseExamples() {
             </p>
             <div className={styles.exampleLinks}>
               <Link
-                to='https://stackblitz.com/edit/checkout-components-themes?file=README.md'
+                to='https://stackblitz.com/edit/primer-checkout-themes?file=README.md'
                 className={styles.exampleLink}
                 target='_blank'
                 rel='noopener noreferrer'
@@ -186,7 +186,7 @@ function ShowcaseExamples() {
           <div className={styles.exampleMedia}>
             <div className={styles.embedWrapper}>
               <iframe
-                src='https://stackblitz.com/edit/checkout-components-themes?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
+                src='https://stackblitz.com/edit/primer-checkout-themes?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
                 title='Custom-Styled Checkout Example'
                 className={styles.embedFrameTall}
                 loading='lazy'
@@ -206,7 +206,7 @@ function ShowcaseExamples() {
             </p>
             <div className={styles.exampleLinks}>
               <Link
-                to='https://stackblitz.com/edit/checkout-components-custom-layout?file=index.html'
+                to='https://stackblitz.com/edit/primer-checkout-custom-layout?file=index.html'
                 className={styles.exampleLink}
                 target='_blank'
                 rel='noopener noreferrer'
@@ -219,7 +219,7 @@ function ShowcaseExamples() {
           <div className={styles.exampleMedia}>
             <div className={styles.embedWrapper}>
               <iframe
-                src='https://stackblitz.com/edit/checkout-components-custom-layout?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
+                src='https://stackblitz.com/edit/primer-checkout-custom-layout?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
                 title='Custom-Styled Checkout Example'
                 className={styles.embedFrame}
                 loading='lazy'
@@ -239,7 +239,7 @@ function ShowcaseExamples() {
             </p>
             <div className={styles.exampleLinks}>
               <Link
-                to='https://stackblitz.com/edit/checkout-components-custom-form?file=index.html'
+                to='https://stackblitz.com/edit/primer-checkout-custom-form?file=index.html'
                 className={styles.exampleLink}
                 target='_blank'
                 rel='noopener noreferrer'
@@ -252,7 +252,7 @@ function ShowcaseExamples() {
           <div className={styles.exampleMedia}>
             <div className={styles.embedWrapper}>
               <iframe
-                src='https://stackblitz.com/edit/checkout-components-custom-form?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
+                src='https://stackblitz.com/edit/primer-checkout-custom-form?ctl=1&embed=1&file=index.html&hideExplorer=1&hideNavigation=1&view=preview'
                 title='Custom Card Form Layout Example'
                 className={styles.embedFrame}
                 loading='lazy'
@@ -283,7 +283,7 @@ function ComingSoonExamples() {
             </div>
             <Heading as='h3'>React Integration</Heading>
             <p>
-              A complete example of integrating Checkout Components with React
+              A complete example of integrating Primer Checkout with React
               applications, including state management and component wrappers
             </p>
           </div>
@@ -294,7 +294,7 @@ function ComingSoonExamples() {
             </div>
             <Heading as='h3'>Vue.js Integration</Heading>
             <p>
-              A complete example of integrating Checkout Components with Vue.js
+              A complete example of integrating Primer Checkout with Vue.js
               applications
             </p>
           </div>
@@ -305,7 +305,7 @@ function ComingSoonExamples() {
             </div>
             <Heading as='h3'>Angular Integration</Heading>
             <p>
-              Learn how to use Checkout Components within an Angular application
+              Learn how to use Primer Checkout within an Angular application
               framework
             </p>
           </div>
@@ -320,8 +320,8 @@ export default function Showcase() {
 
   return (
     <Layout
-      title='Showcase | Checkout Components'
-      description="Explore practical examples and implementations of Primer's Checkout Components SDK."
+      title='Showcase | Primer Checkout'
+      description='Explore practical examples and implementations of Primer Checkout.'
     >
       <ShowcaseHeader />
       <main>

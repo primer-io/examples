@@ -2,7 +2,7 @@
 title: LLM Guide
 sidebar_label: LLM Guide
 sidebar_position: 5
-description: Learn how to integrate and use Large Language Models with Primer Composable Checkout
+description: Learn how to integrate and use Large Language Models with Primer Checkout
 ---
 
 # LLM Guide
@@ -36,7 +36,7 @@ You can access our LLM-friendly documentation in several ways:
 You can directly ask an LLM to retrieve and analyze our documentation by providing the Context7 link:
 
 ```
-Please analyze the Primer Composable Checkout documentation at https://context7.com/primer-io/examples/llms.txt
+Please analyze the Primer Checkout documentation at https://context7.com/primer-io/examples/llms.txt
 ```
 
 ### Option 2: Copy the Documentation Text

@@ -1,6 +1,6 @@
 # Custom Layout Example
 
-This example demonstrates how to create a custom payment layout using Primer's Composable Checkout SDK. It showcases how to organize different payment methods into sections with custom styling and use the new `primer-payment-method-container` component for simplified payment method management.
+This example demonstrates how to create a custom payment layout using Primer Checkout. It showcases how to organize different payment methods into sections with custom styling and use the new `primer-payment-method-container` component for simplified payment method management.
 
 ## Features
 

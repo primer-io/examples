@@ -7,7 +7,7 @@ sidebar_position: 7
 
 ## Overview
 
-The Base Components folder contains the fundamental UI building blocks of the Primer Composable Checkout SDK. These components are designed to be simple, reusable, and consistent across all checkout implementations.
+The Base Components folder contains the fundamental UI building blocks of the Primer Checkout SDK. These components are designed to be simple, reusable, and consistent across all checkout implementations.
 
 ```mermaid
 flowchart TD

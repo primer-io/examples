@@ -27,7 +27,7 @@ This is a Yarn workspaces monorepo using Turbo for task orchestration. It contai
 Navigate to the specific workspace directory and run:
 
 - `cd docs && yarn dev` - Start docs site on port 9000
-- `cd examples/checkout-components-basic && yarn dev` - Start specific example
+- `cd examples/primer-checkout-basic && yarn dev` - Start specific example
 
 ### Git Hooks
 
@@ -67,20 +67,20 @@ Each example in `/examples` is a standalone demonstration:
 
 ### Example Types
 
-1. **Basic Examples** (`checkout-components-basic`)
+1. **Basic Examples** (`primer-checkout-basic`)
 
    - Vanilla TypeScript + Vite
    - Minimal dependencies
    - Focus on SDK fundamentals
 
-2. **React Examples** (`checkout-components-custom-layout`, `checkout-components-custom-form`)
+2. **React Examples** (`primer-checkout-custom-layout`, `primer-checkout-custom-form`)
 
    - React 19 + Vite + TypeScript
    - Include ESLint configuration
    - Demonstrate component integration patterns
    - Commands: `yarn dev`, `yarn build`, `yarn lint`, `yarn check-types`
 
-3. **Theme/Customization Examples** (`checkout-components-themes`, `checkout-components-vaulted`)
+3. **Theme/Customization Examples** (`primer-checkout-themes`, `primer-checkout-vaulted`)
    - Show styling and theming capabilities
    - Demonstrate advanced SDK features
 

@@ -2,23 +2,23 @@
 sidebar_position: 2
 title: Technology
 sidebar_label: Technology
-description: Understand the core web technologies that power Primer Composable Checkout components
+description: Understand the core web technologies that power Primer Checkout components
 ---
 
 # Understanding Primer Components Technology
 
-This guide introduces the core technologies that power Primer Composable Checkout. While you won't need to implement these technologies directly, understanding them will help you better use and customize the checkout components in your projects.
+This guide introduces the core technologies that power Primer Checkout. While you won't need to implement these technologies directly, understanding them will help you better use and customize the checkout components in your projects.
 
 :::tip What you'll learn
 
-- The technologies that make Primer Composable Checkout work
+- The technologies that make Primer Checkout work
 - How these technologies enable component isolation and customization
 - What these technical foundations mean for your development experience
   :::
 
 ## Web Components: The Foundation
 
-Primer Composable Checkout is built on [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) - a set of web platform features that enable reusable, encapsulated components. Think of them as specialized HTML elements that:
+Primer Checkout is built on [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) - a set of web platform features that enable reusable, encapsulated components. Think of them as specialized HTML elements that:
 
 - Keep their internal workings private and protected
 - Can be easily customized through properties and attributes
@@ -307,7 +307,7 @@ Lit is a lightweight library for building fast, reactive web components. Learn m
 
 ## Component Customization Technologies
 
-Primer Composable Checkout components can be customized through multiple complementary technologies:
+Primer Checkout components can be customized through multiple complementary technologies:
 
 ```mermaid
 flowchart TD
@@ -329,7 +329,7 @@ Together, these technologies create a flexible system that can adapt to your spe
 
 ## Browser Support
 
-Primer Composable Checkout works in all modern browsers:
+Primer Checkout works in all modern browsers:
 
 | Browser | Support |
 | ------- | ------- |
@@ -362,5 +362,5 @@ For a deeper understanding of Web Components, check out the following resources:
   :::
 
 :::tip Remember
-You don't need to implement these technologies yourself - Primer Composable Checkout handles the complexity for you. This knowledge simply helps you use the components more effectively.
+You don't need to implement these technologies yourself - Primer Checkout handles the complexity for you. This knowledge simply helps you use the components more effectively.
 :::

@@ -530,7 +530,7 @@ stateDiagram-v2
 
 ## CSS Custom Properties
 
-Checkout Components use CSS Custom Properties (CSS Variables) to maintain a consistent design language across components. These tokens provide a standardized way to customize the appearance of your UI components.
+Primer Checkout uses CSS Custom Properties (CSS Variables) to maintain a consistent design language across components. These tokens provide a standardized way to customize the appearance of your UI components.
 
 You can apply tokens in two ways:
 
@@ -719,7 +719,7 @@ The simplest implementation with default behavior and styling:
 
   // Listen for SDK initialization
   checkout.addEventListener('primer:ready', (event) => {
-    console.log('Checkout SDK initialized');
+    console.log('Primer Checkout initialized');
   });
 </script>
 ```
@@ -780,7 +780,7 @@ If an unsupported locale is provided, the component will fall back to the defaul
 :::
 
 :::warning
-At present the Checkout Components only support left-to-right (LTR) languages.
+At present Primer Checkout only supports left-to-right (LTR) languages.
 :::
 
 ## Disable Loader Option

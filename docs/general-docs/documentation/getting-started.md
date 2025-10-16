@@ -1,17 +1,17 @@
 ---
 sidebar_position: 1
 title: Getting Started
-description: Learn how to install and set up Primer Composable Checkout in your web application
+description: Learn how to install and set up Primer Checkout in your web application
 ---
 
-# Getting Started with Primer Composable Checkout
+# Getting Started with Primer Checkout
 
-Welcome to Primer's Composable Checkout SDK! This guide will help you integrate our payment solution into your website or web application.
+Welcome to Primer Checkout! This guide will help you integrate our payment solution into your website or web application.
 
 :::tip What you'll learn
 
 - Set up a client session for Primer payments
-- Install and initialize the Primer Composable Checkout SDK
+- Install and initialize Primer Checkout
 - Implement a basic checkout experience
 - Style your checkout with light and dark themes
 - Handle payment events and checkout state changes
@@ -36,7 +36,7 @@ Legacy browsers like Internet Explorer 11 aren't officially supported due to the
 ## Server-Side Rendering Limitations
 
 :::warning Important SSR Limitation
-Primer Composable Checkout is **not supported in server-side rendering (SSR) frameworks out of the box**. The library relies on browser-specific APIs and must only be loaded on the client side.
+Primer Checkout is **not supported in server-side rendering (SSR) frameworks out of the box**. The library relies on browser-specific APIs and must only be loaded on the client side.
 :::
 
 When using SSR frameworks like Next.js, Nuxt.js, or SvelteKit, you must ensure that Primer is only loaded in the browser environment. Here's how to handle this:
@@ -87,7 +87,7 @@ Each SSR framework has its own patterns for client-side code execution. Consult 
 
 ## Before You Start
 
-Before integrating Primer Composable Checkout, ensure you have completed these prerequisites:
+Before integrating Primer Checkout, ensure you have completed these prerequisites:
 
 1. You're [ready to process payments](https://primer.io/docs/payments/process-payments)
 2. [Universal Checkout is properly configured](https://primer.io/docs/payments/universal-checkout/configure-universal-checkout-without-code) in your Primer Dashboard
@@ -112,7 +112,7 @@ A **client session** is required to initialize the checkout experience. This ses
 - Include at minimum: - `orderId`: Your reference for tracking this payment - `currencyCode`: Three-letter currency code (e.g., "USD") - `order.lineItems`: Details of items in the order
 </details>
 
-The response will contain a `clientToken` that you'll use in the next steps to initialize Primer Composable Checkout.
+The response will contain a `clientToken` that you'll use in the next steps to initialize Primer Checkout.
 
 ## Installation
 
@@ -145,7 +145,7 @@ For comprehensive details on all available attributes, refer to the [Checkout Co
 
 ## Adding Styles
 
-The Primer Composable Checkout SDK uses CSS Custom Properties to manage its visual appearance. The styles are loaded automatically when you call `loadPrimer();`
+Primer Checkout uses CSS Custom Properties to manage its visual appearance. The styles are loaded automatically when you call `loadPrimer();`
 
 ### Theme Implementation Options
 
@@ -168,7 +168,7 @@ document.querySelector('primer-checkout').className = 'primer-dark-theme';
 
 ## Customizing with the Styling API
 
-The Primer Composable Checkout SDK provides a comprehensive Styling API that allows you to customize the visual appearance of all checkout components. This API uses CSS Custom Properties (CSS Variables) to maintain a consistent design language across components.
+Primer Checkout provides a comprehensive Styling API that allows you to customize the visual appearance of all checkout components. This API uses CSS Custom Properties (CSS Variables) to maintain a consistent design language across components.
 
 ```html
 <!-- Example of styling customization using CSS variables -->
@@ -207,7 +207,7 @@ The Styling API also supports providing styles through a JSON object using the `
 </primer-checkout>
 ```
 
-For detailed information on all available styling variables and customization options, refer to the [Composable Checkout Styling API](/api/styling-api-docs).
+For detailed information on all available styling variables and customization options, refer to the [Primer Checkout Styling API](/api/styling-api-docs).
 
 ## TypeScript Support
 
@@ -435,7 +435,7 @@ For advanced use cases requiring complex payment method handling, you can use th
 
 ## Technical Limitations
 
-When working with the Primer Composable Checkout SDK, be aware of the following limitations:
+When working with Primer Checkout, be aware of the following limitations:
 
 :::warning Key Limitations
 

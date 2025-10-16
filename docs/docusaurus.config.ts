@@ -4,7 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 const config: Config = {
-  title: 'Checkout Components Docs',
+  title: 'Primer Checkout Docs',
   tagline:
     'Shape extraordinary commerce experiences, process payments with precision, and accelerate growth without compromise.',
   favicon: 'img/favicon.ico',
@@ -18,11 +18,11 @@ const config: Config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'primer.io', // Usually your GitHub org/user name.
-  projectName: 'composable-checkout', // Usually your repo name.
+  projectName: 'primer-checkout', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
-  noIndex: true,
+  noIndex: false,
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
@@ -100,9 +100,9 @@ const config: Config = {
       disableSwitch: true,
     },
     navbar: {
-      title: 'Checkout Components',
+      title: 'Primer Checkout',
       logo: {
-        alt: 'Composable Checkout Logo',
+        alt: 'Primer Checkout Logo',
         src: 'https://goat-assets.production.core.primer.io/brand/icon/primer.svg',
         style: {
           color: '#FFA49B',

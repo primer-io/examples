@@ -7362,78 +7362,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"checkout-components-basic@workspace:examples/checkout-components-basic":
-  version: 0.0.0-use.local
-  resolution: "checkout-components-basic@workspace:examples/checkout-components-basic"
-  dependencies:
-    "@primer-io/primer-js": "npm:0.3.3"
-    typescript: "npm:5.7.3"
-    vite: "npm:^6.2.0"
-  languageName: unknown
-  linkType: soft
-
-"checkout-components-custom-form@workspace:examples/checkout-components-custom-form":
-  version: 0.0.0-use.local
-  resolution: "checkout-components-custom-form@workspace:examples/checkout-components-custom-form"
-  dependencies:
-    "@eslint/js": "npm:^9.21.0"
-    "@primer-io/primer-js": "npm:0.3.3"
-    "@types/react": "npm:^19.0.10"
-    "@types/react-dom": "npm:^19.0.4"
-    "@vitejs/plugin-react": "npm:^4.3.4"
-    eslint: "npm:^9.21.0"
-    eslint-plugin-react-hooks: "npm:^5.1.0"
-    eslint-plugin-react-refresh: "npm:^0.4.19"
-    globals: "npm:^16.0.0"
-    react: "npm:^19.0.0"
-    react-dom: "npm:^19.0.0"
-    typescript: "npm:5.7.3"
-    typescript-eslint: "npm:^8.24.1"
-    vite: "npm:^6.2.0"
-  languageName: unknown
-  linkType: soft
-
-"checkout-components-custom-layout@workspace:examples/checkout-components-custom-layout":
-  version: 0.0.0-use.local
-  resolution: "checkout-components-custom-layout@workspace:examples/checkout-components-custom-layout"
-  dependencies:
-    "@eslint/js": "npm:^9.21.0"
-    "@primer-io/primer-js": "npm:0.3.3"
-    "@types/react": "npm:^19.0.10"
-    "@types/react-dom": "npm:^19.0.4"
-    "@vitejs/plugin-react": "npm:^4.3.4"
-    eslint: "npm:^9.21.0"
-    eslint-plugin-react-hooks: "npm:^5.1.0"
-    eslint-plugin-react-refresh: "npm:^0.4.19"
-    globals: "npm:^16.0.0"
-    react: "npm:^19.0.0"
-    react-dom: "npm:^19.0.0"
-    typescript: "npm:5.7.3"
-    typescript-eslint: "npm:^8.24.1"
-    vite: "npm:^6.2.0"
-  languageName: unknown
-  linkType: soft
-
-"checkout-components-themes@workspace:examples/checkout-components-themes":
-  version: 0.0.0-use.local
-  resolution: "checkout-components-themes@workspace:examples/checkout-components-themes"
-  dependencies:
-    "@primer-io/primer-js": "npm:0.3.3"
-    typescript: "npm:5.7.3"
-    vite: "npm:^6.2.0"
-  languageName: unknown
-  linkType: soft
-
-"checkout-components-vaulted@workspace:examples/checkout-components-vaulted":
-  version: 0.0.0-use.local
-  resolution: "checkout-components-vaulted@workspace:examples/checkout-components-vaulted"
-  dependencies:
-    "@primer-io/primer-js": "npm:0.3.3"
-    typescript: "npm:5.7.3"
-    vite: "npm:^6.2.0"
-  languageName: unknown
-  linkType: soft
-
 "cheerio-select@npm:^2.1.0":
   version: 2.1.0
   resolution: "cheerio-select@npm:2.1.0"
@@ -16069,6 +15997,78 @@ __metadata:
   checksum: 10/ed5783ea5225680672c53ff104343256037a0e2296387d2f71afecce9e10e83f9131291e6809d4405c0dc25c53f2949dce0233349589762ca499e380d3df2f8a
   languageName: node
   linkType: hard
+
+"primer-checkout-basic@workspace:examples/primer-checkout-basic":
+  version: 0.0.0-use.local
+  resolution: "primer-checkout-basic@workspace:examples/primer-checkout-basic"
+  dependencies:
+    "@primer-io/primer-js": "npm:0.3.3"
+    typescript: "npm:5.7.3"
+    vite: "npm:^6.2.0"
+  languageName: unknown
+  linkType: soft
+
+"primer-checkout-custom-form@workspace:examples/primer-checkout-custom-form":
+  version: 0.0.0-use.local
+  resolution: "primer-checkout-custom-form@workspace:examples/primer-checkout-custom-form"
+  dependencies:
+    "@eslint/js": "npm:^9.21.0"
+    "@primer-io/primer-js": "npm:0.3.3"
+    "@types/react": "npm:^19.0.10"
+    "@types/react-dom": "npm:^19.0.4"
+    "@vitejs/plugin-react": "npm:^4.3.4"
+    eslint: "npm:^9.21.0"
+    eslint-plugin-react-hooks: "npm:^5.1.0"
+    eslint-plugin-react-refresh: "npm:^0.4.19"
+    globals: "npm:^16.0.0"
+    react: "npm:^19.0.0"
+    react-dom: "npm:^19.0.0"
+    typescript: "npm:5.7.3"
+    typescript-eslint: "npm:^8.24.1"
+    vite: "npm:^6.2.0"
+  languageName: unknown
+  linkType: soft
+
+"primer-checkout-custom-layout@workspace:examples/primer-checkout-custom-layout":
+  version: 0.0.0-use.local
+  resolution: "primer-checkout-custom-layout@workspace:examples/primer-checkout-custom-layout"
+  dependencies:
+    "@eslint/js": "npm:^9.21.0"
+    "@primer-io/primer-js": "npm:0.3.3"
+    "@types/react": "npm:^19.0.10"
+    "@types/react-dom": "npm:^19.0.4"
+    "@vitejs/plugin-react": "npm:^4.3.4"
+    eslint: "npm:^9.21.0"
+    eslint-plugin-react-hooks: "npm:^5.1.0"
+    eslint-plugin-react-refresh: "npm:^0.4.19"
+    globals: "npm:^16.0.0"
+    react: "npm:^19.0.0"
+    react-dom: "npm:^19.0.0"
+    typescript: "npm:5.7.3"
+    typescript-eslint: "npm:^8.24.1"
+    vite: "npm:^6.2.0"
+  languageName: unknown
+  linkType: soft
+
+"primer-checkout-themes@workspace:examples/primer-checkout-themes":
+  version: 0.0.0-use.local
+  resolution: "primer-checkout-themes@workspace:examples/primer-checkout-themes"
+  dependencies:
+    "@primer-io/primer-js": "npm:0.3.3"
+    typescript: "npm:5.7.3"
+    vite: "npm:^6.2.0"
+  languageName: unknown
+  linkType: soft
+
+"primer-checkout-vaulted@workspace:examples/primer-checkout-vaulted":
+  version: 0.0.0-use.local
+  resolution: "primer-checkout-vaulted@workspace:examples/primer-checkout-vaulted"
+  dependencies:
+    "@primer-io/primer-js": "npm:0.3.3"
+    typescript: "npm:5.7.3"
+    vite: "npm:^6.2.0"
+  languageName: unknown
+  linkType: soft
 
 "primer-dropin-checkout@workspace:examples/sdk-v2-stackbllitz-dropin":
   version: 0.0.0-use.local

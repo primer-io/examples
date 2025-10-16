@@ -17,10 +17,11 @@ function HomepageHeader() {
         <div className={styles.heroContent}>
           <div className={styles.heroText}>
             <Heading as='h1' className={styles.heroTitle}>
-              Checkout Components
+              Primer Checkout
             </Heading>
             <p className={styles.heroSubtitle}>
-              The next-generation checkout experience that combines the{' '}
+              The web implementation of the next-generation checkout experience
+              that combines the{' '}
               <span className={styles.highlight}>simplicity of Drop-in</span>{' '}
               with the{' '}
               <span className={styles.highlight}>flexibility of Headless</span>
@@ -49,7 +50,7 @@ function CoreBenefits() {
     <section className={styles.benefits}>
       <div className='container'>
         <div className={styles.sectionHeader}>
-          <Heading as='h2'>Why Choose Checkout Components?</Heading>
+          <Heading as='h2'>Why Choose Primer Checkout?</Heading>
           <p>Powerful flexibility with effortless integration</p>
         </div>
 
@@ -116,10 +117,10 @@ function ComposableFeature() {
           <div className={styles.featureContent}>
             <Heading as='h2'>Best of Both Worlds</Heading>
             <p className={styles.featureDescription}>
-              With Checkout Components, we want you to offer your customers the
-              most tailored checkout experience. No more choosing between the
-              simplicity of Drop-in and the flexibility of Headless—Checkout
-              Components combine the best of both worlds, giving you maximum
+              With Primer Checkout, we want you to offer your customers the most
+              tailored checkout experience. No more choosing between the
+              simplicity of Drop-in and the flexibility of Headless—Primer
+              Checkout combines the best of both worlds, giving you maximum
               customization with minimal configuration effort.
             </p>
             <Link
@@ -220,7 +221,7 @@ function CodeExample() {
 
         <div className={styles.codeExampleCta}>
           <Link
-            className='button button--primary button--lg'
+            className='button button--secondary button--lg'
             to='/documentation/getting-started'
           >
             View Documentation
@@ -238,11 +239,11 @@ function ShowcaseSection() {
         <div className={styles.showcaseContent}>
           <Heading as='h2'>See It In Action</Heading>
           <p className={styles.showcaseDescription}>
-            Visit our Showcase to explore practical examples of Checkout
-            Components implementations. Interact with live demos and see how
-            different customization options affect the checkout experience.
+            Visit our Showcase to explore practical examples of Primer Checkout
+            implementations. Interact with live demos and see how different
+            customization options affect the checkout experience.
           </p>
-          <Link className='button button--outline button--lg' to='/showcase'>
+          <Link className='button button--secondary button--lg' to='/showcase'>
             View Interactive Examples
           </Link>
         </div>
@@ -256,8 +257,8 @@ export default function Home() {
 
   return (
     <Layout
-      title='Checkout Components'
-      description="Build powerful, customizable checkout experiences with Primer's Checkout Components. Maximum customization with minimal configuration."
+      title='Primer Checkout'
+      description='Build powerful, customizable checkout experiences with Primer Checkout. Maximum customization with minimal configuration.'
     >
       <HomepageHeader />
       <main className={styles.mainContent}>

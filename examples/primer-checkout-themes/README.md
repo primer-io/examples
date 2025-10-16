@@ -1,6 +1,6 @@
 # Custom-Styled Checkout Demo
 
-This example demonstrates the power of Composable Checkout's style tokens by allowing you to toggle between eight different visual themes. The implementation uses pure HTML with a minimal TypeScript script and relies primarily on CSS variables for styling.
+This example demonstrates the power of Primer Checkout's style tokens by allowing you to toggle between eight different visual themes. The implementation uses pure HTML with a minimal TypeScript script and relies primarily on CSS variables for styling.
 
 ## Overview
 

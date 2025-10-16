@@ -16,7 +16,7 @@
 }
 
 .modal {
-  background-color: white;
+  background-color: var(--color-white);
   padding: 2rem;
   border-radius: 12px;
   width: 400px;
@@ -28,7 +28,7 @@
 
 .title {
   margin: 0 0 1.5rem 0;
-  color: #333;
+  color: var(--gray-800);
 }
 
 .field {
@@ -39,13 +39,13 @@
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
-  color: #555;
+  color: var(--gray-600);
 }
 
 .input {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--gray-200);
   border-radius: 6px;
   font-size: 14px;
   outline: none;
@@ -53,7 +53,7 @@
 }
 
 .input:focus {
-  border-color: #007bff;
+  border-color: var(--color-action-primary);
 }
 
 .actions {
@@ -73,22 +73,22 @@
 }
 
 .cancelButton {
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--gray-200);
   background-color: white;
-  color: #666;
+  color: var(--gray-500);
 }
 
 .cancelButton:hover {
-  border-color: #ccc;
-  background-color: #f8f9fa;
+  border-color: var(--gray-300);
+  background-color: var(--gray-100);
 }
 
 .submitButton {
-  background-color: #007bff;
+  background-color: var(--color-action-primary);
   color: white;
   border: none;
 }
 
 .submitButton:hover {
-  background-color: #0056b3;
+  background-color: var(--color-action-primary-hover);
 }

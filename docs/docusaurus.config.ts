@@ -71,6 +71,30 @@ const config: Config = {
     ],
   ],
   themeConfig: {
+    headTags: [
+      {
+        tagName: 'link',
+        attributes: {
+          rel: 'preconnect',
+          href: 'https://fonts.googleapis.com',
+        },
+      },
+      {
+        tagName: 'link',
+        attributes: {
+          rel: 'preconnect',
+          href: 'https://fonts.gstatic.com',
+          crossorigin: 'anonymous',
+        },
+      },
+      {
+        tagName: 'link',
+        attributes: {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Display:wght@500;700&display=swap',
+        },
+      },
+    ],
     colorMode: {
       defaultMode: 'light',
       disableSwitch: true,

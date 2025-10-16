@@ -43,17 +43,85 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #212121;
-  --ifm-color-primary-dark: #1e1e1e;
-  --ifm-color-primary-darker: #1c1c1c;
-  --ifm-color-primary-darkest: #171717;
-  --ifm-color-primary-light: #242424;
-  --ifm-color-primary-lighter: #262626;
-  --ifm-color-primary-lightest: #2b2b2b;
+  /* ========================================
+     Standardized Grayscale Palette
+     ======================================== */
+  --gray-50: #fafafa; /* Very light backgrounds */
+  --gray-100: #f5f5f5; /* Light backgrounds */
+  --gray-200: #e5e5e5; /* Dividers, light borders */
+  --gray-300: #d4d4d4; /* Medium-light gray */
+  --gray-400: #a3a3a3; /* Medium gray */
+  --gray-500: #737373; /* Medium-dark gray */
+  --gray-600: #525252; /* Secondary text */
+  --gray-700: #404040; /* Emphasis text */
+  --gray-800: #262626; /* Strong text */
+  --gray-900: #171717; /* Near black, headings */
+
+  /* Special cases */
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Accent (non-grayscale) */
+  --color-dew: #e5f0ee; /* Subtle teal accent */
+
+  /* ========================================
+     Semantic Color Mappings
+     ======================================== */
+  --color-text-primary: var(--gray-900);
+  --color-text-secondary: var(--gray-600);
+  --color-text-emphasis: var(--gray-700);
+  --color-bg-surface: var(--color-white);
+  --color-bg-subtle: var(--gray-100);
+  --color-border-default: var(--gray-200);
+  --color-border-strong: var(--gray-300);
+
+  /* ========================================
+     ACTION & INTERACTIVE COLORS
+     ======================================== */
+
+  /* Primary Action Colors - Bootstrap Blue (standardized) */
+  --color-action-primary: #007bff;
+  --color-action-primary-hover: #0056b3;
+  --color-action-primary-light: #e3f2fd;
+
+  /* State Colors */
+  --color-success: #4caf50;
+  --color-success-dark: #2e7d32;
+  --color-success-bg: #e8f5e8;
+  --color-success-border: #4caf50;
+
+  --color-danger: #dc3545;
+  --color-danger-hover: #c82333;
+  --color-danger-bg: #fee;
+  --color-danger-border: #dc3545;
+
+  --color-warning: #ffc107;
+  --color-warning-bg: #fff3cd;
+  --color-warning-border: #ffeaa7;
+  --color-warning-text: #856404;
+
+  --color-info: #0284c7;
+  --color-info-bg: #f0f9ff;
+  --color-info-border: #b3e5fc;
+
+  /* Drag & Drop Interaction States */
+  --color-drag-active: #2196f3;
+  --color-drag-bg: #f3f8ff;
+  --color-drop-ready: #4caf50;
+  --color-drop-bg: #f1f8e9;
+
+  /* Infima primary color overrides */
+  --ifm-color-primary: var(--gray-900);
+  --ifm-color-primary-dark: var(--gray-900);
+  --ifm-color-primary-darker: var(--gray-900);
+  --ifm-color-primary-darkest: var(--gray-900);
+  --ifm-color-primary-light: var(--gray-800);
+  --ifm-color-primary-lighter: var(--gray-800);
+  --ifm-color-primary-lightest: var(--gray-700);
 
   /* Set Inter as the default font family */
   --ifm-font-family-base: 'Inter', sans-serif;
-  --ifm-heading-font-family: 'Inter', sans-serif;
+  --ifm-heading-font-family: 'Inter Display', 'Inter', system-ui, sans-serif;
   --ifm-font-family-monospace:
     SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
     monospace;
@@ -71,10 +139,22 @@ h3,
 h4,
 h5,
 h6 {
-  font-weight: 800;
+  font-family: var(--ifm-heading-font-family);
   letter-spacing: -0.02em;
   line-height: 1.2;
   color: var(--ifm-color-primary);
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 700;
+}
+
+h4,
+h5,
+h6 {
+  font-weight: 500;
 }
 
 /* Size adjustments for different heading levels */

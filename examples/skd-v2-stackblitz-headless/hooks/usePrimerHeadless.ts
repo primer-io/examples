@@ -214,7 +214,6 @@ export function usePrimerHeadless({
               setIsProcessing(false);
             }
           },
-          apiVersion: '2.4',
         };
 
         // Create checkout

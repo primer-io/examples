@@ -9,13 +9,6 @@ description: Understand the core web technologies that power Primer Checkout com
 
 This guide introduces the core technologies that power Primer Checkout. While you won't need to implement these technologies directly, understanding them will help you better use and customize the checkout components in your projects.
 
-:::tip What you'll learn
-
-- The technologies that make Primer Checkout work
-- How these technologies enable component isolation and customization
-- What these technical foundations mean for your development experience
-  :::
-
 ## Web Components: The Foundation
 
 Primer Checkout is built on [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) - a set of web platform features that enable reusable, encapsulated components. Think of them as specialized HTML elements that:
@@ -40,7 +33,7 @@ flowchart TD
 
 ### What This Means For You
 
-<div class="benefits">
+<div className="benefits">
 
 - **Framework Independence**: Primer Components work in any JavaScript environment
 - **Consistent Behavior**: Components behave the same way regardless of your tech stack
@@ -100,7 +93,7 @@ Although CSS classes won't cascade into the shadow DOM, inheritable properties l
 
 ### What This Means For You
 
-<div class="benefits">
+<div className="benefits">
 
 - **Reliability**: Components maintain their intended appearance
 - **Reduced Style Conflicts**: Your CSS classes won't accidentally break components
@@ -218,15 +211,15 @@ Slots were introduced as part of the Web Components standard to solve a common p
 
 ### Types of Slots
 
-<div class="slot-types">
-<div class="tabs-container">
-<div class="tabs">
-<div class="tab default active">Default Slots</div>
-<div class="tab named">Named Slots</div>
-<div class="tab multiple">Multiple Elements</div>
+<div className="slot-types">
+<div className="tabs-container">
+<div className="tabs">
+<div className="tab default active">Default Slots</div>
+<div className="tab named">Named Slots</div>
+<div className="tab multiple">Multiple Elements</div>
 </div>
 
-<div class="tab-content default active">
+<div className="tab-content default active">
 
 ```html
 <primer-button>
@@ -237,7 +230,7 @@ Slots were introduced as part of the Web Components standard to solve a common p
 
 </div>
 
-<div class="tab-content named">
+<div className="tab-content named">
 
 ```html
 <primer-main>
@@ -253,7 +246,7 @@ Slots were introduced as part of the Web Components standard to solve a common p
 
 </div>
 
-<div class="tab-content multiple">
+<div className="tab-content multiple">
 
 ```html
 <primer-input-wrapper>
@@ -271,7 +264,7 @@ Slots were introduced as part of the Web Components standard to solve a common p
 
 ### What This Means For You
 
-<div class="benefits">
+<div className="benefits">
 
 - **Natural HTML Structure**: Write your content using standard HTML - slots organize it automatically
 - **Flexible Content**: Insert any HTML elements, components, or text into slots
@@ -297,7 +290,7 @@ Lit is a lightweight library for building fast, reactive web components. Learn m
 
 ### What This Means For You
 
-<div class="benefits">
+<div className="benefits">
 
 - **Performance**: Components update quickly and efficiently
 - **Reliability**: Consistent behavior across different scenarios

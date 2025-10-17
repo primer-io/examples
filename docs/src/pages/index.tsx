@@ -99,7 +99,10 @@ function CoreBenefits() {
               variables that make design changes simple, scalable, and
               maintainable
             </p>
-            <Link to='/api/styling-api-docs' className={styles.learnMore}>
+            <Link
+              to='/sdk-reference/styling-api-docs'
+              className={styles.learnMore}
+            >
               View styling variables →
             </Link>
           </div>
@@ -182,7 +185,7 @@ function StyleFeature() {
               checkout to match your brand.
             </p>
             <Link
-              to='/api/styling-api-docs'
+              to='/sdk-reference/styling-api-docs'
               className={clsx('button button--primary', styles.featureBtn)}
             >
               Explore Style Variables

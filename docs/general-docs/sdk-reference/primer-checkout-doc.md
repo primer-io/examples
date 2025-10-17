@@ -1,7 +1,7 @@
 ---
 title: Checkout Component
 sidebar_label: <primer-checkout>
-sidebar_position: 0
+sidebar_position: 4
 description: The Checkout component is the main container for all Primer payment components and handles SDK initialization.
 ---
 
@@ -96,78 +96,17 @@ For comprehensive layout customization options, see the [Layout Customizations G
 | `custom-styles`  | `String`  | Optional. Stringified JSON object containing CSS custom properties for styling. | `''`    |
 | `disable-loader` | `Boolean` | Optional. When true, disables the default loading spinner.                      | `false` |
 
-## Setting Attributes in JavaScript
+## SDK Options
 
-:::warning Important: setAttribute() Required for Most Attributes
-When setting attributes programmatically in JavaScript, most attributes must be set using `setAttribute()` rather than direct property assignment. This is because the component's attribute change processing is triggered only through the DOM attribute system.
+The primer-checkout component accepts a comprehensive set of configuration options.
+
+- **How to configure:** See the [Options Guide](/documentation/options-guide) for usage patterns, React/JSX considerations, and setAttribute() requirements
+- **What options are available:** See the [SDK Options Reference](/sdk-reference/sdk-options-reference) for a complete list of all options
+- **Event handling:** For checkout completion/failure events, see the [Events Guide](/documentation/events-guide)
+
+:::tip Start Here
+Start with the Options Guide to understand how to configure the SDK, then reference the SDK Options Reference for specific options.
 :::
-
-### Attributes that MUST use setAttribute()
-
-The following attributes require `setAttribute()` to work correctly:
-
-```javascript
-const checkoutElement = document.querySelector('primer-checkout');
-
-// ✅ Correct - use setAttribute()
-checkoutElement.setAttribute('client-token', 'your-client-token');
-checkoutElement.setAttribute('custom-styles', JSON.stringify(themeStyles));
-checkoutElement.setAttribute('loader-disabled', 'true');
-
-// ❌ Incorrect - direct property assignment not supported
-checkoutElement.clientToken = 'your-client-token'; // Won't work
-checkoutElement.customStyles = JSON.stringify(themeStyles); // Won't work
-checkoutElement.disableLoader = true; // Won't work
-```
-
-### Exception: The options Property
-
-The `options` property is an exception and should be set directly as a property:
-
-```javascript
-// ✅ Correct - options is set as a property, not an attribute
-checkoutElement.options = {
-  locale: 'en-GB',
-  apiVersion: '2.4',
-};
-
-// ❌ Incorrect - options cannot be set as an attribute
-checkoutElement.setAttribute('options', JSON.stringify(options)); // Won't work
-```
-
-### Why setAttribute() is Required
-
-Using `setAttribute()` is required because:
-
-1. **Attribute Change Processing**: The component watches for attribute changes through the DOM's mutation system
-2. **Type Conversion**: The component automatically handles string-to-type conversion for attributes
-3. **Lifecycle Integration**: Attribute changes trigger the component's internal update mechanisms
-
-### Complete Example
-
-```javascript
-// Initialize checkout element
-const checkoutElement = document.querySelector('primer-checkout');
-
-// Set required attributes using setAttribute()
-checkoutElement.setAttribute('client-token', 'your-client-token');
-
-// Set optional styling
-const customStyles = {
-  primerColorBrand: '#4a6cf7',
-  primerTypographyBrand: 'Inter, sans-serif',
-};
-checkoutElement.setAttribute('custom-styles', JSON.stringify(customStyles));
-
-// Disable loader if needed
-checkoutElement.setAttribute('loader-disabled', 'true');
-
-// Set options as a property (not an attribute)
-checkoutElement.options = {
-  locale: 'en-GB',
-  apiVersion: '2.4',
-};
-```
 
 ## Slots
 
@@ -177,18 +116,9 @@ checkoutElement.options = {
 
 ## Events
 
-| Event Name                   | Description                                      | Event Detail              |
-| ---------------------------- | ------------------------------------------------ | ------------------------- |
-| `primer:ready`               | Fired when the SDK is successfully initialized   | PrimerJS instance         |
-| `primer:methods-update`      | Fired when payment methods are loaded            | Available payment methods |
-| `primer:state-change`        | Fired when the checkout state changes            | Current state object      |
-| `primer:card-network-change` | Fired when card network detection changes        | Card network information  |
-| `primer:card-success`        | Fired when a card form is successfully submitted | Submission result         |
-| `primer:card-error`          | Fired when card form submission has errors       | Validation errors         |
+The Checkout component dispatches various events throughout the payment lifecycle. These events can be captured at either the component level or the document level, as they bubble and cross shadow DOM boundaries.
 
-:::info Card Form Events
-For detailed information about card form events, including the triggerable `primer:card-submit` event and payload interfaces, see the [Card Form Component documentation](/api/Components/CardForm/).
-:::
+For complete technical reference including event types and payloads, see the [Events & Callbacks Reference](/sdk-reference/events-callbacks). For usage examples, integration patterns, and best practices, see the [Events Guide](/documentation/events-guide).
 
 ```mermaid
 sequenceDiagram
@@ -213,295 +143,6 @@ sequenceDiagram
         Checkout->>YourApp: primer:state-change (error: {...})
     end
 ```
-
-## SDK Options
-
-:::caution Temporary Implementation
-The current SDK options structure documented here is temporary and will be changing. We will be moving away from the JSON-based configuration approach as we progress with the migration of our Headless SDK.
-:::
-
-The `options` property accepts a configuration object for the Primer SDK. When used as an HTML attribute, it must be a stringified JSON object. Remember that stringified JSON must use double quotes for property names and string values.
-
-Here's a comprehensive overview of the available options:
-
-### Core Options
-
-| Option             | Type                | Description                                                        | Default          |
-| ------------------ | ------------------- | ------------------------------------------------------------------ | ---------------- |
-| `locale`           | `String`            | Forces the locale for UI elements. Formats: "en-US", "fr-FR", etc. | Browser's locale |
-| `apiVersion`       | `"legacy" \| "2.4"` | API version to use when interacting with Primer backend.           | `"legacy"`       |
-| `disabledPayments` | `Boolean`           | When true, disables all payment methods globally.                  | `false`          |
-
-### Payment Method-Specific Options
-
-<details>
-<summary><strong>Card Options</strong></summary>
-
-Controls the behavior of card payment methods.
-
-```javascript
-{
-  "card": {
-    "cardholderName": {
-      "required": true  // Whether the cardholder name is required
-    }
-  }
-}
-```
-
-</details>
-
-<details>
-<summary><strong>Apple Pay Options</strong></summary>
-
-Configures Apple Pay payment behavior and button appearance.
-
-```javascript
-{
-  "applePay": {
-    "buttonType": "plain",           // "plain", "buy", "set-up", "donate", "check-out", "book", "subscribe"
-    "buttonStyle": "black",          // "white", "white-outline", "black"
-
-    // Deprecated - use billingOptions.requiredBillingContactFields instead
-    "captureBillingAddress": false,
-
-    "billingOptions": {
-      // Required billing information to collect during checkout
-      "requiredBillingContactFields": ["postalAddress", "phoneNumber", "emailAddress", "name", "phoneticName"]
-    },
-
-    "shippingOptions": {
-      // Required shipping information to collect during checkout
-      "requiredShippingContactFields": ["postalAddress", "name", "phoneNumber", "emailAddress", "phoneticName"],
-      "requireShippingMethod": false   // Whether shipping method selection is required
-    }
-  }
-}
-```
-
-</details>
-
-<details>
-<summary><strong>Google Pay Options</strong></summary>
-
-Configures Google Pay payment behavior and button appearance.
-
-```javascript
-{
-  "googlePay": {
-    "buttonType": "long",            // "long", "short", "book", "buy", "checkout", "donate", "order", "pay", "plain", "subscribe"
-    "buttonColor": "default",        // "default", "black", "white"
-    "buttonSizeMode": "fill",        // "fill" or "static"
-    "captureBillingAddress": false,  // Whether to prompt for billing address
-    "shippingAddressParameters": {
-      "phoneNumberRequired": false   // Whether phone number is required in shipping address
-    },
-    "emailRequired": false,          // Whether email address is required
-    "requireShippingMethod": false,  // Whether shipping method selection is required
-  }
-}
-```
-
-</details>
-
-<details>
-<summary><strong>PayPal Options</strong></summary>
-
-Configures PayPal payment behavior and button appearance.
-
-```javascript
-{
-  "paypal": {
-    "buttonColor": "gold",           // "gold", "blue", "silver", "white", "black"
-    "buttonShape": "pill",           // "pill" or "rect"
-    "buttonSize": "medium",          // "small", "medium", "large", "responsive"
-    "buttonHeight": 40,              // Custom button height in pixels
-    "buttonLabel": "checkout",       // "checkout", "credit", "pay", "buynow", "paypal", "installment"
-    "buttonTagline": false,          // Whether to show PayPal tagline
-    "paymentFlow": "DEFAULT",        // "DEFAULT" or "PREFER_VAULT"
-  }
-}
-```
-
-</details>
-
-<details>
-<summary><strong>Klarna Options</strong></summary>
-
-Configures Klarna payment behavior.
-
-```javascript
-{
-  "klarna": {
-    "paymentFlow": "DEFAULT",        // "DEFAULT" or "PREFER_VAULT"
-    "recurringPaymentDescription": "Monthly subscription", // Description for recurring payments
-    "allowedPaymentCategories": ["pay_now", "pay_later", "pay_over_time"], // Allowed Klarna payment categories
-    "buttonOptions": {
-      "text": "Pay with Klarna"         // Custom button text
-    }
-  }
-}
-```
-
-</details>
-
-<details>
-<summary><strong>3D Secure Options</strong></summary>
-
-Configures 3D Secure authentication behavior.
-
-```javascript
-{
-  "threeDsOptions": {
-    "enabled": true,                 // Whether 3DS is enabled
-    "preferred": false               // Whether 3DS is preferred over other auth methods
-  }
-}
-```
-
-</details>
-
-<details>
-<summary><strong>Vaulting Options</strong></summary>
-
-Configures payment method vaulting (saving for future use).
-
-```javascript
-{
-  "vault": {
-    "enabled": true,                 // Enable payment method vaulting
-    "showEmptyState": true           // Show empty state when no vaulted methods exist
-  }
-}
-```
-
-</details>
-
-<details>
-<summary><strong>Stripe Options</strong></summary>
-
-Configures Stripe-specific payment options.
-
-```javascript
-{
-  "stripe": {
-    "mandateData": {
-      "fullMandateText": "Custom mandate text for direct debits",
-      "merchantName": "Your Business Name"
-    },
-    "publishableKey": "pk_test_..."  // Stripe publishable key
-  }
-}
-```
-
-</details>
-
-<details>
-<summary><strong>Submit Button Options</strong></summary>
-
-Configures the submit button behavior.
-
-```javascript
-{
-  "submitButton": {
-    "amountVisible": true            // Whether to show the payment amount on the submit button
-  }
-}
-```
-
-</details>
-
-### Example of Complete Options Object
-
-Here's an example of a complete options object with various settings:
-
-```html
-<primer-checkout
-  client-token="your-client-token"
-  options='{"locale":"en-GB","apiVersion":"2.4","disabledPayments":false,"card":{"cardholderName":{"required":true}},"applePay":{"buttonStyle":"black","billingOptions":{"requiredBillingContactFields":["postalAddress","emailAddress"]}},"googlePay":{"buttonColor":"black","captureBillingAddress":true},"paypal":{"buttonColor":"blue","buttonShape":"pill","buttonLabel":"checkout"},"klarna":{"allowedPaymentCategories":["pay_now","pay_later"]},"vault":{"enabled":true}}'
->
-  <primer-main slot="main"></primer-main>
-</primer-checkout>
-```
-
-When using JavaScript:
-
-```javascript
-const checkout = document.querySelector('primer-checkout');
-
-// ✅ Correct - The options property is set directly as an object
-checkout.options = {
-  locale: 'en-GB',
-  apiVersion: '2.4',
-  disabledPayments: false,
-  card: {
-    cardholderName: {
-      required: true,
-    },
-  },
-  applePay: {
-    buttonStyle: 'black',
-    billingOptions: {
-      requiredBillingContactFields: ['postalAddress', 'emailAddress'],
-    },
-  },
-  googlePay: {
-    buttonColor: 'black',
-    captureBillingAddress: true,
-  },
-  paypal: {
-    buttonColor: 'blue',
-    buttonShape: 'pill',
-    buttonLabel: 'checkout',
-  },
-  klarna: {
-    allowedPaymentCategories: ['pay_now', 'pay_later'],
-  },
-  vault: {
-    enabled: true,
-  },
-};
-```
-
-### Important Notes on JSON Formatting
-
-:::warning
-When passing options to the `primer-checkout` component as an HTML attribute:
-
-1. The entire options object must be a valid JSON string (use `JSON.stringify()` in JavaScript)
-2. Use double quotes (`"`) for property names and string values
-3. Do not include trailing commas
-4. Boolean values should be `true` or `false` (not strings)
-   :::
-
-<div class="tabs-container">
-<div class="tabs">
-<div class="tab incorrect">Incorrect ❌</div>
-<div class="tab correct">Correct ✅</div>
-</div>
-
-<div class="tab-content incorrect">
-
-```html
-<!-- Invalid: Single quotes around property names, trailing comma -->
-<primer-checkout
-  options='{"locale": "en-GB", "apiVersion": "2.4",}'
-></primer-checkout>
-```
-
-</div>
-
-<div class="tab-content correct">
-
-```html
-<!-- Valid: Proper JSON formatting -->
-<primer-checkout
-  options='{"locale":"en-GB","apiVersion":"2.4"}'
-></primer-checkout>
-```
-
-</div>
-</div>
 
 ## States
 
@@ -645,7 +286,7 @@ The simplest implementation with default behavior and styling:
 ```html
 <primer-checkout
   client-token="your-client-token"
-  options='{"apiVersion":"2.4","locale":"en-GB","card":{"cardholderName":{"required":true}}}'
+  options='{"locale":"en-GB","card":{"cardholderName":{"required":true}}}'
 >
   <primer-main slot="main"></primer-main>
 </primer-checkout>
@@ -750,7 +391,6 @@ The simplest implementation with default behavior and styling:
   // ✅ Set options directly as a property (not an attribute)
   checkout.options = {
     locale: 'en-GB',
-    apiVersion: '2.4',
     card: {
       cardholderName: {
         required: true,

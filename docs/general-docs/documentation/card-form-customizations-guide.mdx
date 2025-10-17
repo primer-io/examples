@@ -1,7 +1,7 @@
 ---
 title: Card Form Customizations Guide
 sidebar_label: Card Form Customizations
-sidebar_position: 3
+sidebar_position: 5
 description: Learn how to customize the card payment form in your Primer Checkout experience
 ---
 
@@ -208,6 +208,8 @@ When submission is triggered, the component:
 
 The card form follows an event-driven approach for both validation handling and programmatic control. This section covers how to listen for events and trigger actions programmatically.
 
+For comprehensive information on all available events, event payloads, and best practices, see the [Events Guide](/documentation/events-guide).
+
 ### Selecting Card Form Components
 
 To interact with card form components programmatically, you need to select them from the DOM:
@@ -252,14 +254,11 @@ These events bubble up to the `<primer-checkout>` component, allowing you to han
 
 ### Programmatic Form Submission
 
-You can trigger card form submission programmatically by dispatching a `primer:card-submit` event to the card form component:
+You can trigger card form submission programmatically by dispatching a `primer:card-submit` event to the document:
 
 ```javascript
-// Select the card form component
-const cardForm = document.querySelector('primer-card-form');
-
-// Trigger submission programmatically
-cardForm.dispatchEvent(
+// Trigger card form submission from anywhere in your application
+document.dispatchEvent(
   new CustomEvent('primer:card-submit', {
     bubbles: true,
     composed: true,
@@ -268,8 +267,12 @@ cardForm.dispatchEvent(
 );
 ```
 
-:::important Component Must Be Present
-Programmatic submission only works when the `primer-card-form` component is present in the UI. This approach is useful for:
+The checkout component listens for this event at the document level and forwards it internally to the card form, so you don't need to reference the card form element directly.
+
+:::important Event Propagation
+The checkout component listens for `primer:card-submit` events at the document level. You can dispatch this event from anywhere in your application—the event will bubble up through the DOM and be captured by the checkout component, which forwards it internally to the card form.
+
+This approach is useful for:
 
 - Custom submit buttons outside the card form
 - Triggering submission from other UI elements
@@ -300,16 +303,14 @@ Programmatic submission only works when the `primer-card-form` component is pres
 <script>
   // Set up custom submit button
   document.getElementById('custom-submit').addEventListener('click', () => {
-    const cardForm = document.querySelector('primer-card-form');
-    if (cardForm) {
-      cardForm.dispatchEvent(
-        new CustomEvent('primer:card-submit', {
-          bubbles: true,
-          composed: true,
-          detail: { source: 'custom-pay-button' },
-        }),
-      );
-    }
+    // Dispatch to document - checkout listens at document level
+    document.dispatchEvent(
+      new CustomEvent('primer:card-submit', {
+        bubbles: true,
+        composed: true,
+        detail: { source: 'custom-pay-button' },
+      }),
+    );
   });
 
   // Handle submission results
@@ -487,6 +488,6 @@ Key points about this relationship:
 8. **Test Thoroughly** - Validate behavior across browsers and device types
    :::
 
-For detailed information on individual components, refer to their API documentation:
+For detailed information on individual components, refer to their SDK Reference documentation:
 
-- [Card Form](/api/Components/CardForm/)
+- [Card Form](/sdk-reference/Components/CardForm/)

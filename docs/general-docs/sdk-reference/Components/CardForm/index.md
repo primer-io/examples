@@ -326,12 +326,11 @@ This is the recommended approach as it provides localized button text and consis
 <details>
 <summary><strong>5. Programmatically via primer:card-submit Event</strong></summary>
 
-You can trigger card form submission programmatically by dispatching a `primer:card-submit` event:
+You can trigger card form submission programmatically by dispatching a `primer:card-submit` event. The checkout component listens for this event at the document level, so you can dispatch it from anywhere in your application without needing to reference the card form element.
 
 ```javascript
-// Basic programmatic submission
-const cardForm = document.querySelector('primer-card-form');
-cardForm.dispatchEvent(
+// Trigger card form submission from anywhere in your application
+document.dispatchEvent(
   new CustomEvent('primer:card-submit', {
     bubbles: true,
     composed: true,
@@ -339,6 +338,10 @@ cardForm.dispatchEvent(
   }),
 );
 ```
+
+:::important Event Propagation
+The `bubbles: true` and `composed: true` properties are required. These properties allow the event to propagate correctly through the DOM and across shadow DOM boundaries, ensuring the checkout component can capture the event regardless of where it's dispatched.
+:::
 
 **Advanced Example: Custom Submit Button with Event Handling**
 
@@ -357,8 +360,8 @@ cardForm.dispatchEvent(
 <script>
   // Set up custom submit button
   document.getElementById('custom-submit').addEventListener('click', () => {
-    const cardForm = document.querySelector('primer-card-form');
-    cardForm.dispatchEvent(
+    // Dispatch to document - checkout listens at document level
+    document.dispatchEvent(
       new CustomEvent('primer:card-submit', {
         bubbles: true,
         composed: true,
@@ -383,7 +386,7 @@ cardForm.dispatchEvent(
 ```
 
 :::tip Using the Source Parameter
-Include a meaningful `source` identifier when triggering `primer:card-submit` events. This helps with debugging and allows you to handle submissions differently based on the trigger source.
+Include a meaningful `source` identifier in the event detail. This helps with debugging and allows you to handle submissions differently based on the trigger source. The checkout component captures this event at the document level and forwards it internally to the card form.
 :::
 
 </details>

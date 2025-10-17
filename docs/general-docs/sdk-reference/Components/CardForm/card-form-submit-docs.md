@@ -52,7 +52,11 @@ The Card Form Submit Button component is designed to be used within a `primer-ca
 
 | Event Name           | Description                      | Event Detail                            |
 | -------------------- | -------------------------------- | --------------------------------------- |
-| `primer-card-submit` | Fired when the button is clicked | `{ source: 'primer-card-form-submit' }` |
+| `primer:card-submit` | Fired when the button is clicked | `{ source: 'primer-card-form-submit' }` |
+
+:::note Internal vs. Triggerable Events
+This event is dispatched internally by the submit button component. For programmatically triggering card form submission from external code, see the triggerable `primer:card-submit` event documented in the [Card Form Component](/sdk-reference/Components/CardForm/).
+:::
 
 ## Features
 
@@ -82,25 +86,28 @@ flowchart LR
 
 </div>
 
-## Technical Implementation
+## Component Flow
 
 ```mermaid
 sequenceDiagram
-    participant Submit as primer-card-form-submit
-    participant Button as primer-button
-    participant CardForm as primer-card-form
+    participant User
+    participant Button as primer-card-form-submit
+    participant Form as primer-card-form
+    participant SDK as Primer SDK
 
-    Note over Submit: Component initialization
-    Submit->>Button: Create with buttonType="submit"
-    Submit->>Button: Add data-submit attribute
-    Submit->>Button: Apply variant & text
-
-    Note over Submit: User clicks button
-    Button->>Submit: Click event
-    Submit->>Submit: Prevent default
-    Submit->>CardForm: Emit primer-card-submit
-    CardForm->>CardForm: Process submission
+    User->>Button: Click
+    Button->>Form: primer:card-submit
+    Form->>SDK: Validate & Submit
+    alt Success
+        SDK->>Form: Success
+        Form->>Button: Update State
+    else Error
+        SDK->>Form: Errors
+        Form->>Button: Update State
+    end
 ```
+
+The submit button dispatches the `primer:card-submit` event when clicked, which the card form captures and processes.
 
 ## DOM Structure
 

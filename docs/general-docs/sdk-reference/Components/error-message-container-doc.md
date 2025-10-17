@@ -193,5 +193,5 @@ Card validation errors are handled by the card input components themselves and p
 
 ## Related Components
 
-- [`<primer-checkout>`](/api/Components/primer-checkout-doc) - The main checkout container
-- [`<primer-main>`](/api/Components/primer-main-doc) - The main content area component
+- [`<primer-checkout>`](/sdk-reference/primer-checkout-doc) - The main checkout container
+- [`<primer-main>`](/sdk-reference/Components/primer-main-doc) - The main content area component

@@ -73,9 +73,6 @@ export function usePrimerDropIn({
             setIsLoading(false);
             return handler?.showErrorMessage();
           },
-
-          // Additional standard configuration
-          apiVersion: '2.4',
         });
 
         if (!checkout) {

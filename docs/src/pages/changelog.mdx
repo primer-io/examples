@@ -8,320 +8,360 @@ sidebar_position: 99
 
 This page documents all notable changes to Primer Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
-## v0.3.3 - Vault Initialization Fix (08-Jul-2025)
+## v0.4.0 - SDK Core Default & Billing Address (17-Oct-2025)
 
-🔧 **Bug Fix**:
+:::warning Breaking Change
+SDK Core is now the default payment engine. Previously, omitting the `sdkCore` option used the legacy SDK. Starting in v0.4.0, SDK Core is enabled by default when `sdkCore` is not specified.
 
-- Fixed vault manager initialization where vault would initialize even when disabled, causing unnecessary API calls and performance issues
-- Vault now uses lazy initialization and only creates when `vault.enabled` is true
-- Components now initialize gracefully when customer ID is missing - vault initialization fails silently without preventing other components from working
+**Migration:** To continue using the legacy SDK, explicitly set `sdkCore: false` in your configuration.
+:::
 
-📈 **Performance Improvements**:
+:::info New Feature
+Billing address capture is now supported through Primer Dashboard checkout configuration.
+:::
 
-- Eliminated unnecessary API calls when vault is disabled
-- Improved SDK initialization speed when vault functionality is not needed
+**Key Changes:**
+
+- SDK Core enabled by default when `sdkCore` option not specified
+- Billing address form support (SDK Core only)
+- Automatic billing address display in drop-in mode
+- Manual integration required for custom layouts
+- Removed "experimental" terminology from SDK Core references
+- Expanded test coverage for SDK selection scenarios
+
+**Billing Address:**
+
+- Enable via Primer Dashboard checkout configuration
+- Automatic display in drop-in mode
+- Manual inclusion needed for slotted card forms (custom layouts)
+- Requires SDK Core enabled (not available with `sdkCore: false`)
+- Billing Address Documentation (coming soon)
+
+**Example - SDK Core Opt-out:**
+
+```javascript
+// v0.3.x - Legacy SDK by default
+const checkout = PrimerCheckout({
+  clientToken: 'token',
+  // sdkCore not specified - used Legacy SDK
+});
+
+// v0.4.0 - SDK Core by default
+const checkout = PrimerCheckout({
+  clientToken: 'token',
+  sdkCore: false, // Explicit opt-out for Legacy SDK
+});
+```
 
 ---
 
-## v0.3.2 - Payment Method Container Component (07-Jul-2025)
+## v0.3.12 - Google Pay Fix (13-Oct-2025)
 
-### ✨ New Components
+:::note Bug Fix
+Fixed Google Pay rendering issue in certain browser configurations
+:::
 
-- **Payment Method Container**: Introduced `primer-payment-method-container` component for simplified payment method layouts
-  - **Declarative filtering**: Use `include` and `exclude` attributes to control which payment methods are rendered
-  - **Eliminates verbose event listeners**: No more complex `primer:methods-update` event handling for basic layouts
-  - **Automatic updates**: Container automatically responds to payment method availability changes
-  - **Developer experience**: Significantly reduces boilerplate code for custom payment layouts
+**SDK Core Updates:**
 
-### 📚 Documentation Updates
+- Vault CVV recapture
+- Billing address API improvements
 
-- **API Documentation**: Added comprehensive [Payment Method Container API documentation](/api/Components/payment-method-container-doc)
-- **Getting Started Guide**: Updated to emphasize declarative container approach over verbose event listeners
-- **Layout Customization Guide**: Added examples using the new container component as the recommended approach
+**Note:** Most changes in this release relate to SDK core development.
 
-### Migration Benefits
+---
 
-- **Before**: Complex event listeners with manual filtering and state management
-- **After**: Simple HTML attributes for payment method organization
-- **Backward Compatible**: Existing event-driven implementations continue to work unchanged
+## v0.3.11 - SDK Core Updates (08-Oct-2025)
 
-### Example Usage
+:::note SDK Core
+This release contains internal SDK improvements with no user-facing component changes.
+:::
+
+**Internal Changes:**
+
+- Iframe lifecycle fixes
+- Payment methods filter list
+- Datadog logging integration
+
+---
+
+## v0.3.10 - CSS Improvements (06-Oct-2025)
+
+:::note Bug Fixes
+
+- PayPal button height fix
+- Native payment method CSS improvements
+  :::
+
+---
+
+## v0.3.9 - SDK Core Updates (30-Sep-2025)
+
+:::note SDK Core
+This release contains internal SDK improvements with no user-facing component changes.
+:::
+
+**Internal Changes:**
+
+- Card form slot handling improvements
+
+---
+
+## v0.3.8 - SDK Core Updates (29-Sep-2025)
+
+:::note SDK Core
+This release contains internal SDK improvements with no user-facing component changes.
+:::
+
+**Internal Changes:**
+
+- Analytics URL from client token
+- Vault management features
+- Logger implementation
+- Iframe RPC refactor
+
+---
+
+## v0.3.7 - SDK Core Updates (18-Sep-2025)
+
+:::note SDK Core
+This release contains internal SDK improvements with no user-facing component changes.
+:::
+
+**Internal Changes:**
+
+- Error standardization
+- HTTP retry logic
+- Locale support improvements
+
+---
+
+## v0.3.6 - Cardholder Name Toggle (04-Sep-2025)
+
+:::info New Feature
+Added cardholder name toggle option for card form customization
+:::
+
+**Changes:**
+
+- Cardholder name display toggle
+- Fixed toggle implementation in primer-sdk-web
+
+---
+
+## v0.3.5 - Dependency Cleanup (20-Aug-2025)
+
+:::note Improvements
+Removed unnecessary peer dependencies and extended React version compatibility
+:::
+
+---
+
+## v0.3.4 - Firefox Compatibility (24-Jul-2025)
+
+:::note Bug Fix
+Removed native `:focus-within` CSS selector and implemented alternative focus handling for Firefox compatibility
+:::
+
+---
+
+## v0.3.3 - Vault Initialization Fix (08-Jul-2025)
+
+:::note Bug Fix
+Fixed vault manager initialization preventing unnecessary API calls when vault is disabled. Components now handle missing customer ID gracefully.
+:::
+
+**Changes:**
+
+- Lazy vault initialization (only when `vault.enabled` is true)
+- Eliminated unnecessary API calls when vault disabled
+- Graceful handling of missing customer ID
+
+---
+
+## v0.3.2 - Payment Method Container (07-Jul-2025)
+
+:::info New Component
+Payment Method Container enables declarative payment layouts using `include` and `exclude` attributes, eliminating verbose event listener code.
+:::
+
+**Key Features:**
+
+- Declarative filtering with HTML attributes
+- Automatic updates when payment methods change
+- Backward compatible with existing implementations
+
+**Example:**
 
 ```html
-<!-- Simple sectioned layout -->
 <primer-payment-method-container
   include="APPLE_PAY,GOOGLE_PAY"
 ></primer-payment-method-container>
-<primer-payment-method-container
-  exclude="PAYMENT_CARD,APPLE_PAY,GOOGLE_PAY"
-></primer-payment-method-container>
 ```
 
-📖 **Documentation & Migration**:
+**Documentation:**
 
-- [📚 API Documentation](/api/Components/payment-method-container-doc) - Complete component reference
-- [🔄 Migration Guide](/documentation/migration-guides/event-listeners-to-payment-method-container) - Step-by-step migration from event listeners
+- [SDK Reference](/sdk-reference/Components/payment-method-container-doc)
+
+---
 
 ## v0.3.1 - Payment Type Updates (20-Jun-2025)
 
-### 🔧 Payment Type Enhancements
+:::note Type Additions
+Extended Payment type definitions to include `DLOCAL_PIX`, `ALMA`, and `PAY_NL_RIVERTY`
+:::
 
-- **Extended payment type support**: Updated Payment types to include missing payment methods:
-  - Added `DLOCAL_PIX`
-  - Added `ALMA`
-  - Added `PAY_NL_RIVERTY`
+---
 
-## v0.3.0 - Vault UI Redesign, Payment Method Controls & Architecture Improvements (12-Jun-2025)
+## v0.3.0 - Vault Redesign & Payment Controls (12-Jun-2025)
 
-### 🎨 Vault Component Redesign
+:::info Major Features
+Complete vault component redesign with new control system for disabling payment methods globally or individually.
+:::
 
-- **Complete visual overhaul** of the vault manager component following updated designs
-- **Responsive layout improvements** with enhanced interaction states and better mobile experience
-- **Custom empty state slot**: Override the default empty state with your own content using `<div slot="vault-empty-state">`
-- **New showEmptyState option**: Control empty state visibility for drop-in implementations via `vault.showEmptyState: false`
-- **Improved accessibility** with better ARIA labels and screen reader support
+**Vault Component:**
 
-### ⚡ Payment Method Control System
+- Visual overhaul with improved responsive layout
+- Custom empty state slot: `<div slot="vault-empty-state">`
+- Control empty state visibility: `vault.showEmptyState: false`
+- Enhanced accessibility
 
-- **Individual payment method disabling**: Add `disabled` attribute to any payment component
-  ```html
-  <primer-card-form disabled></primer-card-form>
-  <primer-payment-method type="PAYPAL" disabled></primer-payment-method>
-  ```
-- **Global payment disabling**: Use `disabledPayments: true` in SDK options to disable all methods at once
-- **Enhanced visual states**: Consistent disabled styling across all payment methods using design tokens
-- **iframe-based payment support**: Advanced overlay technique for disabling Google Pay, Apple Pay, and PayPal buttons
+**Payment Controls:**
 
-### 🏗️ Build Improvements
+- Individual method disabling: `<primer-card-form disabled></primer-card-form>`
+- Global disabling: `disabledPayments: true` in SDK options
+- Consistent disabled styling across all methods
 
-- **Improved bundling pipeline**: Enhanced compilation process with better tree-shaking and reduced bundle sizes
-- **Component type fixes**: Fixed missing Lit class types that could cause components to not be recognized as HTML elements in native JavaScript
-- **Enhanced developer experience**: Better IntelliSense with explicit interface definitions
+:::warning Breaking Changes
+Stricter TypeScript typing may reveal previously ignored errors
+:::
 
-### 🔧 Bug Fixes
-
-- **Fixed PayPal disappearing issue**: Resolved a bug where PayPal buttons would disappear in some setups due to insufficient space allocation
-- **Payment method height stabilization**: Replaced dynamic CSS variables with constants to ensure consistent display
-
-### ⚠️ Breaking Changes
-
-- **Stricter TypeScript typing**: More precise type definitions may reveal previously ignored TypeScript errors in your codebase
-
-### Example Usage
+**Example:**
 
 ```html
-<!-- Custom vault empty state -->
 <primer-vault-manager>
   <div slot="vault-empty-state">
     <p>No saved payment methods</p>
-    <button>Add a payment method</button>
   </div>
 </primer-vault-manager>
-
-<!-- Disabled payment methods -->
-<primer-card-form disabled></primer-card-form>
-<primer-payment-method type="KLARNA" disabled></primer-payment-method>
 ```
 
-```javascript
-// SDK options for vault and global disabling
-{
-  vault: {
-    enabled: true,
-    showEmptyState: false
-  },
-  disabledPayments: true
-}
-```
+---
 
-## v0.2.0 - Event System Overhaul & PrimerJS API Introduction (19-May-2025)
+## v0.2.0 - Event System Overhaul (19-May-2025)
 
-### ⚠️ Breaking Changes
+:::warning Breaking Changes
+All DOM events renamed to `primer:*` namespace format. Legacy `primer-oncheckout-complete` and `primer-oncheckout-failure` events removed.
 
-- **Event namespace changes**: Renamed all DOM events to follow the `primer:*` namespace format:
-  - `primer-state-changed` → `primer:state-change`
-  - `primer-payment-methods-updated` → `primer:methods-update`
-  - `primer-checkout-initialized` → `primer:ready`
-  - `primer-card-submit-success` → `primer:card-success`
-  - `primer-card-submit-errors` → `primer:card-error`
-  - `primer-card-network-change` → `primer:card-network-change`
-- **Removed legacy events**: `primer-oncheckout-complete` and `primer-oncheckout-failure` events
-- **New PrimerJS class**: Replaced direct access to the headless SDK instance
-- **Unified callbacks**: Consolidated payment success and failure callbacks into a single `onPaymentComplete` callback
+**Event Renames:**
 
-### ✨ New Features
+- `primer-state-changed` → `primer:state-change`
+- `primer-payment-methods-updated` → `primer:methods-update`
+- `primer-checkout-initialized` → `primer:ready`
+- `primer-card-submit-success` → `primer:card-success`
+- `primer-card-submit-errors` → `primer:card-error`
+- `primer-card-network-change` → `primer:card-network-change`
+  :::
 
-- **PrimerJS class**: Introduced type-safe API surface with:
-  - `refreshSession()` method for refreshing client session
-  - `getPaymentMethods()` method for retrieving available payment methods
-  - `onPaymentStart` callback for payment process initiation
-  - `onPaymentPrepare` callback with handler for intercepting payment creation
-  - `onPaymentComplete` unified callback for payment completion results
+:::info New API
+Introduced type-safe `PrimerJS` class replacing direct SDK access:
 
-### 📚 Documentation
+- `refreshSession()` - Refresh client session
+- `getPaymentMethods()` - Retrieve available methods
+- `onPaymentStart` - Payment initiation callback
+- `onPaymentPrepare` - Intercept payment creation
+- `onPaymentComplete` - Unified payment result callback
+  :::
 
-- **Migration guide**: Added [migration guide](documentation/migration-guides/v01-to-v02) for transitioning from v0.1.x to v0.2.x
-- **Updated documentation**: Refreshed examples and API reference documentation
+---
 
-## v0.1.8 - Card Network Icon Enhancements (02-May-2025)
+## v0.1.8 - Card Network Icon Fix (02-May-2025)
 
-### 🔧 Bug Fixes
+Improved icon display and alignment for card network selection.
 
-- **Icon display improvements**: Further improved icon display around card number input
-- **Network selection fixes**: Fixed card network selection icon visibility and alignment
+---
 
-## v0.1.7 - Card Form Icon Display Fix (02-May-2025)
+## v0.1.7 - Card Form Icon Fix (02-May-2025)
 
-### 🔧 Bug Fixes
+Fixed icon display next to card number input.
 
-- **Card icon fix**: Fixed the icon display next to the card number input in the card form component
+---
 
-## v0.1.6 - Component Improvements and New Events (01-May-2025)
+## v0.1.6 - Component Improvements (01-May-2025)
 
-### ✨ New Features
+Added `hide-labels` property to card form. Introduced `primer-oncheckout-complete` and `primer-oncheckout-failure` events.
 
-- **Hide labels option**: Added new `hide-labels` property to the card form component
-- **Checkout events**: Introduced new checkout events for better integration:
-  - `primer-oncheckout-complete` event with payment payload
-  - `primer-oncheckout-failure` event with error details
-
-### 🔧 Bug Fixes
-
-- **Button improvements**: Fixed issues in the primary button component
-- **HTML conventions**: Changed attribute names to better align with HTML conventions
-
-### Example Usage
-
-```jsx
-<primer-card-form hide-labels={true}>{/* Form content */}</primer-card-form>
-```
+---
 
 ## v0.1.5 - Vault and Styling Improvements (30-Apr-2025)
 
-### ✨ Enhancements
+Enhanced vault component functionality, improved transitions, and fixed custom style application.
 
-- **Vault improvements**: Improved primary vault component functionality
-- **Smooth transitions**: Enhanced transitions and state change handling
-- **Style fixes**: Fixed custom styles applied through JSON objects
-- **Klarna updates**: Implemented improvements to Klarna component logic
-- **Error handling**: Fixed error display issues
+---
 
-## v0.1.4 - Experimental Stripe ACH Support (15-Apr-2025)
+## v0.1.4 - Experimental Stripe ACH (15-Apr-2025)
 
-### 🧪 Experimental Features
+Introduced experimental Stripe ACH UI and configuration support.
 
-- **Stripe ACH UI**: Introduced experimental UI for Stripe ACH
-- **ACH configuration**: Added support for Stripe ACH configuration
-- **Dynamic components**: New components visible when Stripe ACH configuration is passed
-- **Early testing**: Early testing capability for Stripe ACH integration
+---
 
-## v0.1.3 - Style Injection Logic Improvements (15-Apr-2025)
+## v0.1.3 - Style Injection Improvements (15-Apr-2025)
 
-### 🔧 Technical Improvements
+Moved style injection logic into components for better reinitialization and stability.
 
-- **Component-based styling**: Moved the bulk of the style injection logic into the components themselves
-- **Better reinitialization**: Improved reinitialization of component logic
-- **Enhanced stability**: Enhanced stability during component lifecycle
+---
 
-## v0.1.2 - NPM Build Optimizations (10-Apr-2025)
+## v0.1.2 - Build Optimizations (10-Apr-2025)
 
-### ⚡ Performance Improvements
+Optimized NPM builds with improved bundling, faster loading, and reduced CDN dependency.
 
-- **Optimized builds**: Improved NPM builds with properly bundled components
-- **Faster loading**: Significant improvements in loading times and compilation times
-- **Reduced CDN dependency**: CDN now only used for handling business logic, while all components are part of the NPM package
-- **React preparation**: Preparation for upcoming React wrapper library
+---
 
-## v0.1.1 - Safari Compatibility Fixes (10-Apr-2025)
+## v0.1.1 - Safari Compatibility (10-Apr-2025)
 
-### 🔧 Bug Fixes
+Fixed Safari styling issues by switching from Inter font to system fonts.
 
-- **Safari styling**: Fixed styling and font display issues in Safari
-- **Font optimization**: Removed usage of Inter font in favor of system fonts
-- **Cross-browser support**: Improved cross-browser compatibility by limiting to system fonts for full support
+---
 
-## v0.1.0 - Standalone Vaulting, New Payment Methods, and UX Improvements (10-Apr-2025)
+## v0.1.0 - Vaulting & UX Improvements (10-Apr-2025)
 
-This release introduces significant enhancements including a standalone vaulting component, Klarna integration, improved error handling, and various UX improvements.
+:::info Major Release
+Introduced standalone vaulting component, Klarna integration, and significant UX improvements.
+:::
 
-### 🎯 Key Highlights
+**Key Features:**
 
-- **New Klarna Component**: Full Klarna support with collapsible design, inline pay button, and proper error message display
-- **Standalone Vaulting Component**: Place anywhere on your page with support for all current backend payment methods
-- **Improved UX**: Enhanced error validation, redesigned payment method styling, and better loader implementation
+- Klarna payment method with collapsible design
+- Standalone vault component supporting all backend payment methods
+- Enhanced error validation (triggers on blur instead of submit)
+- Improved styling system with JavaScript-injected CSS tokens
+- CSS-only loader with merchant customization support
 
-### ✨ New Components and Features
+---
 
-- **🟡 Klarna**:
-  - Fully integrated Klarna payment solution
-  - Collapsible design for better space utilization
-  - Inline pay button for streamlined checkout flow
-  - Improved error message display and handling
-  - Enhanced composability with other checkout elements
-- **🔐 Standalone Vaulting Component**:
-  - Can be placed anywhere on the page
-  - Supports all current backend payment methods
-  - Includes CVV recapture functionality through client session
-- **💳 Payment Method Improvements**:
-  - Updated button styling, background colors, and icons
-  - Visual improvements for native payment methods
-  - New collapsible component for displaying alternative payment methods
-  - Flexible placement and configuration options
+## v0.0.3 - TypeScript & Button Fixes (11-Mar-2025)
 
-### 🚀 UX and Technical Improvements
+Fixed TypeScript type bundling and Apple Pay/Google Pay button height adjustments.
 
-- **🔍 Enhanced Error Handling**:
-  - Card form validation now triggers on field blur instead of form submit
-  - More responsive feedback for users
-- **🎨 Improved Styling System**:
-  - Overhauled CSS token and style variable loading
-  - JavaScript-injected CSS tokens that preserve merchant customizations
-- **⏳ Loader Enhancements**:
-  - CSS-only loader appears before JavaScript initialization
-  - Optional: merchants can disable or use custom loader designs
+---
 
-## v0.0.3 - TypeScript Types Bundling Fixes and NativePayments Buttons Height Fixes (11-Mar-2025)
+## v0.0.2 - Initial Beta Release (07-Mar-2025)
 
-### 🔧 Bug Fixes
+:::info Initial Beta
+First public beta introducing card form, Apple Pay, Google Pay, PayPal (beta), localization support, and comprehensive styling API.
+:::
 
-- **TypeScript bundling**: Fixed the bundling issue with TypeScript types, which were not generated correctly
-- **Native payment heights**: Applied small fixes to Apple Pay and Google Pay buttons to ensure they adjust their height based on stack configuration
+**Core Components:**
 
-## v0.0.2 - Initial Primer Checkout Release (07-Mar-2025)
+- `<primer-checkout>` - Main container and SDK initialization
+- `<primer-card-form>` - Card input with validation
+- `<primer-payment-method>` - Payment method renderer
+- Card input components: number, expiry, CVV, cardholder name
+- Form helpers: button, input, label, error, wrapper
 
-This major release marks the first public beta of the Primer Checkout library, introducing our core components and functionality.
+---
 
-### ✨ Features
+## v0.0.1 - Package Setup (01-Mar-2025)
 
-- **🎯 Card Form** with layout customizations and interactive validation
-- **💳 Payment Method Support**:
-  - Initial beta release for PayPal support
-  - Apple Pay support
-  - Google Pay support
-- **🌍 Localization Support**: Translations for all locales currently supported in SDK v2
-- **⚡ State Management**: Event dispatching and state handling across components
-- **🎨 Styling API**: Comprehensive CSS variables system for customizing the checkout appearance
+Initial NPM package setup and name reservation.
 
-### 🧩 Components
-
-- `<primer-checkout>`: Main container for all checkout components, handles SDK initialization
-- `<primer-main>`: Optional container for organizing payment methods and checkout states
-- `<primer-payment-method>`: Renders different payment method interfaces based on configuration
-- `<primer-card-form>`: Container for card input components with validation
-- `<primer-input-card-number>`: Secure input for card numbers with network detection
-- `<primer-input-card-expiry>`: Secure input for card expiration dates
-- `<primer-input-cvv>`: Secure input for card verification codes
-- `<primer-input-card-holder-name>`: Input for cardholder name
-- `<primer-card-form-submit>`: Submit button component for card forms
-- `<primer-button>`: Versatile button component for actions
-- `<primer-input>`: Base input component for text and other data
-- `<primer-input-label>`: Label component for form inputs
-- `<primer-input-error>`: Error message component with validation state
-- `<primer-input-wrapper>`: Container component for input, label and error elements
-
-## v0.0.1 - Initial Package Release (01-Mar-2025)
-
-### 📦 Initial Release
-
-- **Package setup**: Initial NPM package setup
-- **Name reservation**: Empty release to reserve package name
+---

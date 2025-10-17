@@ -21,7 +21,6 @@ const config: Config = {
   projectName: 'primer-checkout', // Usually your repo name.
 
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'throw',
   noIndex: false,
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -47,6 +46,9 @@ const config: Config = {
   ],
   markdown: {
     mermaid: true,
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
   },
   presets: [
     [
@@ -118,9 +120,9 @@ const config: Config = {
         },
         {
           type: 'docSidebar',
-          sidebarId: 'api',
+          sidebarId: 'sdkReference',
           position: 'left',
-          label: 'API',
+          label: 'SDK Reference',
         },
         {
           href: '/showcase',

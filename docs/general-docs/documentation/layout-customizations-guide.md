@@ -1,7 +1,7 @@
 ---
 title: Layout Customizations Guide
 sidebar_label: Layout Customizations
-sidebar_position: 4
+sidebar_position: 6
 description: Learn how to customize the layout of your checkout experience with Primer Checkout
 ---
 
@@ -180,7 +180,9 @@ Using the wrong slot name or omitting it entirely can lead to content not appear
 
 ## Event-Driven State Management
 
-When implementing a custom layout without `<primer-main>`, you'll need to listen for events to manage checkout states:
+When implementing a custom layout without `<primer-main>`, you'll need to listen for events to manage checkout states.
+
+For comprehensive information on all available events, event payloads, and best practices, see the [Events Guide](/documentation/events-guide).
 
 ```javascript
 document
@@ -284,7 +286,7 @@ The `primer-payment-method-container` component provides a declarative way to or
 </div>
 ```
 
-This approach automatically filters available payment methods without requiring event listeners or manual state management. See the [Payment Method Container API documentation](/api/Components/payment-method-container-doc) for complete usage guide.
+This approach automatically filters available payment methods without requiring event listeners or manual state management. See the [Payment Method Container SDK Reference documentation](/sdk-reference/Components/payment-method-container-doc) for complete usage guide.
 
 ### Alternative: Event-Driven Dynamic Rendering
 
@@ -499,7 +501,7 @@ This approach gives you complete control over payment failure presentation but r
 The `<primer-error-message-container>` specifically handles payment failures that occur after form submission, not card validation errors. Card validation is handled by the input components themselves and prevents form submission until valid.
 :::
 
-For more information about the error message container, see the [Error Message Container Component](/api/Components/error-message-container-doc) documentation.
+For more information about the error message container, see the [Error Message Container Component](/sdk-reference/Components/error-message-container-doc) documentation.
 
 ## Best Practices for Layout Customization
 
@@ -514,9 +516,9 @@ For more information about the error message container, see the [Error Message C
 7. **Handle Payment Failures** - Either use the `<primer-error-message-container>` component or implement custom payment failure handling using events
    :::
 
-For detailed information on available components and their slots, refer to the component API documentation:
+For detailed information on available components and their slots, refer to the component SDK Reference documentation:
 
-- [Checkout Component](/api/Components/primer-checkout-doc/)
-- [Main Component](/api/Components/primer-main-doc/)
-- [Payment Method Component](/api/Components/payment-method-doc/)
-- [Error Message Container](/api/Components/error-message-container-doc/)
+- [Checkout Component](/sdk-reference/primer-checkout-doc/)
+- [Main Component](/sdk-reference/Components/primer-main-doc/)
+- [Payment Method Component](/sdk-reference/Components/payment-method-doc/)
+- [Error Message Container](/sdk-reference/Components/error-message-container-doc/)

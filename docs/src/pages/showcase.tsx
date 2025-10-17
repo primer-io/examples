@@ -168,7 +168,10 @@ function ShowcaseExamples() {
             <p className={styles.exampleDescription}>
               Built with vanilla HTML and minimal JavaScript to emphasize how
               CSS variables alone can transform your checkout appearance. See
-              the <a href='/api/styling-api-docs'>Styling API documentation</a>{' '}
+              the{' '}
+              <a href='/sdk-reference/styling-api-docs'>
+                Styling API documentation
+              </a>{' '}
               for complete variable reference.
             </p>
             <div className={styles.exampleLinks}>

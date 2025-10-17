@@ -314,9 +314,9 @@ const Component = ({ clientToken, options }) => {
 
 ## Related Components
 
-- [Payment Method Component](/api/Components/payment-method-doc) - Individual payment method component
-- [Primer Checkout](/api/Components/primer-checkout-doc) - Main checkout container
-- [Primer Main](/api/Components/primer-main-doc) - Main checkout content area
+- [Payment Method Component](/sdk-reference/Components/payment-method-doc) - Individual payment method component
+- [Primer Checkout](/sdk-reference/primer-checkout-doc) - Main checkout container
+- [Primer Main](/sdk-reference/Components/primer-main-doc) - Main checkout content area
 
 ## Key Considerations
 

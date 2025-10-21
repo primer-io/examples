@@ -29,7 +29,7 @@ function HomepageHeader() {
             <div className={styles.heroCta}>
               <Link
                 className='button button--primary button--lg'
-                to='/documentation/getting-started'
+                to='/guides/getting-started'
               >
                 Start Building
               </Link>
@@ -65,7 +65,7 @@ function CoreBenefits() {
               flexibility and performance across any tech stack
             </p>
             <Link
-              to='/documentation/components-technology'
+              to='/guides/components-technology'
               className={styles.learnMore}
             >
               Learn about our technology →
@@ -82,7 +82,7 @@ function CoreBenefits() {
               that adapt to your specific business needs and customer journey
             </p>
             <Link
-              to='/documentation/layout-customizations-guide'
+              to='/guides/layout-customizations-guide'
               className={styles.learnMore}
             >
               Explore layout options →
@@ -127,7 +127,7 @@ function ComposableFeature() {
               customization with minimal configuration effort.
             </p>
             <Link
-              to='/documentation/getting-started'
+              to='/guides/getting-started'
               className={clsx('button button--primary', styles.featureBtn)}
             >
               Get Started
@@ -225,7 +225,7 @@ function CodeExample() {
         <div className={styles.codeExampleCta}>
           <Link
             className='button button--secondary button--lg'
-            to='/documentation/getting-started'
+            to='/guides/getting-started'
           >
             View Documentation
           </Link>

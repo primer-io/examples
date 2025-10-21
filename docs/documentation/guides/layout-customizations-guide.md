@@ -1,7 +1,6 @@
 ---
 title: Layout Customizations Guide
 sidebar_label: Layout Customizations
-sidebar_position: 6
 description: Learn how to customize the layout of your checkout experience with Primer Checkout
 ---
 
@@ -182,7 +181,7 @@ Using the wrong slot name or omitting it entirely can lead to content not appear
 
 When implementing a custom layout without `<primer-main>`, you'll need to listen for events to manage checkout states.
 
-For comprehensive information on all available events, event payloads, and best practices, see the [Events Guide](/documentation/events-guide).
+For comprehensive information on all available events, event payloads, and best practices, see the [Events Guide](/guides/events-guide).
 
 ```javascript
 document

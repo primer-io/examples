@@ -1,7 +1,6 @@
 ---
 title: LLM Guide
 sidebar_label: LLM Guide
-sidebar_position: 7
 description: Learn how to integrate and use Large Language Models with Primer Checkout
 ---
 

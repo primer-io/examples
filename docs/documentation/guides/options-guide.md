@@ -1,12 +1,11 @@
 ---
-sidebar_position: 5
 title: SDK Options Guide
 description: Learn how to configure the Primer SDK with options
 ---
 
 # SDK Options Guide
 
-Primer Checkout SDK configuration uses an options object that controls everything from localization and API versions to payment method behavior and styling preferences. This guide explains how to properly pass options to the SDK, handle React-specific challenges, and implement configuration patterns that work reliably across different scenarios.
+Primer Checkout SDK configuration uses an options object that controls everything from localization and API versions to payment method behavior and styling preferences. This guide explains how to properly pass options to the SDK and implement configuration patterns that work reliably across different scenarios and frameworks.
 
 ## Understanding SDK Options
 
@@ -20,7 +19,7 @@ SDK options are configuration settings that determine how the Primer Checkout SD
 - **Billing Requirements**: Which customer data fields to collect
 
 :::info Options vs Events
-Options configure **how the SDK behaves**, while events handle **what happens during the payment flow**. For handling checkout completion, failure, or pending states, use **events** - see the [Events Guide](/documentation/events-guide).
+Options configure **how the SDK behaves**, while events handle **what happens during the payment flow**. For handling checkout completion, failure, or pending states, use **events** - see the [Events Guide](/guides/events-guide).
 :::
 
 ### What This Guide Covers
@@ -46,10 +45,10 @@ These are web component attributes that configure the component itself:
 
 These are SDK configuration settings passed via the `options` property:
 
-- **Core options**: `locale`, `sdkCore`, `merchantDomain`, `disabledPayments`
+- **Core options**: `locale`, `sdkCore`, `merchantDomain`, `disabledPayments`, `enabledPaymentMethods`
 - **Payment method options**: `applePay`, `googlePay`, `paypal`, `klarna`
 - **Card options**: `card.cardholderName.required`, `card.cardholderName.visible`
-- **Other options**: `vault`, `stripe`, `threeDsOptions`, `submitButton`
+- **Other options**: `vault`, `stripe`, `submitButton`
 
 **How to set**: Assign a JavaScript object to the `options` property.
 
@@ -106,12 +105,6 @@ checkout.clientToken = 'your-token'; // Ignored by component
 
 ```html
 <primer-checkout client-token="your-client-token"></primer-checkout>
-```
-
-**React/JSX usage:**
-
-```jsx
-<primer-checkout client-token={token}></primer-checkout>
 ```
 
 #### Optional: custom-styles
@@ -172,9 +165,20 @@ checkout.options = {
   },
 };
 
-// ❌ WRONG: Don't use setAttribute() for options
-checkout.setAttribute('options', JSON.stringify({ locale: 'en-GB' })); // Won't work
+// ⚠️ NOT RECOMMENDED: setAttribute with JSON works but isn't ideal
+checkout.setAttribute('options', JSON.stringify({ locale: 'en-GB' }));
+// ✅ Technically works but has performance overhead
+// ✅ Requires JSON parsing by the component
+// ❌ Use property assignment instead for better performance
+//
+// Prefer this:
+checkout.options = { locale: 'en-GB' }; // Direct property assignment
 ```
+
+> **Note**: While `setAttribute()` with JSON strings works, it's not the recommended approach.
+> Use it only in edge cases where direct property assignment isn't possible (e.g., certain
+> build tool limitations or framework constraints). The SDK will parse the JSON string, but
+> direct property assignment is more performant and type-safe.
 
 For a complete list of all available SDK options, see the [SDK Options Reference](/sdk-reference/sdk-options-reference).
 
@@ -219,289 +223,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 ```
 
-## React/JSX Patterns
-
-### Component Properties in React
-
-React JSX treats web component attributes correctly, so you can pass component properties as JSX attributes:
-
-```tsx
-import { useRef, useEffect } from 'react';
-
-function CheckoutPage({ clientToken }: { clientToken: string }) {
-  const checkoutRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const checkout = checkoutRef.current;
-    if (!checkout) return;
-
-    // Set SDK options as object property
-    checkout.options = {
-      locale: 'en-GB',
-      sdkCore: true,
-    };
-  }, []);
-
-  return (
-    <primer-checkout
-      ref={checkoutRef}
-      client-token={clientToken}
-      loader-disabled={false}
-    >
-      {/* Component content */}
-    </primer-checkout>
-  );
-}
-```
-
-### SDK Options in React
-
-The critical issue in React is with the **`options` property**, not with component attributes.
-
-:::danger React/JSX Users: Critical SDK Options Pattern
-
-**If you're using React, Next.js, or any JSX-based framework**, you MUST follow specific patterns when passing SDK options to avoid re-render issues.
-
-**The Problem**: React creates new object references on every render. Passing inline objects to `<primer-checkout>` can trigger unnecessary re-renders and component re-initialization.
-
-**❌ NEVER do this in React**:
-
-```javascript
-// Inline object creates new reference every render!
-<primer-checkout client-token={token} options={{ locale: 'en-GB' }} />
-```
-
-**✅ Always do this instead**:
-
-```javascript
-// Define options OUTSIDE component or use useMemo
-const SDK_OPTIONS = {
-  locale: 'en-GB',
-};
-
-function MyComponent() {
-  return <primer-checkout options={SDK_OPTIONS} />;
-}
-```
-
-**For complete React integration patterns**, including `useMemo` usage for dynamic options, see the [Server-Side Rendering Guide - Next.js section](/documentation/server-side-rendering-guide#nextjs).
-:::
-
-### Why React Object References Matter
-
-React re-renders components when props change. Every time a component re-renders, inline objects create new references:
-
-```javascript
-// ❌ WRONG: New object on every render
-function CheckoutPage() {
-  // This creates a NEW object every time CheckoutPage renders
-  const options = { locale: 'en-GB' };
-
-  return <primer-checkout options={options} />;
-}
-
-// ✅ CORRECT: Stable reference
-const SDK_OPTIONS = { locale: 'en-GB' };
-
-function CheckoutPage() {
-  // Same object reference every render
-  return <primer-checkout options={SDK_OPTIONS} />;
-}
-```
-
-### React Pattern 1: Static Options (Recommended)
-
-For options that don't change during the component lifecycle, define them outside the component:
-
-```typescript
-import { useEffect, useRef } from 'react';
-
-// Define options outside component - created once
-const SDK_OPTIONS = {
-  locale: 'en-GB',
-  paymentMethodOptions: {
-    PAYMENT_CARD: {
-      requireCVV: true,
-      requireBillingAddress: true,
-    },
-  },
-};
-
-function CheckoutPage() {
-  const checkoutRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const checkout = checkoutRef.current;
-    if (!checkout) return;
-
-    // Set options as property reference
-    checkout.options = SDK_OPTIONS;
-
-    // Set up event listeners
-    const handleReady = (event: CustomEvent) => {
-      console.log('✅ SDK ready');
-    };
-
-    checkout.addEventListener('primer:ready', handleReady);
-
-    // Cleanup
-    return () => {
-      checkout.removeEventListener('primer:ready', handleReady);
-    };
-  }, []); // Empty deps - runs once
-
-  return (
-    <primer-checkout
-      ref={checkoutRef}
-      client-token="your-client-token"
-    >
-      {/* Component content */}
-    </primer-checkout>
-  );
-}
-```
-
-### React Pattern 2: Dynamic Options with useMemo
-
-For options that depend on props or state, use `useMemo` to maintain stable references:
-
-```typescript
-import { useEffect, useMemo, useRef } from 'react';
-
-interface CheckoutPageProps {
-  userLocale: string;
-  merchantName: string;
-}
-
-function CheckoutPage({ userLocale, merchantName }: CheckoutPageProps) {
-  const checkoutRef = useRef<HTMLElement>(null);
-
-  // useMemo creates new object only when dependencies change
-  const sdkOptions = useMemo(
-    () => ({
-      locale: userLocale,
-      paymentMethodOptions: {
-        APPLE_PAY: {
-          merchantName: merchantName,
-          merchantCountryCode: 'GB',
-        },
-      },
-    }),
-    [userLocale, merchantName], // Only recreate if these change
-  );
-
-  useEffect(() => {
-    const checkout = checkoutRef.current;
-    if (!checkout) return;
-
-    checkout.options = sdkOptions;
-
-    const handleReady = (event: CustomEvent) => {
-      console.log('✅ SDK ready with locale:', userLocale);
-    };
-
-    checkout.addEventListener('primer:ready', handleReady);
-
-    return () => {
-      checkout.removeEventListener('primer:ready', handleReady);
-    };
-  }, [sdkOptions]); // Re-run when sdkOptions reference changes
-
-  return (
-    <primer-checkout
-      ref={checkoutRef}
-      client-token="your-client-token"
-    >
-      {/* Component content */}
-    </primer-checkout>
-  );
-}
-```
-
-### React Pattern 3: Avoiding Re-initialization
-
-**Critical**: If the SDK re-initializes unnecessarily, check that your options object reference is stable:
-
-```typescript
-import { useEffect, useMemo, useRef } from 'react';
-
-function CheckoutPage() {
-  const checkoutRef = useRef<HTMLElement>(null);
-
-  // ❌ WRONG: Creates new object every render
-  const badOptions = {
-    locale: 'en-GB',
-  };
-
-  // ✅ CORRECT: Stable reference with useMemo
-  const goodOptions = useMemo(
-    () => ({
-      locale: 'en-GB',
-    }),
-    [], // Empty deps = created once
-  );
-
-  useEffect(() => {
-    const checkout = checkoutRef.current;
-    if (!checkout) return;
-
-    checkout.options = goodOptions; // Stable reference
-
-    // This will only run once because goodOptions never changes
-  }, [goodOptions]);
-
-  return <primer-checkout ref={checkoutRef} />;
-}
-```
-
-### Common React Pitfalls and Solutions
-
-#### Pitfall 1: Inline Object in JSX
-
-```typescript
-// ❌ WRONG: Inline object
-<primer-checkout options={{ locale: 'en-GB' }} />
-
-// ✅ CORRECT: Use constant or useMemo
-const options = useMemo(() => ({ locale: 'en-GB' }), []);
-<primer-checkout options={options} />
-```
-
-#### Pitfall 2: Object Created in Component Body
-
-```typescript
-// ❌ WRONG: New object every render
-function CheckoutPage() {
-  const options = { locale: 'en-GB' };
-  return <primer-checkout options={options} />;
-}
-
-// ✅ CORRECT: Define outside or use useMemo
-const OPTIONS = { locale: 'en-GB' };
-function CheckoutPage() {
-  return <primer-checkout options={OPTIONS} />;
-}
-```
-
-#### Pitfall 3: Missing useMemo Dependencies
-
-```typescript
-// ❌ WRONG: Missing dependency
-const options = useMemo(
-  () => ({
-    locale: userLocale, // Uses userLocale but not in deps
-  }),
-  [],
-); // Missing userLocale in dependency array
-
-// ✅ CORRECT: Include all dependencies
-const options = useMemo(
-  () => ({
-    locale: userLocale,
-  }),
-  [userLocale],
-); // userLocale in deps
-```
+:::info React Developers
+Using React? See the **[React Integration Guide](./react-guide.md)** for React-specific patterns including:
+
+- TypeScript/JSX types setup (critical!)
+- React 18 vs React 19 differences
+- Stable references with useMemo
+- Common React pitfalls and solutions
+  :::
 
 ## Configuration Patterns by Scenario
 
@@ -534,9 +263,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 ### Custom Payment Method Configuration
 
-Enabling Apple Pay with billing address requirements:
+Enabling specific payment methods with configuration:
 
 ```javascript
+import { PaymentMethodType } from '@primer-io/primer-js';
+
 document.addEventListener('DOMContentLoaded', () => {
   const checkout = document.querySelector('primer-checkout');
 
@@ -547,11 +278,11 @@ document.addEventListener('DOMContentLoaded', () => {
   checkout.options = {
     locale: 'en-US',
     sdkCore: true,
-    applePay: {
-      merchantName: 'Your Store Name',
-      buttonType: 'buy',
-      buttonStyle: 'black',
-    },
+    // Specify which payment methods to enable
+    enabledPaymentMethods: [
+      PaymentMethodType.PAYMENT_CARD,
+      PaymentMethodType.ADYEN_BLIK,
+    ],
     card: {
       cardholderName: {
         required: true,
@@ -565,7 +296,8 @@ document.addEventListener('DOMContentLoaded', () => {
 **Key points:**
 
 - `client-token` is a component property
-- `applePay` and `card` are SDK options
+- `enabledPaymentMethods` controls which payment methods are displayed
+- `card` configuration applies to the card payment method
 - Configure multiple payment methods in the options object
 - All payment configuration happens in `options`, not attributes
 
@@ -662,12 +394,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 ## Best Practices
 
-### 1. Define Options Outside Components to Prevent Re-renders
+### 1. Define Options Outside Functions to Prevent Re-creation
 
-Create options objects once and reuse them to avoid unnecessary re-renders:
+Create options objects once and reuse them to avoid unnecessary re-initialization:
 
 :::tip Performance Optimization
-Define static options outside your component or function scope. This prevents creating new object references on every render/execution.
+Define static options outside your function scope. This prevents creating new object references on every function execution.
 :::
 
 ```javascript
@@ -684,40 +416,11 @@ function initCheckout() {
 // ❌ AVOID: Created every time function runs
 function initCheckout() {
   const checkout = document.querySelector('primer-checkout');
-  checkout.options = { locale: 'en-GB' }; // New object
+  checkout.options = { locale: 'en-GB' }; // New object every execution
 }
 ```
 
-### 2. Use useMemo in React for Dynamic Options
-
-When options depend on props or state, use `useMemo` to maintain stable references:
-
-:::tip React Performance
-Always use `useMemo` when options depend on props, state, or other dynamic values. This prevents unnecessary SDK re-initialization.
-:::
-
-```typescript
-// ✅ GOOD: Stable reference with proper dependencies
-const options = useMemo(
-  () => ({
-    locale: userLocale,
-    paymentMethodOptions: {
-      APPLE_PAY: { merchantName: storeName },
-    },
-  }),
-  [userLocale, storeName], // Only recreate when these change
-);
-
-// ❌ AVOID: New object every render
-const options = {
-  locale: userLocale,
-  paymentMethodOptions: {
-    APPLE_PAY: { merchantName: storeName },
-  },
-};
-```
-
-### 3. Use TypeScript Interfaces for Type Safety
+### 2. Use TypeScript Interfaces for Type Safety
 
 Define TypeScript interfaces for your options objects to catch errors at compile time:
 
@@ -747,7 +450,7 @@ const options: PrimerSDKOptions = {
 };
 ```
 
-### 4. Test Options Configuration Separately
+### 3. Test Options Configuration Separately
 
 Create isolated tests for your options configuration:
 
@@ -761,21 +464,17 @@ describe('SDK Options Configuration', () => {
     expect(options.locale).toBe('en-GB');
   });
 
-  it('should maintain stable reference with useMemo', () => {
-    const { result, rerender } = renderHook(() =>
-      useMemo(() => ({ locale: 'en-GB' }), []),
-    );
+  it('should maintain stable reference', () => {
+    const options = { locale: 'en-GB' };
+    const checkout = document.querySelector('primer-checkout');
+    checkout.options = options;
 
-    const firstRef = result.current;
-    rerender();
-    const secondRef = result.current;
-
-    expect(firstRef).toBe(secondRef); // Same reference
+    expect(checkout.options).toBe(options); // Same reference
   });
 });
 ```
 
-### 5. Debug Configuration Issues
+### 4. Debug Configuration Issues
 
 Common debugging approaches for options-related issues:
 
@@ -820,7 +519,7 @@ checkout.addEventListener('primer:ready', (event) => {
 });
 ```
 
-### 6. Distinguish Between Component Properties and SDK Options
+### 5. Distinguish Between Component Properties and SDK Options
 
 Understand the difference between component properties and SDK options:
 
@@ -863,7 +562,7 @@ checkout.options = {
 };
 ```
 
-### 7. Keep Options Simple and Focused
+### 6. Keep Options Simple and Focused
 
 Only configure what you need:
 
@@ -892,6 +591,6 @@ checkout.options = {
 ## See Also
 
 - **[SDK Options Reference](/sdk-reference/sdk-options-reference)** - Complete list of all available SDK options with detailed specifications
-- **[Events Guide](/documentation/events-guide)** - Comprehensive guide to handling SDK events (for checkout completion/failure handling)
-- **[Getting Started](/documentation/getting-started)** - New to the Primer SDK? Start here
+- **[Events Guide](/guides/events-guide)** - Comprehensive guide to handling SDK events (for checkout completion/failure handling)
+- **[Getting Started](/guides/getting-started)** - New to the Primer SDK? Start here
 - **[Primer Checkout Component](/sdk-reference/primer-checkout-doc)** - Component-specific documentation and API reference

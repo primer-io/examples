@@ -8,15 +8,18 @@ description: Complete reference of all SDK configuration options
 
 This reference documents the configuration options passed to the `options` property of the `<primer-checkout>` component. These options configure SDK behavior, payment methods, and features.
 
-:::info How to Use These Options
+:::info Documentation Navigation
+This is a **complete API reference** of all available SDK options - what each option does, its type, and default value.
 
-This reference documents **WHAT** options are available. For guidance on **HOW** to configure these options (including React/JSX patterns and setAttribute() requirements), see the [Options Guide](/documentation/options-guide).
+**Looking for something else?**
 
-For handling checkout events like completion or failure, see the [Events Guide](/documentation/events-guide) instead.
-:::
+- **How to pass options**: See the [Options Guide](../guides/options-guide.md)
+- **React-specific patterns**: See the [React Integration Guide](../guides/react-guide.md)
+- **SSR framework setup**: See the [Server-Side Rendering Guide](../guides/server-side-rendering-guide.md)
+  :::
 
 :::info Component Properties vs SDK Options
-This reference documents **SDK options** (the contents of the `options` object). For **component properties** like `client-token`, `custom-styles`, and `loader-disabled`, see the [Options Guide - Component Properties](/documentation/options-guide#component-properties-html-attributes).
+This reference documents **SDK options** (the contents of the `options` object). For **component properties** like `client-token`, `custom-styles`, and `loader-disabled`, see the [Options Guide - Component Properties](/guides/options-guide#component-properties-html-attributes).
 :::
 
 ## SDK Core Option
@@ -50,9 +53,6 @@ See the [v0.4.0 changelog](/changelog#v040---sdk-core-default--billing-address-1
 ```javascript
 const checkout = document.querySelector('primer-checkout');
 
-// Component property (separate from options)
-checkout.setAttribute('client-token', 'your-token');
-
 // SDK option - opt out of SDK Core
 checkout.options = {
   sdkCore: false, // Use legacy SDK
@@ -63,9 +63,6 @@ checkout.options = {
 
 ```javascript
 const checkout = document.querySelector('primer-checkout');
-
-// Component property (separate from options)
-checkout.setAttribute('client-token', 'your-token');
 
 // SDK options - sdkCore: true is the default
 checkout.options = {
@@ -79,68 +76,50 @@ checkout.options = {
 These are the fundamental options for configuring SDK behavior. These go inside the `options` object.
 
 :::warning client-token is NOT an SDK Option
-The client token is set as a component property using `setAttribute('client-token', 'your-token')`, NOT in the options object. See the [Options Guide](/documentation/options-guide#required-client-token) for details.
+The client token is set as a component property using `setAttribute('client-token', 'your-token')`, NOT in the options object. See the [Options Guide](/guides/options-guide#required-client-token) for details.
 :::
 
 ### locale
 
-**Required**: No
 **Type**: `string`
 **Default**: Browser's locale
-**Description**: Forces the locale for UI elements. Use standard locale formats like "en-US", "fr-FR", "es-ES", etc.
+
+Forces the locale for UI elements. Use standard locale formats like "en-US", "fr-FR", "es-ES", etc.
 
 **Example:**
 
 ```javascript
-const checkout = document.querySelector('primer-checkout');
-
-// Component property
-checkout.setAttribute('client-token', 'your-token');
-
-// SDK option
-checkout.options = {
+const options = {
   locale: 'en-GB', // British English
 };
 ```
 
 ### merchantDomain
 
-**Required**: No
 **Type**: `string`
 **Default**: `window.location.hostname`
-**Description**: Specifies the merchant's domain for Apple Pay domain validation. Particularly useful when the checkout is hosted on a different domain than the merchant's registered Apple Pay domain.
+
+Specifies the merchant's domain for Apple Pay domain validation. Particularly useful when the checkout is hosted on a different domain than the merchant's registered Apple Pay domain.
 
 **Example:**
 
 ```javascript
-const checkout = document.querySelector('primer-checkout');
-
-// Component property
-checkout.setAttribute('client-token', 'your-token');
-
-// SDK option
-checkout.options = {
+const options = {
   merchantDomain: 'merchant.example.com',
 };
 ```
 
 ### disabledPayments
 
-**Required**: No
 **Type**: `boolean`
 **Default**: `false`
-**Description**: When `true`, disables all payment methods globally. Useful for drop-in mode when you only want to display vaulted payment methods.
+
+When `true`, disables all payment methods globally. Useful for drop-in mode when you only want to display vaulted payment methods.
 
 **Example:**
 
 ```javascript
-const checkout = document.querySelector('primer-checkout');
-
-// Component property
-checkout.setAttribute('client-token', 'your-token');
-
-// SDK option
-checkout.options = {
+const options = {
   disabledPayments: true, // Only show vaulted payment methods
 };
 ```
@@ -153,24 +132,20 @@ Configure card payment form behavior and appearance.
 
 **Type**: `boolean`
 **Default**: `false`
-**Description**: Whether the cardholder name field is required for card payments.
+
+Whether the cardholder name field is required for card payments.
 
 ### card.cardholderName.visible
 
 **Type**: `boolean`
 **Default**: `true`
-**Description**: Whether the cardholder name field is visible in the card form.
+
+Whether the cardholder name field is visible in the card form.
 
 **Example:**
 
 ```javascript
-const checkout = document.querySelector('primer-checkout');
-
-// Component property
-checkout.setAttribute('client-token', 'your-token');
-
-// SDK option
-checkout.options = {
+const options = {
   card: {
     cardholderName: {
       required: true,
@@ -188,19 +163,22 @@ Configure Apple Pay button appearance and behavior.
 
 **Type**: `'plain' | 'buy' | 'set-up' | 'donate' | 'check-out' | 'book' | 'subscribe'`
 **Default**: `'plain'`
-**Description**: The type of Apple Pay button to display.
+
+The type of Apple Pay button to display.
 
 ### applePay.buttonStyle
 
 **Type**: `'white' | 'white-outline' | 'black'`
 **Default**: `'black'`
-**Description**: The visual style of the Apple Pay button.
+
+The visual style of the Apple Pay button.
 
 ### applePay.captureBillingAddress
 
 **Type**: `boolean`
 **Default**: `false`
-**Description**: Whether to capture billing address during checkout.
+
+Whether to capture billing address during checkout.
 
 :::warning Deprecated
 Use `applePay.billingOptions.requiredBillingContactFields` instead.
@@ -209,36 +187,35 @@ Use `applePay.billingOptions.requiredBillingContactFields` instead.
 ### applePay.billingOptions
 
 **Type**: `object`
-**Description**: Configuration for billing information collection.
+
+Configuration for billing information collection.
 
 **billingOptions.requiredBillingContactFields**
 **Type**: `Array<'emailAddress' | 'name' | 'phoneNumber' | 'postalAddress' | 'phoneticName'>`
-**Description**: Required billing contact fields to collect during checkout.
+
+Required billing contact fields to collect during checkout.
 
 ### applePay.shippingOptions
 
 **Type**: `object`
-**Description**: Configuration for shipping information collection.
+
+Configuration for shipping information collection.
 
 **shippingOptions.requiredShippingContactFields**
 **Type**: `Array<'emailAddress' | 'name' | 'phoneNumber' | 'postalAddress' | 'phoneticName'>`
-**Description**: Required shipping contact fields to collect during checkout.
+
+Required shipping contact fields to collect during checkout.
 
 **shippingOptions.requireShippingMethod**
 **Type**: `boolean`
 **Default**: `false`
-**Description**: Whether shipping method selection is required.
+
+Whether shipping method selection is required.
 
 **Example:**
 
 ```javascript
-const checkout = document.querySelector('primer-checkout');
-
-// Component property
-checkout.setAttribute('client-token', 'your-token');
-
-// SDK option
-checkout.options = {
+const options = {
   applePay: {
     buttonType: 'buy',
     buttonStyle: 'black',
@@ -261,58 +238,60 @@ Configure Google Pay button appearance and behavior.
 
 **Type**: `'long' | 'short' | 'book' | 'buy' | 'checkout' | 'donate' | 'order' | 'pay' | 'plain' | 'subscribe'`
 **Default**: `'long'`
-**Description**: The type of Google Pay button to display.
+
+The type of Google Pay button to display.
 
 ### googlePay.buttonColor
 
 **Type**: `'default' | 'black' | 'white'`
 **Default**: `'default'`
-**Description**: The color of the Google Pay button.
+
+The color of the Google Pay button.
 
 ### googlePay.buttonSizeMode
 
 **Type**: `'fill' | 'static'`
 **Default**: `'fill'`
-**Description**: The size mode of the Google Pay button. `'fill'` makes the button expand to fill its container, while `'static'` keeps it at a fixed size.
+
+The size mode of the Google Pay button. `'fill'` makes the button expand to fill its container, while `'static'` keeps it at a fixed size.
 
 ### googlePay.captureBillingAddress
 
 **Type**: `boolean`
 **Default**: `false`
-**Description**: Whether to prompt for billing address during checkout.
+
+Whether to prompt for billing address during checkout.
 
 ### googlePay.shippingAddressParameters
 
 **Type**: `object`
-**Description**: Configuration for shipping address collection.
+
+Configuration for shipping address collection.
 
 **shippingAddressParameters.phoneNumberRequired**
 **Type**: `boolean`
 **Default**: `false`
-**Description**: Whether phone number is required in the shipping address.
+
+Whether phone number is required in the shipping address.
 
 ### googlePay.emailRequired
 
 **Type**: `boolean`
 **Default**: `false`
-**Description**: Whether email address is required during checkout.
+
+Whether email address is required during checkout.
 
 ### googlePay.requireShippingMethod
 
 **Type**: `boolean`
 **Default**: `false`
-**Description**: Whether shipping method selection is required.
+
+Whether shipping method selection is required.
 
 **Example:**
 
 ```javascript
-const checkout = document.querySelector('primer-checkout');
-
-// Component property
-checkout.setAttribute('client-token', 'your-token');
-
-// SDK option
-checkout.options = {
+const options = {
   googlePay: {
     buttonType: 'long',
     buttonColor: 'black',
@@ -332,53 +311,55 @@ Configure PayPal button appearance and behavior.
 
 **Type**: `'gold' | 'blue' | 'silver' | 'white' | 'black'`
 **Default**: `'gold'`
-**Description**: The color of the PayPal button.
+
+The color of the PayPal button.
 
 ### paypal.buttonShape
 
 **Type**: `'pill' | 'rect'`
 **Default**: `'pill'`
-**Description**: The shape of the PayPal button.
+
+The shape of the PayPal button.
 
 ### paypal.buttonSize
 
 **Type**: `'small' | 'medium' | 'large' | 'responsive'`
 **Default**: `'medium'`
-**Description**: The size of the PayPal button.
+
+The size of the PayPal button.
 
 ### paypal.buttonHeight
 
 **Type**: `number`
-**Description**: Custom button height in pixels. Overrides the `buttonSize` setting.
+**Default**: none
+
+Custom button height in pixels. Overrides the `buttonSize` setting.
 
 ### paypal.buttonLabel
 
 **Type**: `'checkout' | 'credit' | 'pay' | 'buynow' | 'paypal' | 'installment'`
 **Default**: `'checkout'`
-**Description**: The label text displayed on the PayPal button.
+
+The label text displayed on the PayPal button.
 
 ### paypal.buttonTagline
 
 **Type**: `boolean`
 **Default**: `false`
-**Description**: Whether to show the PayPal tagline below the button.
+
+Whether to show the PayPal tagline below the button.
 
 ### paypal.paymentFlow
 
 **Type**: `'DEFAULT' | 'PREFER_VAULT'`
 **Default**: `'DEFAULT'`
-**Description**: The payment flow to use. `'PREFER_VAULT'` prioritizes saving the payment method for future use.
+
+The payment flow to use. `'PREFER_VAULT'` prioritizes saving the payment method for future use.
 
 **Example:**
 
 ```javascript
-const checkout = document.querySelector('primer-checkout');
-
-// Component property
-checkout.setAttribute('client-token', 'your-token');
-
-// SDK option
-checkout.options = {
+const options = {
   paypal: {
     buttonColor: 'gold',
     buttonShape: 'pill',
@@ -397,37 +378,38 @@ Configure Klarna payment behavior.
 
 **Type**: `'DEFAULT' | 'PREFER_VAULT'`
 **Default**: `'DEFAULT'`
-**Description**: The payment flow to use. `'PREFER_VAULT'` prioritizes saving the payment method for future use.
+
+The payment flow to use. `'PREFER_VAULT'` prioritizes saving the payment method for future use.
 
 ### klarna.recurringPaymentDescription
 
 **Type**: `string`
-**Description**: Description for recurring payments. Required if offering recurring payment options.
+**Default**: none
+
+Description for recurring payments. Required if offering recurring payment options.
 
 ### klarna.allowedPaymentCategories
 
 **Type**: `Array<'pay_now' | 'pay_later' | 'pay_over_time'>`
-**Description**: Allowed Klarna payment categories. Restricts which Klarna payment options are available to customers.
+**Default**: none
+
+Allowed Klarna payment categories. Restricts which Klarna payment options are available to customers.
 
 ### klarna.buttonOptions
 
 **Type**: `object`
-**Description**: Configuration for the Klarna button.
+
+Configuration for the Klarna button.
 
 **buttonOptions.text**
 **Type**: `string`
-**Description**: Custom text to display on the Klarna button.
+
+Custom text to display on the Klarna button.
 
 **Example:**
 
 ```javascript
-const checkout = document.querySelector('primer-checkout');
-
-// Component property
-checkout.setAttribute('client-token', 'your-token');
-
-// SDK option
-checkout.options = {
+const options = {
   klarna: {
     paymentFlow: 'DEFAULT',
     recurringPaymentDescription: 'Monthly subscription',
@@ -435,39 +417,6 @@ checkout.options = {
     buttonOptions: {
       text: 'Pay with Klarna',
     },
-  },
-};
-```
-
-## 3D Secure Options
-
-Configure 3D Secure authentication behavior.
-
-### threeDsOptions.enabled
-
-**Type**: `boolean`
-**Default**: `true`
-**Description**: Whether 3D Secure authentication is enabled for card payments.
-
-### threeDsOptions.preferred
-
-**Type**: `boolean`
-**Default**: `false`
-**Description**: Whether 3D Secure is preferred over other authentication methods when multiple options are available.
-
-**Example:**
-
-```javascript
-const checkout = document.querySelector('primer-checkout');
-
-// Component property
-checkout.setAttribute('client-token', 'your-token');
-
-// SDK option
-checkout.options = {
-  threeDsOptions: {
-    enabled: true,
-    preferred: false,
   },
 };
 ```
@@ -480,24 +429,20 @@ Configure payment method vaulting (saving for future use).
 
 **Type**: `boolean`
 **Required**: Yes (if using vault)
-**Description**: Enable payment method vaulting to allow customers to save payment methods for future purchases.
+
+Enable payment method vaulting to allow customers to save payment methods for future purchases.
 
 ### vault.showEmptyState
 
 **Type**: `boolean`
 **Default**: `false`
-**Description**: Show an empty state message when no vaulted payment methods exist. Useful for providing user feedback in the UI.
+
+Show an empty state message when no vaulted payment methods exist. Useful for providing user feedback in the UI.
 
 **Example:**
 
 ```javascript
-const checkout = document.querySelector('primer-checkout');
-
-// Component property
-checkout.setAttribute('client-token', 'your-token');
-
-// SDK option
-checkout.options = {
+const options = {
   vault: {
     enabled: true,
     showEmptyState: true,
@@ -512,31 +457,30 @@ Configure Stripe-specific payment options.
 ### stripe.mandateData
 
 **Type**: `object`
-**Description**: Configuration for direct debit mandate text and merchant information.
+
+Configuration for direct debit mandate text and merchant information.
 
 **mandateData.fullMandateText**
 **Type**: `string`
-**Description**: Custom mandate text for direct debit payments. Displayed to customers during checkout.
+
+Custom mandate text for direct debit payments. Displayed to customers during checkout.
 
 **mandateData.merchantName**
 **Type**: `string`
-**Description**: Merchant name displayed in the mandate text.
+
+Merchant name displayed in the mandate text.
 
 ### stripe.publishableKey
 
 **Type**: `string`
-**Description**: Stripe publishable key for direct Stripe integration.
+**Default**: none
+
+Stripe publishable key for direct Stripe integration.
 
 **Example:**
 
 ```javascript
-const checkout = document.querySelector('primer-checkout');
-
-// Component property
-checkout.setAttribute('client-token', 'your-token');
-
-// SDK option
-checkout.options = {
+const options = {
   stripe: {
     mandateData: {
       fullMandateText: 'By providing your payment information...',
@@ -555,13 +499,15 @@ Configure the submit button behavior and appearance.
 
 **Type**: `boolean`
 **Default**: `false`
-**Description**: Whether to show the order amount on the submit button. When `true`, displays formatted amount next to button text (e.g., "Pay $12.34").
+
+Whether to show the order amount on the submit button. When `true`, displays formatted amount next to button text (e.g., "Pay $12.34").
 
 ### submitButton.useBuiltInButton
 
 **Type**: `boolean`
 **Default**: `true`
-**Description**: Whether to render the built-in submit button component.
+
+Whether to render the built-in submit button component.
 
 - When `true` (default): The component renders the standard Primer submit button.
 - When `false`: No DOM elements are created, allowing external buttons to handle form submission by dispatching the `primer:card-submit` event.
@@ -569,13 +515,7 @@ Configure the submit button behavior and appearance.
 **Example with Built-in Button:**
 
 ```javascript
-const checkout = document.querySelector('primer-checkout');
-
-// Component property
-checkout.setAttribute('client-token', 'your-token');
-
-// SDK option
-checkout.options = {
+const options = {
   submitButton: {
     amountVisible: true,
     useBuiltInButton: true, // Default
@@ -586,13 +526,8 @@ checkout.options = {
 **Example with External Button:**
 
 ```javascript
-const checkout = document.querySelector('primer-checkout');
-
-// Component property
-checkout.setAttribute('client-token', 'your-token');
-
 // Hide built-in button and use external button
-checkout.options = {
+const options = {
   submitButton: {
     useBuiltInButton: false,
   },
@@ -610,7 +545,54 @@ document.getElementById('my-button').addEventListener('click', () => {
 ```
 
 :::tip External Button Integration
-See the [Events Guide - primer:card-submit](/documentation/events-guide#primercard-submit) for more details on external button usage and event handling.
+See the [Events Guide - primer:card-submit](/guides/events-guide#primercard-submit) for more details on external button usage and event handling.
+:::
+
+## Enabled Payment Methods
+
+Configure which payment methods are available and displayed in the checkout.
+
+### enabledPaymentMethods
+
+**Type**: `PaymentMethodType[]`
+**Default**: `[PaymentMethodType.PAYMENT_CARD]`
+
+Specifies which payment methods are enabled and displayed in the checkout. By default, only card payments are enabled. Configure this to enable specific payment methods for your checkout flow.
+
+**Available payment methods**: `PAYMENT_CARD`, `ADYEN_BLIK`
+
+**Example:**
+
+```javascript
+import { PaymentMethodType } from '@primer-io/primer-js';
+
+const options = {
+  enabledPaymentMethods: [
+    PaymentMethodType.PAYMENT_CARD,
+    PaymentMethodType.ADYEN_BLIK,
+  ],
+};
+```
+
+**Common Use Cases:**
+
+```javascript
+// Card payments only (default)
+const options = {
+  enabledPaymentMethods: [PaymentMethodType.PAYMENT_CARD],
+};
+
+// Card and BLIK (Poland)
+const options = {
+  enabledPaymentMethods: [
+    PaymentMethodType.PAYMENT_CARD,
+    PaymentMethodType.ADYEN_BLIK,
+  ],
+};
+```
+
+:::info Payment Method Configuration
+Payment methods must be configured in your Primer Dashboard and included in your client token to be available. The `enabledPaymentMethods` option filters which configured methods are displayed in the checkout UI.
 :::
 
 ## Complete Options Reference
@@ -618,6 +600,8 @@ See the [Events Guide - primer:card-submit](/documentation/events-guide#primerca
 Here's a comprehensive example showing all available options. Use this as a starting template and remove options you don't need.
 
 ```typescript
+import { PaymentMethodType } from '@primer-io/primer-js';
+
 const checkout = document.querySelector('primer-checkout');
 
 // First, set component properties (HTML attributes)
@@ -630,6 +614,10 @@ checkout.options = {
   locale: 'en-US', // Optional: force UI locale
   merchantDomain: 'merchant.example.com', // Optional: for Apple Pay validation
   disabledPayments: false, // Optional: disable all payment methods
+  enabledPaymentMethods: [
+    PaymentMethodType.PAYMENT_CARD,
+    PaymentMethodType.ADYEN_BLIK,
+  ], // Optional: which payment methods to display
 
   // Card Options
   card: {
@@ -675,12 +663,6 @@ checkout.options = {
   klarna: {
     paymentFlow: 'DEFAULT',
     allowedPaymentCategories: ['pay_now', 'pay_later', 'pay_over_time'],
-  },
-
-  // 3D Secure Options
-  threeDsOptions: {
-    enabled: true,
-    preferred: false,
   },
 
   // Vault Options
@@ -732,7 +714,7 @@ checkout.options = options;
 
 ## See Also
 
-- **[Options Guide](/documentation/options-guide)** - Learn HOW to configure SDK options with usage patterns and best practices
-- **[Events Guide](/documentation/events-guide)** - Handle checkout completion, failure, and other SDK events
-- **[Getting Started](/documentation/getting-started)** - New to the Primer SDK? Start here
+- **[Options Guide](/guides/options-guide)** - Learn HOW to configure SDK options with usage patterns and best practices
+- **[Events Guide](/guides/events-guide)** - Handle checkout completion, failure, and other SDK events
+- **[Getting Started](/guides/getting-started)** - New to the Primer SDK? Start here
 - **[Primer Checkout Component](/sdk-reference/primer-checkout-doc)** - Component-specific documentation and API reference

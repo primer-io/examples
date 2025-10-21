@@ -38,7 +38,7 @@ const config: Config = {
         hashed: true,
         indexBlog: false,
         indexPages: true,
-        docsDir: './general-docs',
+        docsDir: './documentation',
         forceIgnoreNoIndex: true,
         ignoreFiles: ['llm-guide.md'],
       },
@@ -56,7 +56,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          path: 'general-docs',
+          path: 'documentation',
           routeBasePath: '',
         },
         pages: {

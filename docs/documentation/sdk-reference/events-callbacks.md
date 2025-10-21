@@ -10,7 +10,7 @@ description: Technical reference for Primer SDK events and callbacks
 Complete technical reference for all Primer SDK events, callbacks, and instance methods.
 
 :::tip Practical Guide Available
-For practical examples and implementation patterns, see the [Events Guide](/documentation/events-guide).
+For practical examples and implementation patterns, see the [Events Guide](/guides/events-guide).
 :::
 
 ## DOM Events
@@ -359,6 +359,6 @@ interface PrepareHandler {
 
 ## See Also
 
-- [Events Guide](/documentation/events-guide) - Practical examples and implementation patterns
+- [Events Guide](/guides/events-guide) - Practical examples and implementation patterns
 - [Primer Checkout Component](/sdk-reference/primer-checkout-doc) - Component API reference
 - [SDK Options Reference](/sdk-reference/sdk-options-reference) - Configuration options

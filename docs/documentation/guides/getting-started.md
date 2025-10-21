@@ -1,5 +1,4 @@
 ---
-sidebar_position: 1
 title: Getting Started
 description: Learn how to install and set up Primer Checkout in your web application
 ---
@@ -82,19 +81,19 @@ For comprehensive details on all available attributes, refer to the [Checkout Co
 
 :::note React and Framework Developers
 
-If you're using **React, Next.js, or any JSX-based framework**, special patterns are required to avoid re-render issues when passing SDK options. The [SDK Options Guide](/documentation/options-guide) covers React-specific patterns in detail, including `useMemo` patterns for dynamic options.
+If you're using **React, Next.js, or any JSX-based framework**, special patterns are required to avoid re-render issues when passing SDK options. The [SDK Options Guide](/guides/options-guide) covers React-specific patterns in detail, including `useMemo` patterns for dynamic options.
 
-For complete server-side rendering patterns, see the [Server-Side Rendering Guide](/documentation/server-side-rendering-guide).
+For complete server-side rendering patterns, see the [Server-Side Rendering Guide](/guides/server-side-rendering-guide).
 
 :::
 
 :::tip Advanced Topics
 
-**SDK Options**: Need to configure payment methods, locales, or advanced features? See the [Options Guide](/documentation/options-guide) for comprehensive SDK configuration patterns.
+**SDK Options**: Need to configure payment methods, locales, or advanced features? See the [Options Guide](/guides/options-guide) for comprehensive SDK configuration patterns.
 
-**Server-Side Rendering**: If you're using SSR frameworks (Next.js, Nuxt.js, SvelteKit), see the [Server-Side Rendering Guide](/documentation/server-side-rendering-guide) for framework-specific patterns.
+**Server-Side Rendering**: If you're using SSR frameworks (Next.js, Nuxt.js, SvelteKit), see the [Server-Side Rendering Guide](/guides/server-side-rendering-guide) for framework-specific patterns.
 
-**Event Handling**: Need to respond to checkout lifecycle events? Check out the [Events Guide](/documentation/events-guide) for comprehensive event documentation.
+**Event Handling**: Need to respond to checkout lifecycle events? Check out the [Events Guide](/guides/events-guide) for comprehensive event documentation.
 
 :::
 
@@ -206,7 +205,7 @@ checkout.addEventListener('primer:state-change', (event) => {
 });
 ```
 
-For comprehensive information on all available events, event payloads, and best practices, see the [Events Guide](/documentation/events-guide).
+For comprehensive information on all available events, event payloads, and best practices, see the [Events Guide](/guides/events-guide).
 
 ## Customizing the Checkout Experience
 
@@ -231,7 +230,7 @@ The SDK provides flexible options for customizing your checkout experience. You 
 The `<primer-error-message-container>` component provides a ready-to-use solution for displaying payment failure messages. When using custom layouts, you can either include this component or build your own error handling using the checkout events.
 :::
 
-For more advanced customization options, including handling success and failure states, checkout flow customization, and more, refer to the [Layout Customizations Guide](/documentation/layout-customizations-guide).
+For more advanced customization options, including handling success and failure states, checkout flow customization, and more, refer to the [Layout Customizations Guide](/guides/layout-customizations-guide).
 
 ### Payment Method Configuration
 
@@ -261,12 +260,12 @@ For advanced use cases requiring complex payment method handling, you can use th
 
 When working with Primer Checkout, be aware of the following limitations:
 
-| Area            | Limitation                  | Description                                                                                                                                                        | Learn More                                                  |
-| --------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
-| **Browser**     | Modern Browsers Only        | The SDK uses modern web technologies and is not compatible with legacy browsers such as Internet Explorer 11.                                                      | [Environment Requirements](#environment-requirements)       |
-| **Styling**     | Shadow DOM Isolation        | Direct CSS targeting of inner elements is not possible due to Shadow DOM encapsulation. Use the provided CSS variables for customization.                          | [Technology Overview](/documentation/components-technology) |
-| **Lifecycle**   | Web Component Lifecycle     | Custom elements have their own lifecycle methods that differ from those in frameworks like React or Vue. Ensure proper handling of connections and disconnections. | [Technology Overview](/documentation/components-technology) |
-| **Security**    | HTTPS Required              | The SDK requires a secure context (HTTPS) for certain features like Apple Pay to function correctly.                                                               | -                                                           |
-| **Integration** | Framework-Specific Patterns | While the SDK works with all modern frameworks, integration patterns may differ based on your framework's approach to handling custom elements.                    | [SSR Guide](/documentation/server-side-rendering-guide)     |
+| Area            | Limitation                  | Description                                                                                                                                                        | Learn More                                            |
+| --------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
+| **Browser**     | Modern Browsers Only        | The SDK uses modern web technologies and is not compatible with legacy browsers such as Internet Explorer 11.                                                      | [Environment Requirements](#environment-requirements) |
+| **Styling**     | Shadow DOM Isolation        | Direct CSS targeting of inner elements is not possible due to Shadow DOM encapsulation. Use the provided CSS variables for customization.                          | [Technology Overview](/guides/components-technology)  |
+| **Lifecycle**   | Web Component Lifecycle     | Custom elements have their own lifecycle methods that differ from those in frameworks like React or Vue. Ensure proper handling of connections and disconnections. | [Technology Overview](/guides/components-technology)  |
+| **Security**    | HTTPS Required              | The SDK requires a secure context (HTTPS) for certain features like Apple Pay to function correctly.                                                               | -                                                     |
+| **Integration** | Framework-Specific Patterns | While the SDK works with all modern frameworks, integration patterns may differ based on your framework's approach to handling custom elements.                    | [SSR Guide](/guides/server-side-rendering-guide)      |
 
-For more detailed information about the underlying technologies and design decisions, see our [Technology Overview](/documentation/components-technology).
+For more detailed information about the underlying technologies and design decisions, see our [Technology Overview](/guides/components-technology).

@@ -1,5 +1,4 @@
 ---
-sidebar_position: 4
 title: Events Guide
 sidebar_label: Events & Callbacks
 description: Learn how to listen to and handle events from Primer Checkout components
@@ -761,4 +760,4 @@ Primer Checkout's event-driven architecture provides:
 
 By following the patterns and best practices in this guide, you can build robust payment flows that handle all checkout scenarios gracefully.
 
-For more information on basic setup and initialization, see the [Getting Started Guide](/documentation/getting-started).
+For more information on basic setup and initialization, see the [Getting Started Guide](/guides/getting-started).

@@ -341,5 +341,5 @@ Customize the appearance of the billing address component with CSS variables:
 ## Related Documentation
 
 - [Card Form Component](/sdk-reference/Components/CardForm/) - Parent component for billing address
-- [Layout Customizations Guide](/documentation/layout-customizations-guide) - Creating custom card form layouts
+- [Layout Customizations Guide](/guides/layout-customizations-guide) - Creating custom card form layouts
 - [Primer Billing Address Documentation](https://primer.io/docs/checkout/capture-billing-address#capture-billing-address) - Dashboard configuration guide

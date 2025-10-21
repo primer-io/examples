@@ -1,5 +1,4 @@
 ---
-sidebar_position: 3
 title: Server-Side Rendering Guide
 sidebar_label: SSR Guide
 description: Learn how to integrate Primer Checkout with server-side rendering frameworks like Next.js, Nuxt.js, and SvelteKit
@@ -8,6 +7,11 @@ description: Learn how to integrate Primer Checkout with server-side rendering f
 # Server-Side Rendering Guide
 
 Primer Checkout is a client-side library built with Web Components that requires browser-specific APIs to function. This guide explains how to properly integrate Primer Checkout with server-side rendering (SSR) frameworks.
+
+> **Looking for general options guidance?** See the [Options Guide](./options-guide.md)
+> for all methods of passing options to SDK components.
+>
+> **Want to see all available options?** Check the [SDK Options Reference](../sdk-reference/sdk-options-reference.md).
 
 ## Why SSR Requires Special Handling
 
@@ -112,91 +116,8 @@ export default function CheckoutPage() {
 
 The `'use client'` directive marks this entire component as client-side only, making it safe to import and use browser-specific code.
 
-:::danger Critical: React SDK Options Pattern
-
-When using React, **NEVER pass SDK options as inline objects** to Primer components. React will create a new object reference on every render, which can trigger unnecessary re-renders and potentially cause re-initialization issues.
-
-**❌ WRONG - Inline object (creates new reference every render)**:
-
-```javascript
-return (
-  <primer-checkout client-token={token} options={{ locale: 'en-GB' }}>
-    {children}
-  </primer-checkout>
-);
-```
-
-**✅ CORRECT - Constant outside component**:
-
-```javascript
-import { PrimerCheckoutComponent } from '@primer-io/primer-js';
-import { useEffect, useRef } from 'react';
-
-// Define SDK options OUTSIDE the component
-const SDK_OPTIONS = {
-  locale: 'en-GB',
-};
-
-function CheckoutWrapper({ token, children }) {
-  const checkoutRef = useRef(null);
-
-  useEffect(() => {
-    if (!token) return;
-
-    const handleStateChange = (evt) => {
-      console.log('State changed:', evt.detail);
-    };
-
-    const checkout = checkoutRef.current;
-    checkout?.addEventListener('primer:state-change', handleStateChange);
-
-    return () => {
-      checkout?.removeEventListener('primer:state-change', handleStateChange);
-    };
-  }, [token]);
-
-  return (
-    <primer-checkout
-      client-token={token}
-      options={SDK_OPTIONS}
-      ref={checkoutRef}
-    >
-      <div slot='main'>{children}</div>
-    </primer-checkout>
-  );
-}
-```
-
-**✅ CORRECT - Using useMemo for dynamic options**:
-
-```javascript
-import { useMemo } from 'react';
-
-function CheckoutWrapper({ token, userId, children }) {
-  // Use useMemo when options depend on props or state
-  const sdkOptions = useMemo(
-    () => ({
-      locale: 'en-GB',
-    }),
-    [userId],
-  ); // Only recreate when userId changes
-
-  return (
-    <primer-checkout client-token={token} options={sdkOptions}>
-      <div slot='main'>{children}</div>
-    </primer-checkout>
-  );
-}
-```
-
-**Why This Matters**:
-
-- React creates new object references on every render
-- New object references can trigger component re-initialization
-- This can cause performance issues and unexpected behavior
-- Use constants outside components or `useMemo` hook for stable references
-
-For more information on React object reference stability, see the [Best Practices section](#best-practices).
+:::info React Version Differences
+For React 18 vs React 19 differences and stable reference patterns, see the **[React Integration Guide](./react-guide.md)**.
 :::
 
 ### Nuxt.js
@@ -533,4 +454,4 @@ Integrating Primer Checkout with SSR frameworks requires:
 
 By following these patterns, you can successfully use Primer Checkout in any SSR framework while maintaining a smooth development experience.
 
-For more information on basic setup and configuration, see the [Getting Started Guide](/documentation/getting-started).
+For more information on basic setup and configuration, see the [Getting Started Guide](/guides/getting-started).

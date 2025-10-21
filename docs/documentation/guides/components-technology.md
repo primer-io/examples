@@ -1,5 +1,4 @@
 ---
-sidebar_position: 2
 title: Technology
 sidebar_label: Technology
 description: Understand the core web technologies that power Primer Checkout components

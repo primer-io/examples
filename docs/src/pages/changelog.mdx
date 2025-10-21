@@ -8,6 +8,40 @@ sidebar_position: 99
 
 This page documents all notable changes to Primer Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
+## v0.5.0 - BLIK Payment Method (21-Oct-2025)
+
+:::warning Requirements
+BLIK requires SDK Core enabled (`sdkCore: true` or omit) AND must be added to `enabledPaymentMethods` array.
+:::
+
+:::info New Payment Method
+BLIK support is now available for the Polish market. BLIK is Poland's leading mobile payment system that allows customers to authorize payments using a 6-digit code from their banking app.
+:::
+
+**Key Changes:**
+
+- BLIK payment method for Polish market (6-digit code from banking app)
+- Auto-submit with real-time status polling and timeout warnings
+- Collapsible UI: button → form → loading → success/error states
+- Full localization (40+ languages) and dark mode support
+- TypeScript improvements: Enhanced JSDoc documentation for all `PrimerCheckoutOptions` properties
+- Dependency updates across all packages
+
+**Example Configuration:**
+
+```javascript
+const checkout = PrimerCheckout({
+  clientToken: 'token',
+  sdkCore: true, // Required for BLIK
+  enabledPaymentMethods: [
+    PaymentMethodType.PAYMENT_CARD,
+    PaymentMethodType.ADYEN_BLIK, // Add BLIK
+  ],
+});
+```
+
+---
+
 ## v0.4.0 - SDK Core Default & Billing Address (17-Oct-2025)
 
 :::warning Breaking Change

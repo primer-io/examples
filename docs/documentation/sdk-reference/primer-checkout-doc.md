@@ -85,7 +85,7 @@ Replace the `primer-main` component entirely with your own custom implementation
 </primer-checkout>
 ```
 
-For comprehensive layout customization options, see the [Layout Customizations Guide](/documentation/layout-customizations-guide).
+For comprehensive layout customization options, see the [Layout Customizations Guide](/guides/layout-customizations-guide).
 
 ## Properties
 
@@ -100,9 +100,9 @@ For comprehensive layout customization options, see the [Layout Customizations G
 
 The primer-checkout component accepts a comprehensive set of configuration options.
 
-- **How to configure:** See the [Options Guide](/documentation/options-guide) for usage patterns, React/JSX considerations, and setAttribute() requirements
+- **How to configure:** See the [Options Guide](/guides/options-guide) for usage patterns, React/JSX considerations, and setAttribute() requirements
 - **What options are available:** See the [SDK Options Reference](/sdk-reference/sdk-options-reference) for a complete list of all options
-- **Event handling:** For checkout completion/failure events, see the [Events Guide](/documentation/events-guide)
+- **Event handling:** For checkout completion/failure events, see the [Events Guide](/guides/events-guide)
 
 :::tip Start Here
 Start with the Options Guide to understand how to configure the SDK, then reference the SDK Options Reference for specific options.
@@ -118,7 +118,7 @@ Start with the Options Guide to understand how to configure the SDK, then refere
 
 The Checkout component dispatches various events throughout the payment lifecycle. These events can be captured at either the component level or the document level, as they bubble and cross shadow DOM boundaries.
 
-For complete technical reference including event types and payloads, see the [Events & Callbacks Reference](/sdk-reference/events-callbacks). For usage examples, integration patterns, and best practices, see the [Events Guide](/documentation/events-guide).
+For complete technical reference including event types and payloads, see the [Events & Callbacks Reference](/sdk-reference/events-callbacks). For usage examples, integration patterns, and best practices, see the [Events Guide](/guides/events-guide).
 
 ```mermaid
 sequenceDiagram
@@ -453,4 +453,4 @@ This is useful when you want to implement your own custom loading indicator or w
 - **Important**: Most attributes (`client-token`, `custom-styles`, `loader-disabled`) must be set using `setAttribute()` in JavaScript, not direct property assignment. The `options` property is an exception and should be set directly as a property.
   :::
 
-For advanced customization, refer to the [Layout Customizations Guide](/documentation/layout-customizations-guide).
+For advanced customization, refer to the [Layout Customizations Guide](/guides/layout-customizations-guide).

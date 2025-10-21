@@ -74,4 +74,4 @@ This example has been updated from the previous event-driven approach to use the
 - Complex filtering logic
 - Conditional rendering based on method availability
 
-For more information about migrating from event listeners to the payment method container, see the [Migration Guide](../../docs/general-docs/documentation/migration-guides/event-listeners-to-payment-method-container.md).
+For more information about migrating from event listeners to the payment method container, see the [Migration Guide](../../docs/documentation/guides/migration-guides/event-listeners-to-payment-method-container.md).

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "Primer Checkout",
+  "description": "Web Components-based payment SDK for modern checkout integrations",
+  "excludeFolders": [],
+  "excludeFiles": [],
+  "folders": ["docs/documentation"],
+  "rules": [
+    "Use Web Components standards (Custom Elements, Shadow DOM, Slots)",
+    "Style components using CSS Custom Properties for theme customization",
+    "Components are framework-agnostic and work with any JavaScript framework",
+    "Target modern browsers only (Chrome, Firefox, Safari, Edge)",
+    "Use @primer-io/primer-js SDK for payment integrations"
+  ]
+}

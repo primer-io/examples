@@ -30,14 +30,18 @@ BLIK support is now available for the Polish market. BLIK is Poland's leading mo
 **Example Configuration:**
 
 ```javascript
-const checkout = PrimerCheckout({
-  clientToken: 'token',
+import { PaymentMethodType } from '@primer-io/primer-js';
+
+const checkout = document.querySelector('primer-checkout');
+checkout.setAttribute('client-token', 'your-client-token');
+
+checkout.options = {
   sdkCore: true, // Required for BLIK
   enabledPaymentMethods: [
     PaymentMethodType.PAYMENT_CARD,
     PaymentMethodType.ADYEN_BLIK, // Add BLIK
   ],
-});
+};
 ```
 
 ---
@@ -75,16 +79,16 @@ Billing address capture is now supported through Primer Dashboard checkout confi
 
 ```javascript
 // v0.3.x - Legacy SDK by default
-const checkout = PrimerCheckout({
-  clientToken: 'token',
-  // sdkCore not specified - used Legacy SDK
-});
+const checkout = document.querySelector('primer-checkout');
+checkout.setAttribute('client-token', 'your-client-token');
+// sdkCore not specified - used Legacy SDK by default
 
 // v0.4.0 - SDK Core by default
-const checkout = PrimerCheckout({
-  clientToken: 'token',
+const checkout = document.querySelector('primer-checkout');
+checkout.setAttribute('client-token', 'your-client-token');
+checkout.options = {
   sdkCore: false, // Explicit opt-out for Legacy SDK
-});
+};
 ```
 
 ---

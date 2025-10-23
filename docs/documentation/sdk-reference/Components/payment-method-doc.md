@@ -84,7 +84,7 @@ If a payment method isn't available (not configured or not returned by the serve
 
 ### Dynamic Payment Method Discovery
 
-The best way to work with payment methods is to listen for the `primer-payment-methods-updated` event, which provides the complete list of available payment methods for your checkout configuration. This approach lets you dynamically render only the methods that are actually available.
+The best way to work with payment methods is to listen for the `primer:methods-update` event, which provides the complete list of available payment methods for your checkout configuration. This approach lets you dynamically render only the methods that are actually available.
 
 ```mermaid
 sequenceDiagram
@@ -92,11 +92,18 @@ sequenceDiagram
     participant YourApp
     participant PaymentMethod as primer-payment-method
 
-    Checkout->>YourApp: primer-payment-methods-updated
+    Checkout->>YourApp: primer:methods-update
     Note right of YourApp: Get available methods
     YourApp->>YourApp: Process available methods
     YourApp->>PaymentMethod: Create components for<br>available methods
 ```
+
+:::note Event Handling
+For comprehensive event handling patterns, error management, and event lifecycle details, see:
+
+- [Events Guide](/guides/events-guide) - Implementation patterns and best practices
+- [Events & Callbacks Reference](/sdk-reference/events-callbacks) - Complete event API documentation
+  :::
 
 ## Disabled State
 
@@ -150,36 +157,35 @@ paymentMethod.removeAttribute('disabled');
 ## Examples
 
 <details>
-<summary><strong>Best Practice: Dynamic Payment Method Rendering</strong></summary>
+<summary><strong>Dynamic Payment Method Rendering</strong></summary>
 
-This example shows how to listen for available payment methods and dynamically render them:
+This example shows how to dynamically render payment methods based on availability:
 
 ```html
 <primer-checkout id="checkout" client-token="your-client-token">
   <primer-main slot="main">
     <div slot="payments" id="payment-methods-container">
-      <!-- Payment methods will be inserted here -->
+      <!-- Payment methods will be inserted here dynamically -->
     </div>
   </primer-main>
 </primer-checkout>
 
 <script>
   const checkout = document.getElementById('checkout');
+  const container = document.getElementById('payment-methods-container');
 
-  checkout.addEventListener('primer-payment-methods-updated', (event) => {
+  // Listen for available payment methods
+  checkout.addEventListener('primer:methods-update', (event) => {
     const paymentMethods = event.detail;
-    const container = document.getElementById('payment-methods-container');
 
     // Clear previous content
     container.innerHTML = '';
 
     // Render all available payment methods
     paymentMethods.toArray().forEach((method) => {
-      container.innerHTML += `
-        <div class="payment-method-item">
-          <primer-payment-method type="${method.type}"></primer-payment-method>
-        </div>
-      `;
+      const methodElement = document.createElement('primer-payment-method');
+      methodElement.setAttribute('type', method.type);
+      container.appendChild(methodElement);
     });
   });
 </script>
@@ -187,81 +193,9 @@ This example shows how to listen for available payment methods and dynamically r
 
 </details>
 
-<details>
-<summary><strong>Custom Layout with Priority Ordering</strong></summary>
-
-This example shows how to create a custom layout where certain payment methods are prioritized:
-
-```html
-<primer-checkout id="checkout" client-token="your-client-token">
-  <primer-main slot="main">
-    <div slot="payments">
-      <!-- Prioritize card payment (only displays if available) -->
-      <div class="primary-payment-method">
-        <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
-      </div>
-
-      <!-- Digital wallets section -->
-      <div id="wallets-container" class="payment-section">
-        <h3>Quick Checkout</h3>
-        <div class="wallet-methods">
-          <primer-payment-method type="APPLE_PAY"></primer-payment-method>
-          <primer-payment-method type="GOOGLE_PAY"></primer-payment-method>
-        </div>
-      </div>
-
-      <!-- Other methods will be dynamically added here -->
-      <div id="other-methods-container" class="payment-section"></div>
-    </div>
-  </primer-main>
-</primer-checkout>
-
-<script>
-  const checkout = document.getElementById('checkout');
-
-  // Define payment method categories
-  const walletTypes = ['APPLE_PAY', 'GOOGLE_PAY'];
-  const priorityTypes = ['PAYMENT_CARD', 'APPLE_PAY', 'GOOGLE_PAY'];
-
-  checkout.addEventListener('primer-payment-methods-updated', (event) => {
-    const paymentMethods = event.detail;
-    const allMethods = paymentMethods.toArray();
-    const otherContainer = document.getElementById('other-methods-container');
-    const walletsContainer = document.getElementById('wallets-container');
-
-    // Check if any wallet methods are available
-    const hasWallets = allMethods.some((method) =>
-      walletTypes.includes(method.type),
-    );
-
-    // Hide wallets container if no wallet methods are available
-    if (!hasWallets) {
-      walletsContainer.style.display = 'none';
-    }
-
-    // Add other payment methods (excluding priority ones)
-    const otherMethods = allMethods.filter(
-      (method) => !priorityTypes.includes(method.type),
-    );
-
-    if (otherMethods.length > 0) {
-      otherContainer.innerHTML = '<h3>Other Payment Options</h3>';
-
-      otherMethods.forEach((method) => {
-        otherContainer.innerHTML += `
-          <div class="payment-method-item">
-            <primer-payment-method type="${method.type}"></primer-payment-method>
-          </div>
-        `;
-      });
-    } else {
-      otherContainer.style.display = 'none';
-    }
-  });
-</script>
-```
-
-</details>
+:::tip Advanced Layout Patterns
+For complex layout customizations, container styling, and positioning patterns, see the [Layout Customizations Guide](/guides/layout-customizations-guide).
+:::
 
 <details>
 <summary><strong>Custom Payment Method with Options Configuration</strong></summary>
@@ -435,7 +369,7 @@ Each payment method type can be configured through the `options` property of the
 - Payment methods must be configured in your Primer Checkout Builder settings to be displayed
 - If a payment method is specified but not available, the component won't render anything (no error)
 - The component automatically determines which payment interface to render based on the payment method's type
-- Always listen to the `primer-payment-methods-updated` event to get the current list of available payment methods
+- Always listen to the `primer:methods-update` event to get the current list of available payment methods
 - The component must be used within a `primer-checkout` context to access payment methods
 - The `disabled` attribute makes payment methods non-interactive but they remain visible
 - Disabled payment methods prevent user interaction and form submission

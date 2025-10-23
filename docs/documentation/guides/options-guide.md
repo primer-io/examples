@@ -52,6 +52,10 @@ These are SDK configuration settings passed via the `options` property:
 
 **How to set**: Assign a JavaScript object to the `options` property.
 
+:::note SDK Core is Enabled by Default
+The `sdkCore` option is enabled by default (`sdkCore: true`). You only need to explicitly set this option if you want to disable SDK Core features by setting it to `false`. Most developers should omit this option and use the default value.
+:::
+
 :::warning Critical Distinction
 Component properties (like `client-token`) are set using `setAttribute()`. SDK options (like `locale`, `sdkCore`) are set inside the `options` object. Do not confuse these two!
 :::
@@ -72,7 +76,6 @@ checkout.setAttribute('loader-disabled', 'false');
 // 2. Set SDK options as an object property
 checkout.options = {
   locale: 'en-GB',
-  sdkCore: true,
   merchantDomain: 'example.com',
   applePay: {
     buttonType: 'buy',
@@ -152,7 +155,6 @@ const checkout = document.querySelector('primer-checkout');
 // ✅ CORRECT: Assign options directly as an object
 checkout.options = {
   locale: 'en-GB',
-  sdkCore: true,
   merchantDomain: 'merchant.example.com',
   applePay: {
     buttonType: 'buy',
@@ -203,7 +205,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Set SDK options as an object property
   checkout.options = {
     locale: 'en-GB',
-    sdkCore: true,
     applePay: {
       buttonType: 'buy',
       buttonStyle: 'black',
@@ -250,7 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Set SDK options
   checkout.options = {
     locale: 'en-GB', // British English
-    sdkCore: true, // Use SDK Core (default)
   };
 });
 ```
@@ -258,8 +258,9 @@ document.addEventListener('DOMContentLoaded', () => {
 **Key points:**
 
 - `client-token` is a component property (attribute)
-- `locale` and `sdkCore` are SDK options (in options object)
+- `locale` is an SDK option (in options object)
 - These two configuration types work together
+- SDK Core is enabled by default - no need to specify it
 
 ### Custom Payment Method Configuration
 
@@ -277,7 +278,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Set SDK options with payment method configuration
   checkout.options = {
     locale: 'en-US',
-    sdkCore: true,
     // Specify which payment methods to enable
     enabledPaymentMethods: [
       PaymentMethodType.PAYMENT_CARD,
@@ -315,7 +315,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Set SDK options with vault configuration
   checkout.options = {
     locale: 'en-GB',
-    sdkCore: true,
     vault: {
       vaultedPaymentMethodsHeading: 'Saved Payment Methods',
       addNewPaymentMethodButtonText: 'Add New Payment Method',
@@ -358,7 +357,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Set SDK options
   checkout.options = {
     locale: 'de-DE', // German locale
-    sdkCore: true,
     merchantDomain: 'shop.example.de',
     applePay: {
       merchantName: 'Mein Geschäft',
@@ -388,7 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
 **Key points:**
 
 - `client-token` and `custom-styles` are component properties (attributes)
-- `locale`, `sdkCore`, `merchantDomain`, and payment methods are SDK options
+- `locale`, `merchantDomain`, and payment methods are SDK options
 - Component properties handle theming; SDK options handle functionality
 - Clear separation between visual (properties) and behavioral (options) configuration
 
@@ -504,7 +502,7 @@ checkout.setAttribute('client-token', 'new-token');
 console.log('Token attribute:', checkout.getAttribute('client-token'));
 
 // SDK options use direct property assignment
-checkout.options = { locale: 'en-GB', sdkCore: true };
+checkout.options = { locale: 'en-GB' };
 console.log('Options object:', checkout.options);
 ```
 
@@ -536,9 +534,9 @@ Understand the difference between component properties and SDK options:
 **SDK Options** (use `options` object):
 
 - `locale` - UI language
-- `sdkCore` - Engine selection
 - Payment method configuration
 - Feature settings
+- Merchant domain and API settings
 
 ```javascript
 // ✅ CORRECT: Clear separation
@@ -551,7 +549,6 @@ checkout.setAttribute('loader-disabled', 'false');
 // SDK options
 checkout.options = {
   locale: 'en-GB',
-  sdkCore: true,
   applePay: { buttonType: 'buy' },
 };
 

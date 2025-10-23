@@ -389,6 +389,13 @@ The `bubbles: true` and `composed: true` properties are required. These properti
 Include a meaningful `source` identifier in the event detail. This helps with debugging and allows you to handle submissions differently based on the trigger source. The checkout component captures this event at the document level and forwards it internally to the card form.
 :::
 
+:::note Advanced Event Handling
+For advanced event handling patterns with CardForm, including validation events, submission flows, and error management, see:
+
+- [Events Guide](/guides/events-guide) - Implementation patterns and best practices
+- [Events & Callbacks Reference](/sdk-reference/events-callbacks) - Complete event API documentation
+  :::
+
 </details>
 
 ## Validation

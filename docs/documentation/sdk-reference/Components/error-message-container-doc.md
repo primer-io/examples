@@ -93,6 +93,10 @@ checkout.addEventListener('primer:state-change', (event) => {
 </div>
 </div>
 
+:::tip Error Handling Patterns
+For comprehensive error handling strategies, custom error displays, and error event management, see the [Events Guide - Error Handling](/guides/events-guide#error-handling).
+:::
+
 ## When to Use
 
 Include this component in your custom checkout layouts when you need to:

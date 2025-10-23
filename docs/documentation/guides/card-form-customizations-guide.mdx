@@ -123,6 +123,10 @@ This relationship means:
 3. **Event Bubbling**: Events from child components bubble up to the parent for processing
 4. **Coordinated Validation**: The parent coordinates validation across all input components
 
+:::tip Billing Address Component
+The `<primer-billing-address>` component can be included in the `card-form-content` slot to collect billing information. This component is available when SDK Core is enabled (default) and can be configured for drop-in or custom layout modes. See the [Billing Address Component](/sdk-reference/Components/CardForm/billing-address) for detailed configuration options and styling.
+:::
+
 ## Customizing Input Field Appearance
 
 Each card input component accepts properties that modify its appearance without affecting functionality:
@@ -366,6 +370,9 @@ You can seamlessly integrate custom fields alongside the secure card inputs:
   <div slot="card-form-content">
     <primer-input-card-number></primer-input-card-number>
 
+    <!-- Primer billing address component (optional) -->
+    <primer-billing-address></primer-billing-address>
+
     <!-- Custom field using primer-input -->
     <primer-input-wrapper>
       <primer-input-label slot="label">Billing Zip Code</primer-input-label>
@@ -383,7 +390,7 @@ You can seamlessly integrate custom fields alongside the secure card inputs:
 ```
 
 :::note
-The form container doesn't validate these custom fields directly, so you'll need to implement your own validation if needed.
+The form container doesn't validate these custom fields directly, so you'll need to implement your own validation if needed. The `<primer-billing-address>` component handles its own validation internally.
 :::
 
 ## Avoiding Duplicate Card Form Rendering

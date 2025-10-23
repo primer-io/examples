@@ -11,7 +11,7 @@ This page documents all notable changes to Primer Checkout. We follow [Semantic 
 ## v0.5.0 - BLIK Payment Method (21-Oct-2025)
 
 :::warning Requirements
-BLIK requires SDK Core enabled (`sdkCore: true` or omit) AND must be added to `enabledPaymentMethods` array.
+BLIK requires SDK Core (enabled by default) AND must be added to `enabledPaymentMethods` array.
 :::
 
 :::info New Payment Method
@@ -36,7 +36,6 @@ const checkout = document.querySelector('primer-checkout');
 checkout.setAttribute('client-token', 'your-client-token');
 
 checkout.options = {
-  sdkCore: true, // Required for BLIK
   enabledPaymentMethods: [
     PaymentMethodType.PAYMENT_CARD,
     PaymentMethodType.ADYEN_BLIK, // Add BLIK

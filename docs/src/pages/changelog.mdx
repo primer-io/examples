@@ -8,6 +8,20 @@ sidebar_position: 99
 
 This page documents all notable changes to Primer Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
+## v0.5.1 - SDK Core Default Fix (24-Oct-2025)
+
+:::note Bug Fix
+Fixed billing address rendering issue when `sdkCore` option was omitted. The billing address component now correctly displays when relying on the default SDK Core setting introduced in v0.4.0.
+:::
+
+**Key Changes:**
+
+- Fixed SDK Core default detection for billing address component
+- Billing address now renders correctly when `sdkCore` option is not explicitly set
+- No impact on other SDK functionality
+
+---
+
 ## v0.5.0 - BLIK Payment Method (21-Oct-2025)
 
 :::warning Requirements

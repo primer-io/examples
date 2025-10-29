@@ -44,7 +44,7 @@ To enable the Vault Manager component, you need to:
 </primer-checkout>
 ```
 
-2. Ensure your client session is properly configured to handle vaulted payment methods. Refer to the [Save Payment Methods documentation](https://primer.io/docs/payments/save-payment-methods) for detailed configuration requirements.
+2. Ensure your client session is properly configured to handle vaulted payment methods. Refer to the [Save Payment Methods documentation](https://primer.io/docs/payment-services/save-payment-methods) for detailed configuration requirements.
 
 ## Default Layout and Other Payment Methods
 
@@ -111,7 +111,7 @@ The Vault Manager component provides a comprehensive interface for managing save
 
 ### CVV Recapture
 
-For enhanced security, the Vault Manager can be configured to require CVV verification for saved card payments. To enable CVV recapture, refer to the [Save Payment Methods documentation](https://primer.io/docs/payments/save-payment-methods).
+For enhanced security, the Vault Manager can be configured to require CVV verification for saved card payments. To enable CVV recapture, refer to the [Save Payment Methods documentation](https://primer.io/docs/payment-services/save-payment-methods).
 
 ## Technical Implementation
 
@@ -191,5 +191,5 @@ This example demonstrates how to maintain the same user experience as the defaul
 
 For more information on configuring and using the vaulting functionality:
 
-- [Save Payment Methods Documentation](https://primer.io/docs/payments/save-payment-methods)
+- [Save Payment Methods Documentation](https://primer.io/docs/payment-services/save-payment-methods)
 - [Show Other Payments Component](show-other-payments-doc)

@@ -8,6 +8,23 @@ sidebar_position: 99
 
 This page documents all notable changes to Primer Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
+## v0.5.2 - Billing Address Requirement Fix (29-Oct-2025)
+
+:::warning Bug Fix
+Fixed critical bug where billing address was being set even when not required by checkout configuration, causing payment submission failures and validation errors.
+:::
+
+**Key Changes:**
+
+- Fixed billing address validation logic to respect checkout configuration requirements
+- Billing address no longer submitted when not required by merchant settings
+- Eliminated unnecessary validation errors during payment submission
+- Improved payment flow reliability
+
+**Recommendation:** Update to this version immediately to avoid payment submission issues.
+
+---
+
 ## v0.5.1 - SDK Core Default Fix (24-Oct-2025)
 
 :::note Bug Fix

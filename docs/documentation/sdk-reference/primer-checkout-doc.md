@@ -89,12 +89,12 @@ For comprehensive layout customization options, see the [Layout Customizations G
 
 ## Properties
 
-| Attribute        | Type      | Description                                                                     | Default |
-| ---------------- | --------- | ------------------------------------------------------------------------------- | ------- |
-| `client-token`   | `String`  | Required. The client token obtained from your Primer backend integration.       | `''`    |
-| `options`        | `Object`  | Optional. Configuration options for the Primer SDK.                             | `{}`    |
-| `custom-styles`  | `String`  | Optional. Stringified JSON object containing CSS custom properties for styling. | `''`    |
-| `disable-loader` | `Boolean` | Optional. When true, disables the default loading spinner.                      | `false` |
+| Attribute         | Type      | Description                                                                     | Default |
+| ----------------- | --------- | ------------------------------------------------------------------------------- | ------- |
+| `client-token`    | `String`  | Required. The client token obtained from your Primer backend integration.       | `''`    |
+| `options`         | `Object`  | Optional. Configuration options for the Primer SDK.                             | `{}`    |
+| `custom-styles`   | `String`  | Optional. Stringified JSON object containing CSS custom properties for styling. | `''`    |
+| `loader-disabled` | `Boolean` | Optional. When true, disables the default loading spinner.                      | `false` |
 
 ## SDK Options
 
@@ -423,12 +423,12 @@ If an unsupported locale is provided, the component will fall back to the defaul
 At present Primer Checkout only supports left-to-right (LTR) languages.
 :::
 
-## Disable Loader Option
+## Loader Disabled Option
 
-You can disable the default loading spinner that appears during SDK initialization by using the `disable-loader` attribute:
+You can disable the default loading spinner that appears during SDK initialization by using the `loader-disabled` attribute:
 
 ```html
-<primer-checkout client-token="your-client-token" disable-loader>
+<primer-checkout client-token="your-client-token" loader-disabled>
   <primer-main slot="main"></primer-main>
 </primer-checkout>
 ```

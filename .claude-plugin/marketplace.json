@@ -1,0 +1,20 @@
+{
+  "name": "primer-skills",
+  "owner": {
+    "name": "Primer",
+    "email": "developers@primer.io"
+  },
+  "metadata": {
+    "description": "Official Primer SDK and component skills for payment integration",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "primer-web-components",
+      "description": "Build checkout and payment experiences using Primer's web components. Covers React integration, SSR support, event handling, and CSS theming.",
+      "source": "./claude-code-skills",
+      "strict": false,
+      "skills": ["./primer-web-components"]
+    }
+  ]
+}

@@ -8,6 +8,164 @@ sidebar_position: 99
 
 This page documents all notable changes to Primer Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
+## v0.7.0 - Payment Events & Callback Architecture Refactor (04-Nov-2025)
+
+:::warning Breaking Changes
+This release significantly refactors the callback and state architecture for improved type safety and developer experience. Key breaking changes:
+
+1. **Callback API Changes**: `onPaymentComplete` removed in favor of separate `onPaymentSuccess` and `onPaymentFailure` callbacks
+2. **State Field Renames**: `error` → `primerJsError`, `failure` → `paymentFailure` with updated structure
+3. **Type Safety**: All callbacks now provide strongly-typed, specific data structures
+   :::
+
+:::info New Features
+Added comprehensive payment event system with PII-protected payment summaries and vault update notifications.
+:::
+
+**Key Changes:**
+
+- **Callback Architecture Refactor (BREAKING)**
+
+  - Removed `onPaymentComplete` unified callback
+  - Added `onPaymentSuccess(data: PaymentSuccessData)` - Handles successful payments with payment summary
+  - Added `onPaymentFailure(data: PaymentFailureData)` - Handles payment failures with error details
+  - Added `onVaultedMethodsUpdate()` - Notifies when vaulted payment methods change
+  - Existing callbacks unchanged: `onPaymentStart`, `onPaymentPrepare`
+
+- **State Field Renames (BREAKING)**
+
+  - `error` → `primerJsError` (SDK initialization/component errors)
+  - `failure` → `paymentFailure` (payment processing failures)
+  - `failure.details` → `paymentFailure.diagnosticsId`
+  - Added `paymentFailure.data` for additional error metadata
+
+- **New Payment Events**
+
+  - `primer:payment-start` - Dispatched when payment creation begins
+  - `primer:payment-success` - Dispatched on successful payment (includes PII-filtered PaymentSummary)
+  - `primer:payment-failure` - Dispatched on payment failure (includes error details)
+  - `primer:vault:methods-update` - Dispatched when vaulted payment methods update
+
+- **PII Protection**
+
+  - PaymentSummary type with whitelisted fields only (last4Digits, network, bankName)
+  - No cardholder names, full card numbers, or other PII exposed in events
+  - Compliant with GDPR Article 5(1)(c) and PCI DSS Requirement 3.4
+
+- **Performance Improvements**
+  - 40-60% reduction in redundant state-change events through deduplication
+  - Internal optimization with no API changes
+
+**Migration Guide:**
+
+Before (v0.6.x):
+
+```javascript
+primerJS.onPaymentComplete = (data) => {
+  if (data.status === 'success') {
+    console.log('Payment ID:', data.payment?.id);
+  } else if (data.status === 'error') {
+    console.log('Error:', data.error?.message);
+  }
+};
+
+// State access
+if (state.error) {
+  // Handle SDK error
+}
+if (state.failure) {
+  // Handle payment error
+  console.log('Details:', state.failure.details);
+}
+```
+
+After (v0.7.0):
+
+```javascript
+primerJS.onPaymentSuccess = ({ payment, paymentMethodType }) => {
+  console.log('Payment ID:', payment.id);
+  console.log('Last 4 digits:', payment.paymentMethodData?.last4Digits);
+  console.log('Network:', payment.paymentMethodData?.network);
+};
+
+primerJS.onPaymentFailure = ({ error, payment, paymentMethodType }) => {
+  console.log('Error:', error.message);
+  console.log('Diagnostics ID:', error.diagnosticsId);
+  console.log('Additional data:', error.data);
+};
+
+primerJS.onVaultedMethodsUpdate = () => {
+  console.log('Vaulted methods updated');
+  // Refresh vault display if needed
+};
+
+// State access
+if (state.primerJsError) {
+  // Handle SDK error
+}
+if (state.paymentFailure) {
+  // Handle payment error
+  console.log('Diagnostics ID:', state.paymentFailure.diagnosticsId);
+}
+```
+
+**Documentation:**
+
+- [Events Guide](/guides/events-guide) - Complete event system overview
+- [Events & Callbacks Reference](/sdk-reference/events-callbacks) - Full API reference
+
+---
+
+## v0.6.0 - PayPal Support (30-Oct-2025)
+
+:::info New Payment Method
+PayPal is now available in SDK Core with early-stage support. PayPal provides button-based payment flows with comprehensive customization options for styling, funding source control, and vaulting.
+:::
+
+:::warning Requirements
+PayPal requires SDK Core enabled (default) AND must be added to `enabledPaymentMethods` array.
+:::
+
+**Key Changes:**
+
+- PayPal payment method support in SDK Core
+- Button style customization (layout, color, shape, height, label)
+- Funding source control (enable/disable specific PayPal payment options)
+- Vaulting support for saved PayPal accounts
+- Sandbox testing options for development
+
+**Configuration:**
+
+PayPal must be explicitly enabled in the `enabledPaymentMethods` array:
+
+```javascript
+import { PaymentMethodType } from '@primer-io/primer-js';
+
+const checkout = document.querySelector('primer-checkout');
+checkout.options = {
+  sdkCore: true, // Required for PayPal (enabled by default)
+  enabledPaymentMethods: [
+    PaymentMethodType.PAYMENT_CARD,
+    PaymentMethodType.PAYPAL, // Add PayPal
+  ],
+  paypal: {
+    style: {
+      color: 'gold',
+      shape: 'rect',
+    },
+  },
+};
+```
+
+**Documentation:**
+
+- [PayPal Options Reference](/sdk-reference/paypal-options) - Complete PayPal configuration options
+- [Payment Methods Guide](/guides/payment-methods-guide) - Supported payment methods and SDK modes
+
+**Note:** PayPal is in early-stage support. Additional features and improvements will be added in future releases.
+
+---
+
 ## v0.5.2 - Billing Address Requirement Fix (29-Oct-2025)
 
 :::warning Bug Fix

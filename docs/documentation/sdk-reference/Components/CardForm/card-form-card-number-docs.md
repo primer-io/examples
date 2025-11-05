@@ -123,25 +123,11 @@ This component doesn't emit custom events directly, but it listens for the `netw
 
 ## Examples
 
-<div class="tabs-container">
-<div class="tabs">
-<div class="tab basic active">Basic Usage</div>
-<div class="tab custom">Custom Labels</div>
-<div class="tab no-placeholder">No Placeholder</div>
-<div class="tab complete">Complete Form</div>
-</div>
-
-<div class="tab-content basic active">
-
 ```html
 <primer-card-form>
   <primer-input-card-number></primer-input-card-number>
 </primer-card-form>
 ```
-
-</div>
-
-<div class="tab-content custom">
 
 ```html
 <primer-card-form>
@@ -154,20 +140,12 @@ This component doesn't emit custom events directly, but it listens for the `netw
 </primer-card-form>
 ```
 
-</div>
-
-<div class="tab-content no-placeholder">
-
 ```html
 <primer-card-form>
   <primer-input-card-number label="Card Number" placeholder="">
   </primer-input-card-number>
 </primer-card-form>
 ```
-
-</div>
-
-<div class="tab-content complete">
 
 ```html
 <primer-card-form>
@@ -182,9 +160,6 @@ This component doesn't emit custom events directly, but it listens for the `netw
   </div>
 </primer-card-form>
 ```
-
-</div>
-</div>
 
 ## Card Network Detection
 

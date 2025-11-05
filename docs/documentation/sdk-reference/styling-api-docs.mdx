@@ -56,38 +56,21 @@ Primer Checkout uses styling variables (implemented as CSS Variables) to maintai
 
 You can apply styling in two ways:
 
-<div className="tabs-container">
-  <div className="tabs">
-    <div className="tab css active">CSS Variables Method</div>
-    <div className="tab json">JSON Properties Method</div>
-  </div>
-
-  <div className="tab-content css active">
-
-    ```css
-    /* Apply styling directly in your CSS */
-    primer-checkout {
-    --primer-color-brand: #2f98ff;
-    --primer-radius-medium: 8px;
-    --primer-typography-brand: 'Inter', sans-serif;
-
+```css
+/* Apply styling directly in your CSS */
+primer-checkout {
+  --primer-color-brand: #2f98ff;
+  --primer-radius-medium: 8px;
+  --primer-typography-brand: 'Inter', sans-serif;
 }
+```
 
-````
-
-  </div>
-
-  <div className="tab-content json">
-
-    ```html
-    <!-- Apply styling through component attributes -->
-    <primer-checkout
-      customStyles='{"primerColorBrand":"#2f98ff","primerRadiusMedium":"8px"}'
-    ></primer-checkout>
-    ```
-
-  </div>
-</div>
+```html
+<!-- Apply styling through component attributes -->
+<primer-checkout
+  customStyles='{"primerColorBrand":"#2f98ff","primerRadiusMedium":"8px"}'
+></primer-checkout>
+```
 
 ## CSS to JSON Conversion
 
@@ -101,7 +84,7 @@ flowchart LR
     style B fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
     style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
     style D fill:#fff8e1,stroke:#ffa000,stroke-width:1px
-````
+```
 
 When using the JSON method, convert kebab-case CSS variables to camelCase properties:
 

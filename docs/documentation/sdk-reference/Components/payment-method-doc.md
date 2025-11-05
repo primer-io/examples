@@ -272,63 +272,7 @@ For complex layout customizations, container styling, and positioning patterns, 
 
 ## Available Payment Method Types
 
-The Primer SDK supports a wide range of payment methods. Here are some of the commonly used types:
-
-<div class="tabs-container">
-<div class="tabs">
-<div class="tab core active">Core Payment Types</div>
-<div class="tab banking">Online Banking</div>
-<div class="tab bnpl">Buy Now, Pay Later</div>
-<div class="tab regional">Regional Methods</div>
-<div class="tab crypto">Cryptocurrency</div>
-</div>
-
-<div class="tab-content core active">
-
-- `PAYMENT_CARD` - Standard card payments
-- `APPLE_PAY` - Apple Pay
-- `GOOGLE_PAY` - Google Pay
-- `PAYPAL` - PayPal payments
-- `KLARNA` - Klarna payments
-
-</div>
-
-<div class="tab-content banking">
-
-- Various iDEAL implementations: `ADYEN_IDEAL`, etc.
-- SOFORT implementations: `ADYEN_SOFORT`, `MOLLIE_SOFORT`, `PAY_NL_SOFORT_BANKING`, etc.
-
-</div>
-
-<div class="tab-content bnpl">
-
-- `CLEARPAY` - Clearpay/Afterpay
-- `HOOLAH` - Hoolah
-- `ATOME` - Atome
-
-</div>
-
-<div class="tab-content regional">
-
-- Multiple Bancontact implementations: `ADYEN_BANCONTACT_CARD`, `PAY_NL_BANCONTACT`, etc.
-- GiroPay implementations: `ADYEN_GIROPAY`, `BUCKAROO_GIROPAY`, etc.
-- Regional wallets: `RAPYD_GRABPAY`, `XENDIT_DANA`, etc.
-
-</div>
-
-<div class="tab-content crypto">
-
-- `COINBASE` - Coinbase cryptocurrency payments
-- `OPENNODE` - OpenNode Bitcoin payments
-
-</div>
-</div>
-
-:::important Web Headless Support
-At the moment, Primer Checkout supports only payment methods that are compatible with Primer's Web Headless SDK. Before implementing any payment method through Primer Checkout, developers should reference the [Available Payment Methods](https://primer.io/docs/payment-methods/available-payment-methods) documentation, which provides detailed information about which payment methods are supported in which regions and integrations.
-
-The actual availability of payment methods depends on your Primer account configuration, merchant location, and the customer's country. The component will only render payment methods that are both specified in your code AND available in your checkout configuration.
-:::
+For a comprehensive list of all supported payment method types, see the [Payment Methods Guide](/guides/payment-methods-guide).
 
 ## Configuring Payment Methods
 

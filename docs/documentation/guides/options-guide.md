@@ -590,4 +590,4 @@ checkout.options = {
 - **[SDK Options Reference](/sdk-reference/sdk-options-reference)** - Complete list of all available SDK options with detailed specifications
 - **[Events Guide](/guides/events-guide)** - Comprehensive guide to handling SDK events (for checkout completion/failure handling)
 - **[Getting Started](/guides/getting-started)** - New to the Primer SDK? Start here
-- **[Primer Checkout Component](/sdk-reference/primer-checkout-doc)** - Component-specific documentation and API reference
+- **[Primer Checkout Component](/sdk-reference/Components/primer-checkout-doc)** - Component-specific documentation and API reference

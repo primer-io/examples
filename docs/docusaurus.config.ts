@@ -39,8 +39,6 @@ const config: Config = {
         indexBlog: false,
         indexPages: true,
         docsDir: './documentation',
-        forceIgnoreNoIndex: true,
-        ignoreFiles: ['llm-guide.md'],
       },
     ],
   ],

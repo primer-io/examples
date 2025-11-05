@@ -1,7 +1,7 @@
 ---
 title: Checkout Component
 sidebar_label: <primer-checkout>
-sidebar_position: 4
+sidebar_position: 0
 description: The Checkout component is the main container for all Primer payment components and handles SDK initialization.
 ---
 
@@ -120,6 +120,26 @@ The Checkout component dispatches various events throughout the payment lifecycl
 
 For complete technical reference including event types and payloads, see the [Events & Callbacks Reference](/sdk-reference/events-callbacks). For usage examples, integration patterns, and best practices, see the [Events Guide](/guides/events-guide).
 
+### Key Events
+
+| Event Name                    | Description                                                             |
+| ----------------------------- | ----------------------------------------------------------------------- |
+| `primer:ready`                | Dispatched when SDK is fully initialized and ready                      |
+| `primer:methods-update`       | Dispatched when available payment methods are updated                   |
+| `primer:vault:methods-update` | Dispatched when vaulted payment methods are loaded or updated           |
+| `primer:state-change`         | Dispatched when SDK state changes (loading, processing, success, error) |
+| `primer:card-network-change`  | Dispatched when card network is detected or changed                     |
+| `primer:card-submit`          | Triggerable event to submit the card form programmatically              |
+| `primer:card-success`         | Dispatched when card form submission succeeds                           |
+| `primer:card-error`           | Dispatched when card form validation errors occur                       |
+| `primer:payment-start`        | Dispatched when payment creation begins                                 |
+| `primer:payment-success`      | Dispatched when payment completes successfully                          |
+| `primer:payment-failure`      | Dispatched when payment fails with error details                        |
+
+:::note New in v0.7.0
+Added payment lifecycle events (`primer:payment-start`, `primer:payment-success`, `primer:payment-failure`) and vault management events (`primer:vault:methods-update`).
+:::
+
 ```mermaid
 sequenceDiagram
     participant Checkout as primer-checkout
@@ -133,14 +153,17 @@ sequenceDiagram
 
     Note over Checkout,YourApp: Payment Processing
     YourApp->>Checkout: Submit Payment
+    Checkout->>YourApp: primer:payment-start
     Checkout->>YourApp: primer:state-change (isProcessing: true)
 
     alt Success Path
         Checkout->>YourApp: primer:card-success
+        Checkout->>YourApp: primer:payment-success
         Checkout->>YourApp: primer:state-change (isSuccessful: true)
-    else Error Path
+    else Failure Path
         Checkout->>YourApp: primer:card-error
-        Checkout->>YourApp: primer:state-change (error: {...})
+        Checkout->>YourApp: primer:payment-failure
+        Checkout->>YourApp: primer:state-change (paymentFailure: {...})
     end
 ```
 
@@ -340,27 +363,60 @@ The simplest implementation with default behavior and styling:
 <script>
   const checkout = document.getElementById('checkout');
 
+  // Listen for SDK initialization and configure callbacks
+  checkout.addEventListener('primer:ready', (event) => {
+    console.log('Primer Checkout initialized');
+    const primerJS = event.detail;
+
+    // Configure payment lifecycle callbacks
+    primerJS.onPaymentStart = () => {
+      console.log('Payment creation started');
+    };
+
+    primerJS.onPaymentSuccess = (data) => {
+      console.log('Payment completed successfully:', data);
+      // Access payment summary, payment ID, and other details
+    };
+
+    primerJS.onPaymentFailure = (data) => {
+      console.error('Payment failed:', data.error);
+      // Handle payment failure with error details
+    };
+  });
+
   // Listen for payment methods loading
   checkout.addEventListener('primer:methods-update', (event) => {
     const paymentMethods = event.detail;
     console.log('Available payment methods:', paymentMethods.toArray());
   });
 
+  // Listen for payment lifecycle events
+  checkout.addEventListener('primer:payment-start', () => {
+    console.log('Payment started via event');
+  });
+
+  checkout.addEventListener('primer:payment-success', (event) => {
+    const { paymentSummary, paymentMethodType } = event.detail;
+    console.log('Payment success event:', paymentSummary);
+  });
+
+  checkout.addEventListener('primer:payment-failure', (event) => {
+    const { error, paymentMethodType } = event.detail;
+    console.error('Payment failure event:', error);
+  });
+
   // Listen for checkout state changes
   checkout.addEventListener('primer:state-change', (event) => {
     const state = event.detail;
     if (state.isSuccessful) {
-      console.log('Payment completed successfully');
+      console.log('Payment state: successful');
     } else if (state.isProcessing) {
-      console.log('Payment is processing');
-    } else if (state.error) {
-      console.error('Error:', state.error.message);
+      console.log('Payment state: processing');
+    } else if (state.primerJsError) {
+      console.error('SDK Error:', state.primerJsError.message);
+    } else if (state.paymentFailure) {
+      console.error('Payment Failure:', state.paymentFailure.message);
     }
-  });
-
-  // Listen for SDK initialization
-  checkout.addEventListener('primer:ready', (event) => {
-    console.log('Primer Checkout initialized');
   });
 </script>
 ```

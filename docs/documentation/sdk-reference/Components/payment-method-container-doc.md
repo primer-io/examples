@@ -17,41 +17,14 @@ The `primer-payment-method-container` component simplifies the creation of custo
 ></primer-payment-method-container>
 ```
 
-```mermaid
-flowchart TD
-    A[primer-payment-method-container] -->|include/exclude| B{Filter Available Payment Methods}
-    B --> C[Render Filtered Methods]
-
-    C --> D["primer-payment-method type=APPLE_PAY"]
-    C --> E["primer-payment-method type=GOOGLE_PAY"]
-    C --> F["primer-payment-method type=OTHER"]
-
-    G[Payment Methods Context] --> A
-    H[Client Options Context] --> A
-
-    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
-    style B fill:#fff8e1,stroke:#ffa000,stroke-width:1px
-    style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
-```
-
 ## Usage
 
 ```html
 <primer-checkout client-token="your-client-token">
   <primer-main slot="main">
     <div slot="payments">
-      <!-- Render all available payment methods -->
+      <!-- All available payment methods -->
       <primer-payment-method-container></primer-payment-method-container>
-
-      <!-- Include specific payment methods -->
-      <primer-payment-method-container
-        include="APPLE_PAY,GOOGLE_PAY"
-      ></primer-payment-method-container>
-
-      <!-- Exclude specific payment methods -->
-      <primer-payment-method-container
-        exclude="PAYMENT_CARD"
-      ></primer-payment-method-container>
     </div>
   </primer-main>
 </primer-checkout>
@@ -73,50 +46,10 @@ flowchart TD
 
 ## Key Benefits
 
-### Before: Verbose Event Listeners
-
-The traditional approach requires complex event handling and state management:
-
-```tsx
-// Old approach - requires complex setup
-const [paymentMethods, setPaymentMethods] = useState([]);
-const litRef = useRef<PrimerCheckoutComponent>(null);
-
-useEffect(() => {
-  if (litRef.current) {
-    litRef.current.addEventListener('primer:methods-update', (e) => {
-      const methods = e?.detail;
-      const filteredMethods = methods
-        .toArray()
-        .filter((method) => method.type !== 'PAYMENT_CARD');
-      setPaymentMethods(filteredMethods);
-    });
-  }
-}, [clientToken]);
-
-return (
-  <primer-checkout client-token={clientToken} ref={litRef}>
-    <primer-main slot='main'>
-      <div slot='payments'>
-        {paymentMethods.map(({ type }) => (
-          <primer-payment-method key={type} type={type}></primer-payment-method>
-        ))}
-      </div>
-    </primer-main>
-  </primer-checkout>
-);
-```
-
-### After: Declarative Container
-
-The new container component provides a simple, declarative approach:
-
-```html
-<!-- New approach - simple and declarative -->
-<primer-payment-method-container
-  exclude="PAYMENT_CARD"
-></primer-payment-method-container>
-```
+- **Declarative filtering** - Use `include` and `exclude` attributes instead of manual JavaScript filtering
+- **Automatic updates** - Component automatically responds to payment method changes
+- **Zero boilerplate** - No event listeners or state management needed
+- **Flexible layouts** - Easily create sectioned payment layouts with different filters
 
 ## Examples
 
@@ -187,146 +120,37 @@ Temporarily disable all payment methods in a container:
 
 ## Filter Logic
 
-### Include Filter
+**Include Filter:**
 
-- When `include` is specified, only payment methods with types in the comma-separated list are rendered
-- Filter is case-sensitive and matches exact payment method types
-- Whitespace around comma-separated values is automatically trimmed
+- Only renders payment methods in the comma-separated list
+- Case-sensitive exact matching
+- Whitespace automatically trimmed
 
-### Exclude Filter
+**Exclude Filter:**
 
-- When `exclude` is specified, payment methods with types in the comma-separated list are filtered out
-- Filter is case-sensitive and matches exact payment method types
-- Whitespace around comma-separated values is automatically trimmed
+- Filters out payment methods in the comma-separated list
+- Case-sensitive exact matching
+- Whitespace automatically trimmed
 
-### Combined Filters
+**Combined Filters:**
 
-- Both `include` and `exclude` can be used together
-- `include` filter is applied first, then `exclude` filter is applied to the included methods
-- If no methods remain after filtering, the component renders nothing
-
-## Common Payment Method Types
-
-| Type                | Description                    |
-| ------------------- | ------------------------------ |
-| `PAYMENT_CARD`      | Credit/debit card form         |
-| `APPLE_PAY`         | Apple Pay button               |
-| `GOOGLE_PAY`        | Google Pay button              |
-| `PAYPAL`            | PayPal button                  |
-| `KLARNA`            | Klarna payment options         |
-| `AFTERPAY_CLEARPAY` | Afterpay/Clearpay installments |
-
-## Styling
-
-### Default Styles
-
-The component applies minimal default styling:
-
-- Full width container (`width: 100%`)
-- Vertical layout with gap between payment methods
-- Disabled state with reduced opacity
-
-### Customization
-
-```css
-/* Customize the container */
-primer-payment-method-container {
-  --primer-space-small: 16px; /* Adjust gap between methods */
-}
-
-/* Style the inner container */
-primer-payment-method-container .payment-methods-container {
-  border: 1px solid #e1e5e9;
-  border-radius: 8px;
-  padding: 16px;
-}
-
-/* Horizontal layout instead of vertical */
-primer-payment-method-container .payment-methods-container {
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-```
-
-## Migration Guide
-
-### From Event Listener Approach
-
-**Before** (Complex event-driven approach):
-
-```tsx
-const Component = ({ clientToken, options }) => {
-  const [paymentMethods, setPaymentMethods] = useState([]);
-  const litRef = useRef<PrimerCheckoutComponent>(null);
-
-  useEffect(() => {
-    if (litRef.current) {
-      litRef.current.addEventListener('primer:methods-update', (e) => {
-        const methods = e?.detail;
-        const filteredMethods = methods
-          .toArray()
-          .filter((method) => method.type !== 'PAYMENT_CARD');
-        setPaymentMethods(filteredMethods);
-      });
-    }
-  }, [clientToken]);
-
-  return (
-    <primer-checkout client-token={clientToken} options={options} ref={litRef}>
-      <primer-main slot='main'>
-        <div slot='payments'>
-          {paymentMethods.map(({ type }) => (
-            <primer-payment-method
-              key={type}
-              type={type}
-            ></primer-payment-method>
-          ))}
-        </div>
-      </primer-main>
-    </primer-checkout>
-  );
-};
-```
-
-**After** (Declarative container approach):
-
-```tsx
-const Component = ({ clientToken, options }) => {
-  return (
-    <primer-checkout client-token={clientToken} options={options}>
-      <primer-main slot='main'>
-        <div slot='payments'>
-          <primer-payment-method-container exclude='PAYMENT_CARD'></primer-payment-method-container>
-        </div>
-      </primer-main>
-    </primer-checkout>
-  );
-};
-```
-
-### Benefits of Migration
-
-1. **Reduced Complexity**: No need for event listeners, state management, or manual filtering
-2. **Declarative Syntax**: Clear intent through HTML attributes
-3. **Automatic Updates**: Container automatically responds to payment method changes
-4. **Better Performance**: Eliminates React re-renders for payment method updates
-5. **Cleaner Code**: Significantly less boilerplate code
+- `include` applied first, then `exclude`
+- If no methods remain after filtering, component renders nothing
 
 ## Related Components
 
 - [Payment Method Component](/sdk-reference/Components/payment-method-doc) - Individual payment method component
-- [Primer Checkout](/sdk-reference/primer-checkout-doc) - Main checkout container
+- [Primer Checkout](/sdk-reference/Components/primer-checkout-doc) - Main checkout container
 - [Primer Main](/sdk-reference/Components/primer-main-doc) - Main checkout content area
 
 ## Key Considerations
 
-:::info Summary
+:::info
 
-- Payment methods must be configured in your Primer Checkout Builder settings to be displayed
-- The container automatically subscribes to payment method updates from the Primer context
-- Filter attributes are case-sensitive and match exact payment method types
-- When no methods remain after filtering, the component renders nothing (no error)
-- The component must be used within a `primer-checkout` context to access payment methods
-- Both `include` and `exclude` filters can be used together for precise control
+- Payment methods must be configured in your Primer Dashboard to be displayed
+- Component automatically subscribes to payment method updates
+- Filter attributes are case-sensitive (exact match)
+- Must be used within `<primer-checkout>` context
+- Renders nothing when no methods remain after filtering
 
 :::

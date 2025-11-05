@@ -105,24 +105,11 @@ The component renders the following DOM structure:
 
 ## Examples
 
-<div class="tabs-container">
-<div class="tabs">
-<div class="tab basic active">Basic Usage</div>
-<div class="tab custom">Custom Labels</div>
-<div class="tab inline">Inline with Expiry</div>
-</div>
-
-<div class="tab-content basic active">
-
 ```html
 <primer-card-form>
   <primer-input-cvv></primer-input-cvv>
 </primer-card-form>
 ```
-
-</div>
-
-<div class="tab-content custom">
 
 ```html
 <primer-card-form>
@@ -134,10 +121,6 @@ The component renders the following DOM structure:
   </primer-input-cvv>
 </primer-card-form>
 ```
-
-</div>
-
-<div class="tab-content inline">
 
 ```html
 <primer-card-form>
@@ -151,9 +134,6 @@ The component renders the following DOM structure:
   </div>
 </primer-card-form>
 ```
-
-</div>
-</div>
 
 ## Key Considerations
 

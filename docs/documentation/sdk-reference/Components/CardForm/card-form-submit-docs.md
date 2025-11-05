@@ -121,25 +121,12 @@ This component uses `display: contents` which means it doesn't create a new box 
 
 ## Examples
 
-<div class="tabs-container">
-<div class="tabs">
-<div class="tab basic active">Basic Usage</div>
-<div class="tab custom">Custom Text & Variant</div>
-<div class="tab disabled">Disabled State</div>
-</div>
-
-<div class="tab-content basic active">
-
 ```html
 <primer-card-form>
   <!-- Card form inputs -->
   <primer-card-form-submit></primer-card-form-submit>
 </primer-card-form>
 ```
-
-</div>
-
-<div class="tab-content custom">
 
 ```html
 <primer-card-form>
@@ -149,19 +136,12 @@ This component uses `display: contents` which means it doesn't create a new box 
 </primer-card-form>
 ```
 
-</div>
-
-<div class="tab-content disabled">
-
 ```html
 <primer-card-form>
   <!-- Card form inputs -->
   <primer-card-form-submit disabled></primer-card-form-submit>
 </primer-card-form>
 ```
-
-</div>
-</div>
 
 ## Key Considerations
 

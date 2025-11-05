@@ -147,6 +147,26 @@ Cardholder name text input (not in secure iframe).
 
 Localized submit button for card forms.
 
+### `<primer-billing-address>`
+
+Collects billing address information (SDK Core only).
+
+**Attributes:**
+
+- Mode configuration (drop-in or custom layout)
+
+**Example:**
+
+```html
+<primer-card-form>
+  <div slot="card-form-content">
+    <primer-input-card-number></primer-input-card-number>
+    <primer-billing-address></primer-billing-address>
+    <primer-card-form-submit></primer-card-form-submit>
+  </div>
+</primer-card-form>
+```
+
 ## Base UI Components
 
 ### `<primer-input-wrapper>`
@@ -258,77 +278,301 @@ Manages visibility of alternative payment methods when vault is active.
 
 ## Events
 
-### Checkout Events
+### Core Checkout Events
 
 **`primer:ready`**
 
 - Fired when SDK initialization completes
-- Detail: None
-
-**`primer:state-change`**
-
-- Fired when checkout state changes
-- Detail: `{isProcessing, isSuccessful, error}`
-
-**`primer-payment-methods-updated`**
-
-- Fired when available payment methods change
-- Detail: Array of payment method objects with `.toArray()` method
+- Detail: PrimerJS instance with callbacks:
+  - `onPaymentSuccess` - New in v0.7.0
+  - `onPaymentFailure` - New in v0.7.0
+  - `onVaultedMethodsUpdate` - New in v0.7.0
+  - `onPaymentStart`, `onPaymentPrepare`
+  - `refreshSession()`, `getPaymentMethods()`
 
 **Example:**
 
 ```javascript
-checkout.addEventListener('primer:ready', () => {
-  console.log('SDK ready');
-});
+checkout.addEventListener('primer:ready', (event) => {
+  const primer = event.detail;
 
+  // Set up callbacks
+  primer.onPaymentSuccess = ({ paymentSummary, paymentMethodType }) => {
+    console.log('Payment successful!');
+  };
+
+  primer.onPaymentFailure = ({ error, paymentMethodType }) => {
+    console.error('Payment failed:', error.message);
+  };
+});
+```
+
+**`primer:state-change`**
+
+- Fired when checkout state changes
+- Detail: `{isProcessing, isSuccessful, isLoading, primerJsError, paymentFailure}`
+- Note: `error` → `primerJsError`, `failure` → `paymentFailure` (v0.7.0)
+
+**Example:**
+
+```javascript
 checkout.addEventListener('primer:state-change', (event) => {
-  const { isProcessing, isSuccessful, error } = event.detail;
-  // Handle state
+  const { isProcessing, isSuccessful, primerJsError, paymentFailure } =
+    event.detail;
+  if (primerJsError) {
+    console.error('SDK error:', primerJsError);
+  }
+  if (paymentFailure) {
+    console.error('Payment failed:', paymentFailure);
+  }
 });
+```
 
-checkout.addEventListener('primer-payment-methods-updated', (event) => {
+**`primer:methods-update`**
+
+- Fired when available payment methods change
+- Detail: InitializedPayments instance with `.toArray()`, `.get()`, `.size()` methods
+- Note: Replaces `primer-payment-methods-updated`
+
+**Example:**
+
+```javascript
+checkout.addEventListener('primer:methods-update', (event) => {
   const methods = event.detail.toArray();
-  // Handle methods
+  console.log(`${methods.length} payment methods available`);
+
+  // Get specific method
+  const cardMethod = event.detail.get('PAYMENT_CARD');
 });
+```
+
+### Payment Lifecycle Events (New in v0.7.0)
+
+**`primer:payment-start`**
+
+- Fired when payment processing begins
+- Detail: undefined
+
+**`primer:payment-success`**
+
+- Fired when payment completes successfully
+- Detail: `{paymentSummary, paymentMethodType, timestamp}`
+- PaymentSummary is PII-filtered (safe for client-side)
+
+**Example:**
+
+```javascript
+checkout.addEventListener('primer:payment-success', (event) => {
+  const { paymentSummary, paymentMethodType, timestamp } = event.detail;
+  console.log(`✅ Payment successful via ${paymentMethodType}`);
+  console.log(
+    `Card: ${paymentSummary.network} ending in ${paymentSummary.last4Digits}`,
+  );
+  // Navigate to success page
+});
+```
+
+**`primer:payment-failure`**
+
+- Fired when payment fails
+- Detail: `{error: {code, message, diagnosticsId}, paymentSummary?, paymentMethodType, timestamp}`
+
+**Example:**
+
+```javascript
+checkout.addEventListener('primer:payment-failure', (event) => {
+  const { error, paymentMethodType } = event.detail;
+  console.error(`❌ Payment failed: ${error.message}`);
+  console.error(`Diagnostics ID: ${error.diagnosticsId}`);
+  // Show error to user
+});
+```
+
+### Vault Events (New in v0.7.0)
+
+**`primer:vault:methods-update`**
+
+- Fired when vaulted payment methods loaded/updated
+- Detail: `{vaultedPayments, timestamp}`
+- vaultedPayments API: `.toArray()`, `.get(id)`, `.size()`
+
+**Example:**
+
+```javascript
+checkout.addEventListener('primer:vault:methods-update', (event) => {
+  const { vaultedPayments } = event.detail;
+  console.log(`${vaultedPayments.size()} saved payment methods`);
+
+  vaultedPayments.toArray().forEach((method) => {
+    console.log(
+      `${method.paymentInstrumentType}: ${method.paymentInstrumentData.last4Digits}`,
+    );
+  });
+});
+```
+
+### Card Events
+
+**`primer:card-network-change`**
+
+- Fired when card network detected
+- Detail: `{detectedCardNetwork, selectableCardNetworks, isLoading}`
+
+**Example:**
+
+```javascript
+cardForm.addEventListener('primer:card-network-change', (event) => {
+  const { detectedCardNetwork, selectableCardNetworks } = event.detail;
+  console.log(`Detected: ${detectedCardNetwork}`);
+});
+```
+
+**`primer:card-success`**
+
+- Fired when card form submission succeeds
+- Detail: `{result}`
+
+**`primer:card-error`**
+
+- Fired when card validation errors occur
+- Detail: `{errors: InputValidationError[]}`
+
+**`primer:card-submit`** (Triggerable)
+
+- Dispatch this event to trigger card form submission programmatically
+- Detail: `{source?: string}`
+
+**Example:**
+
+```javascript
+// Trigger card form submission from external button
+const cardForm = document.querySelector('primer-card-form');
+cardForm.dispatchEvent(
+  new CustomEvent('primer:card-submit', {
+    detail: { source: 'external-button' },
+  }),
+);
 ```
 
 ## SDK Options Structure
 
 ```typescript
 interface SDKOptions {
-  // Localization
+  // Core Options
+  sdkCore?: boolean; // Default: true since v0.4.0
   locale?: string; // e.g., 'en-GB', 'fr-FR'
+  merchantDomain?: string; // For Apple Pay domain validation
+  disabledPayments?: boolean; // Disable all payment methods
+  enabledPaymentMethods?: PaymentMethodType[]; // Filter which methods display
 
-  // Payment method specific options
-  paymentMethodOptions?: {
-    PAYMENT_CARD?: {
-      requireCVV?: boolean;
-      requireBillingAddress?: boolean;
-      cardholderName?: {
-        required?: boolean;
-        visible?: boolean;
-      };
-    };
-    APPLE_PAY?: {
-      merchantName?: string;
-      merchantCountryCode?: string;
-      buttonType?: 'buy' | 'donate' | 'plain' | 'checkout';
-      buttonStyle?: 'black' | 'white' | 'white-outline';
-    };
-    GOOGLE_PAY?: {
-      buttonTheme?: 'dark' | 'light';
-      buttonType?: 'buy' | 'donate' | 'plain' | 'checkout';
+  // Card Options
+  card?: {
+    cardholderName?: {
+      required?: boolean;
+      visible?: boolean;
     };
   };
 
-  // Vault configuration
+  // Apple Pay Options
+  applePay?: {
+    buttonType?:
+      | 'buy'
+      | 'donate'
+      | 'plain'
+      | 'checkout'
+      | 'set-up'
+      | 'book'
+      | 'subscribe';
+    buttonStyle?: 'black' | 'white' | 'white-outline';
+    billingOptions?: {
+      requiredBillingContactFields?: (
+        | 'emailAddress'
+        | 'name'
+        | 'phoneNumber'
+        | 'postalAddress'
+        | 'phoneticName'
+      )[];
+    };
+    shippingOptions?: {
+      requiredShippingContactFields?: (
+        | 'emailAddress'
+        | 'name'
+        | 'phoneNumber'
+        | 'postalAddress'
+        | 'phoneticName'
+      )[];
+      requireShippingMethod?: boolean;
+    };
+  };
+
+  // Google Pay Options
+  googlePay?: {
+    buttonType?:
+      | 'long'
+      | 'short'
+      | 'book'
+      | 'buy'
+      | 'checkout'
+      | 'donate'
+      | 'order'
+      | 'pay'
+      | 'plain'
+      | 'subscribe';
+    buttonColor?: 'default' | 'black' | 'white';
+    buttonSizeMode?: 'fill' | 'static';
+    captureBillingAddress?: boolean;
+    emailRequired?: boolean;
+    requireShippingMethod?: boolean;
+  };
+
+  // PayPal Options
+  paypal?: {
+    style?: {
+      layout?: 'vertical' | 'horizontal';
+      color?: 'gold' | 'blue' | 'silver' | 'white' | 'black';
+      shape?: 'rect' | 'pill';
+      height?: number; // 25-55
+      label?: 'paypal' | 'checkout' | 'buynow' | 'pay' | 'installment';
+      tagline?: boolean;
+      borderRadius?: number; // 0-55
+      disableMaxWidth?: boolean;
+    };
+    disableFunding?: string[]; // ['credit', 'card', 'paylater', etc.]
+    enableFunding?: string[]; // ['venmo', etc.]
+    vault?: boolean;
+    buyerCountry?: string; // Sandbox only
+    debug?: boolean;
+  };
+
+  // Klarna Options
+  klarna?: {
+    paymentFlow?: 'DEFAULT' | 'PREFER_VAULT';
+    allowedPaymentCategories?: ('pay_now' | 'pay_later' | 'pay_over_time')[];
+    buttonOptions?: {
+      text?: string;
+    };
+  };
+
+  // Vault Options
   vault?: {
     enabled?: boolean;
+    showEmptyState?: boolean;
   };
 
-  // Core SDK features
-  sdkCore?: boolean;
+  // Stripe Options
+  stripe?: {
+    mandateData?: {
+      fullMandateText?: string;
+      merchantName?: string;
+    };
+    publishableKey?: string;
+  };
+
+  // Submit Button Options
+  submitButton?: {
+    amountVisible?: boolean;
+    useBuiltInButton?: boolean; // Set false for external buttons
+  };
 }
 ```
 

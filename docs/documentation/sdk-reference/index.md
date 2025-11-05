@@ -11,7 +11,7 @@ This document provides a complete list of all the components that have been docu
 ## Main Components
 
 - [Primer Main](./Components/primer-main-doc.md) - The main entry point for the SDK
-- [Primer Checkout](./primer-checkout-doc.md) - The checkout component for handling payment flows
+- [Primer Checkout](./Components/primer-checkout-doc.md) - The checkout component for handling payment flows
 - [Vault Manager](./Components/vault-manager-doc.md) - Component for managing saved payment methods
 - [Payment Method](./Components/payment-method-doc.md) - Component for displaying payment method options
 - [Payment Method Container](./Components/payment-method-container-doc.md) - Container for filtering and organizing payment methods
@@ -27,15 +27,6 @@ This document provides a complete list of all the components that have been docu
 - [Card Form Expiry](./Components/CardForm/card-form-expiry-docs.md) - Input field for card expiration date
 - [Card Form CVV](./Components/CardForm/card-form-cvv-docs.md) - Input field for card security code
 - [Card Form Submit](./Components/CardForm/card-form-submit-docs.md) - Submit button for card form
-
-## Base Components
-
-- [Base Components Overview](./Components/Base/index.md) - Overview of base UI components
-- [Button Component](./Components/Base/button-component-docs.md) - Reusable button component
-- [Input Component](./Components/Base/input-component-docs.md) - Base input field component
-- [Input Label](./Components/Base/input-label-docs.md) - Label component for input fields
-- [Input Wrapper](./Components/Base/input-wrapper-docs.md) - Wrapper component for input fields
-- [Input Error](./Components/Base/input-error-docs.md) - Component for displaying input validation errors
 
 ## Styling
 

@@ -51,7 +51,8 @@ Listen for events directly on the `primer-checkout` component:
 const checkout = document.querySelector('primer-checkout');
 
 checkout.addEventListener('primer:state-change', (event) => {
-  const { isProcessing, isSuccessful, error } = event.detail;
+  const { isProcessing, isSuccessful, primerJsError, paymentFailure } =
+    event.detail;
   // Handle state changes
 });
 ```
@@ -68,8 +69,19 @@ Listen for events at the document level where all Primer events bubble:
 
 ```javascript
 document.addEventListener('primer:state-change', (event) => {
-  const { isProcessing, isSuccessful, error } = event.detail;
+  const { isProcessing, isSuccessful, primerJsError, paymentFailure } =
+    event.detail;
   // Handle state changes
+});
+
+document.addEventListener('primer:payment-success', (event) => {
+  const { paymentSummary, paymentMethodType } = event.detail;
+  // Handle payment success
+});
+
+document.addEventListener('primer:payment-failure', (event) => {
+  const { error, paymentMethodType } = event.detail;
+  // Handle payment failure
 });
 
 document.addEventListener('primer:card-success', (event) => {
@@ -122,7 +134,11 @@ Dispatched when the Primer SDK is fully initialized and ready for use.
 
 **Event Detail:**
 
-The event detail contains the PrimerJS instance with methods like `onPaymentComplete`, `onPaymentStart`, `onPaymentPrepare`, `refreshSession()`, and `getPaymentMethods()`.
+The event detail contains the PrimerJS instance with methods like `onPaymentSuccess`, `onPaymentFailure`, `onPaymentStart`, `onPaymentPrepare`, `refreshSession()`, and `getPaymentMethods()`.
+
+:::note Changed in v0.7.0
+The `onPaymentComplete` callback has been split into `onPaymentSuccess` and `onPaymentFailure` for clearer separation of concerns. The old unified callback is deprecated.
+:::
 
 **Usage:**
 
@@ -133,25 +149,39 @@ checkout.addEventListener('primer:ready', (event) => {
   const primer = event.detail;
   console.log('✅ Primer SDK ready');
 
-  // Configure payment completion handler
-  primer.onPaymentComplete = ({ payment, status, error }) => {
-    if (status === 'success') {
-      console.log('✅ Payment successful', payment);
-      // Redirect to confirmation page, show success message, etc.
-    } else if (status === 'pending') {
-      console.log('⏳ Payment pending', payment);
-      // Show pending state, explain next steps to user
-    } else if (status === 'error') {
-      console.error('❌ Payment failed', error);
-      // Show error message, allow retry
+  // Configure payment success handler
+  primer.onPaymentSuccess = ({ payment, paymentMethodType }) => {
+    console.log('✅ Payment successful', payment.id);
+    console.log('💳 Method:', paymentMethodType);
+
+    // Access available payment data (PII-filtered)
+    if (payment.paymentMethodData?.last4Digits) {
+      console.log('Last 4:', payment.paymentMethodData.last4Digits);
     }
+
+    // Redirect to confirmation page or show success message
+    window.location.href = `/order/confirmation?id=${payment.orderId}`;
+  };
+
+  // Configure payment failure handler
+  primer.onPaymentFailure = ({ error, payment, paymentMethodType }) => {
+    console.error('❌ Payment failed', error.message);
+    console.error('Error code:', error.code);
+
+    // Log diagnostics ID for support
+    if (error.diagnosticsId) {
+      console.error('Diagnostics ID:', error.diagnosticsId);
+    }
+
+    // Show error message and allow retry
+    showErrorMessage(error.message);
   };
 });
 ```
 
 **When to use:**
 
-- Setting up the `onPaymentComplete` callback
+- Setting up `onPaymentSuccess` and `onPaymentFailure` callbacks
 - Accessing PrimerJS instance methods
 - Performing actions that require a fully initialized SDK
 
@@ -161,28 +191,35 @@ Dispatched whenever the checkout state changes (processing, success, error, etc.
 
 **Event Detail:**
 
-The event detail contains SDK state including `isProcessing`, `isSuccessful`, `isLoading`, `error`, and `failure` properties.
+The event detail contains SDK state including `isProcessing`, `isSuccessful`, `isLoading`, `primerJsError`, and `paymentFailure` properties.
+
+:::note Changed in v0.7.0
+State error fields have been renamed for clarity:
+
+- `error` → `primerJsError` (SDK-level errors)
+- `failure` → `paymentFailure` (payment-level failures)
+  :::
 
 **Usage:**
 
 ```javascript
 checkout.addEventListener('primer:state-change', (event) => {
-  const { isProcessing, isSuccessful, error, failure } = event.detail;
+  const { isProcessing, isSuccessful, primerJsError, paymentFailure } =
+    event.detail;
 
   if (isProcessing) {
-    // Show loading spinner
     console.log('⏳ Processing payment...');
-    document.getElementById('spinner').style.display = 'block';
   } else if (isSuccessful) {
-    // Show success message
     console.log('✅ Payment successful!');
-    document.getElementById('success-message').style.display = 'block';
-  } else if (error || failure) {
-    // Show error message
-    const errorMessage = error?.message || failure?.message;
+  } else if (primerJsError || paymentFailure) {
+    const errorMessage =
+      primerJsError?.message || paymentFailure?.message || 'An error occurred';
     console.error('❌ Payment failed:', errorMessage);
-    document.getElementById('error-message').textContent = errorMessage;
-    document.getElementById('error-message').style.display = 'block';
+
+    // Log error code for debugging
+    if (paymentFailure?.code) {
+      console.error('Error code:', paymentFailure.code);
+    }
   }
 });
 ```
@@ -209,13 +246,11 @@ checkout.addEventListener('primer:methods-update', (event) => {
   const paymentMethods = event.detail.toArray();
 
   console.log('Available payment methods:', paymentMethods);
+  console.log('Total methods:', paymentMethods.length);
 
-  // Example: Dynamically render payment method buttons
-  const container = document.getElementById('payment-methods');
+  // Access individual method details
   paymentMethods.forEach((method) => {
-    const element = document.createElement('primer-payment-method');
-    element.setAttribute('type', method.type);
-    container.appendChild(element);
+    console.log('Method type:', method.type);
   });
 });
 ```
@@ -230,6 +265,277 @@ checkout.addEventListener('primer:methods-update', (event) => {
 :::tip Payment Method Container Alternative
 For most use cases involving payment method layout and filtering, the `primer-payment-method-container` component provides a simpler declarative approach without requiring event listeners. See the [Payment Method Container SDK Reference](/sdk-reference/Components/payment-method-container-doc) for details.
 :::
+
+## Payment Lifecycle Events
+
+:::note New in v0.7.0
+Payment lifecycle events provide granular tracking of payment processing stages with detailed data payloads.
+:::
+
+Payment lifecycle events allow you to track the complete payment flow from initiation to completion. These events work alongside callbacks and state change events to provide comprehensive payment monitoring.
+
+### `primer:payment-start`
+
+Dispatched when payment processing begins, immediately after the user initiates a payment.
+
+**Event Detail:**
+
+The event detail is `undefined` for this event. Use it as a trigger signal only.
+
+**Usage:**
+
+```javascript
+document.addEventListener('primer:payment-start', () => {
+  console.log('💳 Payment processing started');
+
+  // Track payment initiation
+  analytics.track('Payment Started');
+});
+```
+
+**When to use:**
+
+- Show loading indicators immediately when payment starts
+- Disable form inputs to prevent duplicate submissions
+- Track payment initiation in analytics
+- Update UI to reflect processing state
+
+### `primer:payment-success`
+
+Dispatched when a payment completes successfully.
+
+**Event Detail:**
+
+The event detail contains a `PaymentSuccessData` object with the following structure:
+
+```typescript
+{
+  paymentSummary: PaymentSummary; // PII-filtered payment data
+  paymentMethodType: string; // e.g., 'PAYMENT_CARD', 'PAYPAL'
+  timestamp: number; // Unix timestamp of success
+}
+```
+
+**PaymentSummary Structure:**
+
+The `PaymentSummary` object provides access to non-sensitive payment information. **Important: PII (Personally Identifiable Information) is filtered** from this object to ensure sensitive data isn't exposed in browser events.
+
+Available fields:
+
+- `id`: Payment ID
+- `orderId`: Merchant order ID
+- `paymentMethodType`: Type of payment method used
+- `paymentMethodData`: Object containing non-sensitive card data
+  - `last4Digits`: Last 4 digits of card number (if applicable)
+  - `network`: Card network (Visa, Mastercard, etc.)
+  - `paymentMethodType`: Payment method type
+
+Filtered fields (not available):
+
+- `cardholderName`: Cardholder name is filtered for PII protection
+
+**Usage:**
+
+```javascript
+document.addEventListener('primer:payment-success', (event) => {
+  const { paymentSummary, paymentMethodType, timestamp } = event.detail;
+
+  console.log('✅ Payment successful!');
+  console.log('Payment ID:', paymentSummary.id);
+  console.log('Order ID:', paymentSummary.orderId);
+  console.log('Method:', paymentMethodType);
+  console.log('Timestamp:', new Date(timestamp));
+
+  // Access available payment method data
+  if (paymentSummary.paymentMethodData?.last4Digits) {
+    console.log('Last 4 digits:', paymentSummary.paymentMethodData.last4Digits);
+    console.log('Network:', paymentSummary.paymentMethodData.network);
+  }
+
+  // Track successful payment in analytics
+  analytics.track('Payment Successful', {
+    paymentId: paymentSummary.id,
+    orderId: paymentSummary.orderId,
+    method: paymentMethodType,
+    last4: paymentSummary.paymentMethodData?.last4Digits,
+  });
+
+  // Redirect to confirmation page
+  window.location.href = `/order/confirmation?id=${paymentSummary.orderId}`;
+});
+```
+
+**When to use:**
+
+- Display success messages with payment details
+- Track successful payments in analytics
+- Redirect to confirmation pages
+- Update order status in your application
+- Show receipt information
+
+:::warning PII Protection
+The `PaymentSummary` object filters sensitive information like cardholder names. Only use the provided non-sensitive fields for display and analytics.
+:::
+
+### `primer:payment-failure`
+
+Dispatched when a payment fails or encounters an error.
+
+**Event Detail:**
+
+The event detail contains a `PaymentFailureData` object with the following structure:
+
+```typescript
+{
+  error: {
+    code: string;           // Error code (e.g., 'CARD_DECLINED')
+    message: string;        // User-friendly error message
+    diagnosticsId?: string; // Optional diagnostics ID for support
+    data?: any;            // Optional additional error data
+  };
+  paymentSummary?: PaymentSummary;  // Optional, may be undefined
+  paymentMethodType: string;
+  timestamp: number;
+}
+```
+
+**Error Structure:**
+
+- `code`: Machine-readable error code for programmatic handling
+- `message`: Human-readable error message suitable for display
+- `diagnosticsId`: Unique identifier for troubleshooting with Primer support
+- `data`: Additional context-specific error information
+
+**Usage:**
+
+```javascript
+document.addEventListener('primer:payment-failure', (event) => {
+  const { error, paymentSummary, paymentMethodType, timestamp } = event.detail;
+
+  console.error('❌ Payment failed');
+  console.error('Error code:', error.code);
+  console.error('Error message:', error.message);
+
+  if (error.diagnosticsId) {
+    console.error('Diagnostics ID:', error.diagnosticsId);
+  }
+
+  // Track payment failure in analytics
+  analytics.track('Payment Failed', {
+    errorCode: error.code,
+    errorMessage: error.message,
+    diagnosticsId: error.diagnosticsId,
+    method: paymentMethodType,
+    timestamp: new Date(timestamp),
+  });
+
+  // Send to error tracking service
+  if (error.diagnosticsId) {
+    errorTracker.capturePaymentFailure({
+      diagnosticsId: error.diagnosticsId,
+      code: error.code,
+      paymentMethodType,
+    });
+  }
+});
+```
+
+**When to use:**
+
+- Display error messages to users
+- Implement retry logic
+- Track payment failures in analytics
+- Send error reports to monitoring services
+- Log diagnostics IDs for support cases
+- Handle specific error codes with custom logic
+
+## Vault Events
+
+:::note New in v0.7.0
+Vault events enable you to track and manage saved payment methods in real-time.
+:::
+
+### `primer:vault:methods-update`
+
+Dispatched when vaulted payment methods are loaded, updated, or when the vault state changes.
+
+**Event Detail:**
+
+The event detail contains a `VaultMethodsUpdateData` object with the following structure:
+
+```typescript
+{
+  vaultedPayments: InitializedVaultedPayments; // Vault API instance
+  timestamp: number; // Unix timestamp
+}
+```
+
+**InitializedVaultedPayments API:**
+
+The `vaultedPayments` object provides methods to access saved payment methods:
+
+- `toArray()`: Returns array of `VaultedPaymentMethodSummary` objects
+- `get(id: string)`: Gets a specific vaulted payment method by ID
+- `size()`: Returns the number of saved payment methods
+
+**VaultedPaymentMethodSummary Structure:**
+
+Each vaulted payment method contains:
+
+- `id`: Unique identifier for the vaulted payment method
+- `analyticsId`: Analytics tracking identifier
+- `paymentMethodType`: Type of payment method (e.g., 'PAYMENT_CARD', 'ADYEN_STRIPE_ACH')
+- `paymentInstrumentType`: Instrument type
+- `paymentInstrumentData`: Object with PII-filtered payment instrument details
+  - `last4Digits`: Last 4 digits of card (cards only)
+  - `network`: Card network like VISA, MASTERCARD (cards only)
+  - `accountNumberLastFourDigits`: Last 4 of account number (ACH only)
+  - `bankName`: Bank name (ACH only)
+  - `accountType`: CHECKING or SAVINGS (ACH only)
+  - `email`: Email address (wallet methods like PayPal)
+- `userDescription`: Optional user-provided description
+
+:::warning PII Protection
+Sensitive fields like cardholder names, expiration dates, and full account numbers are filtered out for security. Only safe identifiers are exposed.
+:::
+
+**Usage:**
+
+```javascript
+document.addEventListener('primer:vault:methods-update', (event) => {
+  const { vaultedPayments, timestamp } = event.detail;
+
+  console.log('💳 Vault methods updated');
+  console.log('Total saved methods:', vaultedPayments.size());
+
+  // Get all saved payment methods
+  const methods = vaultedPayments.toArray();
+
+  methods.forEach((method) => {
+    console.log('Method ID:', method.id);
+    console.log('Type:', method.paymentMethodType);
+
+    if (method.paymentInstrumentData) {
+      console.log('Last 4:', method.paymentInstrumentData.last4Digits);
+      console.log('Network:', method.paymentInstrumentData.network);
+    }
+  });
+
+  // Track vault updates in analytics
+  analytics.track('Vault Methods Updated', {
+    count: methods.length,
+    timestamp,
+  });
+});
+```
+
+**When to use:**
+
+- Display saved payment methods to users
+- Update vault UI when methods are added or removed
+- Track vault usage in analytics
+- Implement saved payment method selection
+- Show payment method counts or summaries
 
 ## Card Events
 
@@ -249,12 +555,6 @@ The event detail contains a `result` object with payment submission data.
 checkout.addEventListener('primer:card-success', (event) => {
   const result = event.detail.result;
   console.log('✅ Card form submitted successfully', result);
-
-  // Example: Show success message
-  document.getElementById('card-success-message').style.display = 'block';
-
-  // Example: Disable form to prevent duplicate submissions
-  document.querySelector('primer-card-form').setAttribute('disabled', 'true');
 });
 ```
 
@@ -280,22 +580,10 @@ checkout.addEventListener('primer:card-error', (event) => {
   const errors = event.detail.errors;
   console.error('❌ Card validation errors:', errors);
 
-  // Example: Display error messages
-  const errorContainer = document.getElementById('card-errors');
-  errorContainer.innerHTML = '';
-
+  // Log each error
   errors.forEach((error) => {
-    const errorElement = document.createElement('div');
-    errorElement.className = 'error-message';
-    errorElement.textContent = `${error.field}: ${error.error}`;
-    errorContainer.appendChild(errorElement);
+    console.error(`${error.field}: ${error.error}`);
   });
-
-  // Example: Focus on first invalid field
-  if (errors.length > 0) {
-    const firstErrorField = errors[0].field;
-    // Implement focus logic based on field name
-  }
 });
 ```
 
@@ -330,17 +618,8 @@ checkout.addEventListener('primer:card-network-change', (event) => {
     const network = detectedCardNetwork.network;
     console.log('💳 Card network detected:', network);
 
-    // Example: Update UI with card brand logo
-    const brandLogo = document.getElementById('card-brand-logo');
-    brandLogo.src = `/images/card-brands/${network}.svg`;
-    brandLogo.alt = network;
-
-    // Example: Show network-specific messaging
-    if (network === 'amex') {
-      document.getElementById('amex-notice').style.display = 'block';
-    } else {
-      document.getElementById('amex-notice').style.display = 'none';
-    }
+    // Track card network detection
+    analytics.track('Card Network Detected', { network });
   }
 });
 ```
@@ -457,307 +736,19 @@ document.dispatchEvent(
 - The checkout component handles the event at the document level and forwards it internally
 - This pattern works regardless of where your submit button is located in the DOM
 
-## Best Practices
-
-### 1. Use Named Functions for Event Handlers
-
-Named functions make it easier to debug and remove event listeners:
-
-```javascript
-// ✅ GOOD: Named function
-function handleStateChange(event) {
-  const { isProcessing, isSuccessful, error } = event.detail;
-  // Handle state changes
-}
-
-checkout.addEventListener('primer:state-change', handleStateChange);
-
-// Easy to remove later
-checkout.removeEventListener('primer:state-change', handleStateChange);
-
-// ❌ AVOID: Anonymous function
-checkout.addEventListener('primer:state-change', (event) => {
-  // Harder to debug and remove
-});
-```
-
-### 2. Always Check Event Detail Exists
-
-Events may have different payload structures based on context:
-
-```javascript
-checkout.addEventListener('primer:state-change', (event) => {
-  // ✅ GOOD: Safe property access
-  if (event.detail?.error) {
-    console.error('Error:', event.detail.error.message);
-  }
-
-  // ❌ AVOID: Unsafe access
-  console.error(event.detail.error.message); // May throw if error is undefined
-});
-```
-
-### 3. Triggering Events Properly
-
-When dispatching triggerable events like `primer:card-submit`, always include the required properties:
-
-```javascript
-// ✅ GOOD: Proper event dispatch with required properties
-document.dispatchEvent(
-  new CustomEvent('primer:card-submit', {
-    bubbles: true, // Required: allows event to bubble up through DOM
-    composed: true, // Required: allows event to cross shadow DOM boundaries
-    detail: { source: 'custom-button' }, // Recommended: identify trigger source
-  }),
-);
-
-// ❌ AVOID: Missing required properties
-document.dispatchEvent(
-  new CustomEvent('primer:card-submit', {
-    detail: { source: 'custom-button' },
-  }),
-); // Won't work - missing bubbles and composed
-```
-
-### 4. Clean Up Event Listeners
-
-Remove event listeners when components unmount to prevent memory leaks:
-
-```javascript
-// React example
-useEffect(() => {
-  const checkout = document.querySelector('primer-checkout');
-
-  const handleStateChange = (event) => {
-    // Handle event
-  };
-
-  checkout?.addEventListener('primer:state-change', handleStateChange);
-
-  // Cleanup on unmount
-  return () => {
-    checkout?.removeEventListener('primer:state-change', handleStateChange);
-  };
-}, []);
-```
-
-### 5. Implement Proper Error Handling
-
-Always handle error scenarios gracefully:
-
-```javascript
-checkout.addEventListener('primer:state-change', (event) => {
-  try {
-    const { error, failure } = event.detail;
-
-    if (error || failure) {
-      // Show user-friendly error message
-      showErrorMessage(error?.message || failure?.message);
-
-      // Log detailed error for debugging
-      console.error('Payment error details:', { error, failure });
-
-      // Optionally report to error tracking service
-      reportError(error || failure);
-    }
-  } catch (err) {
-    console.error('Error handling state change:', err);
-  }
-});
-```
-
-### 6. Combine Events for Complete Payment Flow
-
-Use multiple event listeners together for a complete payment experience:
-
-```javascript
-const checkout = document.querySelector('primer-checkout');
-
-// Initialize SDK and set up payment handler
-checkout.addEventListener('primer:ready', (event) => {
-  const primer = event.detail;
-
-  primer.onPaymentComplete = ({ payment, status, error }) => {
-    if (status === 'success') {
-      window.location.href = '/order/confirmation';
-    } else if (status === 'error') {
-      showErrorMessage(error.message);
-    }
-  };
-});
-
-// Track payment processing state
-checkout.addEventListener('primer:state-change', (event) => {
-  const { isProcessing } = event.detail;
-
-  if (isProcessing) {
-    showLoadingSpinner();
-  } else {
-    hideLoadingSpinner();
-  }
-});
-
-// Handle card-specific errors
-checkout.addEventListener('primer:card-error', (event) => {
-  const errors = event.detail.errors;
-  displayCardValidationErrors(errors);
-});
-```
-
-## Common Use Cases
-
-### Analytics Tracking
-
-Track payment flow through events:
-
-```javascript
-document.addEventListener('primer:ready', () => {
-  analytics.track('Checkout Initialized');
-});
-
-document.addEventListener('primer:state-change', (event) => {
-  if (event.detail.isSuccessful) {
-    analytics.track('Payment Successful');
-  } else if (event.detail.error) {
-    analytics.track('Payment Failed', {
-      error: event.detail.error.message,
-    });
-  }
-});
-
-document.addEventListener('primer:card-network-change', (event) => {
-  if (event.detail.detectedCardNetwork) {
-    analytics.track('Card Network Detected', {
-      network: event.detail.detectedCardNetwork.network,
-    });
-  }
-});
-```
-
-### Custom Loading States
-
-Implement custom loading indicators:
-
-```javascript
-let loadingTimeout;
-
-checkout.addEventListener('primer:state-change', (event) => {
-  const { isProcessing } = event.detail;
-
-  if (isProcessing) {
-    // Show loading immediately
-    document.getElementById('loading-overlay').classList.add('active');
-
-    // Show "still processing" message after 5 seconds
-    loadingTimeout = setTimeout(() => {
-      document.getElementById('long-processing-message').style.display =
-        'block';
-    }, 5000);
-  } else {
-    // Hide loading
-    document.getElementById('loading-overlay').classList.remove('active');
-    document.getElementById('long-processing-message').style.display = 'none';
-
-    // Clear timeout
-    if (loadingTimeout) {
-      clearTimeout(loadingTimeout);
-    }
-  }
-});
-```
-
-### Form State Management
-
-Manage form interactivity based on checkout state:
-
-```javascript
-checkout.addEventListener('primer:state-change', (event) => {
-  const { isProcessing, isSuccessful } = event.detail;
-  const submitButton = document.querySelector('primer-card-form-submit');
-
-  if (isProcessing) {
-    // Disable submission during processing
-    submitButton?.setAttribute('disabled', 'true');
-    submitButton.textContent = 'Processing...';
-  } else if (isSuccessful) {
-    // Keep disabled after success
-    submitButton?.setAttribute('disabled', 'true');
-    submitButton.textContent = 'Payment Complete';
-  } else {
-    // Re-enable for retry
-    submitButton?.removeAttribute('disabled');
-    submitButton.textContent = 'Pay Now';
-  }
-});
-```
-
-## Anti-Patterns to Avoid
-
-### ❌ Don't Poll for State Changes
-
-```javascript
-// ❌ WRONG: Polling is inefficient
-setInterval(() => {
-  const checkout = document.querySelector('primer-checkout');
-  // Check state somehow
-}, 1000);
-
-// ✅ CORRECT: Use events
-checkout.addEventListener('primer:state-change', (event) => {
-  // React to state changes
-});
-```
-
-### ❌ Don't Ignore Event Cleanup
-
-```javascript
-// ❌ WRONG: Memory leak in SPA
-function initCheckout() {
-  const checkout = document.querySelector('primer-checkout');
-  checkout.addEventListener('primer:state-change', handleStateChange);
-  // No cleanup when page/component changes
-}
-
-// ✅ CORRECT: Clean up when done
-function initCheckout() {
-  const checkout = document.querySelector('primer-checkout');
-  const handleStateChange = (event) => {
-    /* ... */
-  };
-
-  checkout.addEventListener('primer:state-change', handleStateChange);
-
-  // Return cleanup function
-  return () => {
-    checkout.removeEventListener('primer:state-change', handleStateChange);
-  };
-}
-```
-
-### ❌ Don't Modify Event Objects
-
-```javascript
-// ❌ WRONG: Modifying event data
-checkout.addEventListener('primer:state-change', (event) => {
-  event.detail.isProcessing = false; // Don't mutate
-});
-
-// ✅ CORRECT: Create new objects if needed
-checkout.addEventListener('primer:state-change', (event) => {
-  const state = { ...event.detail };
-  // Work with your copy
-});
-```
-
 ## Summary
 
 Primer Checkout's event-driven architecture provides:
 
 - **Flexible Integration**: Listen at component or document level based on your needs
 - **Complete Lifecycle Coverage**: Events for initialization, state changes, validation, and completion
+- **Payment Lifecycle Events**: Granular tracking with `primer:payment-start`, `primer:payment-success`, and `primer:payment-failure`
+- **Vault Management**: Real-time updates for saved payment methods via `primer:vault:methods-update`
+- **Specialized Callbacks**: Dedicated `onPaymentSuccess` and `onPaymentFailure` callbacks for cleaner error handling
 - **Framework Agnostic**: Standard DOM events work everywhere
 - **Detailed Payloads**: Rich event data for comprehensive state management
+- **PII Protection**: Sensitive data is filtered from browser events to ensure security
 
-By following the patterns and best practices in this guide, you can build robust payment flows that handle all checkout scenarios gracefully.
+This guide demonstrates the core patterns for working with Primer Checkout's event-driven architecture.
 
 For more information on basic setup and initialization, see the [Getting Started Guide](/guides/getting-started).

@@ -2,200 +2,79 @@
 title: Error Message Container
 sidebar_label: <primer-error-message-container>
 sidebar_position: 6
-description: A pre-built component to display payment failure messages in the checkout process
+description: A pre-built component to display payment failure errors in the checkout process
 ---
 
 # Error Message Container
 
 ## \<primer-error-message-container\>
 
-The `primer-error-message-container` component provides a convenient way to display payment failure messages during the checkout process. It automatically handles the display of payment-related errors received from the SDK without requiring you to write custom error handling code.
+The `primer-error-message-container` component provides a convenient way to display **payment failure errors** during the checkout process. It automatically handles the display of payment failure errors received from the SDK without requiring you to write custom error handling code.
 
-## Usage
-
-<div class="tabs-container">
-<div class="tabs">
-<div class="tab standard active">Standard Layout</div>
-<div class="tab custom">Custom Layout</div>
-<div class="tab events">Custom Error Handling</div>
-</div>
-
-<div class="tab-content standard active">
+## Basic Usage
 
 ```html
-<primer-checkout client-token="your-client-token">
-  <primer-main slot="main">
-    <div slot="payments">
-      <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
-      <!-- Include the error message container for payment failure display -->
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <primer-checkout client-token="YOUR_CLIENT_TOKEN">
       <primer-error-message-container></primer-error-message-container>
-    </div>
-  </primer-main>
-</primer-checkout>
+      <primer-card-form></primer-card-form>
+      <primer-submit-button>Pay Now</primer-submit-button>
+    </primer-checkout>
+  </body>
+</html>
 ```
 
-</div>
-
-<div class="tab-content custom">
-
-```html
-<primer-checkout client-token="your-client-token">
-  <div slot="main">
-    <!-- Your custom payment method layout -->
-    <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
-
-    <!-- Include error message container for built-in payment failure handling -->
-    <primer-error-message-container></primer-error-message-container>
-  </div>
-</primer-checkout>
-```
-
-</div>
-
-<div class="tab-content events">
-
-```javascript
-// Alternative approach using the PrimerJS API for custom payment failure handling
-const checkout = document.querySelector('primer-checkout');
-
-// Listen for the checkout ready event
-checkout.addEventListener('primer:ready', ({ detail: primer }) => {
-  // Set up the payment complete callback
-  primer.onPaymentComplete = ({ payment, status, error }) => {
-    if (status === 'error') {
-      // Display the payment failure using your own UI
-      const errorElement = document.getElementById('custom-error-display');
-      errorElement.textContent = error.message;
-      errorElement.style.display = 'block';
-    } else {
-      // Hide error element for success/pending states
-      document.getElementById('custom-error-display').style.display = 'none';
-    }
-  };
-});
-
-// Listen for checkout state changes
-checkout.addEventListener('primer:state-change', (event) => {
-  const { error, failure } = event.detail;
-
-  if (error || failure) {
-    // Display the error using your own UI
-    const errorElement = document.getElementById('custom-error-display');
-    errorElement.textContent = failure ? failure.message : error.message;
-    errorElement.style.display = 'block';
-  } else {
-    // Hide error when not present
-    document.getElementById('custom-error-display').style.display = 'none';
-  }
-});
-```
-
-</div>
-</div>
-
-:::tip Error Handling Patterns
-For comprehensive error handling strategies, custom error displays, and error event management, see the [Events Guide - Error Handling](/guides/events-guide#error-handling).
-:::
+The component automatically displays payment failure errors. No configuration required.
 
 ## When to Use
 
-Include this component in your custom checkout layouts when you need to:
+Use `<primer-error-message-container>` when you want automatic display of payment failure errors without custom error handling.
 
-- Display payment processing failures
-- Present server-side error responses
-- Notify users about declined transactions
-- Show general payment-related errors
+**Use this component if:**
 
-:::tip
-This component specifically handles payment failures, not card validation errors. Card validation is handled separately and prevents form submission until valid.
-:::
+- You want zero-config error display
+- You're using the default checkout layout
 
-## Properties
+**Don't use this component if:**
 
-The component doesn't require any properties or attributes to function. It automatically connects to the checkout context and displays payment failure messages that occur during the checkout process.
+- You need custom error UI/UX
+- You want to handle errors programmatically
+- You're building a fully custom layout with your own error handling
 
-## Events
+For custom error handling, listen to the `primer:state-change` event on `<primer-checkout>` and access the `paymentFailure` field.
 
-This component doesn't emit any events directly, but it displays errors emitted by other components in the checkout flow:
+## How It Works
 
-| Event Source      | Event Name            | What It Displays                                          |
-| ----------------- | --------------------- | --------------------------------------------------------- |
-| `primer-checkout` | `primer:ready`        | Connects to the PrimerJS instance for error handling      |
-| `primer-checkout` | `primer:state-change` | General checkout errors (via error or failure properties) |
+The component subscribes to the SDK state and automatically displays payment failure errors when they occur.
 
-## CSS Custom Properties
+**What it displays:**
 
-The error message container uses these CSS custom properties for styling:
+- Payment failure errors (after submission fails)
 
-| CSS Property                           | Description                           | Default     |
-| -------------------------------------- | ------------------------------------- | ----------- |
-| `--primer-color-background-error`      | Background color for error messages   | `#ffebee`   |
-| `--primer-color-text-error`            | Text color for error messages         | `#d32f2f`   |
-| `--primer-radius-small`                | Border radius for the error container | `4px`       |
-| `--primer-space-small`                 | Padding inside the error container    | `8px`       |
-| `--primer-typography-body-medium-font` | Font family for error text            | System font |
-| `--primer-typography-body-medium-size` | Font size for error text              | `14px`      |
+**What it does NOT display:**
 
-### Styling Example
+- Card validation errors (use `primer-card-form` validation instead)
+- SDK initialization errors
+- Network errors during processing
 
-```css
-primer-error-message-container {
-  --primer-color-background-error: #fff0f0;
-  --primer-color-text-error: #d32f2f;
-  --primer-radius-small: 8px;
-}
-```
+**Behavior:**
 
-## Technical Details
+- Automatically shows when `paymentFailure` state field is populated
+- Automatically hides when payment succeeds or is retried
+- Includes proper ARIA attributes for accessibility
 
-The error message container integrates with the SDK's state management system and automatically displays payment failure messages when they occur. It handles:
+## Technical Implementation
 
-- Payment processor errors
-- Network connectivity issues
-- Server-side errors from the Primer API
-- Declined transaction messages
+The component uses Lit's `@consume` decorator to subscribe to SDK state changes via the `sdkStateContext`. This allows it to automatically react to state updates without manual event listener setup.
 
-```mermaid
-sequenceDiagram
-    participant Checkout as primer-checkout
-    participant ErrorContainer as primer-error-message-container
-    participant User
+**State Fields Monitored:**
 
-    Note over Checkout,ErrorContainer: Payment Failure Flow
-
-    Checkout->>ErrorContainer: primer:ready (primer)
-    ErrorContainer->>ErrorContainer: Connect to PrimerJS instance
-    Note over Checkout,ErrorContainer: When payment fails
-    Checkout->>ErrorContainer: onPaymentComplete (status: 'error')
-    ErrorContainer->>ErrorContainer: Process error message
-    ErrorContainer->>User: Display formatted payment failure message
-
-    Note over Checkout,ErrorContainer: Alternative Flow
-    Checkout->>ErrorContainer: primer:state-change (error/failure)
-    ErrorContainer->>ErrorContainer: Extract failure details
-    ErrorContainer->>User: Display payment error message
-```
-
-## Important Distinction
-
-:::info
-Unlike form validation errors (which prevent submission), the `primer-error-message-container` specifically handles payment failures that occur after a valid form is submitted or other payment method has been used
-
-Card validation errors are handled by the card input components themselves and prevent form submission.
-:::
-
-## Best Practices
-
-:::tip Best Practices Summary
-
-1. **Strategic Placement**: Position the error container prominently where users will look after attempting payment.
-2. **Visual Integration**: Use consistent styling with the rest of your checkout for a cohesive experience.
-3. **Consider Alternatives**: For highly customized UIs, you may prefer implementing your own error handling with the `primer:state-change` event and PrimerJS API.
-4. **Accessibility First**: The component includes proper ARIA attributes, but ensure your layout maintains focus management for error states.
-5. **Clear Messaging**: The component handles formatting error messages from the server, but consider how they fit within your overall checkout flow.
-   :::
+- `paymentFailure` - Displays error messages when payment processing fails
+- `isProcessing` - Hides errors during active payment processing
 
 ## Related Components
 
-- [`<primer-checkout>`](/sdk-reference/primer-checkout-doc) - The main checkout container
+- [`<primer-checkout>`](/sdk-reference/Components/primer-checkout-doc) - The main checkout container
 - [`<primer-main>`](/sdk-reference/Components/primer-main-doc) - The main content area component

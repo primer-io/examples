@@ -109,14 +109,6 @@ The Card Form component:
 
 The CardForm component can be used in two ways:
 
-<div class="tabs-container">
-<div class="tabs">
-<div class="tab default active">Default Layout</div>
-<div class="tab custom">Custom Layout</div>
-</div>
-
-<div class="tab-content default active">
-
 ```html
 <primer-card-form></primer-card-form>
 ```
@@ -128,10 +120,6 @@ This renders a complete card form with:
 - CVV input
 - Cardholder name input
 - Submit button
-
-</div>
-
-<div class="tab-content custom">
 
 ```html
 <primer-card-form disabled>
@@ -146,9 +134,6 @@ This renders a complete card form with:
   </div>
 </primer-card-form>
 ```
-
-</div>
-</div>
 
 ## DOM Structure
 

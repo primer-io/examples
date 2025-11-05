@@ -27,15 +27,7 @@ This reference documents **SDK options** (the contents of the `options` object).
 :::warning SDK Core is Default as of v0.4.0
 Starting in v0.4.0, **SDK Core is enabled by default**. This is a new payment engine with enhanced performance and features.
 
-**Current Support:**
-
-- ✅ Card payment forms
-- ✅ Vaulted payment methods (stored cards)
-- ✅ Billing address capture
-
-**Coming Soon:**
-
-- 🔄 Additional payment methods (in future releases)
+**For the current list of supported payment methods**, see the [Payment Methods Guide](/guides/payment-methods-guide).
 
 **To use the full suite of payment methods now**, explicitly set `sdkCore: false` to use the legacy SDK engine.
 
@@ -305,70 +297,7 @@ const options = {
 
 ## PayPal Options
 
-Configure PayPal button appearance and behavior.
-
-### paypal.buttonColor
-
-**Type**: `'gold' | 'blue' | 'silver' | 'white' | 'black'`
-**Default**: `'gold'`
-
-The color of the PayPal button.
-
-### paypal.buttonShape
-
-**Type**: `'pill' | 'rect'`
-**Default**: `'pill'`
-
-The shape of the PayPal button.
-
-### paypal.buttonSize
-
-**Type**: `'small' | 'medium' | 'large' | 'responsive'`
-**Default**: `'medium'`
-
-The size of the PayPal button.
-
-### paypal.buttonHeight
-
-**Type**: `number`
-**Default**: none
-
-Custom button height in pixels. Overrides the `buttonSize` setting.
-
-### paypal.buttonLabel
-
-**Type**: `'checkout' | 'credit' | 'pay' | 'buynow' | 'paypal' | 'installment'`
-**Default**: `'checkout'`
-
-The label text displayed on the PayPal button.
-
-### paypal.buttonTagline
-
-**Type**: `boolean`
-**Default**: `false`
-
-Whether to show the PayPal tagline below the button.
-
-### paypal.paymentFlow
-
-**Type**: `'DEFAULT' | 'PREFER_VAULT'`
-**Default**: `'DEFAULT'`
-
-The payment flow to use. `'PREFER_VAULT'` prioritizes saving the payment method for future use.
-
-**Example:**
-
-```javascript
-const options = {
-  paypal: {
-    buttonColor: 'gold',
-    buttonShape: 'pill',
-    buttonSize: 'medium',
-    buttonLabel: 'checkout',
-    paymentFlow: 'DEFAULT',
-  },
-};
-```
+For comprehensive PayPal configuration options including button styling, vaulting, and funding source control, see the dedicated [PayPal Options Reference](/sdk-reference/paypal-options).
 
 ## Klarna Options
 
@@ -559,7 +488,7 @@ Configure which payment methods are available and displayed in the checkout.
 
 Specifies which payment methods are enabled and displayed in the checkout. By default, only card payments are enabled. Configure this to enable specific payment methods for your checkout flow.
 
-**Available payment methods**: `PAYMENT_CARD`, `ADYEN_BLIK`
+**Available payment methods**: `PAYMENT_CARD`, `PAYPAL`, `ADYEN_BLIK`
 
 **Example:**
 
@@ -616,6 +545,7 @@ checkout.options = {
   disabledPayments: false, // Optional: disable all payment methods
   enabledPaymentMethods: [
     PaymentMethodType.PAYMENT_CARD,
+    PaymentMethodType.PAYPAL,
     PaymentMethodType.ADYEN_BLIK,
   ], // Optional: which payment methods to display
 
@@ -648,15 +578,6 @@ checkout.options = {
     captureBillingAddress: true,
     emailRequired: false,
     requireShippingMethod: false,
-  },
-
-  // PayPal Options
-  paypal: {
-    buttonColor: 'gold',
-    buttonShape: 'pill',
-    buttonSize: 'medium',
-    buttonLabel: 'checkout',
-    paymentFlow: 'DEFAULT',
   },
 
   // Klarna Options
@@ -717,4 +638,4 @@ checkout.options = options;
 - **[Options Guide](/guides/options-guide)** - Learn HOW to configure SDK options with usage patterns and best practices
 - **[Events Guide](/guides/events-guide)** - Handle checkout completion, failure, and other SDK events
 - **[Getting Started](/guides/getting-started)** - New to the Primer SDK? Start here
-- **[Primer Checkout Component](/sdk-reference/primer-checkout-doc)** - Component-specific documentation and API reference
+- **[Primer Checkout Component](/sdk-reference/Components/primer-checkout-doc)** - Component-specific documentation and API reference

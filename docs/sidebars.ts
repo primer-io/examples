@@ -25,6 +25,7 @@ const sidebars: SidebarsConfig = {
       collapsible: true,
       collapsed: false,
       items: [
+        'guides/payment-methods-guide',
         'guides/options-guide',
         'guides/events-guide',
         'guides/llm-guide',

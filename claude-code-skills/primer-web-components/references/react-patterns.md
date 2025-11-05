@@ -170,8 +170,8 @@ function CheckoutPage({ clientToken }: { clientToken: string }) {
     if (!checkout) return;
 
     const handleStateChange = (event: CustomEvent) => {
-      const { isProcessing, isSuccessful, error } = event.detail;
-      console.log('State:', { isProcessing, isSuccessful, error });
+      const { isProcessing, isSuccessful, primerJsError, paymentFailure } = event.detail;
+      console.log('State:', { isProcessing, isSuccessful, primerJsError, paymentFailure });
     };
 
     checkout.addEventListener('primer:state-change', handleStateChange);
@@ -207,10 +207,10 @@ function CheckoutPage() {
       setPaymentMethods(methods);
     };
 
-    checkout.addEventListener('primer-payment-methods-updated', handleMethodsUpdate);
+    checkout.addEventListener('primer:methods-update', handleMethodsUpdate);
 
     return () => {
-      checkout.removeEventListener('primer-payment-methods-updated', handleMethodsUpdate);
+      checkout.removeEventListener('primer:methods-update', handleMethodsUpdate);
     };
   }, []);
 
@@ -225,6 +225,90 @@ function CheckoutPage() {
       </primer-main>
     </primer-checkout>
   );
+}
+```
+
+### Payment Lifecycle Event Handling (New in v0.7.0)
+
+```typescript
+function CheckoutPage({ clientToken }: { clientToken: string }) {
+  const checkoutRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const checkout = checkoutRef.current;
+    if (!checkout) return;
+
+    // Set up callbacks via primer:ready
+    const handleReady = (event: CustomEvent) => {
+      const primer = event.detail;
+
+      primer.onPaymentSuccess = ({ paymentSummary, paymentMethodType }) => {
+        console.log('✅ Payment successful');
+        console.log(`${paymentSummary.network} ending in ${paymentSummary.last4Digits}`);
+        // Navigate to success page
+      };
+
+      primer.onPaymentFailure = ({ error, paymentMethodType }) => {
+        console.error('❌ Payment failed:', error.message);
+        console.error('Diagnostics ID:', error.diagnosticsId);
+        // Show error to user
+      };
+
+      primer.onVaultedMethodsUpdate = ({ vaultedPayments }) => {
+        console.log(`${vaultedPayments.size()} saved payment methods`);
+      };
+    };
+
+    checkout.addEventListener('primer:ready', handleReady);
+
+    return () => {
+      checkout.removeEventListener('primer:ready', handleReady);
+    };
+  }, []);
+
+  return (
+    <primer-checkout
+      ref={checkoutRef}
+      client-token={clientToken}
+      options={SDK_OPTIONS}
+    />
+  );
+}
+```
+
+Alternatively, you can use events directly:
+
+```typescript
+function CheckoutPage() {
+  useEffect(() => {
+    const handlePaymentSuccess = (event: CustomEvent) => {
+      const { paymentSummary, paymentMethodType, timestamp } = event.detail;
+      console.log('Payment successful!');
+      // Handle success
+    };
+
+    const handlePaymentFailure = (event: CustomEvent) => {
+      const { error, paymentMethodType } = event.detail;
+      console.error('Payment failed:', error.message);
+      // Handle failure
+    };
+
+    document.addEventListener('primer:payment-success', handlePaymentSuccess);
+    document.addEventListener('primer:payment-failure', handlePaymentFailure);
+
+    return () => {
+      document.removeEventListener(
+        'primer:payment-success',
+        handlePaymentSuccess,
+      );
+      document.removeEventListener(
+        'primer:payment-failure',
+        handlePaymentFailure,
+      );
+    };
+  }, []);
+
+  // ...
 }
 ```
 
@@ -287,7 +371,11 @@ export default function CheckoutPage() {
 
 ## Custom Hooks
 
-### usePrimerDropIn Hook
+### usePrimerDropIn Hook (Legacy Universal Checkout API)
+
+**⚠️ IMPORTANT:** This hook uses the legacy `Primer.showUniversalCheckout()` API, which is NOT part of the Primer Web Components API documented in this skill. This hook is provided for reference only if you need to work with the older Universal Checkout integration.
+
+For web components, use the patterns shown in the "Event Handling in React" section above instead.
 
 ```typescript
 'use client';

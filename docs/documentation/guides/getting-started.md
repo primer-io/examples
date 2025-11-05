@@ -77,7 +77,7 @@ Create a basic checkout integration by adding the `primer-checkout` component to
 Currently, only one instance of `<primer-checkout>` can be used per application. Multiple checkout configurations on a single page are not supported in the current version. This limitation may be addressed in future releases as we progress with engine rewrites.
 :::
 
-For comprehensive details on all available attributes, refer to the [Checkout Component SDK Reference](/sdk-reference/primer-checkout-doc).
+For comprehensive details on all available attributes, refer to the [Checkout Component SDK Reference](/sdk-reference/Components/primer-checkout-doc).
 
 :::note React and Framework Developers
 
@@ -188,6 +188,15 @@ Libraries will often have their own module names you will need to use when exten
 
 ## Event Handling
 
+:::note v0.7.0 Breaking Changes
+Starting in v0.7.0, the callback API has been updated:
+
+- `onPaymentComplete` has been replaced with `onPaymentSuccess` and `onPaymentFailure`
+- State fields have been renamed: `error` → `primerJsError`, `failure` → `paymentFailure`
+
+For complete details, see the [Events Guide](/guides/events-guide).
+:::
+
 Primer Checkout emits events throughout the payment lifecycle that you can listen to and respond to. Events bubble up through the DOM and can be captured at the component or document level.
 
 **Quick Example:**
@@ -196,12 +205,36 @@ Primer Checkout emits events throughout the payment lifecycle that you can liste
 const checkout = document.querySelector('primer-checkout');
 
 checkout.addEventListener('primer:ready', (event) => {
-  console.log('Checkout is ready!');
+  const primer = event.detail;
+  console.log('✅ Primer SDK ready');
+
+  // Set up payment callbacks
+  primer.onPaymentSuccess = ({ payment, paymentMethodType }) => {
+    console.log('Payment successful!', payment.id);
+    // Redirect to confirmation page
+  };
+
+  primer.onPaymentFailure = ({ error }) => {
+    console.error('Payment failed:', error.message);
+    // Show error message
+  };
 });
 
 checkout.addEventListener('primer:state-change', (event) => {
-  const { isProcessing, isSuccessful, error } = event.detail;
-  // Handle state changes
+  const { isProcessing, isSuccessful, primerJsError, paymentFailure } =
+    event.detail;
+
+  if (isProcessing) {
+    console.log('Processing payment...');
+  }
+
+  if (primerJsError) {
+    console.error('SDK error:', primerJsError.message);
+  }
+
+  if (paymentFailure) {
+    console.error('Payment failed:', paymentFailure.message);
+  }
 });
 ```
 

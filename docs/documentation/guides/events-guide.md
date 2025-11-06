@@ -134,7 +134,7 @@ Dispatched when the Primer SDK is fully initialized and ready for use.
 
 **Event Detail:**
 
-The event detail contains the PrimerJS instance with methods like `onPaymentSuccess`, `onPaymentFailure`, `onPaymentStart`, `onPaymentPrepare`, `refreshSession()`, and `getPaymentMethods()`.
+The event detail contains the PrimerJS instance with methods like `onPaymentSuccess`, `onPaymentFailure`, `onPaymentStart`, `onPaymentPrepare`, `refreshSession()`, `getPaymentMethods()`, and `setCardholderName()`.
 
 :::note Changed in v0.7.0
 The `onPaymentComplete` callback has been split into `onPaymentSuccess` and `onPaymentFailure` for clearer separation of concerns. The old unified callback is deprecated.
@@ -176,6 +176,13 @@ checkout.addEventListener('primer:ready', (event) => {
     // Show error message and allow retry
     showErrorMessage(error.message);
   };
+
+  // Pre-fill cardholder name (v0.7.1+)
+  // Useful for improving UX by reducing manual data entry
+  const userProfile = getUserProfile(); // Your user data source
+  if (userProfile.fullName) {
+    primer.setCardholderName(userProfile.fullName);
+  }
 });
 ```
 
@@ -183,6 +190,7 @@ checkout.addEventListener('primer:ready', (event) => {
 
 - Setting up `onPaymentSuccess` and `onPaymentFailure` callbacks
 - Accessing PrimerJS instance methods
+- Pre-filling cardholder name from user profile data
 - Performing actions that require a fully initialized SDK
 
 ### `primer:state-change`
@@ -735,6 +743,80 @@ document.dispatchEvent(
 - Always include a meaningful `source` parameter to help with debugging and tracking
 - The checkout component handles the event at the document level and forwards it internally
 - This pattern works regardless of where your submit button is located in the DOM
+
+## Programmatic Control Methods
+
+:::tip New in v0.7.1
+Beyond events, the PrimerJS instance provides direct methods for programmatic control of checkout components.
+:::
+
+### Setting Cardholder Name Programmatically
+
+The `setCardholderName()` method allows you to programmatically set the cardholder name field value. This is useful for pre-filling data from user profiles, auto-completing from previous transactions, or synchronizing with external form data.
+
+**Basic Usage:**
+
+```javascript
+const checkout = document.querySelector('primer-checkout');
+
+checkout.addEventListener('primer:ready', (event) => {
+  const primerJS = event.detail;
+
+  // Pre-fill cardholder name from user profile
+  primerJS.setCardholderName('John Doe');
+});
+```
+
+**Real-World Example: Auto-Fill from User Profile**
+
+```javascript
+// Assume you have user data from your authentication system
+const currentUser = {
+  firstName: 'Jane',
+  lastName: 'Smith',
+  email: 'jane.smith@example.com',
+};
+
+const checkout = document.querySelector('primer-checkout');
+
+checkout.addEventListener('primer:ready', (event) => {
+  const primerJS = event.detail;
+
+  // Combine first and last name for cardholder field
+  const fullName = `${currentUser.firstName} ${currentUser.lastName}`;
+  primerJS.setCardholderName(fullName);
+
+  console.log(`✅ Pre-filled cardholder name: ${fullName}`);
+});
+```
+
+**Important Timing Considerations:**
+
+- Must be called **after** the `primer:ready` event fires
+- Must be called **after** card hosted inputs have rendered
+- Calling too early will log a warning but won't throw an error
+- Safe to call multiple times if needed (e.g., when user data updates)
+
+**Use Cases:**
+
+- **Returning Customers**: Auto-fill from stored user profile data
+- **Multi-Step Checkout**: Sync data from previous checkout steps
+- **Account Integration**: Use data from authenticated user sessions
+- **Form Synchronization**: Keep cardholder name in sync with billing address name
+
+**Example: Conditional Pre-fill**
+
+```javascript
+checkout.addEventListener('primer:ready', (event) => {
+  const primerJS = event.detail;
+
+  // Only pre-fill if user is logged in
+  const user = getAuthenticatedUser();
+  if (user?.fullName) {
+    primerJS.setCardholderName(user.fullName);
+  }
+});
+```
 
 ## Summary
 

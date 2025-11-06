@@ -8,6 +8,37 @@ sidebar_position: 99
 
 This page documents all notable changes to Primer Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
+## v0.7.1 - Programmatic Cardholder Name (06-Nov-2025)
+
+:::info New Feature
+Added `setCardholderName()` method to PrimerJS instance for programmatically setting cardholder name values.
+:::
+
+**Key Changes:**
+
+- **New PrimerJS Method**
+  - Added `setCardholderName(name: string)` - Programmatically set the cardholder name field value
+  - Useful for pre-filling from user profiles or auto-completing checkout forms
+  - Must be called after `primer:ready` event and after card inputs are rendered
+  - Graceful error handling with warnings if called before initialization
+
+**Usage Example:**
+
+```javascript
+checkout.addEventListener('primer:ready', (event) => {
+  const primerJS = event.detail;
+  // Pre-fill cardholder name from user profile
+  primerJS.setCardholderName('John Doe');
+});
+```
+
+**Documentation:**
+
+- [Events & Callbacks Reference](/sdk-reference/events-callbacks) - Full API reference
+- [Events Guide](/guides/events-guide) - Practical usage examples
+
+---
+
 ## v0.7.0 - Payment Events & Callback Architecture Refactor (04-Nov-2025)
 
 :::warning Breaking Changes

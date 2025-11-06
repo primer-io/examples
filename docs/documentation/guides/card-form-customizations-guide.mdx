@@ -145,6 +145,30 @@ aria-label="Credit card number" <!-- Changes the accessibility label -->
 
 These properties work consistently across all card input components, allowing for uniform customization.
 
+### Programmatic Value Control
+
+:::tip New in v0.7.1
+You can programmatically set the cardholder name field value using the PrimerJS instance.
+:::
+
+Beyond visual customization, you can programmatically control the cardholder name field value. This is useful for pre-filling data from user profiles or synchronizing with external forms:
+
+```javascript
+const checkout = document.querySelector('primer-checkout');
+
+checkout.addEventListener('primer:ready', (event) => {
+  const primerJS = event.detail;
+
+  // Pre-fill cardholder name from user profile
+  const user = getUserProfile();
+  if (user.fullName) {
+    primerJS.setCardholderName(user.fullName);
+  }
+});
+```
+
+**Important:** The `setCardholderName()` method must be called after the `primer:ready` event fires and after card inputs have been rendered. See the [Events Guide](/guides/events-guide#setting-cardholder-name-programmatically) for more examples and use cases.
+
 ## Form Layout Patterns
 
 While you have complete freedom over the layout, certain patterns are common and effective:

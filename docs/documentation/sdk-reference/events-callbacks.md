@@ -546,10 +546,11 @@ Public methods available on the PrimerJS instance (accessible via the `primer:re
 
 ### Methods Overview
 
-| Method                | Returns               | Description                                                   |
-| --------------------- | --------------------- | ------------------------------------------------------------- |
-| `refreshSession()`    | `Promise<void>`       | Synchronizes client-side SDK with server-side session updates |
-| `getPaymentMethods()` | `PaymentMethodInfo[]` | Returns cached list of available payment methods              |
+| Method                    | Returns               | Description                                                   |
+| ------------------------- | --------------------- | ------------------------------------------------------------- |
+| `refreshSession()`        | `Promise<void>`       | Synchronizes client-side SDK with server-side session updates |
+| `getPaymentMethods()`     | `PaymentMethodInfo[]` | Returns cached list of available payment methods              |
+| `setCardholderName(name)` | `void`                | Programmatically sets the cardholder name field value         |
 
 ### refreshSession()
 
@@ -570,6 +571,45 @@ getPaymentMethods(): PaymentMethodInfo[]
 ```
 
 **Use Case:** Use this method to check which payment methods are available without waiting for events.
+
+### setCardholderName()
+
+:::tip New in v0.7.1
+Programmatically set the cardholder name value in card payment forms.
+:::
+
+Sets the cardholder name field value programmatically.
+
+```typescript
+setCardholderName(cardholderName: string): void
+```
+
+**Parameters:**
+
+| Name             | Type     | Description                |
+| ---------------- | -------- | -------------------------- |
+| `cardholderName` | `string` | The cardholder name to set |
+
+**Use Case:** Pre-fill the cardholder name from user profile data, auto-complete from previous transactions, or synchronize with external form data to improve checkout UX.
+
+**Timing Requirements:**
+
+- Must be called after the `primer:ready` event has fired
+- Must be called after card hosted inputs have been rendered
+- Calling before initialization will log a warning and fail gracefully
+
+**Example:**
+
+```typescript
+const checkout = document.querySelector('primer-checkout');
+
+checkout.addEventListener('primer:ready', (event) => {
+  const primerJS = event.detail;
+
+  // Pre-fill cardholder name from user profile
+  primerJS.setCardholderName('John Doe');
+});
+```
 
 ## Type Definitions
 

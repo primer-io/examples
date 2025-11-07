@@ -72,6 +72,38 @@ All examples use `@primer-io/primer-js` version 0.2.0 and require:
 - Modern browser support (no IE11/legacy Edge)
 - Checkout session management with payment event handling
 
+**⚠️ CRITICAL: Correct SDK Initialization Pattern**
+
+The Primer SDK uses **web components**, NOT class constructors. When writing documentation or examples:
+
+❌ **WRONG - DO NOT USE THIS PATTERN:**
+
+```typescript
+// This is INCORRECT and should NEVER appear in docs or examples
+import { PrimerCheckout } from '@primer-io/primer-js';
+const checkout = new PrimerCheckout({ clientToken: 'token', ...options });
+```
+
+✅ **CORRECT - ALWAYS USE THIS PATTERN:**
+
+```javascript
+// This is the CORRECT web component pattern
+const checkout = document.querySelector('primer-checkout');
+checkout.setAttribute('client-token', 'your-client-token');
+checkout.options = {
+  // SDK options here (locale, enabledPaymentMethods, etc.)
+};
+```
+
+**Key points:**
+
+- There is NO `PrimerCheckout` class to import
+- `client-token` is set via `setAttribute()` (it's a component property)
+- SDK options are set via the `options` property (NOT in a constructor)
+- Do NOT mix component properties with SDK options
+
+This pattern must be consistent across ALL documentation, examples, and code snippets.
+
 ### Example Structure Patterns
 
 - Basic examples: Vanilla TypeScript with Vite

@@ -37,27 +37,34 @@ Polish payment method requiring one-time password (OTP) verification. Popular in
 By default, only `PAYMENT_CARD` is enabled. Configure payment methods via `enabledPaymentMethods`:
 
 ```typescript
-import { PrimerCheckout, PaymentMethodType } from '@primer-io/primer-js';
+import { PaymentMethodType } from '@primer-io/primer-js';
 
-const checkout = new PrimerCheckout({
-  clientToken: 'your-client-token',
+const checkout = document.querySelector('primer-checkout');
+checkout.setAttribute('client-token', 'your-client-token');
+checkout.options = {
   enabledPaymentMethods: [
     PaymentMethodType.PAYMENT_CARD,
     PaymentMethodType.PAYPAL,
     PaymentMethodType.ADYEN_BLIK,
   ],
-});
+};
 ```
 
 **Default behavior:**
 
-```typescript
+```javascript
 // These are equivalent:
-new PrimerCheckout({ clientToken: 'token' });
-new PrimerCheckout({
-  clientToken: 'token',
+
+// Default - no options needed
+const checkout = document.querySelector('primer-checkout');
+checkout.setAttribute('client-token', 'token');
+
+// Explicit default
+const checkout = document.querySelector('primer-checkout');
+checkout.setAttribute('client-token', 'token');
+checkout.options = {
   enabledPaymentMethods: [PaymentMethodType.PAYMENT_CARD],
-});
+};
 ```
 
 :::note Type Restriction is Temporary
@@ -87,11 +94,12 @@ Not all payment methods support Web Headless integration. When browsing the [Pri
 
 Enable Legacy SDK by setting `sdkCore: false`. All payment methods configured in your Primer Dashboard that support Web Headless will be automatically available.
 
-```typescript
-const checkout = new PrimerCheckout({
-  clientToken: 'your-client-token',
+```javascript
+const checkout = document.querySelector('primer-checkout');
+checkout.setAttribute('client-token', 'your-client-token');
+checkout.options = {
   sdkCore: false, // Enables Legacy SDK with Web Headless payment methods
-});
+};
 ```
 
 :::note Payment Method Availability

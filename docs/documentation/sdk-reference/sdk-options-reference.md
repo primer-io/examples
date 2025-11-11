@@ -134,6 +134,29 @@ Whether the cardholder name field is required for card payments.
 
 Whether the cardholder name field is visible in the card form.
 
+### card.cardholderName.defaultValue
+
+:::info New in v0.7.3
+Pre-fill the cardholder name field with a default value using synchronous initialization.
+:::
+
+**Type**: `string`
+**Default**: none
+
+Pre-fills the cardholder name field with the specified value during initialization. The value is applied synchronously via iframe URL hash, ensuring it appears immediately when the checkout loads with no race conditions or blank field flash.
+
+**Key benefits:**
+
+- Synchronous initialization (value visible immediately at T+4ms)
+- No race conditions or blank field flash
+- User can edit or clear the pre-filled value
+- Backward compatible (optional parameter)
+
+**Common use cases:**
+
+- Pre-filling from user profiles during checkout initialization
+- Auto-completing checkout forms with known customer data
+
 **Example:**
 
 ```javascript
@@ -142,10 +165,16 @@ const options = {
     cardholderName: {
       required: true,
       visible: true,
+      defaultValue: 'John Doe', // Pre-fill cardholder name
     },
   },
 };
 ```
+
+**Comparison with `setCardholderName()`:**
+
+- **`defaultValue`**: Use for pre-filling during initialization (synchronous, no race conditions)
+- **`setCardholderName()`**: Use for runtime updates after initialization (see [v0.7.1 changelog](/changelog#v071---programmatic-cardholder-name-06-nov-2025))
 
 ## Apple Pay Options
 
@@ -554,6 +583,7 @@ checkout.options = {
     cardholderName: {
       required: true, // Whether cardholder name is required
       visible: true, // Whether cardholder name field is visible
+      defaultValue: 'John Doe', // Pre-fill cardholder name (optional)
     },
   },
 

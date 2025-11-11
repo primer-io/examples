@@ -147,11 +147,44 @@ These properties work consistently across all card input components, allowing fo
 
 ### Programmatic Value Control
 
-:::tip New in v0.7.1
-You can programmatically set the cardholder name field value using the PrimerJS instance.
+You can control the cardholder name field value in two ways: during initialization or at runtime.
+
+#### Pre-filling During Initialization (New in v0.7.3)
+
+:::tip Recommended for Initialization
+Use the `defaultValue` option to pre-fill the cardholder name during checkout initialization. This approach is synchronous and eliminates race conditions.
 :::
 
-Beyond visual customization, you can programmatically control the cardholder name field value. This is useful for pre-filling data from user profiles or synchronizing with external forms:
+The `card.cardholderName.defaultValue` option pre-fills the cardholder name field during initialization. The value is applied synchronously, ensuring it appears immediately when the checkout loads:
+
+```javascript
+const checkout = document.querySelector('primer-checkout');
+checkout.setAttribute('client-token', 'your-client-token');
+
+checkout.options = {
+  card: {
+    cardholderName: {
+      visible: true,
+      required: true,
+      defaultValue: 'John Doe', // Pre-fill during initialization
+    },
+  },
+};
+```
+
+**Key benefits:**
+
+- Value appears immediately (no race conditions or blank field flash)
+- Synchronous initialization (no timing issues)
+- User can edit or clear the pre-filled value
+
+#### Runtime Updates (v0.7.1)
+
+:::tip Use for Runtime Updates
+Use `setCardholderName()` to update the cardholder name field after the checkout has initialized.
+:::
+
+For updating the cardholder name after initialization, use the `setCardholderName()` method on the PrimerJS instance:
 
 ```javascript
 const checkout = document.querySelector('primer-checkout');
@@ -159,7 +192,7 @@ const checkout = document.querySelector('primer-checkout');
 checkout.addEventListener('primer:ready', (event) => {
   const primerJS = event.detail;
 
-  // Pre-fill cardholder name from user profile
+  // Update cardholder name at runtime
   const user = getUserProfile();
   if (user.fullName) {
     primerJS.setCardholderName(user.fullName);
@@ -167,7 +200,14 @@ checkout.addEventListener('primer:ready', (event) => {
 });
 ```
 
-**Important:** The `setCardholderName()` method must be called after the `primer:ready` event fires and after card inputs have been rendered. See the [Events Guide](/guides/events-guide#setting-cardholder-name-programmatically) for more examples and use cases.
+**Important:** The `setCardholderName()` method must be called after the `primer:ready` event fires and after card inputs have been rendered.
+
+#### When to Use Each Approach
+
+- **Use `defaultValue`**: When you have the cardholder name available during checkout initialization (most common)
+- **Use `setCardholderName()`**: When you need to update the value after initialization (e.g., user switches profiles, data loaded asynchronously)
+
+See the [Events Guide](/guides/events-guide#setting-cardholder-name-programmatically) for more examples and use cases.
 
 ## Form Layout Patterns
 

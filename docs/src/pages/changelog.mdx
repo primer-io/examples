@@ -8,6 +8,57 @@ sidebar_position: 99
 
 This page documents all notable changes to Primer Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
+## v0.7.3 - Cardholder Name Default Value (11-Nov-2025)
+
+:::info New Feature
+Pre-fill the cardholder name field with a default value using synchronous initialization. No race conditions, no blank field flash - the value appears immediately when the checkout loads.
+:::
+
+**Key Changes:**
+
+- **Cardholder Name Pre-filling**
+  - Added `card.cardholderName.defaultValue` option for synchronous cardholder name pre-filling
+  - Value applied during iframe initialization (before it becomes visible)
+  - Eliminates race conditions and blank field flash from async approaches
+  - User can edit or clear the pre-filled value
+  - Backward compatible - optional parameter
+
+**Usage Example:**
+
+```javascript
+const checkout = document.querySelector('primer-checkout');
+checkout.setAttribute('client-token', 'your-client-token');
+
+checkout.options = {
+  card: {
+    cardholderName: {
+      visible: true,
+      required: true,
+      defaultValue: 'John Doe', // Pre-fill cardholder name
+    },
+  },
+};
+```
+
+**Technical Details:**
+
+- Synchronous initialization via iframe URL hash
+- Value visible immediately when iframe loads (T+4ms vs T+16ms for async)
+- No timing issues or readiness checks required
+- Works with SDK Core enabled (default)
+
+**When to Use:**
+
+- Pre-filling from user profiles during checkout initialization
+- For runtime updates after initialization, use `primerJS.setCardholderName()` (see v0.7.1)
+
+**Documentation:**
+
+- [Card Options Reference](/sdk-reference/sdk-options-reference#card-options) - Complete API reference
+- [Options Guide](/guides/options-guide) - Configuration patterns and best practices
+
+---
+
 ## v0.7.2 - Vault Manager Improvements (07-Nov-2025)
 
 :::note Improvements & Bug Fixes

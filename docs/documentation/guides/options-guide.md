@@ -47,7 +47,7 @@ These are SDK configuration settings passed via the `options` property:
 
 - **Core options**: `locale`, `sdkCore`, `merchantDomain`, `disabledPayments`, `enabledPaymentMethods`
 - **Payment method options**: `applePay`, `googlePay`, `paypal`, `klarna`
-- **Card options**: `card.cardholderName.required`, `card.cardholderName.visible`
+- **Card options**: `card.cardholderName.required`, `card.cardholderName.visible`, `card.cardholderName.defaultValue`
 - **Other options**: `vault`, `stripe`, `submitButton`
 
 **How to set**: Assign a JavaScript object to the `options` property.
@@ -300,6 +300,68 @@ document.addEventListener('DOMContentLoaded', () => {
 - `card` configuration applies to the card payment method
 - Configure multiple payment methods in the options object
 - All payment configuration happens in `options`, not attributes
+
+### Card Form Pre-filling Configuration
+
+:::info New in v0.7.3
+Pre-fill the cardholder name field with a default value using synchronous initialization. The value appears immediately when the checkout loads with no race conditions or blank field flash.
+:::
+
+Pre-filling the cardholder name field from user profiles or customer data:
+
+```javascript
+document.addEventListener('DOMContentLoaded', () => {
+  const checkout = document.querySelector('primer-checkout');
+
+  // 1. Set component property
+  checkout.setAttribute('client-token', 'your-client-token');
+
+  // 2. Set SDK options with cardholder name pre-filling
+  checkout.options = {
+    locale: 'en-US',
+    card: {
+      cardholderName: {
+        required: true,
+        visible: true,
+        defaultValue: 'John Doe', // Pre-fill cardholder name
+      },
+    },
+  };
+});
+```
+
+**Key points:**
+
+- `defaultValue` pre-fills the cardholder name during initialization
+- Value is applied synchronously (visible immediately, no race conditions)
+- User can edit or clear the pre-filled value
+- For runtime updates after initialization, use `primerJS.setCardholderName()` (see [v0.7.1 changelog](/changelog#v071---programmatic-cardholder-name-06-nov-2025))
+
+**Common use cases:**
+
+```javascript
+// Pre-fill from user profile
+const user = getUserProfile();
+checkout.options = {
+  card: {
+    cardholderName: {
+      visible: true,
+      defaultValue: user.fullName, // e.g., "Jane Smith"
+    },
+  },
+};
+
+// Pre-fill from checkout form data
+const checkoutData = getCheckoutData();
+checkout.options = {
+  card: {
+    cardholderName: {
+      required: true,
+      defaultValue: `${checkoutData.firstName} ${checkoutData.lastName}`,
+    },
+  },
+};
+```
 
 ### Vault Mode Configuration
 

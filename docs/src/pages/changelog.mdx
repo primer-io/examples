@@ -8,6 +8,26 @@ sidebar_position: 99
 
 This page documents all notable changes to Primer Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
+## v0.7.4 - Billing Address Build Fix (11-Nov-2025)
+
+:::warning Bug Fix
+Fixed build failures caused by dynamic imports issue in the billing address component's locale country data.
+:::
+
+**Key Changes:**
+
+- **Billing Address Component**
+  - Fixed dynamic imports for locale country data
+  - Resolved build failures and bundle errors
+  - Component now builds correctly across all environments
+
+**Impact:**
+
+- Merchants experiencing build failures should update immediately
+- No API changes or migration required
+
+---
+
 ## v0.7.3 - Cardholder Name Default Value (11-Nov-2025)
 
 :::info New Feature

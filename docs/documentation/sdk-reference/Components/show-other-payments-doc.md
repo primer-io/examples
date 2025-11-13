@@ -38,9 +38,85 @@ This component serves to declutter the checkout interface by:
 
 ## Slots
 
-| Name             | Description                                                                  |
-| ---------------- | ---------------------------------------------------------------------------- |
-| `other-payments` | Container slot for alternative payment methods that will be made collapsible |
+| Name                                | Description                                                                                                            |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `other-payments`                    | Container slot for alternative payment methods that will be made collapsible                                           |
+| `show-other-payments-toggle-button` | Custom content slot for the toggle button. When provided, it replaces the default "Show other payment methods" button. |
+
+### Toggle Button Slot
+
+The Show Other Payments component allows you to customize the toggle button by providing your own button element via the `show-other-payments-toggle-button` slot. This gives you full control over the button's appearance while maintaining the collapse/expand functionality.
+
+```html
+<primer-show-other-payments>
+  <button slot="show-other-payments-toggle-button" type="button">
+    View More Payment Options
+  </button>
+  <div slot="other-payments">
+    <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
+    <primer-payment-method type="PAYPAL"></primer-payment-method>
+  </div>
+</primer-show-other-payments>
+```
+
+**Button Requirements:**
+
+For the component to recognize your custom button as a toggle button, it must have:
+
+- `type="button"` - Standard HTML button type (prevents form submission)
+
+:::tip Automatic Behavior
+When you provide a custom button via the `show-other-payments-toggle-button` slot, the built-in toggle button is automatically hidden. No additional configuration is needed.
+:::
+
+**Advanced Example: Custom Styled Toggle Button**
+
+```html
+<primer-show-other-payments>
+  <button
+    slot="show-other-payments-toggle-button"
+    type="button"
+    style="
+      background: transparent;
+      border: 2px solid #0288d1;
+      color: #0288d1;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+    "
+  >
+    🔍 Show Alternative Payment Methods
+  </button>
+  <div slot="other-payments" class="payment-methods-list">
+    <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
+    <primer-payment-method type="PAYPAL"></primer-payment-method>
+    <primer-payment-method type="GOOGLE_PAY"></primer-payment-method>
+  </div>
+</primer-show-other-payments>
+```
+
+**Using with primer-button Component:**
+
+```html
+<primer-show-other-payments>
+  <primer-button
+    slot="show-other-payments-toggle-button"
+    type="button"
+    variant="secondary"
+  >
+    Show More Payment Methods
+  </primer-button>
+  <div slot="other-payments">
+    <primer-payment-method type="PAYMENT_CARD"></primer-payment-method>
+    <primer-payment-method type="PAYPAL"></primer-payment-method>
+  </div>
+</primer-show-other-payments>
+```
+
+:::note Toggle Behavior
+The toggle button automatically handles the expand/collapse state of the payment methods container. When clicked, it will show or hide the payment methods in the `other-payments` slot.
+:::
 
 ## Technical Implementation
 
@@ -121,12 +197,13 @@ The component handles several distinct states:
 - The component works in conjunction with the Vault Manager component
 - It automatically expands when no saved payment methods are available
 - The collapse/expand behavior provides a cleaner checkout interface while maintaining access to all payment options
+- Custom toggle buttons can be provided via the `show-other-payments-toggle-button` slot with full styling control
   :::
 
 ## Related Documentation
 
 For more information on related components and functionality:
 
-- [Vault Manager Component](vault-manager-doc)
-- [Payment Method Component](payment-method-doc)
-- [Main Component](primer-main-doc)
+- [Vault Manager Component](/sdk-reference/Components/vault-manager-doc)
+- [Payment Method Component](/sdk-reference/Components/payment-method-doc)
+- [Main Component](/sdk-reference/Components/primer-main-doc)

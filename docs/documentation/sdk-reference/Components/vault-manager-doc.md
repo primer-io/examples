@@ -174,6 +174,162 @@ This example demonstrates how to maintain the same user experience as the defaul
 
 </details>
 
+## Slots
+
+| Name            | Description                                                                                                    |
+| --------------- | -------------------------------------------------------------------------------------------------------------- |
+| `submit-button` | Custom content slot for the submit button. When provided, it replaces the default vault payment submit button. |
+
+### Submit Button Slot
+
+The Vault Manager component allows you to customize the submit button by providing your own button element via the `submit-button` slot. This gives you full control over the button's appearance while maintaining the vault payment functionality.
+
+```html
+<primer-vault-manager>
+  <button slot="submit-button" type="submit">Pay with Saved Card</button>
+</primer-vault-manager>
+```
+
+**Button Requirements:**
+
+For the vault manager to recognize your custom button as a submit button, it must have **one of these attributes**:
+
+- `type="submit"` - Standard HTML submit button type
+- `data-submit` - Custom attribute for non-button elements
+
+:::tip Automatic Behavior
+When you provide a custom button via the `submit-button` slot, the built-in submit button is automatically hidden. No additional configuration is needed.
+:::
+
+## Form Submission
+
+The Vault Manager component handles form submission automatically. You can trigger vault payment submission in multiple ways:
+
+```mermaid
+flowchart LR
+    A[Vault Submission Methods] --> B[Built-in Submit Button]
+    A --> C[Custom Slotted Button]
+    A --> D[HTML button type=submit]
+    A --> E[data-submit attribute]
+    A --> F[Programmatic Event]
+
+    style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
+    style B fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style C fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style D fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style E fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+    style F fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+```
+
+<details>
+<summary><strong>1. Using the built-in submit button (Default)</strong></summary>
+
+The Vault Manager includes a default submit button that is automatically displayed:
+
+```html
+<primer-vault-manager></primer-vault-manager>
+```
+
+This button is shown by default and hidden automatically when you provide a custom button via the `submit-button` slot.
+
+</details>
+
+<details>
+<summary><strong>2. Using a custom slotted button</strong></summary>
+
+Replace the built-in button with your own custom button:
+
+```html
+<primer-vault-manager>
+  <button slot="submit-button" type="submit">Pay with Saved Card</button>
+</primer-vault-manager>
+```
+
+The custom button must have `type="submit"` or `data-submit` attribute.
+
+</details>
+
+<details>
+<summary><strong>3. Using a primer-button component</strong></summary>
+
+You can use Primer's button component in the slot:
+
+```html
+<primer-vault-manager>
+  <primer-button slot="submit-button" type="submit">
+    Complete Payment
+  </primer-button>
+</primer-vault-manager>
+```
+
+</details>
+
+<details>
+<summary><strong>4. Programmatically via primer:vault-submit Event</strong></summary>
+
+You can trigger vault payment submission programmatically by dispatching a `primer:vault-submit` event. The checkout component listens for this event at the document level, so you can dispatch it from anywhere in your application.
+
+```javascript
+// Trigger vault payment submission from anywhere
+document.dispatchEvent(
+  new CustomEvent('primer:vault-submit', {
+    bubbles: true,
+    composed: true,
+    detail: { source: 'external-button' },
+  }),
+);
+```
+
+:::important Event Propagation
+The `bubbles: true` and `composed: true` properties are required. These properties allow the event to propagate correctly through the DOM and across shadow DOM boundaries.
+:::
+
+**Advanced Example: External Submit Button**
+
+```html
+<primer-checkout
+  client-token="your-client-token"
+  options='{"vault": {"enabled": true}}'
+>
+  <primer-main slot="main">
+    <div slot="payments">
+      <primer-vault-manager></primer-vault-manager>
+    </div>
+  </primer-main>
+</primer-checkout>
+
+<!-- External button anywhere on the page -->
+<button id="external-submit">Pay Now</button>
+
+<script>
+  // Set up external submit button
+  document.getElementById('external-submit').addEventListener('click', () => {
+    document.dispatchEvent(
+      new CustomEvent('primer:vault-submit', {
+        bubbles: true,
+        composed: true,
+        detail: { source: 'external-checkout-button' },
+      }),
+    );
+  });
+
+  // Handle payment results
+  document.addEventListener('primer:payment-success', (event) => {
+    console.log('Payment successful:', event.detail);
+  });
+
+  document.addEventListener('primer:payment-failure', (event) => {
+    console.error('Payment failed:', event.detail);
+  });
+</script>
+```
+
+:::tip Using the Source Parameter
+Include a meaningful `source` identifier in the event detail. This helps with debugging and allows you to track different submission triggers.
+:::
+
+</details>
+
 ## Key Considerations
 
 :::info Summary of Key Points
@@ -185,6 +341,7 @@ This example demonstrates how to maintain the same user experience as the defaul
 - CVV recapture can be enabled for enhanced security with saved card payments
 - The component automatically handles different states: loading, empty, edit mode, and delete confirmation
 - Error handling is built in with clear user feedback
+- Custom submit buttons can be provided via the `submit-button` slot with full styling control
   :::
 
 ## Related Documentation
@@ -192,4 +349,4 @@ This example demonstrates how to maintain the same user experience as the defaul
 For more information on configuring and using the vaulting functionality:
 
 - [Save Payment Methods Documentation](https://primer.io/docs/payment-services/save-payment-methods)
-- [Show Other Payments Component](show-other-payments-doc)
+- [Show Other Payments Component](/sdk-reference/Components/show-other-payments-doc)

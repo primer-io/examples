@@ -118,6 +118,80 @@ When you provide a custom button via the `show-other-payments-toggle-button` slo
 The toggle button automatically handles the expand/collapse state of the payment methods container. When clicked, it will show or hide the payment methods in the `other-payments` slot.
 :::
 
+### Tracking Toggle State
+
+The component dispatches a `primer:show-other-payments-toggled` event when the toggle state changes. Use this to update button labels dynamically or implement custom UI logic.
+
+**Event Details:**
+
+- **Event Name**: `primer:show-other-payments-toggled`
+- **Event Data**: `event.detail.expanded` (Boolean - `true` when expanded, `false` when collapsed)
+- **When Dispatched**: On each toggle button click
+
+**React Example: Dynamic Button Label**
+
+```jsx
+import { useRef, useState, useEffect } from 'react';
+
+function CheckoutWithToggle() {
+  const checkoutRef = useRef(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  useEffect(() => {
+    const checkout = checkoutRef.current;
+    if (!checkout) return;
+
+    const handleToggle = (e) => setIsExpanded(e.detail.expanded);
+    checkout.addEventListener(
+      'primer:show-other-payments-toggled',
+      handleToggle,
+    );
+
+    return () =>
+      checkout.removeEventListener(
+        'primer:show-other-payments-toggled',
+        handleToggle,
+      );
+  }, []);
+
+  return (
+    <primer-checkout ref={checkoutRef} client-token='your-client-token'>
+      <primer-main slot='main'>
+        <div slot='payments'>
+          <primer-vault-manager></primer-vault-manager>
+          <primer-show-other-payments>
+            <button slot='show-other-payments-toggle-button' type='button'>
+              {isExpanded ? 'Hide' : 'Show'} Other Payment Methods
+            </button>
+            <div slot='other-payments'>
+              <primer-payment-method type='PAYMENT_CARD'></primer-payment-method>
+              <primer-payment-method type='PAYPAL'></primer-payment-method>
+            </div>
+          </primer-show-other-payments>
+        </div>
+      </primer-main>
+    </primer-checkout>
+  );
+}
+```
+
+**Vanilla JavaScript Example:**
+
+```javascript
+const checkout = document.querySelector('primer-checkout');
+const toggleButton = document.querySelector(
+  '[slot="show-other-payments-toggle-button"]',
+);
+
+checkout.addEventListener('primer:show-other-payments-toggled', (event) => {
+  const isExpanded = event.detail.expanded;
+  toggleButton.textContent = isExpanded
+    ? 'Hide Other Payment Methods'
+    : 'Show Other Payment Methods';
+  toggleButton.setAttribute('aria-expanded', isExpanded);
+});
+```
+
 ## Technical Implementation
 
 The Show Other Payments component:

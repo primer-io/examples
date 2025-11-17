@@ -36,7 +36,6 @@ flowchart TD
 The Card Form component functions as both a container and a context provider. It manages the following:
 
 1. **Context Provision**: Creates and provides a context that contains:
-
    - Secure hosted input elements for card data
    - Validation state management
    - Form state information
@@ -79,12 +78,10 @@ flowchart TD
 The relationship is structured as follows:
 
 1. **Parent-Child Relationship**: All card input components must be children of the `primer-card-form`, either:
-
    - Through the default layout (when no custom content is provided)
    - Through custom content in the `card-form-content` slot
 
 2. **Context-Consumer Relationship**: All card input components consume the context provided by `primer-card-form`:
-
    - Input fields receive hosted input instances
    - Components receive validation state
    - Components can update shared card form data

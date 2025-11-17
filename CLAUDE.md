@@ -68,13 +68,11 @@ Each example in `/examples` is a standalone demonstration:
 ### Example Types
 
 1. **Basic Examples** (`primer-checkout-basic`)
-
    - Vanilla TypeScript + Vite
    - Minimal dependencies
    - Focus on SDK fundamentals
 
 2. **React Examples** (`primer-checkout-custom-layout`, `primer-checkout-custom-form`)
-
    - React 19 + Vite + TypeScript
    - Include ESLint configuration
    - Demonstrate component integration patterns

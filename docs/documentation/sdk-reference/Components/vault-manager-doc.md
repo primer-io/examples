@@ -330,6 +330,89 @@ Include a meaningful `source` identifier in the event detail. This helps with de
 
 </details>
 
+## Tracking Payment Method Selection
+
+The Vault Manager dispatches events to track payment method selection and processing state. Use these to enable/disable custom submit buttons or implement custom UI logic.
+
+**Key Events:**
+
+- **`primer:vault:selection-change`** - Dispatched when a payment method is selected or deselected
+  - `event.detail.paymentMethodId` (string | null) - ID of selected payment method, or `null` when deselected
+  - `event.detail.timestamp` (number) - Timestamp of selection change
+
+- **`primer:state-change`** - Dispatched when SDK processing state changes
+  - `event.detail.isProcessing` (boolean) - `true` when payment is processing
+
+**React Example:**
+
+```jsx
+import { useRef, useState, useEffect } from 'react';
+
+function CheckoutWithVault() {
+  const checkoutRef = useRef(null);
+  const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  useEffect(() => {
+    const checkout = checkoutRef.current;
+    if (!checkout) return;
+
+    const handleSelection = (e) =>
+      setSelectedPaymentMethodId(e.detail.paymentMethodId);
+    const handleStateChange = (e) => setIsProcessing(e.detail.isProcessing);
+
+    checkout.addEventListener('primer:vault:selection-change', handleSelection);
+    checkout.addEventListener('primer:state-change', handleStateChange);
+
+    return () => {
+      checkout.removeEventListener(
+        'primer:vault:selection-change',
+        handleSelection,
+      );
+      checkout.removeEventListener('primer:state-change', handleStateChange);
+    };
+  }, []);
+
+  return (
+    <primer-checkout ref={checkoutRef} client-token='your-client-token'>
+      <primer-main slot='main'>
+        <div slot='payments'>
+          <primer-vault-manager>
+            <button
+              slot='submit-button'
+              type='submit'
+              disabled={!selectedPaymentMethodId || isProcessing}
+            >
+              {isProcessing ? 'Processing...' : 'Pay with Saved Card'}
+            </button>
+          </primer-vault-manager>
+        </div>
+      </primer-main>
+    </primer-checkout>
+  );
+}
+```
+
+**Vanilla JavaScript Example:**
+
+```javascript
+const checkout = document.querySelector('primer-checkout');
+const submitButton = document.querySelector('[slot="submit-button"]');
+
+let selectedPaymentMethodId = null;
+let isProcessing = false;
+
+checkout.addEventListener('primer:vault:selection-change', (e) => {
+  selectedPaymentMethodId = e.detail.paymentMethodId;
+  submitButton.disabled = !selectedPaymentMethodId || isProcessing;
+});
+
+checkout.addEventListener('primer:state-change', (e) => {
+  isProcessing = e.detail.isProcessing;
+  submitButton.disabled = !selectedPaymentMethodId || isProcessing;
+});
+```
+
 ## Key Considerations
 
 :::info Summary of Key Points

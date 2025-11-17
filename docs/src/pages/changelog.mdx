@@ -8,6 +8,22 @@ sidebar_position: 99
 
 This page documents all notable changes to Primer Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
+## v0.8.2 - Fixes and enhancements to slotted show other payment methods toggle button and slotted vault submit button (17-Nov-2025)
+
+:::info New Feature
+Added new event `primer:vault:selection-change` dispatched when a payment method is selected or deselected
+:::
+
+:::warning Bug Fix
+Fixed slotted show other payment methods toggle button in the case when `Pay` button is of type `button`
+:::
+
+---
+
+## v0.8.1 - Add Adyen Cash App and Affirm payment instrument types. (17-Nov-2025)
+
+---
+
 ## v0.8.0 - Available slots for vault submit button and show other payment methods button (13-Nov-2025)
 
 :::info New Feature
@@ -97,7 +113,6 @@ This release improves the accessibility and visual consistency of the Vault Mana
 **Key Changes:**
 
 - **Vault Manager Enhancements**
-
   - Improved accessibility for better screen reader support and keyboard navigation
   - Fixed icon rendering issues in dark mode for better visual consistency
 
@@ -155,7 +170,6 @@ Added comprehensive payment event system with PII-protected payment summaries an
 **Key Changes:**
 
 - **Callback Architecture Refactor (BREAKING)**
-
   - Removed `onPaymentComplete` unified callback
   - Added `onPaymentSuccess(data: PaymentSuccessData)` - Handles successful payments with payment summary
   - Added `onPaymentFailure(data: PaymentFailureData)` - Handles payment failures with error details
@@ -163,21 +177,18 @@ Added comprehensive payment event system with PII-protected payment summaries an
   - Existing callbacks unchanged: `onPaymentStart`, `onPaymentPrepare`
 
 - **State Field Renames (BREAKING)**
-
   - `error` → `primerJsError` (SDK initialization/component errors)
   - `failure` → `paymentFailure` (payment processing failures)
   - `failure.details` → `paymentFailure.diagnosticsId`
   - Added `paymentFailure.data` for additional error metadata
 
 - **New Payment Events**
-
   - `primer:payment-start` - Dispatched when payment creation begins
   - `primer:payment-success` - Dispatched on successful payment (includes PII-filtered PaymentSummary)
   - `primer:payment-failure` - Dispatched on payment failure (includes error details)
   - `primer:vault:methods-update` - Dispatched when vaulted payment methods update
 
 - **PII Protection**
-
   - PaymentSummary type with whitelisted fields only (last4Digits, network, bankName)
   - No cardholder names, full card numbers, or other PII exposed in events
   - Compliant with GDPR Article 5(1)(c) and PCI DSS Requirement 3.4

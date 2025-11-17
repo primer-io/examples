@@ -128,9 +128,9 @@ export const VaultManagerUI: FC<VaultManagerUIProps> = ({
             <div className='flex justify-between items-center'>
               <div>
                 <p className='font-medium'>{method.paymentInstrumentType}</p>
-                {method.paymentInstrumentData.last4Digits && (
+                {!!method.paymentInstrumentData.last4Digits && (
                   <p className='text-sm text-gray-600'>
-                    •••• {method.paymentInstrumentData.last4Digits}
+                    •••• {String(method.paymentInstrumentData.last4Digits)}
                   </p>
                 )}
               </div>

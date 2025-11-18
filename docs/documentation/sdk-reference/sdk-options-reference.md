@@ -390,12 +390,92 @@ Configure payment method vaulting (saving for future use).
 
 Enable payment method vaulting to allow customers to save payment methods for future purchases.
 
-### vault.showEmptyState
+### vault.headless
+
+:::info New in v0.9.0
+Enable headless vault mode for complete programmatic control over vault UI and payment flow.
+:::
 
 **Type**: `boolean`
 **Default**: `false`
 
-Show an empty state message when no vaulted payment methods exist. Useful for providing user feedback in the UI.
+When `true`, hides all default vault UI components while maintaining full vault functionality. This allows you to build completely custom vault interfaces using the PrimerJS methods (`createCvvInput()`, `startVaultPayment()`) and callbacks (`onVaultedMethodsUpdate`).
+
+**Key behaviors:**
+
+- Default vault UI components are not rendered (vault manager, payment method list, submit button)
+- All vault functionality remains operational (payment method storage, selection, CVV recapture)
+- `onVaultedMethodsUpdate` callback still fires with vaulted payment methods data
+- Compatible with all other vault configuration options
+- Requires custom UI implementation to display and manage vaulted payment methods
+
+**When to use:**
+
+- Building custom vault UI that matches your brand design
+- Integrating vault into existing checkout flows with specific layouts
+- Creating advanced vault management interfaces
+- Implementing non-standard vault UX patterns
+
+**Example:**
+
+```javascript
+const checkout = document.querySelector('primer-checkout');
+checkout.setAttribute('client-token', 'your-client-token');
+
+checkout.options = {
+  vault: {
+    enabled: true,
+    headless: true, // Enable headless mode
+    showEmptyState: false,
+  },
+};
+
+checkout.addEventListener('primer:ready', (event) => {
+  const primerJS = event.detail;
+
+  // Build custom vault UI when methods are loaded
+  primerJS.onVaultedMethodsUpdate = ({ vaultedPayments, cvvRecapture }) => {
+    // Render custom vault UI
+    const vaultContainer = document.getElementById('custom-vault');
+    vaultContainer.innerHTML = '';
+
+    vaultedPayments.toArray().forEach((method) => {
+      const methodElement = createCustomVaultCard(method);
+      vaultContainer.appendChild(methodElement);
+    });
+
+    // Add CVV input if required
+    if (cvvRecapture) {
+      const cvvInput = await primerJS.createCvvInput();
+      vaultContainer.appendChild(cvvInput);
+    }
+  };
+
+  // Handle payment submission
+  document.getElementById('custom-pay-btn').addEventListener('click', async () => {
+    await primerJS.startVaultPayment();
+  });
+});
+```
+
+**Related:**
+
+- `createCvvInput()` method - Creates CVV input component for custom vault UI (see [Events & Callbacks Reference](/sdk-reference/events-callbacks))
+- `startVaultPayment()` method - Initiates vault payment (see [Events & Callbacks Reference](/sdk-reference/events-callbacks))
+- `onVaultedMethodsUpdate` callback - Receives `cvvRecapture` flag (see [Events & Callbacks Reference](/sdk-reference/events-callbacks))
+
+### vault.showEmptyState
+
+:::warning Default Changed in v0.9.0
+The default value changed from `true` to `false` in v0.9.0. Explicitly set to `true` if you want to display the empty state.
+:::
+
+**Type**: `boolean`
+**Default**: `false` (changed from `true` in v0.9.0)
+
+Show an empty state message when no vaulted payment methods exist. When `true`, displays a default message indicating no saved payment methods are available.
+
+**Note:** This option has no effect when `vault.headless: true` (you control the empty state in your custom UI).
 
 **Example:**
 
@@ -403,7 +483,7 @@ Show an empty state message when no vaulted payment methods exist. Useful for pr
 const options = {
   vault: {
     enabled: true,
-    showEmptyState: true,
+    showEmptyState: true, // Explicitly enable empty state display
   },
 };
 ```
@@ -619,6 +699,7 @@ checkout.options = {
   // Vault Options
   vault: {
     enabled: true,
+    headless: false, // Optional: enable headless mode for custom vault UI
     showEmptyState: true,
   },
 

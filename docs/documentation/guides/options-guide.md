@@ -398,6 +398,140 @@ document.addEventListener('DOMContentLoaded', () => {
 - All vault configuration happens in the options object
 - Customize vault UI text through SDK options
 
+### Headless Vault Configuration
+
+:::info New in v0.9.0
+Build completely custom vault UIs while retaining full vault functionality including payment method storage, selection, and CVV recapture.
+:::
+
+Headless vault mode hides the default vault UI components and provides programmatic control through PrimerJS methods. This enables custom vault interfaces that match your brand and workflow requirements.
+
+```javascript
+document.addEventListener('DOMContentLoaded', () => {
+  const checkout = document.querySelector('primer-checkout');
+
+  // 1. Set component properties
+  checkout.setAttribute('client-token', 'your-client-token');
+
+  // 2. Configure headless vault mode
+  checkout.options = {
+    vault: {
+      enabled: true,
+      headless: true, // Hide default vault UI
+      showEmptyState: false, // Default in v0.9.0
+    },
+  };
+
+  // 3. Set up vault event handlers
+  checkout.addEventListener('primer:ready', (event) => {
+    const primerJS = event.detail;
+
+    // Handle vaulted payment methods
+    primerJS.onVaultedMethodsUpdate = async ({
+      vaultedPayments,
+      cvvRecapture,
+    }) => {
+      // Build custom vault UI
+      const methods = vaultedPayments.toArray();
+      buildCustomVaultUI(methods);
+
+      // Add CVV input if required
+      if (cvvRecapture) {
+        // Get the selected payment method
+        const selectedMethod = methods.find((m) => m.isSelected);
+
+        if (selectedMethod) {
+          const cvvInput = await primerJS.createCvvInput({
+            cardNetwork: selectedMethod.paymentInstrumentData.network,
+            container: '#cvv-section',
+            placeholder: 'CVV',
+          });
+          if (cvvInput) {
+            document.getElementById('cvv-section').appendChild(cvvInput);
+          }
+        }
+      }
+    };
+
+    // Handle payment button click
+    document
+      .getElementById('pay-with-saved-card')
+      .addEventListener('click', async () => {
+        try {
+          await primerJS.startVaultPayment();
+        } catch (error) {
+          console.error('Payment failed:', error);
+        }
+      });
+
+    // Handle payment success
+    primerJS.onPaymentSuccess = (data) => {
+      console.log('Payment successful!', data.payment.id);
+      window.location.href = '/confirmation';
+    };
+
+    // Handle payment failure
+    primerJS.onPaymentFailure = (data) => {
+      console.error('Payment failed:', data.error.message);
+      showErrorMessage(data.error.message);
+    };
+  });
+});
+
+// Helper function to build custom vault UI
+function buildCustomVaultUI(vaultedMethods) {
+  const container = document.getElementById('custom-vault-container');
+  container.innerHTML = '';
+
+  if (vaultedMethods.length === 0) {
+    container.innerHTML = '<p>No saved payment methods</p>';
+    return;
+  }
+
+  vaultedMethods.forEach((method, index) => {
+    const methodElement = document.createElement('div');
+    methodElement.className = 'saved-payment-method';
+    methodElement.innerHTML = `
+      <input
+        type="radio"
+        name="saved-method"
+        id="method-${index}"
+        value="${method.id}"
+        ${index === 0 ? 'checked' : ''}
+      >
+      <label for="method-${index}">
+        <span class="card-network">${method.paymentInstrumentType}</span>
+        <span class="card-last4">•••• ${method.paymentInstrumentData?.last4Digits || '****'}</span>
+      </label>
+    `;
+    container.appendChild(methodElement);
+  });
+}
+```
+
+**Key points:**
+
+- `vault.headless: true` hides all default vault UI components
+- `onVaultedMethodsUpdate` provides vaulted payment methods data and `cvvRecapture` flag
+- `createCvvInput()` creates a styled CVV input component when needed
+- `startVaultPayment()` initiates payment processing with the selected method
+- Standard payment callbacks (`onPaymentSuccess`, `onPaymentFailure`) work normally
+- Complete control over UI layout, styling, and user experience
+
+**When to use headless vault:**
+
+- Custom vault UI design that matches your brand
+- Integration with existing checkout workflows
+- Advanced vault management interfaces
+- Non-standard vault UX patterns
+
+**Documentation:**
+
+- [vault.headless option](/sdk-reference/sdk-options-reference#vaultheadless) - API reference
+- [createCvvInput()](/sdk-reference/events-callbacks#createcvvinput) - Method documentation
+- [startVaultPayment()](/sdk-reference/events-callbacks#startvaultpayment) - Method documentation
+- [onVaultedMethodsUpdate](/sdk-reference/events-callbacks#onvaultedmethodsupdate) - Callback documentation
+
 ### Advanced Customization
 
 Combining multiple configuration options for a complete checkout experience:

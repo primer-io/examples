@@ -19,19 +19,23 @@ All Primer SDK events are CustomEvents with `bubbles: true` and `composed: true`
 
 ### Events Overview
 
-| Event Name                    | Detail Type                | Description                                                             |
-| ----------------------------- | -------------------------- | ----------------------------------------------------------------------- |
-| `primer:state-change`         | `SdkStateContextType`      | Dispatched when SDK state changes (loading, processing, success, error) |
-| `primer:methods-update`       | `InitializedPayments`      | Dispatched when available payment methods are updated                   |
-| `primer:ready`                | `PrimerJS`                 | Dispatched when SDK is fully initialized and ready                      |
-| `primer:card-network-change`  | `CardNetworksContextType`  | Dispatched when card network is detected or changed                     |
-| `primer:card-submit`          | `CardSubmitPayload`        | Triggerable event to submit the card form programmatically              |
-| `primer:card-success`         | `CardSubmitSuccessPayload` | Dispatched when card form submission succeeds                           |
-| `primer:card-error`           | `CardSubmitErrorsPayload`  | Dispatched when card form validation errors occur                       |
-| `primer:payment-start`        | `undefined`                | Dispatched when payment creation begins                                 |
-| `primer:payment-success`      | `PaymentSuccessData`       | Dispatched when payment completes successfully with PII-filtered data   |
-| `primer:payment-failure`      | `PaymentFailureData`       | Dispatched when payment fails with error details                        |
-| `primer:vault:methods-update` | `VaultedMethodsUpdateData` | Dispatched when vaulted payment methods are loaded or updated           |
+| Event Name                           | Detail Type                       | Description                                                             |
+| ------------------------------------ | --------------------------------- | ----------------------------------------------------------------------- |
+| `primer:state-change`                | `SdkStateContextType`             | Dispatched when SDK state changes (loading, processing, success, error) |
+| `primer:methods-update`              | `InitializedPayments`             | Dispatched when available payment methods are updated                   |
+| `primer:ready`                       | `PrimerJS`                        | Dispatched when SDK is fully initialized and ready                      |
+| `primer:card-network-change`         | `CardNetworksContextType`         | Dispatched when card network is detected or changed                     |
+| `primer:card-submit`                 | `CardSubmitPayload`               | Triggerable event to submit the card form programmatically              |
+| `primer:card-success`                | `CardSubmitSuccessPayload`        | Dispatched when card form submission succeeds                           |
+| `primer:card-error`                  | `CardSubmitErrorsPayload`         | Dispatched when card form validation errors occur                       |
+| `primer:payment-start`               | `undefined`                       | Dispatched when payment creation begins                                 |
+| `primer:payment-success`             | `PaymentSuccessData`              | Dispatched when payment completes successfully with PII-filtered data   |
+| `primer:payment-failure`             | `PaymentFailureData`              | Dispatched when payment fails with error details                        |
+| `primer:vault:methods-update`        | `VaultedMethodsUpdateData`        | Dispatched when vaulted payment methods are loaded or updated           |
+| `primer:vault:selection-change`      | `VaultSelectionChangeData`        | Dispatched when a vaulted payment method is selected or deselected      |
+| `primer:vault-submit`                | `VaultSubmitPayload`              | Triggerable event to submit vault payment programmatically              |
+| `primer:show-other-payments-toggle`  | `undefined`                       | Triggerable event to toggle other payment methods visibility            |
+| `primer:show-other-payments-toggled` | `ShowOtherPaymentsToggledPayload` | Dispatched when other payment methods toggle state changes              |
 
 ### `primer:state-change`
 
@@ -348,6 +352,120 @@ document.addEventListener('primer:vault:methods-update', ((
 
   // Update UI
   updateVaultDisplay(methods);
+}) as EventListener);
+```
+
+### `primer:vault:selection-change`
+
+This event tracks payment method selection state in the Vault Manager component.
+
+Dispatched when a vaulted payment method is selected or deselected.
+
+**Payload Properties:**
+
+| Property          | Type             | Description                                              |
+| ----------------- | ---------------- | -------------------------------------------------------- |
+| `paymentMethodId` | `string \| null` | ID of selected payment method, or `null` when deselected |
+| `timestamp`       | `number`         | Unix timestamp (seconds) when selection changed          |
+
+**Usage Note:** Use this event to enable/disable custom submit buttons based on selection state. Combine with `primer:state-change` to track processing state.
+
+**Example:**
+
+```typescript
+document.addEventListener('primer:vault:selection-change', ((
+  event: CustomEvent<VaultSelectionChangeData>,
+) => {
+  const { paymentMethodId } = event.detail;
+
+  if (paymentMethodId) {
+    console.log('Payment method selected:', paymentMethodId);
+    submitButton.disabled = false;
+  } else {
+    console.log('Payment method deselected');
+    submitButton.disabled = true;
+  }
+}) as EventListener);
+```
+
+### `primer:vault-submit`
+
+Triggerable event for programmatic vault payment submission.
+
+Triggerable event to submit vault payment programmatically from anywhere in your application.
+
+**Payload Properties:**
+
+| Property | Type                | Description                                               |
+| -------- | ------------------- | --------------------------------------------------------- |
+| `source` | `string` (optional) | Identifier for the trigger source (e.g., "custom-button") |
+
+**Usage Note:** Dispatch this event to trigger vault payment submission when using external submit buttons. The event must have `bubbles: true` and `composed: true` for proper propagation.
+
+**Example:**
+
+```typescript
+// Trigger vault payment submission from anywhere
+document.dispatchEvent(
+  new CustomEvent('primer:vault-submit', {
+    bubbles: true,
+    composed: true,
+    detail: { source: 'external-checkout-button' },
+  }),
+);
+```
+
+### `primer:show-other-payments-toggle`
+
+Triggerable event for programmatic toggle control.
+
+Triggerable event to toggle the visibility of other payment methods programmatically.
+
+**Payload Properties:**
+
+This event has no detail payload (`undefined`).
+
+**Usage Note:** Dispatch this event to programmatically expand or collapse the other payment methods section. The event must have `bubbles: true` and `composed: true` for proper propagation.
+
+**Example:**
+
+```typescript
+// Toggle other payment methods visibility
+document.dispatchEvent(
+  new CustomEvent('primer:show-other-payments-toggle', {
+    bubbles: true,
+    composed: true,
+  }),
+);
+```
+
+### `primer:show-other-payments-toggled`
+
+Tracks toggle state changes in the Show Other Payments component.
+
+Dispatched when the other payment methods toggle state changes.
+
+**Payload Properties:**
+
+| Property    | Type      | Description                                        |
+| ----------- | --------- | -------------------------------------------------- |
+| `expanded`  | `boolean` | `true` when expanded, `false` when collapsed       |
+| `timestamp` | `number`  | Unix timestamp (seconds) when toggle state changed |
+
+**Usage Note:** Use this event to update button labels dynamically or implement custom UI logic based on toggle state.
+
+**Example:**
+
+```typescript
+document.addEventListener('primer:show-other-payments-toggled', ((
+  event: CustomEvent<ShowOtherPaymentsToggledPayload>,
+) => {
+  const { expanded } = event.detail;
+
+  toggleButton.textContent = expanded
+    ? 'Hide Other Payment Methods'
+    : 'Show Other Payment Methods';
+  toggleButton.setAttribute('aria-expanded', String(expanded));
 }) as EventListener);
 ```
 
@@ -716,6 +834,38 @@ interface VaultedPaymentMethodSummary {
   expirationYear: string;
   cardholderName: string;
   network: string;
+}
+```
+
+#### VaultSelectionChangeData
+
+Tracks payment method selection state in Vault Manager.
+
+```typescript
+interface VaultSelectionChangeData {
+  paymentMethodId: string | null;
+  timestamp: number;
+}
+```
+
+#### VaultSubmitPayload
+
+Payload for triggerable vault payment submission event.
+
+```typescript
+interface VaultSubmitPayload {
+  source?: string;
+}
+```
+
+#### ShowOtherPaymentsToggledPayload
+
+Tracks toggle state changes in Show Other Payments component.
+
+```typescript
+interface ShowOtherPaymentsToggledPayload {
+  expanded: boolean;
+  timestamp: number;
 }
 ```
 

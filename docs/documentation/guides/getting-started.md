@@ -26,7 +26,7 @@ Legacy browsers like Internet Explorer 11 aren't officially supported due to the
 Before integrating Primer Checkout, ensure you have completed these prerequisites:
 
 1. You're [ready to process payments](https://primer.io/docs/payments/process-payments)
-2. [Universal Checkout is properly configured](https://primer.io/docs/payments/universal-checkout/configure-universal-checkout-without-code) in your Primer Dashboard
+2. [Universal Checkout is properly configured](https://primer.io/docs/checkout/universal-checkout) in your Primer Dashboard
 
 ### Create a Client Session
 

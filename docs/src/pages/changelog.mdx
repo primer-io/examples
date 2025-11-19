@@ -8,6 +8,52 @@ sidebar_position: 99
 
 This page documents all notable changes to Primer Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
+## v0.10.0 - Deep Comparison Options Architecture (19-Nov-2025)
+
+:::info Performance Enhancement
+Intelligent change detection for SDK options prevents unnecessary re-initialization when object references change but content remains identical. Solves form flickering and data loss issues in React applications.
+:::
+
+**Key Changes:**
+
+- **Deep Comparison Implementation**
+  - Added deep equality comparison for `options` property changes
+  - Prevents SDK re-initialization when new object references contain identical values
+  - Eliminates form flickering and data loss during React re-renders
+
+- **React Integration Improvements**
+  - Inline options objects now work correctly without causing re-initialization
+  - User-entered payment data preserved across component updates
+  - `useMemo` no longer required (though still recommended for optimal performance)
+
+- **Backward Compatible**
+  - No breaking changes or API modifications
+  - Existing code continues to work identically
+
+**Example:**
+
+```tsx
+// ✅ Now works correctly: Inline objects no longer cause re-initialization
+return (
+  <primer-checkout
+    client-token={clientToken}
+    options={{
+      sdkCore: true,
+    }}
+    ref={checkoutRef}
+  >
+    <div slot='main'>{children}</div>
+  </primer-checkout>
+);
+```
+
+**Documentation:**
+
+- [React Integration Guide](/guides/react-guide) - Updated with deep comparison behavior and best practices
+- [Options Guide](/guides/options-guide) - Comprehensive options configuration patterns
+
+---
+
 ## v0.9.0 - Headless Vault Flow Support (18-Nov-2025)
 
 :::info New Feature

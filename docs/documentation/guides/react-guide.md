@@ -144,14 +144,14 @@ function CheckoutPage({ clientToken }: { clientToken: string }) {
 
 ### Comparison Table
 
-| Aspect                        | React 18                              | React 19              |
-| ----------------------------- | ------------------------------------- | --------------------- |
-| **How objects are passed**    | ref + useEffect                       | JSX props             |
-| **Attribute conversion**      | Converts objects to `[object Object]` | Assigns as properties |
-| **Code pattern**              | Imperative                            | Declarative           |
-| **Lines of code**             | ~15 lines                             | ~5 lines              |
-| **Stable references needed?** | ✅ Yes (always)                       | ✅ Yes (always)       |
-| **Can inline objects?**       | ❌ No (doesn't work)                  | ❌ No (causes issues) |
+| Aspect                        | React 18                              | React 19                            |
+| ----------------------------- | ------------------------------------- | ----------------------------------- |
+| **How objects are passed**    | ref + useEffect                       | JSX props                           |
+| **Attribute conversion**      | Converts objects to `[object Object]` | Assigns as properties               |
+| **Code pattern**              | Imperative                            | Declarative                         |
+| **Lines of code**             | ~15 lines                             | ~5 lines                            |
+| **Stable references needed?** | ✅ Recommended (performance)          | ✅ Recommended (performance)        |
+| **Can inline objects?**       | ❌ No (doesn't work)                  | ⚠️ Works but not optimal (v0.10.0+) |
 
 ### When to Use Which Pattern
 
@@ -199,12 +199,25 @@ function CheckoutPage() {
 
 ### Why Stability Matters
 
-Web components can react to property changes. When you pass a new object reference, the component may re-initialize, even if the content is identical.
+Web components can react to property changes. When you pass a new object reference, the component detects a change and must compare the values to determine if re-initialization is needed.
+
+:::note SDK v0.10.0+ Deep Comparison
+
+Starting with v0.10.0, the Primer SDK implements deep comparison for the `options` property. This means the SDK only re-initializes when option **values** change, not when object **references** change.
+
+**What this means:**
+
+- ✅ Inline objects no longer cause re-initialization (though still not optimal)
+- ✅ Stable references are now a **performance optimization**, not a critical requirement
+- ⚠️ Unstable references still add comparison overhead on every render
+
+**Bottom line:** The guide below focuses on best practices for optimal performance, not preventing errors.
+:::
 
 **The Problem**:
 
 ```typescript
-// ❌ BAD: New object every render
+// ⚠️ SUBOPTIMAL: New object every render
 function CheckoutPage() {
   // This creates a NEW object on every render
   return <primer-checkout options={{ locale: 'en-GB' }} />;
@@ -214,10 +227,10 @@ function CheckoutPage() {
 // Render 1: Creates object at memory address 0x001
 // Render 2: Creates object at memory address 0x002 (NEW reference!)
 // Render 3: Creates object at memory address 0x003 (NEW reference!)
-// Result: Component may re-initialize on every parent re-render
+// Result: SDK performs deep comparison on every parent re-render
 ```
 
-**Real-World Impact**: User enters credit card number → parent re-renders → component receives new options reference → form resets → **user's input is lost** 😱
+**Real-World Impact (v0.10.0+)**: User enters credit card number → parent re-renders → component receives new options reference → SDK performs deep comparison → **no data loss, but unnecessary comparison overhead**
 
 ### Pattern 1: Constant Outside Component
 
@@ -303,20 +316,20 @@ function CheckoutPage({ clientToken, userLocale, merchantName }: CheckoutPagePro
 ### Common Mistake: Inline Object Creation
 
 ```typescript
-// ❌ WRONG: Object created in component body (React 18 & 19)
+// ⚠️ SUBOPTIMAL: Object created in component body (React 18 & 19)
 function CheckoutPage() {
   // New object on every render
   const options = { locale: 'en-GB' };
   return <primer-checkout options={options} />;
 }
 
-// ❌ WRONG: Inline object in JSX (React 18 & 19)
+// ⚠️ SUBOPTIMAL: Inline object in JSX (React 18 & 19)
 function CheckoutPage() {
   // New object on every render
   return <primer-checkout options={{ locale: 'en-GB' }} />;
 }
 
-// ✅ CORRECT: Use constant or useMemo
+// ✅ OPTIMAL: Use constant or useMemo
 const SDK_OPTIONS = { locale: 'en-GB' };
 
 function CheckoutPage() {
@@ -324,25 +337,33 @@ function CheckoutPage() {
   return <primer-checkout options={SDK_OPTIONS} />;
 }
 
-// ✅ CORRECT: Use useMemo for empty deps
+// ✅ OPTIMAL: Use useMemo for empty deps
 function CheckoutPage() {
   const options = useMemo(() => ({ locale: 'en-GB' }), []);
   return <primer-checkout options={options} />;
 }
 ```
 
-**Why it's wrong**:
+**Why it's suboptimal (v0.10.0+)**:
+
+:::tip Functional but Not Performant
+
+With v0.10.0+'s deep comparison, inline objects **work correctly** and won't cause re-initialization. However, they're still suboptimal because:
 
 - Creates new object reference on every component render
-- Causes component to potentially re-initialize
-- Can lead to lost form state and poor performance
-- Works this way in BOTH React 18 AND React 19
+- Forces SDK to perform deep comparison on every render (overhead)
+- Adds unnecessary processing when the values haven't changed
+- Impacts performance in complex applications with frequent re-renders
+- Still applies to BOTH React 18 AND React 19
 
-**How to fix**:
+**The SDK prevents errors, but you're still wasting CPU cycles.** 🔄
+:::
 
-- Move object outside component (constant)
-- Wrap in useMemo with appropriate dependencies
-- Use useState if options need to be modified
+**How to optimize**:
+
+- Move object outside component (constant) - best for static options
+- Wrap in useMemo with appropriate dependencies - best for dynamic options
+- Use useState if options need to be modified imperatively
 
 ---
 
@@ -359,11 +380,12 @@ function CheckoutPage() {
 
 ### Key Principles (Both Versions)
 
-1. ✅ Always use stable references (constant or useMemo)
-2. ❌ Never inline objects in JSX
-3. ❌ Never create objects in component body without useMemo
+1. ✅ Use stable references for optimal performance (constant or useMemo)
+2. ⚠️ Avoid inline objects in JSX (adds comparison overhead)
+3. ⚠️ Avoid creating objects in component body without useMemo
 4. ✅ Include all dependencies in useMemo dependency array
 5. ✅ Define static options outside component
+6. ℹ️ SDK v0.10.0+ uses deep comparison - reference instability won't cause re-initialization but will impact performance
 
 ### Testing for Stability
 
@@ -402,7 +424,7 @@ React integration with Primer SDK components is straightforward when you follow 
 
 1. **TypeScript setup**: Configure JSX types for proper TypeScript support
 2. **React version pattern**: Use refs in React 18, JSX props in React 19
-3. **Stable references**: Always use constants or useMemo to prevent re-initialization
-4. **Never inline objects**: Avoid creating new object references on every render
+3. **Stable references (v0.10.0+)**: Use constants or useMemo for optimal performance (deep comparison prevents re-initialization but stable references avoid comparison overhead)
+4. **Avoid inline objects**: Creating new object references on every render forces unnecessary deep comparisons
 
-Both React 18 and React 19 work excellently with Primer SDK components when these patterns are followed. React 19 simply reduces boilerplate while maintaining the same stability requirements.
+Both React 18 and React 19 work excellently with Primer SDK components when these patterns are followed. React 19 simply reduces boilerplate while maintaining the same performance optimization recommendations.

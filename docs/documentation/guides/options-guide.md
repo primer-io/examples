@@ -593,7 +593,7 @@ document.addEventListener('DOMContentLoaded', () => {
 Create options objects once and reuse them to avoid unnecessary re-initialization:
 
 :::tip Performance Optimization
-Define static options outside your function scope. This prevents creating new object references on every function execution.
+Define static options outside your function scope. As of v0.10.0, the SDK uses deep comparison to detect actual changes, but stable object references reduce comparison overhead and improve performance.
 :::
 
 ```javascript
@@ -613,6 +613,10 @@ function initCheckout() {
   checkout.options = { locale: 'en-GB' }; // New object every execution
 }
 ```
+
+:::info v0.10.0+ Deep Comparison
+The SDK performs deep comparison to detect actual changes in the `options` object. Using stable references (the ✅ GOOD pattern) minimizes comparison overhead and remains the recommended best practice for optimal performance.
+:::
 
 ### 2. Use TypeScript Interfaces for Type Safety
 

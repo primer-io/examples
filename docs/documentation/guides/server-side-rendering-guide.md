@@ -316,14 +316,18 @@ function CheckoutComponent() {
 }
 ```
 
-### 6. Stabilize SDK Options References in React
+### 6. Optimize SDK Options References in React
 
-When using React or React-based frameworks (Next.js, Remix), always ensure SDK options have stable object references to prevent unnecessary re-renders.
+:::note v0.10.0 Deep Comparison
+As of v0.10.0, the SDK performs deep comparison on the `options` property, eliminating the critical need for stable references. However, following these patterns still provides performance benefits by reducing comparison overhead.
+:::
 
-**The Problem**: React creates new object references on every render:
+When using React or React-based frameworks (Next.js, Remix), providing stable object references for SDK options improves performance by minimizing comparison overhead.
+
+**Performance Consideration**: React creates new object references on every render:
 
 ```javascript
-// ❌ WRONG: New object created every render
+// ⚠️ SUBOPTIMAL: New object created every render
 function Checkout() {
   return (
     <primer-checkout
@@ -338,7 +342,7 @@ function Checkout() {
 **Solution 1**: Define options outside the component:
 
 ```javascript
-// ✅ CORRECT: Stable reference
+// ✅ OPTIMAL: Stable reference
 const SDK_OPTIONS = {
   locale: 'en-GB',
 };
@@ -351,7 +355,7 @@ function Checkout() {
 **Solution 2**: Use `useMemo` for dynamic options:
 
 ```javascript
-// ✅ CORRECT: Memoized when needed
+// ✅ OPTIMAL: Memoized when needed
 function Checkout({ userId }) {
   const options = useMemo(
     () => ({
@@ -366,8 +370,8 @@ function Checkout({ userId }) {
 
 **Why This Matters**:
 
-- Prevents potential re-initialization of Primer components
-- Improves performance by avoiding unnecessary re-renders
+- Reduces comparison overhead on every render
+- Improves performance by minimizing deep comparison operations
 - Ensures predictable component behavior
 - Follows React best practices for object dependencies
 

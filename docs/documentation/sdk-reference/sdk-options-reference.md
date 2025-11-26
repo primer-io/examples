@@ -399,7 +399,7 @@ Enable headless vault mode for complete programmatic control over vault UI and p
 **Type**: `boolean`
 **Default**: `false`
 
-When `true`, hides all default vault UI components while maintaining full vault functionality. This allows you to build completely custom vault interfaces using the PrimerJS methods (`createCvvInput()`, `startVaultPayment()`) and callbacks (`onVaultedMethodsUpdate`).
+When `true`, hides all default vault UI components while maintaining full vault functionality. This allows you to build completely custom vault interfaces using the PrimerJS methods (`vault.createCvvInput()`, `vault.startPayment()`) and callbacks (`onVaultedMethodsUpdate`).
 
 **Key behaviors:**
 
@@ -446,22 +446,23 @@ checkout.addEventListener('primer:ready', (event) => {
 
     // Add CVV input if required
     if (cvvRecapture) {
-      const cvvInput = await primerJS.createCvvInput();
+      const cvvInput = await primerJS.vault.createCvvInput();
       vaultContainer.appendChild(cvvInput);
     }
   };
 
   // Handle payment submission
   document.getElementById('custom-pay-btn').addEventListener('click', async () => {
-    await primerJS.startVaultPayment();
+    await primerJS.vault.startPayment();
   });
 });
 ```
 
 **Related:**
 
-- `createCvvInput()` method - Creates CVV input component for custom vault UI (see [Events & Callbacks Reference](/sdk-reference/events-callbacks))
-- `startVaultPayment()` method - Initiates vault payment (see [Events & Callbacks Reference](/sdk-reference/events-callbacks))
+- [Headless Vault Implementation Guide](/sdk-reference/Components/vault-manager-doc#headless-vault-implementation) - Complete implementation example
+- `vault.createCvvInput()` method - Creates CVV input component for custom vault UI (see [Events & Callbacks Reference](/sdk-reference/events-callbacks))
+- `vault.startPayment()` method - Initiates vault payment (see [Events & Callbacks Reference](/sdk-reference/events-callbacks))
 - `onVaultedMethodsUpdate` callback - Receives `cvvRecapture` flag (see [Events & Callbacks Reference](/sdk-reference/events-callbacks))
 
 ### vault.showEmptyState

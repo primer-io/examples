@@ -441,7 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedMethod = methods.find((m) => m.isSelected);
 
         if (selectedMethod) {
-          const cvvInput = await primerJS.createCvvInput({
+          const cvvInput = await primerJS.vault.createCvvInput({
             cardNetwork: selectedMethod.paymentInstrumentData.network,
             container: '#cvv-section',
             placeholder: 'CVV',
@@ -458,7 +458,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .getElementById('pay-with-saved-card')
       .addEventListener('click', async () => {
         try {
-          await primerJS.startVaultPayment();
+          await primerJS.vault.startPayment();
         } catch (error) {
           console.error('Payment failed:', error);
         }
@@ -513,8 +513,8 @@ function buildCustomVaultUI(vaultedMethods) {
 
 - `vault.headless: true` hides all default vault UI components
 - `onVaultedMethodsUpdate` provides vaulted payment methods data and `cvvRecapture` flag
-- `createCvvInput()` creates a styled CVV input component when needed
-- `startVaultPayment()` initiates payment processing with the selected method
+- `vault.createCvvInput()` creates a styled CVV input component when needed
+- `vault.startPayment()` initiates payment processing with the selected method
 - Standard payment callbacks (`onPaymentSuccess`, `onPaymentFailure`) work normally
 - Complete control over UI layout, styling, and user experience
 
@@ -527,9 +527,11 @@ function buildCustomVaultUI(vaultedMethods) {
 
 **Documentation:**
 
+For a complete headless vault implementation example, see the [Headless Vault Implementation Guide](/sdk-reference/Components/vault-manager-doc#headless-vault-implementation).
+
 - [vault.headless option](/sdk-reference/sdk-options-reference#vaultheadless) - API reference
-- [createCvvInput()](/sdk-reference/events-callbacks#createcvvinput) - Method documentation
-- [startVaultPayment()](/sdk-reference/events-callbacks#startvaultpayment) - Method documentation
+- [vault.createCvvInput()](/sdk-reference/events-callbacks#createcvvinput) - Method documentation
+- [vault.startPayment()](/sdk-reference/events-callbacks#startvaultpayment) - Method documentation
 - [onVaultedMethodsUpdate](/sdk-reference/events-callbacks#onvaultedmethodsupdate) - Callback documentation
 
 ### Advanced Customization

@@ -134,7 +134,7 @@ Dispatched when the Primer SDK is fully initialized and ready for use.
 
 **Event Detail:**
 
-The event detail contains the PrimerJS instance with methods like `onPaymentSuccess`, `onPaymentFailure`, `onPaymentStart`, `onPaymentPrepare`, `refreshSession()`, `getPaymentMethods()`, and `setCardholderName()`.
+The event detail contains the PrimerJS instance with methods like `onPaymentSuccess`, `onPaymentFailure`, `onPaymentStart`, `onPaymentPrepare`, `refreshSession()`, `getPaymentMethods()`, `setCardholderName()`, and the `vault.*` namespace for headless vault operations.
 
 :::note Changed in v0.7.0
 The `onPaymentComplete` callback has been split into `onPaymentSuccess` and `onPaymentFailure` for clearer separation of concerns. The old unified callback is deprecated.
@@ -461,6 +461,10 @@ document.addEventListener('primer:payment-failure', (event) => {
 
 :::note New in v0.7.0
 Vault events enable you to track and manage saved payment methods in real-time.
+:::
+
+:::tip Headless Vault API
+For complete headless vault implementation including the `vault.*` namespace methods (`vault.createCvvInput()`, `vault.startPayment()`, `vault.delete()`), see the [Headless Vault Implementation Guide](/sdk-reference/Components/vault-manager-doc#headless-vault-implementation).
 :::
 
 ### `primer:vault:methods-update`

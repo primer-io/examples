@@ -8,6 +8,55 @@ sidebar_position: 99
 
 This page documents all notable changes to Primer Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
+## v0.11.0 - Vault API Namespace & Enhanced Data (26-Nov-2025)
+
+:::warning Breaking Changes
+The vault methods `createCvvInput()` and `startVaultPayment()` on the PrimerJS instance are now deprecated. These methods still work but will be **REMOVED in the next release**. Migrate to the new `primerJS.vault.*` namespace.
+:::
+
+:::info New Features
+This release introduces the `primerJS.vault.*` namespace for better API organization and adds programmatic vault deletion capability. Enhanced data exposure now provides parity between headless and non-headless vault flows.
+:::
+
+**Key Changes:**
+
+- **Vault API Namespace** (Breaking Change)
+  - New `primerJS.vault.*` namespace groups all vault operations
+  - `vault.createCvvInput()` replaces `primerJS.createCvvInput()`
+  - `vault.startPayment()` replaces `primerJS.startVaultPayment()`
+  - Old methods deprecated with console warnings in development mode
+  - **Old methods will be REMOVED in the next release**
+
+- **New Vault Deletion Method**
+  - Added `primerJS.vault.delete(paymentMethodId)` for programmatic deletion
+  - Enables custom vault management UIs without Primer UI components
+
+- **Enhanced Data Exposure for Headless Vault**
+  - **Cards**: Now exposes `cardholderName`, `expirationMonth`, `expirationYear`
+  - **PayPal**: Now exposes `email`, `firstName`, `lastName`, `externalPayerId`
+  - **Klarna**: Now exposes `email`, `firstName`, `lastName`
+  - Provides data parity between headless mode and non-headless vault UI
+
+**Migration Guide:**
+
+```javascript
+// Before (deprecated - will be removed)
+const cvvInput = await primerJS.createCvvInput(options);
+await primerJS.startVaultPayment(methodId, { cvv });
+
+// After (recommended)
+const cvvInput = await primerJS.vault.createCvvInput(options);
+await primerJS.vault.startPayment(methodId, { cvv });
+await primerJS.vault.delete(methodId); // NEW
+```
+
+**Documentation:**
+
+- [Headless Vault Implementation Guide](/sdk-reference/Components/vault-manager-doc#headless-vault-implementation) - Complete implementation example
+- [Events & Callbacks Reference](/sdk-reference/events-callbacks) - VaultAPI documentation
+
+---
+
 ## v0.10.0 - Deep Comparison Options Architecture (19-Nov-2025)
 
 :::info Performance Enhancement
@@ -72,12 +121,10 @@ Complete headless vault implementation allowing full programmatic control over v
   - Added `cvvRecapture` flag in `onVaultedMethodsUpdate` callback data
   - Indicates when CVV re-entry is required for a vaulted payment method
   - Automatically set based on payment processor requirements
-  - Use with `createCvvInput()` method for custom CVV collection
 
 - **New PrimerJS Methods**
-  - Added `createCvvInput()` - Creates CVV input component for custom vault UI
-  - Added `startVaultPayment()` - Initiates payment with selected vaulted payment method
-  - Both methods enable complete programmatic control of vault payment flows
+  - Added CVV input creation for custom vault UI
+  - Added vault payment initiation for programmatic control
   - Type-safe integration with TypeScript support
 
 - **Bug Fix**
@@ -85,78 +132,11 @@ Complete headless vault implementation allowing full programmatic control over v
   - Aligns with common use cases where empty state is custom or hidden
   - Explicit opt-in now required for empty state display
 
-**Headless Vault Configuration:**
-
-```javascript
-const checkout = document.querySelector('primer-checkout');
-checkout.setAttribute('client-token', 'your-client-token');
-
-checkout.options = {
-  vault: {
-    enabled: true,
-    headless: true, // Hide default vault UI
-    showEmptyState: false, // Default changed to false
-  },
-};
-
-checkout.addEventListener('primer:ready', (event) => {
-  const primerJS = event.detail;
-
-  // Handle vaulted methods updates
-  primerJS.onVaultedMethodsUpdate = async ({
-    vaultedPayments,
-    cvvRecapture,
-  }) => {
-    // Build custom vault UI
-    const methods = vaultedPayments.toArray();
-    renderCustomVaultUI(methods);
-
-    // Show CVV input if required
-    if (cvvRecapture) {
-      // Get the selected payment method
-      const selectedMethod = methods.find((m) => m.isSelected);
-
-      if (selectedMethod) {
-        const cvvInput = await primerJS.createCvvInput({
-          cardNetwork: selectedMethod.paymentInstrumentData.network,
-          container: '#cvv-container',
-          placeholder: 'CVV',
-        });
-        if (cvvInput) {
-          document.getElementById('cvv-container').appendChild(cvvInput);
-        }
-      }
-    }
-  };
-
-  // Handle payment submission
-  document.getElementById('pay-button').addEventListener('click', async () => {
-    await primerJS.startVaultPayment();
-  });
-
-  // Handle success/failure
-  primerJS.onPaymentSuccess = (data) => {
-    console.log('Payment successful:', data.payment.id);
-  };
-
-  primerJS.onPaymentFailure = (data) => {
-    console.error('Payment failed:', data.error.message);
-  };
-});
-```
-
-**Use Cases:**
-
-- Custom vault UI design and layout
-- Branded vault payment experiences
-- Integration with existing checkout flows
-- Advanced vault management interfaces
-
 **Documentation:**
 
+- [Headless Vault Implementation Guide](/sdk-reference/Components/vault-manager-doc#headless-vault-implementation) - Complete implementation example with code
 - [Vault Options Reference](/sdk-reference/sdk-options-reference#vault-options) - Complete vault.headless API reference
-- [Events & Callbacks Reference](/sdk-reference/events-callbacks) - onVaultedMethodsUpdate with cvvRecapture flag
-- [PrimerJS Methods Reference](/sdk-reference/events-callbacks) - createCvvInput() and startVaultPayment() methods
+- [Events & Callbacks Reference](/sdk-reference/events-callbacks) - Method documentation
 
 ---
 

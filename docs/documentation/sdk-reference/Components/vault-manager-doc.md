@@ -427,6 +427,313 @@ checkout.addEventListener('primer:state-change', (e) => {
 - Custom submit buttons can be provided via the `submit-button` slot with full styling control
   :::
 
+## Headless Vault Implementation {#headless-vault-implementation}
+
+:::info New in v0.11.0
+The headless vault flow allows you to build completely custom vault UIs while retaining full vault functionality. Use the `primerJS.vault.*` namespace for programmatic control.
+:::
+
+Headless vault mode hides the default vault UI components and provides full programmatic control through the `primerJS.vault` API. This enables custom vault interfaces that match your brand and workflow requirements.
+
+### Configuration
+
+Enable headless vault mode by setting `vault.headless: true` in your options:
+
+```javascript
+const checkout = document.querySelector('primer-checkout');
+checkout.setAttribute('client-token', 'your-client-token');
+
+checkout.options = {
+  vault: {
+    enabled: true,
+    headless: true, // Hide default vault UI
+    showEmptyState: false,
+  },
+};
+```
+
+### Complete Implementation Example
+
+This example demonstrates a full headless vault implementation supporting both Cards and PayPal payment methods:
+
+```html
+<primer-checkout client-token="your-client-token">
+  <primer-main slot="main">
+    <div slot="payments">
+      <!-- Custom vault UI container -->
+      <div id="custom-vault-container"></div>
+      <div id="cvv-container"></div>
+      <button id="pay-button" disabled>Pay Now</button>
+
+      <!-- Other payment methods remain available -->
+      <primer-card-form></primer-card-form>
+    </div>
+  </primer-main>
+</primer-checkout>
+
+<script>
+  const checkout = document.querySelector('primer-checkout');
+
+  // Configure headless vault
+  checkout.options = {
+    vault: {
+      enabled: true,
+      headless: true,
+      showEmptyState: false,
+    },
+  };
+
+  // State management
+  let selectedMethodId = null;
+  let cvvInputInstance = null;
+  let isProcessing = false;
+
+  checkout.addEventListener('primer:ready', (event) => {
+    const primerJS = event.detail;
+    const payButton = document.getElementById('pay-button');
+    const vaultContainer = document.getElementById('custom-vault-container');
+    const cvvContainer = document.getElementById('cvv-container');
+
+    // Handle vaulted methods updates
+    primerJS.onVaultedMethodsUpdate = async ({
+      vaultedPayments,
+      cvvRecapture,
+    }) => {
+      const methods = vaultedPayments.toArray();
+
+      // Clear and rebuild vault UI
+      vaultContainer.innerHTML = '';
+      cvvContainer.innerHTML = '';
+      cvvInputInstance = null;
+
+      if (methods.length === 0) {
+        vaultContainer.innerHTML = '<p>No saved payment methods</p>';
+        payButton.disabled = true;
+        return;
+      }
+
+      // Render each vaulted payment method
+      methods.forEach((method, index) => {
+        const methodElement = document.createElement('div');
+        methodElement.className = 'vault-payment-method';
+
+        // Display data based on payment instrument type
+        let displayInfo = '';
+        if (method.paymentInstrumentType === 'PAYMENT_CARD') {
+          // Card data: last4Digits, network, cardholderName, expirationMonth, expirationYear
+          const data = method.paymentInstrumentData;
+          displayInfo = `
+          <strong>${data.network}</strong> •••• ${data.last4Digits}
+          <br><small>${data.cardholderName || 'Card Holder'} - Exp: ${data.expirationMonth}/${data.expirationYear}</small>
+        `;
+        } else if (
+          method.paymentInstrumentType === 'PAYPAL_BILLING_AGREEMENT'
+        ) {
+          // PayPal data: email, firstName, lastName
+          const data = method.paymentInstrumentData;
+          displayInfo = `
+          <strong>PayPal</strong>
+          <br><small>${data.firstName} ${data.lastName} (${data.email})</small>
+        `;
+        } else {
+          displayInfo = `<strong>${method.paymentInstrumentType}</strong>`;
+        }
+
+        methodElement.innerHTML = `
+        <label>
+          <input type="radio" name="vault-method" value="${method.id}" ${index === 0 ? 'checked' : ''}>
+          ${displayInfo}
+        </label>
+        <button class="delete-btn" data-id="${method.id}">Delete</button>
+      `;
+        vaultContainer.appendChild(methodElement);
+      });
+
+      // Set initial selection
+      selectedMethodId = methods[0]?.id || null;
+      payButton.disabled = !selectedMethodId;
+
+      // Handle radio button changes
+      vaultContainer
+        .querySelectorAll('input[name="vault-method"]')
+        .forEach((radio) => {
+          radio.addEventListener('change', async (e) => {
+            selectedMethodId = e.target.value;
+            payButton.disabled = !selectedMethodId;
+
+            // Recreate CVV input if needed
+            if (cvvRecapture && selectedMethodId) {
+              const selectedMethod = methods.find(
+                (m) => m.id === selectedMethodId,
+              );
+              if (selectedMethod?.paymentInstrumentType === 'PAYMENT_CARD') {
+                cvvContainer.innerHTML = '';
+                cvvInputInstance = await primerJS.vault.createCvvInput({
+                  cardNetwork: selectedMethod.paymentInstrumentData.network,
+                  container: '#cvv-container',
+                  placeholder: 'CVV',
+                });
+              } else {
+                cvvContainer.innerHTML = '';
+                cvvInputInstance = null;
+              }
+            }
+          });
+        });
+
+      // Handle delete buttons
+      vaultContainer.querySelectorAll('.delete-btn').forEach((btn) => {
+        btn.addEventListener('click', async (e) => {
+          const methodId = e.target.dataset.id;
+          try {
+            await primerJS.vault.delete(methodId);
+            console.log('Payment method deleted successfully');
+          } catch (error) {
+            console.error('Failed to delete:', error);
+          }
+        });
+      });
+
+      // Create CVV input if required for first (selected) method
+      if (cvvRecapture && selectedMethodId) {
+        const selectedMethod = methods.find((m) => m.id === selectedMethodId);
+        if (selectedMethod?.paymentInstrumentType === 'PAYMENT_CARD') {
+          cvvInputInstance = await primerJS.vault.createCvvInput({
+            cardNetwork: selectedMethod.paymentInstrumentData.network,
+            container: '#cvv-container',
+            placeholder: 'CVV',
+          });
+        }
+      }
+    };
+
+    // Handle pay button click
+    payButton.addEventListener('click', async () => {
+      if (!selectedMethodId || isProcessing) return;
+
+      // Validate CVV before payment
+      if (cvvInputInstance && cvvInputInstance.metadata.error) {
+        console.error('Invalid CVV:', cvvInputInstance.metadata.error);
+        return;
+      }
+
+      isProcessing = true;
+      payButton.disabled = true;
+      payButton.textContent = 'Processing...';
+
+      try {
+        const options = cvvInputInstance
+          ? { cvv: cvvInputInstance.valueToken }
+          : undefined;
+
+        await primerJS.vault.startPayment(selectedMethodId, options);
+      } catch (error) {
+        console.error('Payment failed:', error);
+        isProcessing = false;
+        payButton.disabled = false;
+        payButton.textContent = 'Pay Now';
+      }
+    });
+
+    // Handle payment success
+    primerJS.onPaymentSuccess = (data) => {
+      console.log('Payment successful:', data.payment.id);
+      isProcessing = false;
+      window.location.href = '/confirmation';
+    };
+
+    // Handle payment failure
+    primerJS.onPaymentFailure = (data) => {
+      console.error('Payment failed:', data.error.message);
+      isProcessing = false;
+      payButton.disabled = false;
+      payButton.textContent = 'Pay Now';
+    };
+  });
+</script>
+
+<style>
+  .vault-payment-method {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .vault-payment-method label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+  }
+  .delete-btn {
+    background: none;
+    border: 1px solid #dc3545;
+    color: #dc3545;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  #cvv-container {
+    margin: 16px 0;
+  }
+  #pay-button {
+    width: 100%;
+    padding: 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  #pay-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+</style>
+```
+
+### VaultAPI Methods Reference
+
+| Method                             | Description                                     |
+| ---------------------------------- | ----------------------------------------------- |
+| `vault.createCvvInput(options)`    | Creates a CVV input for CVV recapture scenarios |
+| `vault.startPayment(id, options?)` | Initiates payment with a vaulted payment method |
+| `vault.delete(id)`                 | Permanently deletes a vaulted payment method    |
+
+### Enhanced Data Fields
+
+The `VaultedPaymentMethodSummary` object provides payment-method-specific data. Use `paymentInstrumentType` to determine the payment method type:
+
+**Cards (`paymentInstrumentType: 'PAYMENT_CARD'`):**
+
+- `last4Digits` - Last 4 digits of card number
+- `network` - Card network (VISA, MASTERCARD, etc.)
+- `cardholderName` - Name on the card
+- `expirationMonth` - Expiration month
+- `expirationYear` - Expiration year
+
+**PayPal (`paymentInstrumentType: 'PAYPAL_BILLING_AGREEMENT'`):**
+
+- `email` - PayPal account email
+- `firstName` - Account holder first name
+- `lastName` - Account holder last name
+- `externalPayerId` - PayPal payer ID
+
+**Klarna (`paymentInstrumentType: 'KLARNA_CUSTOMER_TOKEN'`):**
+
+- `email` - Klarna account email
+- `firstName` - Account holder first name
+- `lastName` - Account holder last name
+
+**ACH (`paymentInstrumentType: 'AUTOMATED_CLEARING_HOUSE'`):**
+
+- `accountNumberLastFourDigits` - Last 4 digits of account
+- `bankName` - Bank name
+- `accountType` - CHECKING or SAVINGS
+
 ## Related Documentation
 
 For more information on configuring and using the vaulting functionality:

@@ -326,15 +326,7 @@ Dispatched when vaulted payment methods are loaded or updated.
 
 **VaultedPaymentMethodSummary Type:**
 
-| Property            | Type     | Description                               |
-| ------------------- | -------- | ----------------------------------------- |
-| `id`                | `string` | Unique identifier for the vaulted payment |
-| `paymentMethodType` | `string` | Payment method type identifier            |
-| `last4Digits`       | `string` | Last 4 digits of the payment card         |
-| `expirationMonth`   | `string` | Card expiration month                     |
-| `expirationYear`    | `string` | Card expiration year                      |
-| `cardholderName`    | `string` | Name on the card                          |
-| `network`           | `string` | Card network                              |
+See the complete [VaultedPaymentMethodSummary type definition](#vaultedpaymentmethodsummary) for all available fields.
 
 **Usage Note:** Use this event to update your vault UI, track the number of saved payment methods, or react to changes in the user's vaulted payments.
 
@@ -736,13 +728,66 @@ Public methods available on the PrimerJS instance (accessible via the `primer:re
 
 ### Methods Overview
 
-| Method                    | Returns                | Description                                                     |
-| ------------------------- | ---------------------- | --------------------------------------------------------------- |
-| `refreshSession()`        | `Promise<void>`        | Synchronizes client-side SDK with server-side session updates   |
-| `getPaymentMethods()`     | `PaymentMethodInfo[]`  | Returns cached list of available payment methods                |
-| `setCardholderName(name)` | `void`                 | Programmatically sets the cardholder name field value           |
-| `createCvvInput()`        | `Promise<HTMLElement>` | Creates CVV input component for custom vault UI (headless mode) |
-| `startVaultPayment()`     | `Promise<void>`        | Initiates vault payment processing in headless mode             |
+| Method                    | Returns                     | Description                                                     |
+| ------------------------- | --------------------------- | --------------------------------------------------------------- |
+| `refreshSession()`        | `Promise<void>`             | Synchronizes client-side SDK with server-side session updates   |
+| `getPaymentMethods()`     | `PaymentMethodInfo[]`       | Returns cached list of available payment methods                |
+| `setCardholderName(name)` | `void`                      | Programmatically sets the cardholder name field value           |
+| `vault.createCvvInput()`  | `Promise<CvvInput \| null>` | Creates CVV input for CVV recapture (new in v0.11.0)            |
+| `vault.startPayment()`    | `Promise<void>`             | Initiates vault payment (new in v0.11.0)                        |
+| `vault.delete()`          | `Promise<void>`             | Deletes a vaulted payment method (new in v0.11.0)               |
+| `createCvvInput()`        | `Promise<HTMLElement>`      | Creates CVV input component for custom vault UI (headless mode) |
+| `startVaultPayment()`     | `Promise<void>`             | Initiates vault payment processing in headless mode             |
+
+### VaultAPI Namespace
+
+:::info New in v0.11.0
+The `primerJS.vault` namespace provides organized access to vault operations. All vault methods are now grouped under this namespace.
+:::
+
+The `vault` property on PrimerJS provides access to all vault operations:
+
+| Method                             | Returns                     | Description                         |
+| ---------------------------------- | --------------------------- | ----------------------------------- |
+| `vault.createCvvInput(options)`    | `Promise<CvvInput \| null>` | Creates CVV input for CVV recapture |
+| `vault.startPayment(id, options?)` | `Promise<void>`             | Initiates vault payment             |
+| `vault.delete(id)`                 | `Promise<void>`             | Deletes a vaulted payment method    |
+
+For complete implementation examples, see the [Headless Vault Implementation Guide](/sdk-reference/Components/vault-manager-doc#headless-vault-implementation).
+
+### vault.delete()
+
+:::info New in v0.11.0
+Programmatically delete vaulted payment methods without using the default vault UI.
+:::
+
+Permanently removes a vaulted payment method.
+
+```typescript
+async vault.delete(paymentMethodId: string): Promise<void>
+```
+
+**Parameters:**
+
+| Name              | Type     | Description                                |
+| ----------------- | -------- | ------------------------------------------ |
+| `paymentMethodId` | `string` | ID of the vaulted payment method to delete |
+
+**Throws:**
+
+- `Error` if vault not initialized
+- `Error` if payment method not found
+
+**Example:**
+
+```typescript
+try {
+  await primerJS.vault.delete(methodId);
+  console.log('Payment method deleted');
+} catch (error) {
+  console.error('Failed to delete:', error);
+}
+```
 
 ### refreshSession()
 
@@ -804,6 +849,10 @@ checkout.addEventListener('primer:ready', (event) => {
 ```
 
 ### createCvvInput()
+
+:::warning Deprecated in v0.11.0
+This method is deprecated. Use `primerJS.vault.createCvvInput()` instead. This method will be removed in the next major release.
+:::
 
 :::tip New in v0.9.0
 Create CVV input components for custom vault UI implementations in headless mode.
@@ -882,6 +931,10 @@ checkout.addEventListener('primer:ready', (event) => {
 - [startVaultPayment()](#startvaultpayment) - Submit vault payment with collected CVV
 
 ### startVaultPayment()
+
+:::warning Deprecated in v0.11.0
+This method is deprecated. Use `primerJS.vault.startPayment()` instead. This method will be removed in the next major release.
+:::
 
 :::tip New in v0.9.0
 Programmatically initiate vault payment flows in headless mode.
@@ -1072,15 +1125,39 @@ interface VaultedMethodsUpdateData {
 
 #### VaultedPaymentMethodSummary
 
+:::info Enhanced in v0.11.0
+`VaultedPaymentMethodSummary` now exposes additional fields for better headless vault implementation:
+
+- **Cards**: `cardholderName`, `expirationMonth`, `expirationYear`
+- **PayPal**: `email`, `firstName`, `lastName`, `externalPayerId`
+- **Klarna**: `email`, `firstName`, `lastName`
+  :::
+
 ```typescript
 interface VaultedPaymentMethodSummary {
   id: string;
+  analyticsId: string;
   paymentMethodType: string;
-  last4Digits: string;
-  expirationMonth: string;
-  expirationYear: string;
-  cardholderName: string;
-  network: string;
+  paymentInstrumentType: string;
+  paymentInstrumentData?: {
+    // Card fields
+    last4Digits?: string;
+    network?: string;
+    cardholderName?: string; // NEW in v0.11.0
+    expirationMonth?: string; // NEW in v0.11.0
+    expirationYear?: string; // NEW in v0.11.0
+    // PayPal fields
+    email?: string; // NEW in v0.11.0
+    firstName?: string; // NEW in v0.11.0
+    lastName?: string; // NEW in v0.11.0
+    externalPayerId?: string; // NEW in v0.11.0
+    // ACH fields
+    accountNumberLastFourDigits?: string;
+    bankName?: string;
+    accountType?: string;
+  };
+  userDescription?: string;
+  isSelected?: boolean;
 }
 ```
 

@@ -85,6 +85,24 @@ paypal: {
 }
 ```
 
+### Style Customizations per funding source
+
+```typescript
+paypal: {
+  style: { // base styles, applying to all funding sources if not overridden
+    layout: 'horizontal',
+    color: 'blue',
+    shape: 'pill',
+    height: 45,
+    label: 'checkout',
+    tagline: false,
+    paylater: { // specific style override for paylater funding source
+      color: 'white'
+    }
+  }
+}
+```
+
 For complete style customization details, see the [PayPal Button Style Guide](https://developer.paypal.com/sdk/js/reference/#style).
 
 ## Vaulting

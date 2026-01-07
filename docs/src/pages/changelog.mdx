@@ -8,6 +8,140 @@ sidebar_position: 99
 
 This page documents all notable changes to Primer Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
+## v0.12.1 - Apple Pay, Google Pay and improved PayPal SDK Core support (16-Dec-2025)
+
+:::info New Payment Methods
+Apple Pay and Google Pay are now available in SDK Core with early-stage support.
+:::
+
+:::warning Requirements
+Apple Pay and Google Pay require SDK Core enabled (default) AND must be added to `enabledPaymentMethods` array.
+:::
+
+**Key Changes:**
+
+- Apple Pay payment method support in SDK Core
+- Google Pay payment method support in SDK Core
+- Apple Pay third-party browser payment using iPhone support is added
+- Enhanced PayPal support with better defaults and per-funding source styling configuration
+
+**Configuration:**
+
+Apple Pay, Google Pay, and PayPal must be explicitly enabled in the `enabledPaymentMethods` array:
+
+```javascript
+import { PaymentMethodType } from '@primer-io/primer-js';
+
+const checkout = document.querySelector('primer-checkout');
+checkout.options = {
+  sdkCore: true, // Required for Apple Pay, Google Pay and PayPal (enabled by default)
+  enabledPaymentMethods: [
+    PaymentMethodType.PAYMENT_CARD,
+    PaymentMethodType.APPLE_PAY, // Add Apple Pay
+    PaymentMethodType.GOOGLE_PAY, // Add Google Pay
+    PaymentMethodType.PAYPAL, // Add PayPal
+  ],
+};
+```
+
+**Apple Pay and Google Pay changes**
+
+- **Apple Pay Payment Method**
+  - Full Apple Pay integration with SDK Core
+  - Button customization (17 button types, 3 button styles)
+  - Billing address capture from Apple Wallet (`requiredBillingContactFields`)
+  - Shipping contact capture (address, name, email, phone) via `requiredShippingContactFields`
+  - Non-Safari browser support
+
+- **Google Pay Payment Method**
+  - Full Google Pay integration with SDK Core
+  - Button customization (type, color, size mode, radius, border, locale)
+  - Billing address capture from Google account (`captureBillingAddress`)
+  - Shipping address capture with country filtering (`captureShippingAddress`)
+  - Email capture (`emailRequired`)
+  - Locale support for 30+ languages
+
+**Example Configuration:**
+
+```javascript
+const checkout = document.querySelector('primer-checkout');
+checkout.options = {
+  sdkCore: true,
+  // Apple Pay configuration
+  applePay: {
+    buttonOptions: {
+      type: 'buy',
+      buttonStyle: 'black',
+    },
+    billingOptions: {
+      requiredBillingContactFields: ['postalAddress'],
+    },
+    shippingOptions: {
+      requiredShippingContactFields: [
+        'postalAddress',
+        'name',
+        'email',
+        'phone',
+      ],
+    },
+  },
+  // Google Pay configuration
+  googlePay: {
+    buttonType: 'checkout',
+    buttonColor: 'black',
+    buttonSizeMode: 'fill',
+    captureBillingAddress: true,
+    captureShippingAddress: true,
+    shippingAddressParameters: {
+      allowedCountryCodes: ['US', 'CA', 'GB'],
+      phoneNumberRequired: true,
+    },
+    emailRequired: true,
+    requireShippingMethod: true,
+  },
+};
+```
+
+**PayPal changes**
+
+- **Enhanced PayPal Support**
+  - Per-funding source styling configuration
+  - Override styles for specific funding sources (e.g., PayPal, Pay Later, Venmo)
+  - Better defaults for button appearance
+  - Buyer country configuration support
+
+**Example PayPal Configuration:**
+
+```javascript
+const checkout = document.querySelector('primer-checkout');
+checkout.options = {
+  sdkCore: true,
+  paypal: {
+    style: {
+      // Base styles
+      borderRadius: 22,
+      color: 'silver',
+      // Override styles for specific funding source
+      paylater: {
+        color: 'white',
+      },
+    },
+    buyerCountry: 'US',
+  },
+};
+```
+
+**Documentation:**
+
+- [Apple Pay Options Reference](/sdk-reference/apple-pay-options) - Complete configuration options and API reference
+- [Google Pay Options Reference](/sdk-reference/google-pay-options) - Complete configuration options and API reference
+- [PayPal Options Reference](/sdk-reference/paypal-options) - Complete configuration options and API reference
+- [Payment Methods Guide](/guides/payment-methods-guide) - Integration patterns and best practices
+
+**Note:** The new payment methods are in early-stage support. Additional features and improvements will be added in future releases.
+
+---
+
 ## v0.11.0 - Vault API Namespace & Enhanced Data (26-Nov-2025)
 
 :::warning Breaking Changes

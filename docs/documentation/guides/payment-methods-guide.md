@@ -24,9 +24,17 @@ The following payment methods work with the default SDK Core engine:
 
 Full-featured card payment form with field validation and tokenization. This is the default payment method if `enabledPaymentMethods` is not specified.
 
+### APPLE_PAY
+
+Apple Pay button integration. See the [Apple Pay integration guide](/sdk-reference/apple-pay-options) for detailed setup instructions.
+
+### GOOGLE_PAY
+
+Google Pay button integration. See the [Google Pay integration guide](/sdk-reference/google-pay-options) for detailed setup instructions.
+
 ### PAYPAL
 
-PayPal button integration with redirect flow. See the [PayPal integration guide](/sdk-reference/paypal-options) for detailed setup instructions.
+PayPal button integration. See the [PayPal integration guide](/sdk-reference/paypal-options) for detailed setup instructions.
 
 ### ADYEN_BLIK
 

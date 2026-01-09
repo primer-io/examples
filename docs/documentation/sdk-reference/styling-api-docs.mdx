@@ -42,6 +42,19 @@ description: Customizable styling variables for Primer Checkout
               color: #f39c12;
             }
 
+            .badge-new {
+              display: inline-block;
+              padding: 2px 8px;
+              border-radius: 4px;
+              font-size: 12px;
+              font-weight: 600;
+              line-height: 16px;
+              background-color: rgba(46, 204, 113, 0.15);
+              color: #27ae60;
+              margin-left: 8px;
+              vertical-align: middle;
+            }
+
             .vars-table td:first-child code {
               white-space: nowrap;
             }
@@ -184,13 +197,48 @@ The following variables control text appearance across components, ensuring cons
 
 <div className="vars-table">
 
-| CSS Variable                                    | Type                                              | Description                                                     | Default Value                    | Affects                                |
-| ----------------------------------------------- | ------------------------------------------------- | --------------------------------------------------------------- | -------------------------------- | -------------------------------------- |
-| `--primer-typography-body-small-font`           | <span className="type-font">font family</span>    | Controls the font family of the body-small typography style.    | `var(--primer-typography-brand)` | primer-input-error, primer-input-label |
-| `--primer-typography-body-small-weight`         | <span className="type-font">font weight</span>    | Controls the font weight of the body-small typography style.    | `400`                            | primer-input-error, primer-input-label |
-| `--primer-typography-body-small-size`           | <span className="type-font">font size</span>      | Controls the font size of the body-small typography style.      | `12px`                           | primer-input-error, primer-input-label |
-| `--primer-typography-body-small-line-height`    | <span className="type-font">line height</span>    | Controls the line height of the body-small typography style.    | `16px`                           | primer-input-error, primer-input-label |
-| `--primer-typography-body-small-letter-spacing` | <span className="type-font">letter spacing</span> | Controls the letter spacing of the body-small typography style. | `0`                              | primer-input-error, primer-input-label |
+| CSS Variable                                    | Type                                              | Description                                                     | Default Value                    | Affects            |
+| ----------------------------------------------- | ------------------------------------------------- | --------------------------------------------------------------- | -------------------------------- | ------------------ |
+| `--primer-typography-body-small-font`           | <span className="type-font">font family</span>    | Controls the font family of the body-small typography style.    | `var(--primer-typography-brand)` | primer-input-label |
+| `--primer-typography-body-small-weight`         | <span className="type-font">font weight</span>    | Controls the font weight of the body-small typography style.    | `400`                            | primer-input-label |
+| `--primer-typography-body-small-size`           | <span className="type-font">font size</span>      | Controls the font size of the body-small typography style.      | `12px`                           | primer-input-label |
+| `--primer-typography-body-small-line-height`    | <span className="type-font">line height</span>    | Controls the line height of the body-small typography style.    | `16px`                           | primer-input-label |
+| `--primer-typography-body-small-letter-spacing` | <span className="type-font">letter spacing</span> | Controls the letter spacing of the body-small typography style. | `0`                              | primer-input-label |
+
+</div>
+
+### Error <span className="badge-new">New</span>
+
+These variables provide dedicated typography control for error messages, allowing independent styling of validation errors separate from other body text.
+
+<div className="vars-table">
+
+| CSS Variable                               | Type                                              | Description                                                | Default Value                                        | Affects            |
+| ------------------------------------------ | ------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------- | ------------------ |
+| `--primer-typography-error-font`           | <span className="type-font">font family</span>    | Controls the font family of the error typography style.    | `var(--primer-typography-body-small-font)`           | primer-input-error |
+| `--primer-typography-error-weight`         | <span className="type-font">font weight</span>    | Controls the font weight of the error typography style.    | `var(--primer-typography-body-small-weight)`         | primer-input-error |
+| `--primer-typography-error-size`           | <span className="type-font">font size</span>      | Controls the font size of the error typography style.      | `var(--primer-typography-body-small-size)`           | primer-input-error |
+| `--primer-typography-error-line-height`    | <span className="type-font">line height</span>    | Controls the line height of the error typography style.    | `var(--primer-typography-body-small-line-height)`    | primer-input-error |
+| `--primer-typography-error-letter-spacing` | <span className="type-font">letter spacing</span> | Controls the letter spacing of the error typography style. | `var(--primer-typography-body-small-letter-spacing)` | primer-input-error |
+
+</div>
+
+## Width <span className="badge-new">New</span>
+
+These variables control the border width of input fields across different states.
+
+<div className="vars-table">
+
+| CSS Variable              | Type                                    | Description                                                  | Default Value                 | Affects                                       |
+| ------------------------- | --------------------------------------- | ------------------------------------------------------------ | ----------------------------- | --------------------------------------------- |
+| `--primer-width-default`  | <span className="type-size">size</span> | Controls the border width of input fields in default state.  | `1`                           | primer-input-wrapper border in default state  |
+| `--primer-width-hover`    | <span className="type-size">size</span> | Controls the border width of input fields in hover state.    | `var(--primer-width-default)` | primer-input-wrapper border in hover state    |
+| `--primer-width-active`   | <span className="type-size">size</span> | Controls the border width of input fields in active state.   | `var(--primer-width-default)` | primer-input-wrapper border in active state   |
+| `--primer-width-focus`    | <span className="type-size">size</span> | Controls the border width of input fields in focus state.    | `2`                           | primer-input-wrapper border in focus state    |
+| `--primer-width-selected` | <span className="type-size">size</span> | Controls the border width of input fields in selected state. | `2`                           | primer-input-wrapper border in selected state |
+| `--primer-width-error`    | <span className="type-size">size</span> | Controls the border width of input fields in error state.    | `2`                           | primer-input-wrapper border in error state    |
+| `--primer-width-loading`  | <span className="type-size">size</span> | Controls the border width of input fields in loading state.  | `var(--primer-width-default)` | primer-input-wrapper border in loading state  |
+| `--primer-width-disabled` | <span className="type-size">size</span> | Controls the border width of input fields in disabled state. | `var(--primer-width-default)` | primer-input-wrapper border in disabled state |
 
 </div>
 

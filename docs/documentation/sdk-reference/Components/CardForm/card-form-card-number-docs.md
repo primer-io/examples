@@ -117,9 +117,18 @@ This component doesn't emit custom events directly, but it listens for the `netw
 
 ## CSS Custom Properties
 
-| Property               | Description                                                                 |
-| ---------------------- | --------------------------------------------------------------------------- |
-| `--primer-space-small` | Spacing between the card number input and network selector (default: `8px`) |
+| Property                                   | Description                                                                 |
+| ------------------------------------------ | --------------------------------------------------------------------------- |
+| `--primer-space-small`                     | Spacing between the card number input and network selector (default: `8px`) |
+| `--primer-color-text-negative`             | Error message text color                                                    |
+| `--primer-color-border-outlined-error`     | Input border color in error state                                           |
+| `--primer-color-background-outlined-error` | Input background color in error state                                       |
+| `--primer-width-error`                     | Input border width in error state                                           |
+| `--primer-typography-error-font`           | Error message font family                                                   |
+| `--primer-typography-error-size`           | Error message font size                                                     |
+| `--primer-typography-error-weight`         | Error message font weight                                                   |
+| `--primer-typography-error-line-height`    | Error message line height                                                   |
+| `--primer-typography-error-letter-spacing` | Error message letter spacing                                                |
 
 ## Examples
 

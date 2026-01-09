@@ -88,6 +88,20 @@ The Cardholder Name Input component:
 4. **Automatically updates the card form context** as the user types, sending each input value
 5. **Automatically handles validation** by detecting errors from the card form context
 
+## CSS Custom Properties
+
+| Property                                   | Description                           |
+| ------------------------------------------ | ------------------------------------- |
+| `--primer-color-text-negative`             | Error message text color              |
+| `--primer-color-border-outlined-error`     | Input border color in error state     |
+| `--primer-color-background-outlined-error` | Input background color in error state |
+| `--primer-width-error`                     | Input border width in error state     |
+| `--primer-typography-error-font`           | Error message font family             |
+| `--primer-typography-error-size`           | Error message font size               |
+| `--primer-typography-error-weight`         | Error message font weight             |
+| `--primer-typography-error-line-height`    | Error message line height             |
+| `--primer-typography-error-letter-spacing` | Error message letter spacing          |
+
 ## DOM Structure
 
 The component renders the following DOM structure:

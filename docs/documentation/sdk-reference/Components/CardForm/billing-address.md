@@ -101,43 +101,18 @@ The component automatically handles:
 
 All validation rules are controlled through your Dashboard settings, ensuring consistency across your payment flows without requiring code changes.
 
-## Styling
+## CSS Custom Properties
 
-The billing address component can be customized using CSS custom properties. Below is the complete list of available CSS variables:
-
-| Property                                      | Purpose                           |
-| --------------------------------------------- | --------------------------------- |
-| `--primer-space-xsmall`                       | Extra small spacing               |
-| `--primer-space-small`                        | Small spacing                     |
-| `--primer-space-medium`                       | Medium spacing                    |
-| `--primer-space-large`                        | Large spacing                     |
-| `--primer-color-text-primary`                 | Primary text color                |
-| `--primer-color-text-placeholder`             | Placeholder text color            |
-| `--primer-color-text-disabled`                | Disabled text color               |
-| `--primer-color-border-outlined-default`      | Default border color              |
-| `--primer-color-border-outlined-focus`        | Focus state border color          |
-| `--primer-color-border-outlined-hover`        | Hover state border color          |
-| `--primer-color-border-outlined-active`       | Active state border color         |
-| `--primer-color-border-outlined-disabled`     | Disabled state border color       |
-| `--primer-color-border-outlined-error`        | Error state border color          |
-| `--primer-color-background-outlined-default`  | Default background color          |
-| `--primer-color-background-outlined-hover`    | Hover state background color      |
-| `--primer-color-background-outlined-active`   | Active state background color     |
-| `--primer-color-background-outlined-disabled` | Disabled state background color   |
-| `--primer-color-background-outlined-error`    | Error state background color      |
-| `--primer-width-error`                        | Input border width in error state |
-| `--primer-radius-small`                       | Border radius                     |
-| `--primer-typography-body-large-font`         | Large body font family            |
-| `--primer-typography-body-large-size`         | Large body font size              |
-| `--primer-typography-body-large-weight`       | Large body font weight            |
-| `--primer-typography-body-large-line-height`  | Large body line height            |
-| `--primer-typography-body-medium-font`        | Medium body font family           |
-| `--primer-color-text-negative`                | Error message text color          |
-| `--primer-typography-error-font`              | Error message font family         |
-| `--primer-typography-error-size`              | Error message font size           |
-| `--primer-typography-error-weight`            | Error message font weight         |
-| `--primer-typography-error-line-height`       | Error message line height         |
-| `--primer-typography-error-letter-spacing`    | Error message letter spacing      |
+| Property                                     | Description                      |
+| -------------------------------------------- | -------------------------------- |
+| `--primer-space-small`                       | Spacing for title bottom margin  |
+| `--primer-space-medium`                      | Gap between form fields and rows |
+| `--primer-space-large`                       | Spacing for title top margin     |
+| `--primer-color-text-primary`                | Title text color                 |
+| `--primer-typography-body-medium-font`       | Title font family                |
+| `--primer-typography-body-large-size`        | Title font size                  |
+| `--primer-typography-body-large-weight`      | Title font weight                |
+| `--primer-typography-body-large-line-height` | Title line height                |
 
 ## Key Considerations
 

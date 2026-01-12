@@ -74,19 +74,6 @@ The component uses Lit's `@consume` decorator to subscribe to SDK state changes 
 - `paymentFailure` - Displays error messages when payment processing fails
 - `isProcessing` - Hides errors during active payment processing
 
-## CSS Custom Properties
-
-The error message container can be styled using the following CSS custom properties:
-
-| Property                                   | Purpose                      |
-| ------------------------------------------ | ---------------------------- |
-| `--primer-color-text-negative`             | Error message text color     |
-| `--primer-typography-error-font`           | Error message font family    |
-| `--primer-typography-error-size`           | Error message font size      |
-| `--primer-typography-error-weight`         | Error message font weight    |
-| `--primer-typography-error-line-height`    | Error message line height    |
-| `--primer-typography-error-letter-spacing` | Error message letter spacing |
-
 ## Related Components
 
 - [`<primer-checkout>`](/sdk-reference/Components/primer-checkout-doc) - The main checkout container

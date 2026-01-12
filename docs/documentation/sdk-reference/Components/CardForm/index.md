@@ -132,6 +132,16 @@ This renders a complete card form with:
 </primer-card-form>
 ```
 
+### Hiding Labels
+
+Use the `hide-labels` attribute to hide labels on all card input fields:
+
+```html
+<primer-card-form hide-labels>
+  <!-- Card inputs will render without visible labels -->
+</primer-card-form>
+```
+
 ## DOM Structure
 
 ```mermaid
@@ -144,7 +154,9 @@ flowchart TD
     F --> G[primer-input-card-expiry]
     F --> H[primer-input-cvv]
     D --> I[primer-input-card-holder-name]
+    D --> K[primer-billing-address]
     B --> J[primer-card-form-submit]
+    B --> L[primer-error-message]
 
     style A fill:#f9f9f9,stroke:#2f98ff,stroke-width:2px
     style B fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
@@ -163,18 +175,25 @@ When no custom content is provided, the component renders the following DOM stru
       <primer-input-cvv></primer-input-cvv>
     </div>
     <primer-input-card-holder-name></primer-input-card-holder-name>
+    <primer-billing-address></primer-billing-address>
   </div>
   <primer-card-form-submit></primer-card-form-submit>
+  <primer-error-message></primer-error-message>
 </form>
 ```
+
+:::note Conditional Fields
+The `primer-input-card-holder-name` field visibility and requirement can be configured through the SDK options via `options.card.cardholderName.visible` and `options.card.cardholderName.required`. By default, the cardholder name field is visible and required.
+:::
 
 With custom content, your slotted content replaces the default structure.
 
 ## Properties
 
-| Name       | Type      | Description                                               | Default |
-| ---------- | --------- | --------------------------------------------------------- | ------- |
-| `disabled` | `Boolean` | When true, disables the card form and prevents submission | `false` |
+| Name          | Type      | Description                                               | Default |
+| ------------- | --------- | --------------------------------------------------------- | ------- |
+| `disabled`    | `Boolean` | When true, disables the card form and prevents submission | `false` |
+| `hide-labels` | `Boolean` | When true, hides labels on all card input fields          | `false` |
 
 ## Slots
 

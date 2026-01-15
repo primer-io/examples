@@ -36,6 +36,8 @@ All Primer SDK events are CustomEvents with `bubbles: true` and `composed: true`
 | `primer:vault-submit`                | `VaultSubmitPayload`              | Triggerable event to submit vault payment programmatically              |
 | `primer:show-other-payments-toggle`  | `undefined`                       | Triggerable event to toggle other payment methods visibility            |
 | `primer:show-other-payments-toggled` | `ShowOtherPaymentsToggledPayload` | Dispatched when other payment methods toggle state changes              |
+| `primer:dialog-open`                 | `undefined`                       | Dispatched when an overlay dialog opens (redirect payments, 3DS)        |
+| `primer:dialog-close`                | `undefined`                       | Dispatched when an overlay dialog closes (redirect payments, 3DS)       |
 
 ### `primer:state-change`
 
@@ -465,6 +467,86 @@ document.addEventListener('primer:show-other-payments-toggled', ((
     : 'Show Other Payment Methods';
   toggleButton.setAttribute('aria-expanded', String(expanded));
 }) as EventListener);
+```
+
+### `primer:dialog-open`
+
+:::tip New in v0.13.0
+This event fires when overlay dialogs are displayed during payment flows.
+:::
+
+Dispatched when an overlay dialog opens. This occurs during:
+
+- Redirect-based payment methods (popup flow with overlay)
+- 3D Secure authentication challenges
+
+**Payload Properties:**
+
+This event has no detail payload (`undefined`).
+
+**Usage Note:** Listen to this event to disable page interactions or show loading states while a dialog is active.
+
+**Example:**
+
+```typescript
+document.addEventListener('primer:dialog-open', () => {
+  console.log('Dialog opened');
+  // Disable background page interactions
+  document.body.classList.add('modal-open');
+});
+```
+
+### `primer:dialog-close`
+
+:::tip New in v0.13.0
+This event fires when overlay dialogs are closed during payment flows.
+:::
+
+Dispatched when an overlay dialog closes. This occurs when:
+
+- Payment completes successfully
+- Payment fails
+- User closes or cancels the dialog
+- 3D Secure challenge completes
+
+**Payload Properties:**
+
+This event has no detail payload (`undefined`).
+
+**Usage Note:** Listen to this event to re-enable page interactions. Payment success/failure should be handled via the `primer:payment-success` and `primer:payment-failure` events.
+
+**Example:**
+
+```typescript
+document.addEventListener('primer:dialog-close', () => {
+  console.log('Dialog closed');
+  // Re-enable background page interactions
+  document.body.classList.remove('modal-open');
+});
+```
+
+**Combined Example:**
+
+```typescript
+const checkout = document.querySelector('primer-checkout');
+
+// Track dialog lifecycle
+checkout.addEventListener('primer:dialog-open', () => {
+  disablePageInteractions();
+});
+
+checkout.addEventListener('primer:dialog-close', () => {
+  enablePageInteractions();
+});
+
+// Handle payment results separately
+checkout.addEventListener('primer:payment-success', (event) => {
+  console.log('Payment succeeded:', event.detail);
+});
+
+checkout.addEventListener('primer:payment-failure', (event) => {
+  console.log('Payment failed:', event.detail.error.message);
+});
 ```
 
 ## PrimerJS Callbacks

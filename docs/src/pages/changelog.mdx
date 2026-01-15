@@ -8,6 +8,26 @@ sidebar_position: 99
 
 This page documents all notable changes to Primer Checkout. We follow [Semantic Versioning](https://semver.org/) for our releases.
 
+## v0.13.0 - Redirect Payment Methods (14-Jan-2026)
+
+:::info New Feature
+The SDK now supports redirect-based Alternative Payment Methods (APMs) with popup-first flow and automatic fallback to full-page redirect.
+:::
+
+**Key Changes:**
+
+- **Redirect Payment Flow**: Popup-first approach with overlay dialog, automatic fallback to full redirect for WebViews and blocked popups
+- **New `redirect` Options**: `returnUrl`, `forceRedirect`, `resumePaymentOnPopupClosure`
+- **New Events**: `primer:dialog-open`, `primer:dialog-close`
+- **`enabledPaymentMethods` Default Change**: Now defaults to all supported payment methods instead of just `PAYMENT_CARD`. If not specified, all SDK Core-supported payment methods will be enabled.
+
+**Documentation:**
+
+- [SDK Options Reference - Redirect Options](/sdk-reference/sdk-options-reference#redirect-options) - Complete configuration options and behavior details
+- [Events & Callbacks Reference](/sdk-reference/events-callbacks) - Dialog events documentation
+
+---
+
 ## v.0.12.5 - (13-Jan-2026)
 
 :::warning Bug Fix

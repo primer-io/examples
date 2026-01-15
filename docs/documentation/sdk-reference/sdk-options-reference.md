@@ -594,11 +594,11 @@ Configure which payment methods are available and displayed in the checkout.
 ### enabledPaymentMethods
 
 **Type**: `PaymentMethodType[]`
-**Default**: `[PaymentMethodType.PAYMENT_CARD]`
+**Default**: All supported payment methods
 
-Specifies which payment methods are enabled and displayed in the checkout. By default, only card payments are enabled. Configure this to enable specific payment methods for your checkout flow.
+Specifies which payment methods are enabled and displayed in the checkout. By default, all SDK Core-supported payment methods are enabled. Configure this to restrict to specific payment methods for your checkout flow.
 
-**Available payment methods**: `PAYMENT_CARD`, `PAYPAL`, `ADYEN_BLIK`
+**Available payment methods**: `PAYMENT_CARD`, `APPLE_PAY`, `GOOGLE_PAY`, `PAYPAL`, `ADYEN_BLIK`, and all redirect-based APMs
 
 **Example:**
 
@@ -616,7 +616,12 @@ const options = {
 **Common Use Cases:**
 
 ```javascript
-// Card payments only (default)
+// All payment methods (default) - no configuration needed
+const checkout = document.querySelector('primer-checkout');
+checkout.setAttribute('client-token', 'token');
+// All supported payment methods will be displayed
+
+// Card payments only
 const options = {
   enabledPaymentMethods: [PaymentMethodType.PAYMENT_CARD],
 };
@@ -633,6 +638,93 @@ const options = {
 :::info Payment Method Configuration
 Payment methods must be configured in your Primer Dashboard and included in your client token to be available. The `enabledPaymentMethods` option filters which configured methods are displayed in the checkout UI.
 :::
+
+## Redirect Options
+
+:::info New in v0.13.0
+Configure redirect-based Alternative Payment Methods (APMs) with popup-first or full-redirect experiences.
+:::
+
+Configure how redirect-based payment methods handle the payment flow. The SDK uses a popup-first approach with intelligent fallback behavior.
+
+### redirect.returnUrl
+
+**Type**: `string`
+**Default**: Current page URL (`window.location.href`)
+
+URL to redirect back to after off-site payment completion. If not provided, the current page URL will be used.
+
+**Example:**
+
+```javascript
+const options = {
+  redirect: {
+    returnUrl: 'https://example.com/checkout/complete',
+  },
+};
+```
+
+### redirect.forceRedirect
+
+**Type**: `boolean`
+**Default**: `false`
+
+Force redirect flow for all supported payment methods. When `true`, always uses full-page redirect instead of popup. The SDK automatically uses full redirect in these scenarios regardless of this setting:
+
+- Customer is using an in-app browser (WebView)
+- Popup is blocked by the browser
+
+**Example:**
+
+```javascript
+const options = {
+  redirect: {
+    forceRedirect: true, // Always use full-page redirect
+  },
+};
+```
+
+### redirect.resumePaymentOnPopupClosure
+
+**Type**: `boolean`
+**Default**: `false`
+
+Whether to resume the payment when the popup is closed by the user. When `false` (default), the payment method will be deselected, allowing the user to select a different payment method.
+
+**Example:**
+
+```javascript
+const options = {
+  redirect: {
+    resumePaymentOnPopupClosure: true, // Continue polling even if popup is closed
+  },
+};
+```
+
+### Popup Flow Behavior
+
+When a customer selects a redirect payment method with the default popup flow:
+
+1. A popup window opens displaying the payment provider's page
+2. An overlay dialog appears on the merchant site
+3. The overlay includes a "Bring back the payment page" button to refocus the popup
+4. Payment status is polled automatically to detect completion
+5. On completion, the popup and overlay close automatically
+
+**Events fired during popup flow:**
+
+- `primer:dialog-open` - When the overlay dialog opens
+- `primer:dialog-close` - When the overlay dialog closes
+
+**Behavior by environment:**
+
+| Environment               | Default Behavior                                         |
+| ------------------------- | -------------------------------------------------------- |
+| Desktop browsers          | Popup with overlay dialog                                |
+| Mobile browsers           | Popup with overlay (full redirect may provide better UX) |
+| In-app browsers (WebView) | Full-page redirect (automatic fallback)                  |
+| Popup blocked             | Full-page redirect (automatic fallback)                  |
+| `forceRedirect: true`     | Full-page redirect                                       |
 
 ## Complete Options Reference
 
@@ -717,6 +809,13 @@ checkout.options = {
   submitButton: {
     amountVisible: true,
     useBuiltInButton: true,
+  },
+
+  // Redirect Options (for redirect-based APMs)
+  redirect: {
+    returnUrl: 'https://example.com/checkout/complete', // Optional: redirect URL after payment
+    forceRedirect: false, // Optional: always use full-page redirect
+    resumePaymentOnPopupClosure: false, // Optional: resume payment if popup closed
   },
 };
 ```

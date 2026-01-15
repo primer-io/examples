@@ -22,7 +22,7 @@ The following payment methods work with the default SDK Core engine:
 
 ### PAYMENT_CARD
 
-Full-featured card payment form with field validation and tokenization. This is the default payment method if `enabledPaymentMethods` is not specified.
+Full-featured card payment form with field validation and tokenization.
 
 ### APPLE_PAY
 
@@ -40,9 +40,36 @@ PayPal button integration. See the [PayPal integration guide](/sdk-reference/pay
 
 Polish payment method requiring one-time password (OTP) verification. Popular in Poland for bank transfers.
 
+## Redirect Payment Methods
+
+:::info New in v0.13.0
+The SDK now supports redirect-based Alternative Payment Methods (APMs) with intelligent popup and redirect handling. Redirect APMs are enabled by default.
+:::
+
+Redirect-based payment methods take the customer off-site to complete payment with the provider (e.g., bank login, wallet authentication). The SDK handles this flow automatically with:
+
+- **Popup-first approach**: Opens the provider's page in a popup with an overlay on your site
+- **Automatic fallback**: Uses full-page redirect when popups are blocked or in WebViews
+
+### Configuring Redirect Behavior
+
+```javascript
+const checkout = document.querySelector('primer-checkout');
+checkout.setAttribute('client-token', 'your-client-token');
+
+checkout.options = {
+  redirect: {
+    returnUrl: 'https://example.com/checkout/complete', // Where to return after redirect
+    forceRedirect: false, // Force full-page redirect instead of popup
+  },
+};
+```
+
+See the [SDK Options Reference - Redirect Options](/sdk-reference/sdk-options-reference#redirect-options) for complete configuration details.
+
 ## Configuration
 
-By default, only `PAYMENT_CARD` is enabled. Configure payment methods via `enabledPaymentMethods`:
+By default, all SDK Core-supported payment methods are enabled. Use `enabledPaymentMethods` to restrict which payment methods are displayed:
 
 ```typescript
 import { PaymentMethodType } from '@primer-io/primer-js';
@@ -50,6 +77,7 @@ import { PaymentMethodType } from '@primer-io/primer-js';
 const checkout = document.querySelector('primer-checkout');
 checkout.setAttribute('client-token', 'your-client-token');
 checkout.options = {
+  // Only show card, PayPal, and BLIK
   enabledPaymentMethods: [
     PaymentMethodType.PAYMENT_CARD,
     PaymentMethodType.PAYPAL,
@@ -61,23 +89,15 @@ checkout.options = {
 **Default behavior:**
 
 ```javascript
-// These are equivalent:
-
-// Default - no options needed
+// All supported payment methods enabled by default
 const checkout = document.querySelector('primer-checkout');
 checkout.setAttribute('client-token', 'token');
 
-// Explicit default
+// No enabledPaymentMethods needed - all supported methods will display
+
 const checkout = document.querySelector('primer-checkout');
 checkout.setAttribute('client-token', 'token');
-checkout.options = {
-  enabledPaymentMethods: [PaymentMethodType.PAYMENT_CARD],
-};
 ```
-
-:::note Type Restriction is Temporary
-The `enabledPaymentMethods` array currently accepts only SDK Core-supported payment methods for type safety. This restriction is temporary during active development. As new payment methods are added to SDK Core, they will be reflected in the `PaymentMethodType` enum.
-:::
 
 ## Legacy SDK Support
 

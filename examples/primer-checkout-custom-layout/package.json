@@ -11,7 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@primer-io/primer-js": "0.3.3",
+    "@primer-io/primer-js": "1.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

@@ -3952,15 +3952,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@primer-io/primer-js@npm:0.3.3":
-  version: 0.3.3
-  resolution: "@primer-io/primer-js@npm:0.3.3"
-  peerDependencies:
-    react: ^18.2.0 || ^19.0.0
-  peerDependenciesMeta:
-    react:
-      optional: true
-  checksum: 10/21a59b1615395ec84f3c8b436fd95d160a446ebd521f270a315eefa36ecbff472a712da73d8ac653ef6ff8a4f10f20aeeaa83bdd3831451adc914c974c109550
+"@primer-io/primer-js@npm:1.0.1":
+  version: 1.0.1
+  resolution: "@primer-io/primer-js@npm:1.0.1"
+  checksum: 10/c70fa1ea49a63c5e34a42bd35b0c88d74f5e55bab7c5f4b72411ff050fb77cf7e630028e0e4624e80256d7cc291d4046758854e640260db87bf9ca38bb2f6747
   languageName: node
   linkType: hard
 
@@ -14863,7 +14858,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "primer-checkout-basic@workspace:examples/primer-checkout-basic"
   dependencies:
-    "@primer-io/primer-js": "npm:0.3.3"
+    "@primer-io/primer-js": "npm:1.0.1"
     typescript: "npm:5.7.3"
     vite: "npm:^6.2.0"
   languageName: unknown
@@ -14874,7 +14869,7 @@ __metadata:
   resolution: "primer-checkout-custom-form@workspace:examples/primer-checkout-custom-form"
   dependencies:
     "@eslint/js": "npm:^9.21.0"
-    "@primer-io/primer-js": "npm:0.3.3"
+    "@primer-io/primer-js": "npm:1.0.1"
     "@types/react": "npm:^19.0.10"
     "@types/react-dom": "npm:^19.0.4"
     "@vitejs/plugin-react": "npm:^4.3.4"
@@ -14895,7 +14890,7 @@ __metadata:
   resolution: "primer-checkout-custom-layout@workspace:examples/primer-checkout-custom-layout"
   dependencies:
     "@eslint/js": "npm:^9.21.0"
-    "@primer-io/primer-js": "npm:0.3.3"
+    "@primer-io/primer-js": "npm:1.0.1"
     "@types/react": "npm:^19.0.10"
     "@types/react-dom": "npm:^19.0.4"
     "@vitejs/plugin-react": "npm:^4.3.4"
@@ -14915,7 +14910,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "primer-checkout-themes@workspace:examples/primer-checkout-themes"
   dependencies:
-    "@primer-io/primer-js": "npm:0.3.3"
+    "@primer-io/primer-js": "npm:1.0.1"
     typescript: "npm:5.7.3"
     vite: "npm:^6.2.0"
   languageName: unknown
@@ -14925,7 +14920,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "primer-checkout-vaulted@workspace:examples/primer-checkout-vaulted"
   dependencies:
-    "@primer-io/primer-js": "npm:0.3.3"
+    "@primer-io/primer-js": "npm:1.0.1"
     typescript: "npm:5.7.3"
     vite: "npm:^6.2.0"
   languageName: unknown

@@ -95,6 +95,14 @@ const config: Config = {
         },
       },
     ],
+    announcementBar: {
+      id: 'docs_deprecated',
+      content:
+        '⚠️ <strong>These docs are outdated and no longer maintained.</strong> Please visit the <a target="_blank" rel="noopener noreferrer" href="https://primer.io/docs/checkout/primer-checkout/product-overview"><strong>official Primer documentation</strong></a> for current information.',
+      backgroundColor: '#ffa500',
+      textColor: '#000000',
+      isCloseable: false,
+    },
     colorMode: {
       defaultMode: 'light',
       disableSwitch: true,

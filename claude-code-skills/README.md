@@ -29,6 +29,38 @@ Skills are packaged knowledge bases that AI coding assistants can reference whil
 
 **Directory:** [`primer-web-components/`](./primer-web-components)
 
+### primer-ios-checkout
+
+**Version:** 1.0.0
+
+**What it includes:**
+
+- Complete scope protocol reference for all payment method scopes
+- SwiftUI integration patterns (NavigationStack, sheets, full-screen covers)
+- UIKit support via PrimerCheckoutPresenter
+- Design token theming with PrimerCheckoutTheme
+- State management via AsyncStream and onCompletion
+- Card form customization with field-level control
+- Common troubleshooting scenarios
+
+**Directory:** [`primer-ios-checkout/`](./primer-ios-checkout)
+
+### primer-android-checkout
+
+**Version:** 1.0.0
+
+**What it includes:**
+
+- Complete composable API reference for Checkout Sheet and Host
+- Controller pattern with remember\*Controller functions
+- Card form customization with slot-based defaults
+- Material 3 theming integration with PrimerTheme
+- State observation with StateFlow and lifecycle-aware collection
+- Payment method list customization
+- Common troubleshooting scenarios
+
+**Directory:** [`primer-android-checkout/`](./primer-android-checkout)
+
 ## Installation
 
 ### Method 1: Via Marketplace (Recommended)
@@ -39,8 +71,10 @@ The easiest way to install Primer skills is through the Claude Code marketplace:
 # Add Primer marketplace
 /plugin marketplace add primer-io/examples
 
-# Install the web components skill
+# Install skills (choose one or more)
 /plugin install primer-web-components@primer-skills
+/plugin install primer-ios-checkout@primer-skills
+/plugin install primer-android-checkout@primer-skills
 ```
 
 After installation, restart Claude Code. The skill will automatically activate when you're working with Primer components.
@@ -52,17 +86,22 @@ For Claude Code, Cursor, or other AI coding assistants:
 ```bash
 cd ~/.claude/skills  # or ~/.cursor/skills for Cursor
 git clone --depth 1 https://github.com/primer-io/examples.git temp
-mv temp/claude-code-skills/primer-web-components ./
+
+# Copy the skill(s) you need
+mv temp/claude-code-skills/primer-web-components ./      # Web
+mv temp/claude-code-skills/primer-ios-checkout ./         # iOS
+mv temp/claude-code-skills/primer-android-checkout ./     # Android
+
 rm -rf temp
 ```
 
 Or download directly from GitHub:
 
-1. Navigate to [`claude-code-skills/primer-web-components`](https://github.com/primer-io/examples/tree/main/claude-code-skills/primer-web-components)
+1. Navigate to the skill directory on [GitHub](https://github.com/primer-io/examples/tree/main/claude-code-skills)
 2. Download the folder (use repo's "Code" → "Download ZIP" and extract the skill folder)
 3. Copy to your skills directory:
-   - **macOS/Linux:** `~/.claude/skills/primer-web-components/`
-   - **Windows:** `%USERPROFILE%\.claude\skills\primer-web-components\`
+   - **macOS/Linux:** `~/.claude/skills/<skill-name>/`
+   - **Windows:** `%USERPROFILE%\.claude\skills\<skill-name>\`
 4. Restart your AI assistant
 
 ## Verifying Installation
@@ -70,7 +109,7 @@ Or download directly from GitHub:
 After installation, verify the skill is loaded by asking your AI assistant:
 
 ```
-Do you have access to the Primer web components skill?
+Do you have access to the Primer <web components|iOS checkout|Android checkout> skill?
 ```
 
 The assistant should confirm it has access to the skill documentation.
@@ -95,14 +134,15 @@ The assistant should confirm it has access to the skill documentation.
 
 ## Version History
 
+### v1.1.0 (2026-03-03)
+
+- Added `primer-ios-checkout` skill for iOS CheckoutComponents SDK
+- Added `primer-android-checkout` skill for Android CheckoutComponents SDK
+
 ### v1.0.0 (2025-10-28)
 
 - Initial release
-- Comprehensive component reference
-- React 18 & 19 integration patterns
-- SSR support documentation
-- CSS theming guide
-- Common troubleshooting scenarios
+- `primer-web-components` skill with comprehensive component reference
 
 ## Contributing
 

@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Official Primer SDK and component skills for payment integration",
-    "version": "1.0.0"
+    "version": "1.1.0"
   },
   "plugins": [
     {
@@ -15,6 +15,20 @@
       "source": "./claude-code-skills",
       "strict": false,
       "skills": ["./primer-web-components"]
+    },
+    {
+      "name": "primer-ios-checkout",
+      "description": "Build checkout and payment experiences using Primer's iOS CheckoutComponents SDK. Covers SwiftUI scope-based architecture, UIKit support, theming, state management, and all payment method scope APIs.",
+      "source": "./claude-code-skills",
+      "strict": false,
+      "skills": ["./primer-ios-checkout"]
+    },
+    {
+      "name": "primer-android-checkout",
+      "description": "Build checkout and payment experiences using Primer's Android CheckoutComponents SDK. Covers Jetpack Compose composables, controller pattern, slot-based customization, Material 3 theming, and complete API reference.",
+      "source": "./claude-code-skills",
+      "strict": false,
+      "skills": ["./primer-android-checkout"]
     }
   ]
 }

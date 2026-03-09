@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "web-components.primer.io"
+        }
+      ],
+      "destination": "https://primer.io/docs/checkout/primer-checkout/product-overview",
+      "permanent": true
+    }
+  ]
+}

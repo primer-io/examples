@@ -1,6 +1,68 @@
 # Primer Android Checkout -- Composable Reference
 
-Flat API reference for all composables, controllers, state types, configuration types, and theming types in the Primer Android Checkout SDK (v3.0.0-beta). Optimized for AI lookup -- no narrative, signatures and types only.
+Flat API reference for all composables, controllers, state types, configuration types, and theming types in the Primer Android Checkout SDK (v3.0.0-beta.3). Optimized for AI lookup -- no narrative, signatures and types only.
+
+---
+
+## Import Map
+
+IMPORTANT: Use these exact imports when writing code. The SDK package structure does NOT follow a flat `api.*` convention.
+
+```kotlin
+// Checkout presentation (sheet + host + remember function)
+import io.primer.checkout.api.checkout.PrimerCheckoutSheet
+import io.primer.checkout.api.checkout.PrimerCheckoutHost
+import io.primer.checkout.api.checkout.rememberPrimerCheckoutController
+
+// Checkout state, events, controller interface
+import io.primer.checkout.api.state.PrimerCheckoutController
+import io.primer.checkout.api.state.PrimerCheckoutState
+import io.primer.checkout.api.state.PrimerCheckoutEvent
+import io.primer.checkout.api.state.formatAmount  // extension on PrimerCheckoutController
+
+// Payment method model (used by PrimerPaymentMethods composable)
+import io.primer.checkout.api.checkout.models.PrimerPaymentMethod
+
+// Card form
+import io.primer.checkout.components.card.PrimerCardForm
+import io.primer.checkout.components.card.CardFormDefaults
+import io.primer.checkout.components.card.PrimerCardFormController
+import io.primer.checkout.components.card.rememberCardFormController
+import io.primer.checkout.components.card.SyncValidationError
+
+// Payment methods list
+import io.primer.checkout.components.paymentMethods.PrimerPaymentMethods
+import io.primer.checkout.components.paymentMethods.PaymentMethodsDefaults
+import io.primer.checkout.components.paymentMethods.PrimerPaymentMethodsController
+import io.primer.checkout.components.paymentMethods.rememberPaymentMethodsController
+
+// Vaulted payment methods
+import io.primer.checkout.components.paymentMethods.PrimerVaultedPaymentMethods
+import io.primer.checkout.components.paymentMethods.VaultedPaymentMethodsDefaults
+import io.primer.checkout.components.paymentMethods.PrimerVaultedPaymentMethodsController
+import io.primer.checkout.components.paymentMethods.rememberVaultedPaymentMethodsController
+
+// Country selection
+import io.primer.checkout.components.country.PrimerCountrySelectionController
+
+// Theming
+import io.primer.checkout.PrimerTheme
+import io.primer.checkout.LocalPrimerTheme
+import io.primer.checkout.internal.tokens.LightColorTokens
+import io.primer.checkout.internal.tokens.DarkColorTokens
+import io.primer.checkout.internal.tokens.BorderWidthTokens
+import io.primer.checkout.internal.tokens.RadiusTokens
+import io.primer.checkout.internal.tokens.SizeTokens
+import io.primer.checkout.internal.tokens.SpacingTokens
+import io.primer.checkout.internal.tokens.TypographyTokens
+
+// Common types from the core SDK (transitive dependencies)
+import io.primer.android.components.domain.inputs.models.PrimerInputElementType
+import io.primer.android.components.domain.core.models.card.PrimerCardNetwork
+import io.primer.android.clientSessionActions.domain.models.PrimerCountry
+import io.primer.android.domain.tokenization.models.PrimerVaultedPaymentMethod
+import io.primer.android.domain.action.models.PrimerClientSession
+```
 
 ---
 
@@ -9,6 +71,7 @@ Flat API reference for all composables, controllers, state types, configuration 
 ### rememberPrimerCheckoutController
 
 ```kotlin
+@ExperimentalPrimerApi
 @Composable
 fun rememberPrimerCheckoutController(
     clientToken: String,
@@ -55,6 +118,29 @@ Requires `PrimerCheckoutHost` or `PrimerCheckoutSheet` scope.
 @Composable
 fun rememberCountrySelectionController(): PrimerCountrySelectionController
 ```
+
+### rememberKlarnaController
+
+```kotlin
+@Composable
+fun rememberKlarnaController(
+    checkout: PrimerCheckoutController,
+): PrimerKlarnaController
+```
+
+Requires `PrimerCheckoutHost` or `PrimerCheckoutSheet` scope.
+
+### rememberQrCodeController
+
+```kotlin
+@Composable
+fun rememberQrCodeController(
+    checkout: PrimerCheckoutController,
+    paymentMethodType: String,
+): PrimerQrCodeController
+```
+
+Requires `PrimerCheckoutHost` or `PrimerCheckoutSheet` scope.
 
 ---
 
@@ -146,6 +232,49 @@ interface PrimerCountrySelectionController {
 }
 ```
 
+### PrimerKlarnaController
+
+```kotlin
+@Stable
+interface PrimerKlarnaController {
+    val state: StateFlow<State>
+    fun selectPaymentCategory(context: Context, categoryId: String)
+    fun submitPayment()
+
+    data class Category(val id: String, val name: String, val url: String)
+    data class State(
+        val step: Step,
+        val categories: List<Category>,
+        val selectedCategoryId: String?,
+        val paymentView: WeakReference<View>?,
+    )
+    sealed interface Step {
+        data object Loading : Step
+        data object CategorySelection : Step
+        data object ViewReady : Step
+        data object AuthorizationStarted : Step
+    }
+}
+```
+
+### PrimerQrCodeController
+
+```kotlin
+@Stable
+interface PrimerQrCodeController {
+    val state: StateFlow<State>
+
+    sealed class State {
+        data object Loading : State()
+        data class Ready(
+            val qrCodeBase64: String,
+            val qrCodeUrl: String? = null,
+            val expiresAt: String? = null,
+        ) : State()
+    }
+}
+```
+
 ---
 
 ## Composable Components
@@ -186,7 +315,11 @@ object PrimerCheckoutSheetDefaults {
     @Composable fun Loading()
     @Composable fun Success(checkoutData: PrimerCheckoutData)
     @Composable fun Error(error: PrimerError)
-    @Composable fun PaymentMethodSelection(checkout: PrimerCheckoutController)
+    @Composable fun PaymentMethodSelection(
+        checkout: PrimerCheckoutController,
+        vaultedMethods: @Composable () -> Unit = { VaultedMethods(checkout) },
+        paymentMethods: @Composable () -> Unit = { PaymentMethods(checkout) },
+    )
     @Composable fun VaultedMethods(checkout: PrimerCheckoutController)
     @Composable fun PaymentMethods(checkout: PrimerCheckoutController)
 }
@@ -223,24 +356,24 @@ fun PrimerCardForm(
 ```kotlin
 @Composable
 fun CardFormDefaults.CardDetailsContent(
-    controller: PrimerCardFormController,
-    cardNumber: @Composable () -> Unit = { CardNumberField(controller) },
-    expiryDate: @Composable () -> Unit = { ExpiryField(controller) },
-    cvv: @Composable () -> Unit = { CvvField(controller) },
-    cardholderName: @Composable () -> Unit = { CardholderField(controller) },
+    cardFormState: PrimerCardFormController,
+    cardNumber: @Composable () -> Unit = { CardNumberField(cardFormState) },
+    expiryDate: @Composable () -> Unit = { ExpiryField(cardFormState) },
+    cvv: @Composable () -> Unit = { CvvField(cardFormState) },
+    cardholderName: @Composable () -> Unit = { CardholderField(cardFormState) },
 )
 
 @Composable
 fun CardFormDefaults.BillingAddressContent(
-    controller: PrimerCardFormController,
-    countryCode: @Composable () -> Unit = { CountryCodeField(controller) },
-    firstName: @Composable () -> Unit = { FirstNameField(controller) },
-    lastName: @Composable () -> Unit = { LastNameField(controller) },
-    addressLine1: @Composable () -> Unit = { AddressLine1Field(controller) },
-    addressLine2: @Composable () -> Unit = { AddressLine2Field(controller) },
-    city: @Composable () -> Unit = { CityField(controller) },
-    state: @Composable () -> Unit = { StateField(controller) },
-    postalCode: @Composable () -> Unit = { PostalCodeField(controller) },
+    cardFormState: PrimerCardFormController,
+    countryCode: @Composable () -> Unit = { CountryCodeField(cardFormState) },
+    firstName: @Composable () -> Unit = { FirstNameField(cardFormState) },
+    lastName: @Composable () -> Unit = { LastNameField(cardFormState) },
+    addressLine1: @Composable () -> Unit = { AddressLine1Field(cardFormState) },
+    addressLine2: @Composable () -> Unit = { AddressLine2Field(cardFormState) },
+    city: @Composable () -> Unit = { CityField(cardFormState) },
+    stateField: @Composable () -> Unit = { StateField(cardFormState) },
+    postalCode: @Composable () -> Unit = { PostalCodeField(cardFormState) },
 )
 
 @Composable
@@ -304,11 +437,21 @@ object PaymentMethodsDefaults {
 fun PrimerVaultedPaymentMethods(
     controller: PrimerVaultedPaymentMethodsController,
     modifier: Modifier = Modifier,
-    header: @Composable () -> Unit = { VaultedPaymentMethodsDefaults.SectionHeader() },
-    item: @Composable (PrimerVaultedPaymentMethod) -> Unit = {
-        VaultedPaymentMethodsDefaults.Method(it, controller)
+    header: @Composable (onShowAll: () -> Unit) -> Unit = { onShowAll ->
+        VaultedPaymentMethodsDefaults.SectionHeader(onShowAll = onShowAll)
     },
-    submitButton: @Composable () -> Unit = {},
+    item: @Composable (
+        method: PrimerVaultedPaymentMethod,
+        isSelected: Boolean,
+        onSelect: () -> Unit,
+    ) -> Unit = { method, isSelected, onSelect ->
+        VaultedPaymentMethodsDefaults.Method(method, isSelected, onSelect)
+    },
+    submitButton: @Composable (
+        isLoading: Boolean,
+        enabled: Boolean,
+        onSubmit: () -> Unit,
+    ) -> Unit = { isLoading, enabled, onSubmit -> },
 )
 ```
 
@@ -316,8 +459,8 @@ fun PrimerVaultedPaymentMethods(
 
 ```kotlin
 object VaultedPaymentMethodsDefaults {
-    @Composable fun SectionHeader()
-    @Composable fun Method(method: PrimerVaultedPaymentMethod, controller: PrimerVaultedPaymentMethodsController)
+    @Composable fun SectionHeader(onShowAll: () -> Unit)
+    @Composable fun Method(method: PrimerVaultedPaymentMethod, isSelected: Boolean, onSelect: () -> Unit)
 }
 ```
 
@@ -339,10 +482,15 @@ sealed interface PrimerCheckoutState {
 
 ```kotlin
 data class PrimerClientSession(
-    val totalAmount: Int?,
-    val currencyCode: String?,
     val customerId: String?,
     val orderId: String?,
+    val currencyCode: String?,
+    val totalAmount: Int?,
+    val lineItems: List<PrimerLineItem>?,
+    val orderDetails: PrimerOrder?,
+    val customer: PrimerCustomer?,
+    val paymentMethod: PrimerPaymentMethod?,
+    val fees: List<PrimerFee>?,
 )
 ```
 
@@ -359,13 +507,16 @@ sealed interface PrimerCheckoutEvent {
 ### PrimerCheckoutData
 
 ```kotlin
-data class PrimerCheckoutData(val payment: PrimerPayment)
+data class PrimerCheckoutData(
+    val payment: Payment,
+    val additionalInfo: PrimerCheckoutAdditionalInfo? = null,
+)
 ```
 
-### PrimerPayment
+### Payment
 
 ```kotlin
-data class PrimerPayment(val id: String, val orderId: String?)
+data class Payment(val id: String, val orderId: String)
 ```
 
 ### PrimerCardFormController.State
@@ -374,13 +525,13 @@ data class PrimerPayment(val id: String, val orderId: String?)
 data class State(
     val cardFields: List<PrimerInputElementType>,
     val billingFields: List<PrimerInputElementType>,
-    val fieldErrors: List<PrimerFieldError>?,
+    val fieldErrors: List<SyncValidationError>?,
     val data: Map<PrimerInputElementType, String>,
     val isLoading: Boolean,
     val isFormEnabled: Boolean,
     val selectedCountry: PrimerCountry?,
     val networkSelection: NetworkSelection?,
-    val fieldFocusStates: Map<PrimerInputElementType, Boolean>,
+    val fieldFocusStates: Map<PrimerInputElementType, FieldState>,
     val isFormValid: Boolean,
     val vaultOnSuccess: Boolean,
 )
@@ -390,27 +541,33 @@ data class State(
 
 ```kotlin
 data class NetworkSelection(
-    val availableNetworks: List<PrimerCardNetwork>,
     val selectedNetwork: PrimerCardNetwork?,
+    val availableNetworks: List<PrimerCardNetwork>,
+    val isNetworkSelectable: Boolean,
+    val isUserSelected: Boolean,
 )
 ```
 
-### PrimerFieldError
+### FieldState
 
 ```kotlin
-data class PrimerFieldError(
-    val inputElementType: PrimerInputElementType,
-    val errorId: String,
+data class FieldState(
+    val hasFocus: Boolean,
+    val hasBeenFocused: Boolean,
+    val shouldShowError: Boolean,
 )
 ```
 
 ### SyncValidationError
 
 ```kotlin
-class SyncValidationError {
-    val inputElementType: PrimerInputElementType
-    val errorId: String
-}
+data class SyncValidationError(
+    val inputElementType: PrimerInputElementType,
+    val errorId: String,
+    @StringRes val fieldId: Int,
+    @StringRes val errorResId: Int?,
+    @StringRes val errorFormatId: Int?,
+)
 ```
 
 ---
@@ -434,7 +591,7 @@ data class PrimerSettings(
 ### PrimerPaymentHandling
 
 ```kotlin
-enum class PrimerPaymentHandling { AUTO }
+enum class PrimerPaymentHandling { AUTO, MANUAL }
 ```
 
 ### PrimerApiVersion
@@ -553,8 +710,9 @@ class PrimerError {
 data class PrimerPaymentMethod(
     val paymentMethodType: String,
     val paymentMethodName: String?,
-    val iconUrl: String?,
-    val surcharge: Amount?,
+    val supportedPrimerSessionIntents: List<PrimerSessionIntent>,
+    val paymentMethodManagerCategories: List<PrimerPaymentMethodManagerCategory>,
+    val surcharge: Surcharge? = null,
 )
 ```
 
@@ -577,11 +735,16 @@ data class PrimerVaultedPaymentMethod(
 data class PaymentInstrumentData(
     val network: String?,
     val cardholderName: String?,
-    val first6Digits: String?,
-    val last4Digits: String?,
-    val expirationMonth: String?,
-    val expirationYear: String?,
+    val first6Digits: Int?,
+    val last4Digits: Int?,
+    val accountNumberLast4Digits: Int?,
+    val expirationMonth: Int?,
+    val expirationYear: Int?,
     val externalPayerInfo: ExternalPayerInfo?,
+    val klarnaCustomerToken: String?,
+    val sessionData: SessionData?,
+    val paymentMethodType: String?,
+    val sessionInfo: SessionInfo?,
     val binData: BinData?,
     val bankName: String?,
 )
@@ -633,6 +796,37 @@ enum class PrimerInputElementType {
     ADDRESS_LINE_1, ADDRESS_LINE_2, CITY, STATE, POSTAL_CODE,
 }
 ```
+
+### PrimerSessionIntent
+
+```kotlin
+enum class PrimerSessionIntent { CHECKOUT, VAULT }
+```
+
+### PrimerPaymentMethodManagerCategory
+
+```kotlin
+enum class PrimerPaymentMethodManagerCategory {
+    NATIVE_UI, RAW_DATA, NOL_PAY, KLARNA, STRIPE_ACH, COMPONENT_WITH_REDIRECT,
+}
+```
+
+### Surcharge
+
+```kotlin
+sealed interface Surcharge {
+    data class PaymentMethodSurcharge(val amount: Int) : Surcharge
+    data class CardNetworksSurcharge(val surcharges: Map<String, Int>) : Surcharge
+}
+```
+
+### PrimerCheckoutAdditionalInfo
+
+```kotlin
+interface PrimerCheckoutAdditionalInfo
+```
+
+Marker interface implemented by payment method-specific additional info classes.
 
 ---
 

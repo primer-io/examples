@@ -2,6 +2,15 @@
 
 Code-heavy patterns for integrating Primer Checkout SDK with Jetpack Compose. Covers presentation modes, state observation, custom layouts, controller lifecycle, navigation, theming, common pitfalls, and debugging.
 
+**IMPORTANT:** For correct import paths, see the Import Map in composable-reference.md or SKILL.md. Key packages:
+
+- `io.primer.checkout.api.checkout` — `PrimerCheckoutSheet`, `PrimerCheckoutHost`, `rememberPrimerCheckoutController`
+- `io.primer.checkout.api.state` — `PrimerCheckoutController`, `PrimerCheckoutState`, `PrimerCheckoutEvent`, `formatAmount`
+- `io.primer.checkout.components.card` — `PrimerCardForm`, `CardFormDefaults`, `rememberCardFormController`
+- `io.primer.checkout.components.paymentMethods` — `PrimerPaymentMethods`, `PrimerVaultedPaymentMethods`, controllers
+- `io.primer.checkout` — `PrimerTheme`, `LocalPrimerTheme`
+- `io.primer.checkout.internal.tokens` — `LightColorTokens`, `DarkColorTokens`, `RadiusTokens`, `SpacingTokens`, etc.
+
 ---
 
 ## Sheet vs Host Patterns
@@ -9,6 +18,7 @@ Code-heavy patterns for integrating Primer Checkout SDK with Jetpack Compose. Co
 ### Minimal Sheet (fastest integration)
 
 ```kotlin
+@OptIn(ExperimentalPrimerApi::class)
 @Composable
 fun CheckoutScreen(clientToken: String, onComplete: () -> Unit) {
     val checkout = rememberPrimerCheckoutController(clientToken)
@@ -29,6 +39,7 @@ fun CheckoutScreen(clientToken: String, onComplete: () -> Unit) {
 ### Sheet with Custom Slots
 
 ```kotlin
+@OptIn(ExperimentalPrimerApi::class)
 @Composable
 fun CustomSheetCheckout(clientToken: String) {
     val checkout = rememberPrimerCheckoutController(clientToken)
@@ -93,6 +104,7 @@ fun CustomSheetCheckout(clientToken: String) {
 ### Inline Host (full control)
 
 ```kotlin
+@OptIn(ExperimentalPrimerApi::class)
 @Composable
 fun InlineCheckoutScreen(clientToken: String) {
     val checkout = rememberPrimerCheckoutController(clientToken)
@@ -161,6 +173,7 @@ fun InlineCheckoutScreen(clientToken: String) {
 ### Observing Checkout State
 
 ```kotlin
+@OptIn(ExperimentalPrimerApi::class)
 val checkout = rememberPrimerCheckoutController(clientToken)
 val checkoutState by checkout.state.collectAsStateWithLifecycle()
 
@@ -290,7 +303,7 @@ PrimerCardForm(
     controller = controller,
     cardDetails = {
         CardFormDefaults.CardDetailsContent(
-            controller = controller,
+            cardFormState = controller,
             // Only replace the card number field
             cardNumber = {
                 Column {
@@ -348,15 +361,13 @@ PrimerPaymentMethods(
                 modifier = Modifier.padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                // Load icon from URL
-                method.iconUrl?.let { url ->
-                    AsyncImage(
-                        model = url,
-                        contentDescription = method.paymentMethodName,
-                        modifier = Modifier.size(32.dp),
-                    )
-                    Spacer(Modifier.width(12.dp))
-                }
+                // Payment method icon (use SDK's default rendering or custom icon source)
+                AsyncImage(
+                    model = "https://assets.primer.io/payment-methods/${method.paymentMethodType}.png",
+                    contentDescription = method.paymentMethodName,
+                    modifier = Modifier.size(32.dp),
+                )
+                Spacer(Modifier.width(12.dp))
                 Column(Modifier.weight(1f)) {
                     Text(
                         method.paymentMethodName ?: method.paymentMethodType,
@@ -410,6 +421,7 @@ Column {
 ### Correct: Screen-Level Checkout Controller
 
 ```kotlin
+@OptIn(ExperimentalPrimerApi::class)
 @Composable
 fun CheckoutScreen(clientToken: String) {
     // Created at screen level -- survives recomposition
@@ -427,6 +439,7 @@ fun CheckoutScreen(clientToken: String) {
 ### Wrong: Controller in Conditional
 
 ```kotlin
+@OptIn(ExperimentalPrimerApi::class)
 @Composable
 fun BadExample(clientToken: String) {
     var showCheckout by remember { mutableStateOf(false) }
@@ -442,6 +455,7 @@ fun BadExample(clientToken: String) {
 ### Correct: Controller Survives Toggle
 
 ```kotlin
+@OptIn(ExperimentalPrimerApi::class)
 @Composable
 fun GoodExample(clientToken: String) {
     // Controller created unconditionally
@@ -462,6 +476,7 @@ fun GoodExample(clientToken: String) {
 ### Refreshing the Session
 
 ```kotlin
+@OptIn(ExperimentalPrimerApi::class)
 val checkout = rememberPrimerCheckoutController(clientToken)
 val state by checkout.state.collectAsStateWithLifecycle()
 
@@ -485,6 +500,7 @@ Column {
 ### Sheet with Navigation Component
 
 ```kotlin
+@OptIn(ExperimentalPrimerApi::class)
 @Composable
 fun NavHostCheckout(navController: NavController) {
     val viewModel: CheckoutViewModel = viewModel()
@@ -514,6 +530,7 @@ fun NavHostCheckout(navController: NavController) {
 ### Host with Internal Navigation
 
 ```kotlin
+@OptIn(ExperimentalPrimerApi::class)
 @Composable
 fun HostWithNavigation(clientToken: String) {
     val checkout = rememberPrimerCheckoutController(clientToken)
@@ -704,6 +721,7 @@ val brandTheme = PrimerTheme(
 val checkout = PrimerCheckoutController(clientToken)
 
 // CORRECT
+@OptIn(ExperimentalPrimerApi::class)
 val checkout = rememberPrimerCheckoutController(clientToken)
 ```
 
@@ -737,6 +755,7 @@ PrimerCheckoutHost(checkout = checkout) {
 
 ```kotlin
 // WRONG -- user cannot return after 3DS or PayPal redirect
+@OptIn(ExperimentalPrimerApi::class)
 val checkout = rememberPrimerCheckoutController(clientToken)
 
 // CORRECT
@@ -745,6 +764,7 @@ val settings = PrimerSettings(
         redirectScheme = "myapp://primer",
     ),
 )
+@OptIn(ExperimentalPrimerApi::class)
 val checkout = rememberPrimerCheckoutController(clientToken, settings)
 ```
 
@@ -816,6 +836,7 @@ formState.fieldErrors?.forEach { error ->
 ### Log All State Transitions
 
 ```kotlin
+@OptIn(ExperimentalPrimerApi::class)
 val checkout = rememberPrimerCheckoutController(clientToken)
 
 LaunchedEffect(checkout) {
@@ -898,6 +919,7 @@ If the build succeeds, the SDK dependency is resolved correctly.
 Full checkout screen with settings, theming, payment methods, card form, vaulted methods, and event handling:
 
 ```kotlin
+@OptIn(ExperimentalPrimerApi::class)
 @Composable
 fun FullCheckoutScreen(
     clientToken: String,
@@ -977,3 +999,362 @@ fun FullCheckoutScreen(
     )
 }
 ```
+
+---
+
+## Klarna Integration Pattern
+
+Full Klarna payment flow with category selection and payment authorization:
+
+```kotlin
+@Composable
+fun KlarnaCheckout(checkout: PrimerCheckoutController) {
+    val klarna = rememberKlarnaController(checkout)
+    val klarnaState by klarna.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
+    Column(
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        when (klarnaState.step) {
+            PrimerKlarnaController.Step.Loading -> {
+                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            }
+            PrimerKlarnaController.Step.CategorySelection -> {
+                Text("Choose payment option", style = MaterialTheme.typography.titleMedium)
+                klarnaState.categories.forEach { category ->
+                    Card(
+                        onClick = { klarna.selectPaymentCategory(context, category.id) },
+                        modifier = Modifier.fillMaxWidth(),
+                        border = if (category.id == klarnaState.selectedCategoryId) {
+                            BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
+                        } else null,
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            AsyncImage(
+                                model = category.url,
+                                contentDescription = category.name,
+                                modifier = Modifier.size(40.dp),
+                            )
+                            Spacer(Modifier.width(12.dp))
+                            Text(category.name, style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
+                }
+            }
+            PrimerKlarnaController.Step.ViewReady -> {
+                // Embed Klarna's native Android View in Compose
+                klarnaState.paymentView?.get()?.let { view ->
+                    AndroidView(
+                        factory = { view },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+                Button(
+                    onClick = { klarna.submitPayment() },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text("Authorize Payment")
+                }
+            }
+            PrimerKlarnaController.Step.AuthorizationStarted -> {
+                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        CircularProgressIndicator()
+                        Spacer(Modifier.height(8.dp))
+                        Text("Authorizing payment...")
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+**Requirements:**
+
+- Client session must include `lineItems` for Klarna to appear
+- Configure `PrimerKlarnaOptions` with `returnIntentUrl` for redirect-based flows
+- The `paymentView` is a `WeakReference<View>` -- always null-check with `?.get()`
+
+---
+
+## QR Code Payment Pattern
+
+Display QR code for payment methods like PromptPay or PayNow:
+
+```kotlin
+@Composable
+fun QrCodePayment(
+    checkout: PrimerCheckoutController,
+    paymentMethodType: String = "XFERS_PAYNOW",
+) {
+    val qrCode = rememberQrCodeController(checkout, paymentMethodType)
+    val qrState by qrCode.state.collectAsStateWithLifecycle()
+
+    Column(
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        when (val state = qrState) {
+            is PrimerQrCodeController.State.Loading -> {
+                CircularProgressIndicator()
+                Text("Generating QR code...")
+            }
+            is PrimerQrCodeController.State.Ready -> {
+                Text(
+                    "Scan to pay",
+                    style = MaterialTheme.typography.titleMedium,
+                )
+
+                // Decode base64 QR code and display
+                val bitmap = remember(state.qrCodeBase64) {
+                    val bytes = Base64.decode(state.qrCodeBase64, Base64.DEFAULT)
+                    BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                }
+                bitmap?.let {
+                    Image(
+                        bitmap = it.asImageBitmap(),
+                        contentDescription = "QR code for payment",
+                        modifier = Modifier.size(240.dp),
+                    )
+                }
+
+                // Show expiration countdown
+                state.expiresAt?.let { expiry ->
+                    Text(
+                        "Expires: $expiry",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+
+                // Fallback: direct URL
+                state.qrCodeUrl?.let { url ->
+                    TextButton(onClick = { /* open URL */ }) {
+                        Text("Open payment link")
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+---
+
+## Google Pay Integration Pattern
+
+Configure Google Pay and show an express checkout button:
+
+```kotlin
+@OptIn(ExperimentalPrimerApi::class)
+@Composable
+fun GooglePayCheckout(clientToken: String, onComplete: (String) -> Unit) {
+    val settings = PrimerSettings(
+        paymentMethodOptions = PrimerPaymentMethodOptions(
+            googlePayOptions = PrimerGooglePayOptions(
+                merchantName = "My Store",
+                captureBillingAddress = true,
+                buttonOptions = GooglePayButtonOptions(
+                    buttonTheme = GooglePayButtonTheme.DARK,
+                    buttonType = GooglePayButtonType.PAY,
+                ),
+            ),
+        ),
+    )
+
+    val checkout = rememberPrimerCheckoutController(clientToken, settings)
+    val checkoutState by checkout.state.collectAsStateWithLifecycle()
+
+    PrimerCheckoutHost(
+        checkout = checkout,
+        onEvent = { event ->
+            when (event) {
+                is PrimerCheckoutEvent.Success -> onComplete(event.checkoutData.payment.id)
+                is PrimerCheckoutEvent.Failure -> {
+                    Log.e("GooglePay", "Error: ${event.error.description}")
+                }
+            }
+        },
+    ) {
+        if (checkoutState is PrimerCheckoutState.Ready) {
+            val controller = rememberPaymentMethodsController(checkout)
+            val methods by controller.methods.collectAsStateWithLifecycle()
+
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                // Express checkout: Google Pay button
+                val googlePay = methods.find { it.paymentMethodType == "GOOGLE_PAY" }
+                googlePay?.let { method ->
+                    Button(
+                        onClick = { controller.select(method) },
+                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                    ) {
+                        Text("Pay with Google Pay")
+                    }
+                }
+
+                HorizontalDivider()
+
+                // Card form fallback
+                val cardFormController = rememberCardFormController(checkout)
+                PrimerCardForm(controller = cardFormController)
+            }
+        } else {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
+    }
+}
+```
+
+**Note:** When `controller.select(googlePayMethod)` is called, the native Google Pay sheet appears automatically. No additional UI is needed.
+
+---
+
+## Error Recovery Pattern
+
+Handle errors with recovery strategies based on error ID:
+
+```kotlin
+@OptIn(ExperimentalPrimerApi::class)
+@Composable
+fun CheckoutWithErrorRecovery(
+    clientToken: String,
+    onFetchNewToken: suspend () -> String,
+    onComplete: () -> Unit,
+) {
+    var currentToken by remember { mutableStateOf(clientToken) }
+    val checkout = rememberPrimerCheckoutController(currentToken)
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+    ) { padding ->
+        PrimerCheckoutSheet(
+            checkout = checkout,
+            modifier = Modifier.padding(padding),
+            onEvent = { event ->
+                when (event) {
+                    is PrimerCheckoutEvent.Success -> onComplete()
+                    is PrimerCheckoutEvent.Failure -> {
+                        when (event.error.errorId) {
+                            "payment-cancelled" -> {
+                                // User cancelled -- no action needed
+                            }
+                            "bad-network", "connectivity-errors" -> {
+                                scope.launch {
+                                    val result = snackbarHostState.showSnackbar(
+                                        message = "No internet connection",
+                                        actionLabel = "Retry",
+                                    )
+                                    if (result == SnackbarResult.ActionPerformed) {
+                                        checkout.refresh()
+                                    }
+                                }
+                            }
+                            "unauthorized", "failed-to-create-session" -> {
+                                // Token expired -- fetch new token and refresh
+                                scope.launch {
+                                    currentToken = onFetchNewToken()
+                                }
+                            }
+                            "server-error" -> {
+                                scope.launch {
+                                    snackbarHostState.showSnackbar("Server error. Please try again later.")
+                                }
+                            }
+                            else -> {
+                                Log.e("Checkout", "Error: ${event.error.errorId}")
+                                Log.e("Checkout", "diagnosticsId: ${event.error.diagnosticsId}")
+                            }
+                        }
+                    }
+                }
+            },
+        )
+    }
+}
+```
+
+---
+
+## Vault-Only Flow Pattern
+
+Save payment methods for future use without processing a payment:
+
+```kotlin
+@OptIn(ExperimentalPrimerApi::class)
+@Composable
+fun VaultCardScreen(clientToken: String) {
+    val settings = PrimerSettings(
+        uiOptions = PrimerUIOptions(
+            cardFormUIOptions = PrimerCardFormUIOptions(
+                payButtonAddNewCard = true, // Shows "Add new card" instead of "Pay $X.XX"
+            ),
+        ),
+    )
+
+    val checkout = rememberPrimerCheckoutController(clientToken, settings)
+    val checkoutState by checkout.state.collectAsStateWithLifecycle()
+
+    PrimerCheckoutHost(
+        checkout = checkout,
+        onEvent = { event ->
+            when (event) {
+                is PrimerCheckoutEvent.Success -> { /* Card saved successfully */ }
+                is PrimerCheckoutEvent.Failure -> { /* Handle error */ }
+            }
+        },
+    ) {
+        if (checkoutState !is PrimerCheckoutState.Ready) {
+            CircularProgressIndicator()
+            return@PrimerCheckoutHost
+        }
+
+        val cardFormController = rememberCardFormController(checkout)
+        val vaultedController = rememberVaultedPaymentMethodsController(checkout)
+        val vaultedMethods by vaultedController.methods.collectAsStateWithLifecycle()
+        val formState by cardFormController.state.collectAsStateWithLifecycle()
+
+        // Enable vault on success
+        LaunchedEffect(Unit) {
+            cardFormController.setVaultOnSuccess(true)
+        }
+
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            // Show existing saved methods
+            if (vaultedMethods.isNotEmpty()) {
+                Text("Saved payment methods", style = MaterialTheme.typography.titleMedium)
+                PrimerVaultedPaymentMethods(controller = vaultedController)
+                HorizontalDivider()
+            }
+
+            // Card form to add new method
+            Text("Add new card", style = MaterialTheme.typography.titleMedium)
+            PrimerCardForm(controller = cardFormController)
+        }
+    }
+}
+```
+
+**Requirements:**
+
+- Client session must include `customerId` for vaulting to work
+- Set `PrimerCardFormUIOptions.payButtonAddNewCard = true` to show appropriate button text
+- Call `cardFormController.setVaultOnSuccess(true)` to enable saving

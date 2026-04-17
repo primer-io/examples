@@ -1,13 +1,13 @@
 ---
 name: primer-android-checkout
-description: Build checkout and payment experiences using Primer's Android CheckoutComponents SDK. Use this skill when implementing payment flows, checkout screens, card forms, or integrating Primer SDK into Jetpack Compose applications. Covers controller pattern, composable APIs, slot-based customization, Material 3 theming, and state management.
+description: Build checkout and payment experiences using Primer's Android CheckoutComponents SDK (io.primer:checkout). Use this skill when implementing payment flows, checkout screens, card forms, or integrating Primer SDK into Jetpack Compose applications. Covers controller pattern, composable APIs, slot-based customization, Material 3 theming, and state management. Verified against 3.0.0-beta.3.
 ---
 
 # Primer Android Checkout
 
 ## Overview
 
-This skill provides comprehensive guidance for building checkout and payment experiences using Primer's Android CheckoutComponents SDK (`io.primer.android:checkout`). The SDK is a Jetpack Compose-native library that provides composable components for card payments, alternative payment methods, and saved payment methods management.
+This skill provides comprehensive guidance for building checkout and payment experiences using Primer's Android CheckoutComponents SDK (`io.primer:checkout`). The SDK is a Jetpack Compose-native library that provides composable components for card payments, alternative payment methods, and saved payment methods management.
 
 Use this skill when:
 
@@ -20,7 +20,7 @@ Use this skill when:
 - Integrating Primer with Jetpack Compose and Material 3
 - Troubleshooting Compose version conflicts, state management, or SDK issues
 
-**SDK status:** Beta (v3.0.0-beta). The API may change before stable release.
+**SDK status:** Beta (v3.0.0-beta.3). The API may change before stable release.
 
 ### Key Architectural Concepts
 
@@ -28,6 +28,66 @@ Use this skill when:
 2. **Slot-based composition** -- top-level composables accept `@Composable` lambda parameters for each UI section, with sensible defaults you can selectively override
 3. **Design tokens** -- theming uses a token system (`PrimerTheme`) that automatically maps to Material 3 `ColorScheme`
 4. **Two presentation modes** -- `PrimerCheckoutSheet` (modal bottom sheet) and `PrimerCheckoutHost` (inline embedding)
+
+## Import Map
+
+IMPORTANT: Use these exact imports when writing code. The SDK package structure does NOT follow a flat `api.*` convention.
+
+```kotlin
+// Checkout presentation (sheet + host + remember function)
+import io.primer.checkout.api.checkout.PrimerCheckoutSheet
+import io.primer.checkout.api.checkout.PrimerCheckoutHost
+import io.primer.checkout.api.checkout.rememberPrimerCheckoutController
+
+// Checkout state, events, controller interface
+import io.primer.checkout.api.state.PrimerCheckoutController
+import io.primer.checkout.api.state.PrimerCheckoutState
+import io.primer.checkout.api.state.PrimerCheckoutEvent
+import io.primer.checkout.api.state.formatAmount  // extension on PrimerCheckoutController
+
+// Payment method model (used by PrimerPaymentMethods composable)
+import io.primer.checkout.api.checkout.models.PrimerPaymentMethod
+
+// Card form
+import io.primer.checkout.components.card.PrimerCardForm
+import io.primer.checkout.components.card.CardFormDefaults
+import io.primer.checkout.components.card.PrimerCardFormController
+import io.primer.checkout.components.card.rememberCardFormController
+import io.primer.checkout.components.card.SyncValidationError
+
+// Payment methods list
+import io.primer.checkout.components.paymentMethods.PrimerPaymentMethods
+import io.primer.checkout.components.paymentMethods.PaymentMethodsDefaults
+import io.primer.checkout.components.paymentMethods.PrimerPaymentMethodsController
+import io.primer.checkout.components.paymentMethods.rememberPaymentMethodsController
+
+// Vaulted payment methods
+import io.primer.checkout.components.paymentMethods.PrimerVaultedPaymentMethods
+import io.primer.checkout.components.paymentMethods.VaultedPaymentMethodsDefaults
+import io.primer.checkout.components.paymentMethods.PrimerVaultedPaymentMethodsController
+import io.primer.checkout.components.paymentMethods.rememberVaultedPaymentMethodsController
+
+// Country selection
+import io.primer.checkout.components.country.PrimerCountrySelectionController
+
+// Theming
+import io.primer.checkout.PrimerTheme
+import io.primer.checkout.LocalPrimerTheme
+import io.primer.checkout.internal.tokens.LightColorTokens
+import io.primer.checkout.internal.tokens.DarkColorTokens
+import io.primer.checkout.internal.tokens.BorderWidthTokens
+import io.primer.checkout.internal.tokens.RadiusTokens
+import io.primer.checkout.internal.tokens.SizeTokens
+import io.primer.checkout.internal.tokens.SpacingTokens
+import io.primer.checkout.internal.tokens.TypographyTokens
+
+// Common types from the core SDK (transitive dependencies)
+import io.primer.android.components.domain.inputs.models.PrimerInputElementType
+import io.primer.android.components.domain.core.models.card.PrimerCardNetwork
+import io.primer.android.clientSessionActions.domain.models.PrimerCountry
+import io.primer.android.domain.tokenization.models.PrimerVaultedPaymentMethod
+import io.primer.android.domain.action.models.PrimerClientSession
+```
 
 ## Quick Start Guide
 
@@ -42,9 +102,13 @@ Prerequisites:
 
 Add the SDK dependency to your module-level `build.gradle.kts`:
 
+- **Maven group:** `io.primer`
+- **Maven artifact name:** `checkout`
+- **TOML entry:** `{ group = "io.primer", name = "checkout", version.ref = "primerCheckout" }`
+
 ```kotlin
 dependencies {
-    implementation("io.primer.android:checkout:3.0.0-beta")
+    implementation("io.primer:checkout:3.0.0-beta.3")
 }
 ```
 
@@ -75,7 +139,10 @@ ProGuard/R8: The SDK includes its own rules. No additional configuration needed.
 
 The fastest way to add checkout -- a modal bottom sheet with built-in navigation between payment method selection, card form, success, and error screens:
 
+> **Note:** `rememberPrimerCheckoutController` is annotated with `@ExperimentalPrimerApi`. You must opt in with `@OptIn(ExperimentalPrimerApi::class)` on the calling function or `@file:OptIn(ExperimentalPrimerApi::class)` at file level.
+
 ```kotlin
+@OptIn(ExperimentalPrimerApi::class)
 @Composable
 fun CheckoutScreen(clientToken: String) {
     val checkout = rememberPrimerCheckoutController(
@@ -130,6 +197,21 @@ fun InlineCheckout(clientToken: String) {
     }
 }
 ```
+
+## Client Session Requirements
+
+The client token is created by your backend via the Primer Client Session API. Different payment methods require different fields in the session:
+
+| Use Case                       | Required Fields                                               |
+| ------------------------------ | ------------------------------------------------------------- |
+| Basic checkout                 | `amount`, `currencyCode`, `orderId`                           |
+| Payment method filtering       | `countryCode` + `currencyCode` (in `order`)                   |
+| Vaulting (save payment method) | `customerId` required                                         |
+| Klarna                         | `lineItems` required (item descriptions, amounts, quantities) |
+| Google Pay                     | `amount` + `currencyCode`                                     |
+| Stripe ACH                     | Customer info (name, email)                                   |
+
+If a required field is missing, the payment method may not appear in the available methods list or the payment flow may fail.
 
 ## Architecture: Controller Pattern
 
@@ -229,19 +311,82 @@ sealed interface PrimerCheckoutState {
 
 ```kotlin
 data class PrimerClientSession(
-    val totalAmount: Int?,
-    val currencyCode: String?,
     val customerId: String?,
     val orderId: String?,
+    val currencyCode: String?,
+    val totalAmount: Int?,
+    val lineItems: List<PrimerLineItem>?,
+    val orderDetails: PrimerOrder?,
+    val customer: PrimerCustomer?,
+    val paymentMethod: PrimerPaymentMethod?,
+    val fees: List<PrimerFee>?,
 )
 ```
 
-| Property       | Type      | Description                                                  |
-| -------------- | --------- | ------------------------------------------------------------ |
-| `totalAmount`  | `Int?`    | Total amount in minor currency units (e.g., `1000` = $10.00) |
-| `currencyCode` | `String?` | ISO 4217 currency code (e.g., `"USD"`, `"EUR"`)              |
-| `customerId`   | `String?` | Customer identifier from your system                         |
-| `orderId`      | `String?` | Order identifier from your system                            |
+| Property        | Type                    | Description                                                  |
+| --------------- | ----------------------- | ------------------------------------------------------------ |
+| `customerId`    | `String?`               | Customer identifier from your system                         |
+| `orderId`       | `String?`               | Order identifier from your system                            |
+| `currencyCode`  | `String?`               | ISO 4217 currency code (e.g., `"USD"`, `"EUR"`)              |
+| `totalAmount`   | `Int?`                  | Total amount in minor currency units (e.g., `1000` = $10.00) |
+| `lineItems`     | `List<PrimerLineItem>?` | Order line items. Required for Klarna.                       |
+| `orderDetails`  | `PrimerOrder?`          | Order details including country code and shipping            |
+| `customer`      | `PrimerCustomer?`       | Customer details including addresses                         |
+| `paymentMethod` | `PrimerPaymentMethod?`  | Payment method config (e.g., allowed card networks)          |
+| `fees`          | `List<PrimerFee>?`      | Fees associated with the session                             |
+
+#### PrimerClientSession Nested Types
+
+```kotlin
+data class PrimerCustomer(
+    val emailAddress: String?,
+    val mobileNumber: String?,
+    val firstName: String?,
+    val lastName: String?,
+    val billingAddress: PrimerAddress?,
+    val shippingAddress: PrimerAddress?,
+)
+
+data class PrimerOrder(
+    val countryCode: CountryCode?,
+    val shipping: PrimerShipping?,
+)
+
+data class PrimerShipping(
+    val amount: Int?,
+    val methodId: String?,
+    val methodName: String?,
+    val methodDescription: String?,
+)
+
+data class PrimerLineItem(
+    val itemId: String?,
+    val itemDescription: String?,
+    val amount: Int?,
+    val discountAmount: Int?,
+    val quantity: Int?,
+    val taxCode: String?,
+    val taxAmount: Int?,
+)
+
+data class PrimerAddress(
+    val firstName: String?,
+    val lastName: String?,
+    val addressLine1: String?,
+    val addressLine2: String?,
+    val postalCode: String?,
+    val city: String?,
+    val state: String?,
+    val countryCode: CountryCode?,
+)
+
+data class PrimerFee(
+    val type: String?,
+    val amount: Int,
+)
+```
+
+Note: `PrimerPaymentMethod` inside `PrimerClientSession` is a different type from the top-level `PrimerPaymentMethod` used in payment method lists. This one contains `orderedAllowedCardNetworks: List<CardNetwork.Type>`.
 
 ### PrimerCheckoutEvent
 
@@ -260,10 +405,10 @@ sealed interface PrimerCheckoutEvent {
 }
 ```
 
-| Event     | When                                                       | Property                           |
-| --------- | ---------------------------------------------------------- | ---------------------------------- |
-| `Success` | After payment confirmation from processor (AUTO mode only) | `checkoutData: PrimerCheckoutData` |
-| `Failure` | After a payment error or SDK error                         | `error: PrimerError`               |
+| Event     | When                                                     | Property                           |
+| --------- | -------------------------------------------------------- | ---------------------------------- |
+| `Success` | After successful payment (AUTO) or tokenization (MANUAL) | `checkoutData: PrimerCheckoutData` |
+| `Failure` | After a payment error or SDK error                       | `error: PrimerError`               |
 
 Events can fire multiple times per session (e.g., a `Failure` followed by a `Success` on retry).
 
@@ -271,23 +416,31 @@ Events can fire multiple times per session (e.g., a `Failure` followed by a `Suc
 
 ```kotlin
 data class PrimerCheckoutData(
-    val payment: PrimerPayment,
+    val payment: Payment,
+    val additionalInfo: PrimerCheckoutAdditionalInfo? = null,
 )
 ```
 
-#### PrimerPayment
+| Property         | Type                            | Description                                                                          |
+| ---------------- | ------------------------------- | ------------------------------------------------------------------------------------ |
+| `payment`        | `Payment`                       | Payment details (ID and order ID)                                                    |
+| `additionalInfo` | `PrimerCheckoutAdditionalInfo?` | Additional info from the payment method (e.g., multi-banking details, redirect info) |
+
+`PrimerCheckoutAdditionalInfo` is a marker interface implemented by payment method-specific info classes.
+
+#### Payment
 
 ```kotlin
-data class PrimerPayment(
+data class Payment(
     val id: String,
-    val orderId: String?,
+    val orderId: String,
 )
 ```
 
-| Property  | Type      | Description                                                    |
-| --------- | --------- | -------------------------------------------------------------- |
-| `id`      | `String`  | Unique payment identifier assigned by Primer                   |
-| `orderId` | `String?` | Order identifier, if provided when creating the client session |
+| Property  | Type     | Description                                  |
+| --------- | -------- | -------------------------------------------- |
+| `id`      | `String` | Unique payment identifier assigned by Primer |
+| `orderId` | `String` | Order identifier from the client session     |
 
 ## PrimerCheckoutSheet
 
@@ -346,17 +499,17 @@ PrimerCheckoutSheet(
     checkout = checkout,
     // Custom card form with rearranged fields
     cardForm = {
-        val controller = rememberCardFormController(checkout)
+        val cardFormController = rememberCardFormController(checkout)
         PrimerCardForm(
-            controller = controller,
+            controller = cardFormController,
             cardDetails = {
                 Column {
-                    CardFormDefaults.CardholderField(controller)
-                    CardFormDefaults.CardNumberField(controller)
+                    CardFormDefaults.CardholderField(cardFormController)
+                    CardFormDefaults.CardNumberField(cardFormController)
                     Row {
-                        CardFormDefaults.ExpiryField(controller, Modifier.weight(1f))
+                        CardFormDefaults.ExpiryField(cardFormController, Modifier.weight(1f))
                         Spacer(Modifier.width(8.dp))
-                        CardFormDefaults.CvvField(controller, Modifier.weight(1f))
+                        CardFormDefaults.CvvField(cardFormController, Modifier.weight(1f))
                     }
                 }
             },
@@ -385,21 +538,25 @@ object PrimerCheckoutSheetDefaults {
     @Composable fun Loading()
     @Composable fun Success(checkoutData: PrimerCheckoutData)
     @Composable fun Error(error: PrimerError)
-    @Composable fun PaymentMethodSelection(checkout: PrimerCheckoutController)
+    @Composable fun PaymentMethodSelection(
+        checkout: PrimerCheckoutController,
+        vaultedMethods: @Composable () -> Unit = { VaultedMethods(checkout) },
+        paymentMethods: @Composable () -> Unit = { PaymentMethods(checkout) },
+    )
     @Composable fun VaultedMethods(checkout: PrimerCheckoutController)
     @Composable fun PaymentMethods(checkout: PrimerCheckoutController)
 }
 ```
 
-| Function                           | Description                                                                   |
-| ---------------------------------- | ----------------------------------------------------------------------------- |
-| `Splash()`                         | Brief splash screen with Primer logo and loading animation                    |
-| `Loading()`                        | Centered circular progress indicator during payment processing                |
-| `Success(checkoutData)`            | Checkmark animation and payment confirmation. Auto-dismisses after 3 seconds. |
-| `Error(error)`                     | Error message with retry and "try other methods" options                      |
-| `PaymentMethodSelection(checkout)` | Vaulted methods (if any) + available payment methods                          |
-| `VaultedMethods(checkout)`         | Saved payment methods section only                                            |
-| `PaymentMethods(checkout)`         | Available payment methods section only (excluding vaulted)                    |
+| Function                                                           | Description                                                                                                 |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| `Splash()`                                                         | Brief splash screen with Primer logo and loading animation                                                  |
+| `Loading()`                                                        | Centered circular progress indicator during payment processing                                              |
+| `Success(checkoutData)`                                            | Checkmark animation and payment confirmation. Auto-dismisses after 3 seconds.                               |
+| `Error(error)`                                                     | Error message with retry and "try other methods" options                                                    |
+| `PaymentMethodSelection(checkout, vaultedMethods, paymentMethods)` | Vaulted methods (if any) + available payment methods. Each section is a slot you can override individually. |
+| `VaultedMethods(checkout)`                                         | Saved payment methods section only                                                                          |
+| `PaymentMethods(checkout)`                                         | Available payment methods section only (excluding vaulted)                                                  |
 
 ## PrimerCheckoutHost
 
@@ -474,9 +631,33 @@ data class PrimerSettings(
 
 ### PrimerPaymentHandling
 
-| Value  | Description                                                            |
-| ------ | ---------------------------------------------------------------------- |
-| `AUTO` | SDK processes payment end-to-end. Emits `Success` or `Failure` events. |
+```kotlin
+enum class PrimerPaymentHandling {
+    AUTO,
+    MANUAL,
+}
+```
+
+| Value    | Description                                                                                                                                                                                               |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AUTO`   | SDK processes payment end-to-end. Emits `Success` or `Failure` events.                                                                                                                                    |
+| `MANUAL` | SDK tokenizes the payment method but does not create the payment. Your app receives a token via decision handlers, creates the payment on its own backend, and resumes with a new client token if needed. |
+
+### PrimerSessionIntent
+
+```kotlin
+enum class PrimerSessionIntent {
+    CHECKOUT,  // One-time payment
+    VAULT,     // Save payment method for future use
+}
+```
+
+| Value      | Description                                       |
+| ---------- | ------------------------------------------------- |
+| `CHECKOUT` | One-time payment flow                             |
+| `VAULT`    | Save payment method for future use without paying |
+
+Exposed on `PrimerPaymentMethod.supportedPrimerSessionIntents` to indicate what intents each payment method supports.
 
 ### PrimerUIOptions
 
@@ -578,6 +759,20 @@ data class PrimerPaymentMethodOptions(
 | ------ | ------------------------------- |
 | `V2_4` | Primer API version 2.4 (latest) |
 
+### Supported Locales
+
+The SDK ships translations for 57 locales (56 + default English):
+
+ar, az, bg, bs, ca, cs, da, de, el, en (default), es, es-AR, es-MX, et, fa, fi, fil, fr, hi, hr, hu, hy, in (Indonesian), it, iw (Hebrew), ja, ka, kk, ko, ku, ky, lt, lv, mk, ms, nb, nl, nl-BE, pl, pt, pt-BR, ro, ru, sk, sl, sq, sr-Latn, sv, th, tr, uk, ur-PK, uz, vi, zh-CN, zh-HK, zh-TW
+
+RTL languages supported: Arabic (ar), Hebrew (iw), Persian (fa), Urdu (ur-PK).
+
+Set via `PrimerSettings.locale`:
+
+```kotlin
+val settings = PrimerSettings(locale = Locale("de")) // German
+```
+
 ### Settings Usage Example
 
 ```kotlin
@@ -678,49 +873,58 @@ Must be called inside `PrimerCheckoutHost` content or a `PrimerCheckoutSheet` sl
 data class State(
     val cardFields: List<PrimerInputElementType>,
     val billingFields: List<PrimerInputElementType>,
-    val fieldErrors: List<PrimerFieldError>?,
+    val fieldErrors: List<SyncValidationError>?,
     val data: Map<PrimerInputElementType, String>,
     val isLoading: Boolean,
     val isFormEnabled: Boolean,
     val selectedCountry: PrimerCountry?,
     val networkSelection: NetworkSelection?,
-    val fieldFocusStates: Map<PrimerInputElementType, Boolean>,
+    val fieldFocusStates: Map<PrimerInputElementType, FieldState>,
     val isFormValid: Boolean,
     val vaultOnSuccess: Boolean,
 )
 ```
 
-| Property           | Type                                   | Description                                                            |
-| ------------------ | -------------------------------------- | ---------------------------------------------------------------------- |
-| `cardFields`       | `List<PrimerInputElementType>`         | Card input fields required by the session                              |
-| `billingFields`    | `List<PrimerInputElementType>`         | Billing address fields required by the session. Empty if not required. |
-| `fieldErrors`      | `List<PrimerFieldError>?`              | Validation errors per field. `null` before first validation.           |
-| `data`             | `Map<PrimerInputElementType, String>`  | Current field values keyed by input element type                       |
-| `isLoading`        | `Boolean`                              | `true` while submitting a payment                                      |
-| `isFormEnabled`    | `Boolean`                              | `true` when the form accepts input. `false` during submission.         |
-| `selectedCountry`  | `PrimerCountry?`                       | Selected billing country, or `null`                                    |
-| `networkSelection` | `NetworkSelection?`                    | Co-badge network selection data. `null` when card is not co-badged.    |
-| `fieldFocusStates` | `Map<PrimerInputElementType, Boolean>` | Focus state per field                                                  |
-| `isFormValid`      | `Boolean`                              | `true` when all required fields pass validation. Updates in real-time. |
-| `vaultOnSuccess`   | `Boolean`                              | Whether payment method will be saved to vault on success               |
+| Property           | Type                                      | Description                                                            |
+| ------------------ | ----------------------------------------- | ---------------------------------------------------------------------- |
+| `cardFields`       | `List<PrimerInputElementType>`            | Card input fields required by the session                              |
+| `billingFields`    | `List<PrimerInputElementType>`            | Billing address fields required by the session. Empty if not required. |
+| `fieldErrors`      | `List<SyncValidationError>?`              | Validation errors per field. `null` before first validation.           |
+| `data`             | `Map<PrimerInputElementType, String>`     | Current field values keyed by input element type                       |
+| `isLoading`        | `Boolean`                                 | `true` while submitting a payment                                      |
+| `isFormEnabled`    | `Boolean`                                 | `true` when the form accepts input. `false` during submission.         |
+| `selectedCountry`  | `PrimerCountry?`                          | Selected billing country, or `null`                                    |
+| `networkSelection` | `NetworkSelection?`                       | Co-badge network selection data. `null` when card is not co-badged.    |
+| `fieldFocusStates` | `Map<PrimerInputElementType, FieldState>` | Focus state per field (see FieldState below)                           |
+| `isFormValid`      | `Boolean`                                 | `true` when all required fields pass validation. Updates in real-time. |
+| `vaultOnSuccess`   | `Boolean`                                 | Whether payment method will be saved to vault on success               |
 
 #### NetworkSelection
 
 ```kotlin
 data class NetworkSelection(
-    val availableNetworks: List<PrimerCardNetwork>,
     val selectedNetwork: PrimerCardNetwork?,
+    val availableNetworks: List<PrimerCardNetwork>,
+    val isNetworkSelectable: Boolean,
+    val isUserSelected: Boolean,
 )
 ```
 
-#### PrimerFieldError
+#### FieldState
 
 ```kotlin
-data class PrimerFieldError(
-    val inputElementType: PrimerInputElementType,
-    val errorId: String,
+data class FieldState(
+    val hasFocus: Boolean,
+    val hasBeenFocused: Boolean,
+    val shouldShowError: Boolean,
 )
 ```
+
+| Property          | Type      | Description                                           |
+| ----------------- | --------- | ----------------------------------------------------- |
+| `hasFocus`        | `Boolean` | Whether the field currently has focus                 |
+| `hasBeenFocused`  | `Boolean` | Whether the field has ever received focus             |
+| `shouldShowError` | `Boolean` | Whether the field should display its validation error |
 
 ### CardFormDefaults
 
@@ -760,11 +964,11 @@ Only rendered when required by session configuration.
 ```kotlin
 @Composable
 fun CardFormDefaults.CardDetailsContent(
-    controller: PrimerCardFormController,
-    cardNumber: @Composable () -> Unit = { CardNumberField(controller) },
-    expiryDate: @Composable () -> Unit = { ExpiryField(controller) },
-    cvv: @Composable () -> Unit = { CvvField(controller) },
-    cardholderName: @Composable () -> Unit = { CardholderField(controller) },
+    cardFormState: PrimerCardFormController,
+    cardNumber: @Composable () -> Unit = { CardNumberField(cardFormState) },
+    expiryDate: @Composable () -> Unit = { ExpiryField(cardFormState) },
+    cvv: @Composable () -> Unit = { CvvField(cardFormState) },
+    cardholderName: @Composable () -> Unit = { CardholderField(cardFormState) },
 )
 ```
 
@@ -775,15 +979,15 @@ Renders the default card details layout. Each field can be individually replaced
 ```kotlin
 @Composable
 fun CardFormDefaults.BillingAddressContent(
-    controller: PrimerCardFormController,
-    countryCode: @Composable () -> Unit = { CountryCodeField(controller) },
-    firstName: @Composable () -> Unit = { FirstNameField(controller) },
-    lastName: @Composable () -> Unit = { LastNameField(controller) },
-    addressLine1: @Composable () -> Unit = { AddressLine1Field(controller) },
-    addressLine2: @Composable () -> Unit = { AddressLine2Field(controller) },
-    city: @Composable () -> Unit = { CityField(controller) },
-    state: @Composable () -> Unit = { StateField(controller) },
-    postalCode: @Composable () -> Unit = { PostalCodeField(controller) },
+    cardFormState: PrimerCardFormController,
+    countryCode: @Composable () -> Unit = { CountryCodeField(cardFormState) },
+    firstName: @Composable () -> Unit = { FirstNameField(cardFormState) },
+    lastName: @Composable () -> Unit = { LastNameField(cardFormState) },
+    addressLine1: @Composable () -> Unit = { AddressLine1Field(cardFormState) },
+    addressLine2: @Composable () -> Unit = { AddressLine2Field(cardFormState) },
+    city: @Composable () -> Unit = { CityField(cardFormState) },
+    stateField: @Composable () -> Unit = { StateField(cardFormState) },
+    postalCode: @Composable () -> Unit = { PostalCodeField(cardFormState) },
 )
 ```
 
@@ -919,19 +1123,30 @@ Must be called inside `PrimerCheckoutHost` content or a `PrimerCheckoutSheet` sl
 data class PrimerPaymentMethod(
     val paymentMethodType: String,
     val paymentMethodName: String?,
-    val iconUrl: String?,
-    val surcharge: Amount?,
+    val supportedPrimerSessionIntents: List<PrimerSessionIntent>,
+    val paymentMethodManagerCategories: List<PrimerPaymentMethodManagerCategory>,
+    val surcharge: Surcharge? = null,
 )
 ```
 
-| Property            | Type      | Description                                                                    |
-| ------------------- | --------- | ------------------------------------------------------------------------------ |
-| `paymentMethodType` | `String`  | Payment method identifier (e.g., `"PAYMENT_CARD"`, `"PAYPAL"`, `"GOOGLE_PAY"`) |
-| `paymentMethodName` | `String?` | Human-readable display name                                                    |
-| `iconUrl`           | `String?` | URL to the payment method icon image                                           |
-| `surcharge`         | `Amount?` | Surcharge amount, or `null` if none                                            |
+| Property                         | Type                                       | Description                                                                                       |
+| -------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| `paymentMethodType`              | `String`                                   | Payment method identifier (e.g., `"PAYMENT_CARD"`, `"PAYPAL"`, `"GOOGLE_PAY"`)                    |
+| `paymentMethodName`              | `String?`                                  | Human-readable display name                                                                       |
+| `supportedPrimerSessionIntents`  | `List<PrimerSessionIntent>`                | Intents this method supports (`CHECKOUT`, `VAULT`, or both)                                       |
+| `paymentMethodManagerCategories` | `List<PrimerPaymentMethodManagerCategory>` | Categories: `NATIVE_UI`, `RAW_DATA`, `KLARNA`, `STRIPE_ACH`, `COMPONENT_WITH_REDIRECT`, `NOL_PAY` |
+| `surcharge`                      | `Surcharge?`                               | Surcharge amount, or `null` if none                                                               |
 
-Common payment method types: `"PAYMENT_CARD"`, `"PAYPAL"`, `"GOOGLE_PAY"`, `"KLARNA"`, `"APPLE_PAY"`, `"IDEAL"`, `"BANCONTACT"`, `"SOFORT"`.
+#### Surcharge
+
+```kotlin
+sealed interface Surcharge {
+    data class PaymentMethodSurcharge(val amount: Int) : Surcharge
+    data class CardNetworksSurcharge(val surcharges: Map<String, Int>) : Surcharge
+}
+```
+
+Common payment method types: `"PAYMENT_CARD"`, `"PAYPAL"`, `"GOOGLE_PAY"`, `"KLARNA"`, `"IDEAL"`, `"BANCONTACT"`, `"SOFORT"`.
 
 ### PrimerVaultedPaymentMethodsController
 
@@ -977,17 +1192,22 @@ data class PrimerVaultedPaymentMethod(
 
 #### PaymentInstrumentData
 
-| Property            | Type                 | Description                                   |
-| ------------------- | -------------------- | --------------------------------------------- |
-| `network`           | `String?`            | Card network (e.g., `"Visa"`, `"Mastercard"`) |
-| `cardholderName`    | `String?`            | Cardholder name                               |
-| `first6Digits`      | `String?`            | First 6 digits (BIN)                          |
-| `last4Digits`       | `String?`            | Last 4 digits for display                     |
-| `expirationMonth`   | `String?`            | Expiry month (MM)                             |
-| `expirationYear`    | `String?`            | Expiry year (YYYY)                            |
-| `externalPayerInfo` | `ExternalPayerInfo?` | External payer details (e.g., PayPal email)   |
-| `binData`           | `BinData?`           | BIN data for card routing                     |
-| `bankName`          | `String?`            | Bank name for bank-based methods              |
+| Property                   | Type                 | Description                                           |
+| -------------------------- | -------------------- | ----------------------------------------------------- |
+| `network`                  | `String?`            | Card network (e.g., `"Visa"`, `"Mastercard"`)         |
+| `cardholderName`           | `String?`            | Cardholder name                                       |
+| `first6Digits`             | `Int?`               | First 6 digits of card (BIN)                          |
+| `last4Digits`              | `Int?`               | Last 4 digits of card for display                     |
+| `accountNumberLast4Digits` | `Int?`               | Last 4 digits of account number (bank methods)        |
+| `expirationMonth`          | `Int?`               | Expiry month                                          |
+| `expirationYear`           | `Int?`               | Expiry year                                           |
+| `externalPayerInfo`        | `ExternalPayerInfo?` | External payer details (e.g., PayPal email)           |
+| `klarnaCustomerToken`      | `String?`            | Klarna-specific customer token                        |
+| `sessionData`              | `SessionData?`       | Session data (recurring description, billing address) |
+| `paymentMethodType`        | `String?`            | Type of payment method                                |
+| `sessionInfo`              | `SessionInfo?`       | Session info (locale, platform, retail outlet)        |
+| `binData`                  | `BinData?`           | BIN data for card routing                             |
+| `bankName`                 | `String?`            | Bank name for bank-based methods                      |
 
 #### PrimerVaultedPaymentMethods Composable
 
@@ -996,20 +1216,32 @@ data class PrimerVaultedPaymentMethod(
 fun PrimerVaultedPaymentMethods(
     controller: PrimerVaultedPaymentMethodsController,
     modifier: Modifier = Modifier,
-    header: @Composable () -> Unit = { VaultedPaymentMethodsDefaults.SectionHeader() },
-    item: @Composable (PrimerVaultedPaymentMethod) -> Unit = {
-        VaultedPaymentMethodsDefaults.Method(it, controller)
+    header: @Composable (onShowAll: () -> Unit) -> Unit = { onShowAll ->
+        VaultedPaymentMethodsDefaults.SectionHeader(onShowAll = onShowAll)
     },
-    submitButton: @Composable () -> Unit = {},
+    item: @Composable (
+        method: PrimerVaultedPaymentMethod,
+        isSelected: Boolean,
+        onSelect: () -> Unit,
+    ) -> Unit = { method, isSelected, onSelect ->
+        VaultedPaymentMethodsDefaults.Method(method, isSelected, onSelect)
+    },
+    submitButton: @Composable (
+        isLoading: Boolean,
+        enabled: Boolean,
+        onSubmit: () -> Unit,
+    ) -> Unit = { isLoading, enabled, onSubmit ->
+        // Default submit button
+    },
 )
 ```
 
 #### VaultedPaymentMethodsDefaults
 
-| Function                     | Description                                                           |
-| ---------------------------- | --------------------------------------------------------------------- |
-| `SectionHeader()`            | Default section header ("Saved payment methods")                      |
-| `Method(method, controller)` | Default method row with card details, network icon, and delete action |
+| Function                               | Description                                                             |
+| -------------------------------------- | ----------------------------------------------------------------------- |
+| `SectionHeader(onShowAll: () -> Unit)` | Default section header ("Saved payment methods") with "Show all" action |
+| `Method(method, isSelected, onSelect)` | Default method row with card details, network icon, and selection state |
 
 ### PaymentMethodsDefaults
 
@@ -1026,6 +1258,159 @@ object PaymentMethodsDefaults {
 | `SectionHeader()`         | Default "Pay with" header styled with the current theme              |
 | `Method(method, onClick)` | Payment method item with icon, name, optional surcharge, and chevron |
 | `EmptyState(modifier)`    | Message displayed when no payment methods are available              |
+
+## Klarna Controller
+
+For Klarna payments, the SDK provides a dedicated controller with a state machine that walks the user through category selection and payment authorization.
+
+### PrimerKlarnaController
+
+```kotlin
+@Stable
+interface PrimerKlarnaController {
+    val state: StateFlow<State>
+    fun selectPaymentCategory(context: Context, categoryId: String)
+    fun submitPayment()
+
+    data class Category(
+        val id: String,
+        val name: String,
+        val url: String,
+    )
+
+    data class State(
+        val step: Step,
+        val categories: List<Category>,
+        val selectedCategoryId: String?,
+        val paymentView: WeakReference<View>?,
+    )
+
+    sealed interface Step {
+        data object Loading : Step
+        data object CategorySelection : Step
+        data object ViewReady : Step
+        data object AuthorizationStarted : Step
+    }
+}
+```
+
+#### Creation
+
+```kotlin
+@Composable
+fun rememberKlarnaController(
+    checkout: PrimerCheckoutController,
+): PrimerKlarnaController
+```
+
+Must be called inside `PrimerCheckoutHost` content or a `PrimerCheckoutSheet` slot.
+
+#### State Machine Flow
+
+`Loading` → `CategorySelection` → (user selects category) → `ViewReady` → (user submits) → `AuthorizationStarted`
+
+| Step                   | Description                                   | Action Available                     |
+| ---------------------- | --------------------------------------------- | ------------------------------------ |
+| `Loading`              | Loading Klarna session data                   | None -- show loading indicator       |
+| `CategorySelection`    | Categories available for selection            | `selectPaymentCategory(context, id)` |
+| `ViewReady`            | Klarna's native payment view is ready         | `submitPayment()`                    |
+| `AuthorizationStarted` | Authorization in progress, waiting for result | None -- show loading indicator       |
+
+#### Key Properties
+
+| Member                    | Type               | Description                                    |
+| ------------------------- | ------------------ | ---------------------------------------------- |
+| `state`                   | `StateFlow<State>` | Observable Klarna payment flow state           |
+| `selectPaymentCategory()` | Method             | Select a category. Requires Android `Context`. |
+| `submitPayment()`         | Method             | Submit payment after `ViewReady` state.        |
+
+#### State Properties
+
+| Property             | Type                   | Description                                       |
+| -------------------- | ---------------------- | ------------------------------------------------- |
+| `step`               | `Step`                 | Current step in the Klarna flow                   |
+| `categories`         | `List<Category>`       | Available payment categories                      |
+| `selectedCategoryId` | `String?`              | Currently selected category ID                    |
+| `paymentView`        | `WeakReference<View>?` | Klarna's native Android View for the payment form |
+
+The `paymentView` is a `WeakReference<View>` -- use `AndroidView` composable to embed it in Compose:
+
+```kotlin
+val klarnaState by klarna.state.collectAsStateWithLifecycle()
+klarnaState.paymentView?.get()?.let { view ->
+    AndroidView(factory = { view })
+}
+```
+
+**Requirements:** Klarna requires `lineItems` in the client session. Configure `PrimerKlarnaOptions` in settings for `returnIntentUrl` and optional `recurringPaymentDescription`.
+
+## QR Code Controller
+
+For payment methods that generate QR codes (e.g., PromptPay, PayNow), the SDK provides a QR code controller.
+
+### PrimerQrCodeController
+
+```kotlin
+@Stable
+interface PrimerQrCodeController {
+    val state: StateFlow<State>
+
+    sealed class State {
+        data object Loading : State()
+        data class Ready(
+            val qrCodeBase64: String,
+            val qrCodeUrl: String? = null,
+            val expiresAt: String? = null,
+        ) : State()
+    }
+}
+```
+
+#### Creation
+
+```kotlin
+@Composable
+fun rememberQrCodeController(
+    checkout: PrimerCheckoutController,
+    paymentMethodType: String,
+): PrimerQrCodeController
+```
+
+Must be called inside `PrimerCheckoutHost` content or a `PrimerCheckoutSheet` slot.
+
+| Parameter           | Type                       | Description                                                 |
+| ------------------- | -------------------------- | ----------------------------------------------------------- |
+| `checkout`          | `PrimerCheckoutController` | Parent checkout controller                                  |
+| `paymentMethodType` | `String`                   | Payment method type (e.g., `"XFERS_PAYNOW"`, `"PROMPTPAY"`) |
+
+#### State
+
+| State     | Properties                                 | Description                |
+| --------- | ------------------------------------------ | -------------------------- |
+| `Loading` | None                                       | QR code is being generated |
+| `Ready`   | `qrCodeBase64`, `qrCodeUrl?`, `expiresAt?` | QR code ready for display  |
+
+- `qrCodeBase64`: Base64-encoded QR code image. Decode and display as a bitmap.
+- `qrCodeUrl`: Direct URL to the QR code image (when available).
+- `expiresAt`: ISO 8601 expiration timestamp for the QR code. Display a countdown or refresh when expired.
+
+## Payment Method Flows
+
+When `controller.select(method)` is called on a `PrimerPaymentMethodsController`, different payment methods trigger different UI flows:
+
+| Method Type                     | Flow                             | Controller / UI            | Required Config                    |
+| ------------------------------- | -------------------------------- | -------------------------- | ---------------------------------- |
+| `PAYMENT_CARD`                  | Card form                        | `PrimerCardFormController` | None                               |
+| `GOOGLE_PAY`                    | Native Google Pay sheet          | Automatic                  | `PrimerGooglePayOptions`           |
+| `PAYPAL`                        | Browser / Custom Tab redirect    | Automatic                  | `redirectScheme`                   |
+| `KLARNA`                        | Category selection → Klarna view | `PrimerKlarnaController`   | `PrimerKlarnaOptions`, `lineItems` |
+| `STRIPE_ACH`                    | Stripe account collection        | Automatic                  | `PrimerStripeOptions`              |
+| iDEAL, Bancontact, Sofort, etc. | Browser / Custom Tab redirect    | Automatic                  | `redirectScheme`                   |
+| PromptPay, PayNow, etc.         | QR code display                  | `PrimerQrCodeController`   | None                               |
+
+**In `PrimerCheckoutSheet`:** Navigation between screens (card form, redirect overlay, etc.) is handled automatically by the sheet.
+
+**In `PrimerCheckoutHost`:** Overlays appear automatically for redirects and 3DS challenges. For Klarna and QR code methods, you create the dedicated controller and show the UI manually.
 
 ## Theming
 
@@ -1322,6 +1707,52 @@ class PrimerError {
 | `diagnosticsId`      | `String`  | Unique diagnostics ID. Provide to Primer support when investigating issues.                               |
 | `recoverySuggestion` | `String?` | Suggested recovery action. `null` when no recovery applies.                                               |
 
+#### Common Error IDs
+
+| Error ID                     | Error Class                   | Description                                     |
+| ---------------------------- | ----------------------------- | ----------------------------------------------- |
+| `"payment-cancelled"`        | `PaymentMethodCancelledError` | User cancelled the payment method flow          |
+| `"failed-to-redirect"`       | `PaymentMethodRedirectError`  | Redirect to external app or browser failed      |
+| `"bad-network"`              | `BadNetworkError`             | Network request failed due to poor connectivity |
+| `"connectivity-errors"`      | `ConnectivityError`           | Device has no network connectivity              |
+| `"failed-to-create-session"` | `SessionCreateError`          | Failed to create the checkout session           |
+| `"unauthorized"`             | `UnauthorizedError`           | Authentication failed (invalid client token)    |
+| `"client-error"`             | `ClientError`                 | HTTP 4xx client error                           |
+| `"server-error"`             | `ServerError` / `HttpError`   | HTTP 5xx server error                           |
+| `"invalid-value"`            | `GeneralError`                | Invalid value in SDK configuration or session   |
+| `"unknown-error"`            | `PrimerUnknownError`          | Unclassified error                              |
+
+#### Programmatic Error Handling
+
+```kotlin
+onEvent = { event ->
+    when (event) {
+        is PrimerCheckoutEvent.Failure -> {
+            when (event.error.errorId) {
+                "payment-cancelled" -> {
+                    // User cancelled -- no action needed, they can retry
+                }
+                "bad-network", "connectivity-errors" -> {
+                    showSnackbar("No internet connection. Please try again.")
+                }
+                "unauthorized", "failed-to-create-session" -> {
+                    // Token expired or invalid -- fetch a new one
+                    fetchNewClientToken()
+                }
+                "server-error" -> {
+                    showSnackbar("Server error. Please try again later.")
+                }
+                else -> {
+                    Log.e("Checkout", "${event.error.errorId}: ${event.error.description}")
+                    Log.e("Checkout", "diagnosticsId: ${event.error.diagnosticsId}")
+                }
+            }
+        }
+        is PrimerCheckoutEvent.Success -> { /* handle success */ }
+    }
+}
+```
+
 ### PrimerCardNetwork
 
 ```kotlin
@@ -1402,11 +1833,22 @@ enum class PrimerInputElementType {
 ### SyncValidationError
 
 ```kotlin
-class SyncValidationError {
-    val inputElementType: PrimerInputElementType
-    val errorId: String
-}
+data class SyncValidationError(
+    val inputElementType: PrimerInputElementType,
+    val errorId: String,
+    @StringRes val fieldId: Int,
+    @StringRes val errorResId: Int?,
+    @StringRes val errorFormatId: Int?,
+)
 ```
+
+| Property           | Type                     | Description                                          |
+| ------------------ | ------------------------ | ---------------------------------------------------- |
+| `inputElementType` | `PrimerInputElementType` | Which field has the error                            |
+| `errorId`          | `String`                 | Programmatic error identifier                        |
+| `fieldId`          | `@StringRes Int`         | String resource ID for the field label               |
+| `errorResId`       | `@StringRes Int?`        | String resource ID for the error message, or `null`  |
+| `errorFormatId`    | `@StringRes Int?`        | String resource ID for format-style error, or `null` |
 
 ## Troubleshooting
 
@@ -1583,3 +2025,11 @@ Add to your Activity in `AndroidManifest.xml`:
 ```
 
 This prevents the WebView from being destroyed during configuration changes, which would cause 3DS challenges to fail.
+
+### Controller Cleanup and Lifecycle
+
+v3 controllers auto-cleanup when their enclosing composition exits -- there is no explicit `cleanup()` method to call. Key lifecycle behaviors:
+
+- `dismiss()` closes the checkout UI (sheet or host), but the controller remains valid
+- `refresh()` reinitializes the session, transitioning state back to `Loading`
+- Child controllers (`rememberCardFormController`, `rememberKlarnaController`, etc.) are tied to the composition scope where they are created

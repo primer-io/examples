@@ -47,17 +47,17 @@ Skills are packaged knowledge bases that AI coding assistants can reference whil
 
 ### primer-android-checkout
 
-**Version:** 1.0.0
+**Version:** 1.2.0
 
 **What it includes:**
 
 - Complete composable API reference for Checkout Sheet and Host
 - Controller pattern with remember\*Controller functions
-- Card form customization with slot-based defaults
-- Material 3 theming integration with PrimerTheme
-- State observation with StateFlow and lifecycle-aware collection
-- Payment method list customization
-- Common troubleshooting scenarios
+- Card form, Klarna, and QR code controller documentation
+- Payment method flow reference and MANUAL handling mode
+- Material 3 theming, slot-based customization, state observation
+- Expanded error reference with concrete error IDs
+- 57 supported locales, troubleshooting guide
 
 **Directory:** [`primer-android-checkout/`](./primer-android-checkout)
 
@@ -133,6 +133,14 @@ The assistant should confirm it has access to the skill documentation.
 **Best Practice:** Use both together! The skill provides workflow guidance while Context7 ensures you have the latest API information.
 
 ## Version History
+
+### v1.2.0 (2026-03-20)
+
+- **primer-android-checkout:** Source-verified update against SDK 3.0.0-beta.2
+  - Added Klarna controller, QR code controller, and payment method flows documentation
+  - Added MANUAL payment handling, PrimerSessionIntent, expanded error IDs
+  - Fixed data classes against source: PrimerClientSession (4→9 fields), PrimerPaymentMethod, Payment, PaymentInstrumentData
+  - Added compose patterns: Klarna, QR code, Google Pay, error recovery, vault-only flow
 
 ### v1.1.0 (2026-03-03)
 

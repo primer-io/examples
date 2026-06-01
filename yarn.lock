@@ -14926,9 +14926,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"primer-dropin-checkout@workspace:examples/sdk-v2-stackbllitz-dropin":
+"primer-dropin-checkout@workspace:examples/sdk-v2-stackblitz-dropin":
   version: 0.0.0-use.local
-  resolution: "primer-dropin-checkout@workspace:examples/sdk-v2-stackbllitz-dropin"
+  resolution: "primer-dropin-checkout@workspace:examples/sdk-v2-stackblitz-dropin"
   dependencies:
     "@primer-io/checkout-web": "npm:^2.50.5"
     "@types/node": "npm:20.6.2"
@@ -14946,9 +14946,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"primer-headless-checkout@workspace:examples/skd-v2-stackblitz-headless":
+"primer-headless-checkout@workspace:examples/sdk-v2-stackblitz-headless":
   version: 0.0.0-use.local
-  resolution: "primer-headless-checkout@workspace:examples/skd-v2-stackblitz-headless"
+  resolution: "primer-headless-checkout@workspace:examples/sdk-v2-stackblitz-headless"
   dependencies:
     "@primer-io/checkout-web": "npm:^2.50.5"
     "@types/node": "npm:20.6.2"

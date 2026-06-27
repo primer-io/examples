@@ -21,10 +21,8 @@ loadPrimer();
 const checkout = document.querySelector('primer-checkout');
 checkout.options = {
   applePay: {
-    buttonOptions: {
-      type: 'buy',
-      buttonStyle: 'black',
-    },
+    buttonType: 'buy',
+    buttonStyle: 'black',
     billingOptions: {
       requiredBillingContactFields: ['postalAddress'],
     },
@@ -34,7 +32,7 @@ checkout.options = {
 
 ## Button Style Options
 
-Customize the appearance of the Apple Pay button through the `buttonOptions` configuration. All properties are optional.
+Customize the appearance of the Apple Pay button with `buttonType` and `buttonStyle`. Both properties are optional.
 
 ### Button Type
 
@@ -75,31 +73,31 @@ The button style controls the visual appearance of the Apple Pay button.
 ```typescript
 // Standard black button for purchasing
 applePay: {
-  buttonOptions: {
-    type: 'buy',
-    buttonStyle: 'black',
-  },
+  buttonType: 'buy',
+  buttonStyle: 'black',
 }
 
 // White button for dark backgrounds
 applePay: {
-  buttonOptions: {
-    type: 'pay',
-    buttonStyle: 'white',
-  },
+  buttonType: 'pay',
+  buttonStyle: 'white',
 }
 
 // Donation button with outline style
 applePay: {
-  buttonOptions: {
-    type: 'donate',
-    buttonStyle: 'white-outline',
-  },
+  buttonType: 'donate',
+  buttonStyle: 'white-outline',
 }
 ```
 
 :::tip Apple Pay Design Guidelines
 Apple provides strict design guidelines for Apple Pay buttons. The SDK automatically renders buttons according to [Apple's Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/apple-pay).
+:::
+
+:::note Button dimensions
+The SDK does not currently expose Apple Pay button height or corner radius as Primer styling options. CSS custom properties such as `--apple-pay-button-height` and `--apple-pay-button-border-radius` are not part of the documented `<primer-checkout>` styling API and may not resize the SDK-rendered Apple Pay button.
+
+Use surrounding layout CSS to control spacing around the button. Changing the rendered Apple Pay button dimensions would require SDK support.
 :::
 
 ## Billing Contact Options
@@ -194,10 +192,8 @@ applePay: {
     sdkCore: true, // Required for Apple Pay
     applePay: {
       // Button styling
-      buttonOptions: {
-        type: 'buy',
-        buttonStyle: 'black',
-      },
+      buttonType: 'buy',
+      buttonStyle: 'black',
 
       // Billing information
       billingOptions: {
@@ -266,9 +262,8 @@ Apple Pay only works on supported devices with Safari or WebKit-based browsers. 
 
 | Option                                          | Type       | Default   | Description                        |
 | ----------------------------------------------- | ---------- | --------- | ---------------------------------- |
-| `buttonOptions`                                 | `object`   | —         | Button styling configuration       |
-| `buttonOptions.type`                            | `string`   | `'plain'` | Button label type                  |
-| `buttonOptions.buttonStyle`                     | `string`   | —         | Button color theme                 |
+| `buttonType`                                    | `string`   | `'plain'` | Button label type                  |
+| `buttonStyle`                                   | `string`   | `'black'` | Button color theme                 |
 | `billingOptions`                                | `object`   | —         | Billing information configuration  |
 | `billingOptions.requiredBillingContactFields`   | `string[]` | —         | Billing fields to capture          |
 | `shippingOptions`                               | `object`   | —         | Shipping information configuration |

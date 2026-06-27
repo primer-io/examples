@@ -148,5 +148,6 @@ To create your own theme:
 ## Important Notes
 
 - Some elements like PayPal, Apple Pay, and Google Pay have their own styling limitations
+- Apple Pay button height and corner radius are not currently exposed as Primer theme variables
 - This example uses only documented Primer style variables for maximum compatibility
 - The proper approach for theming is to apply the theme class directly to the `primer-checkout` element

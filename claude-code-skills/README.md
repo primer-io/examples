@@ -16,7 +16,7 @@ Skills are packaged knowledge bases that AI coding assistants can reference whil
 
 ### primer-web-components
 
-**Version:** 1.0.0
+**Version:** 1.1.0
 
 **What it includes:**
 
@@ -26,6 +26,7 @@ Skills are packaged knowledge bases that AI coding assistants can reference whil
 - SSR support documentation (Next.js, SvelteKit)
 - CSS theming guide
 - Common troubleshooting scenarios
+- Verified against the shipped `@primer-io/primer-js` 1.9.3
 
 **Directory:** [`primer-web-components/`](./primer-web-components)
 
@@ -133,6 +134,17 @@ The assistant should confirm it has access to the skill documentation.
 **Best Practice:** Use both together! The skill provides workflow guidance while Context7 ensures you have the latest API information.
 
 ## Version History
+
+### v1.3.0 (2026-09-10)
+
+- Rebuilt against the shipped `@primer-io/primer-js` 1.9.3, replacing claims validated against 1.7.0
+  - `primer:payment-start` documented with `preventDefault()` first — without it the SDK continues
+    payment creation while a merchant's async check is still running
+  - Removed `sdkCore`, `options.stripe`, `slot="checkout-failure"`, `--primer-color-gray-800` and
+    `.primer-light-theme`: none exist in the shipped package
+  - `redirect.returnUrl` documented — without it the redirect method is dropped from the checkout
+  - The vault manager's `customerId` requirement documented, and twelve previously unmentioned events
+  - `SKILL.md` 6,003 → 1,982 words, reorganised onto the shared skill standard
 
 ### v1.2.0 (2026-03-20)
 

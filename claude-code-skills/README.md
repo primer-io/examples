@@ -48,17 +48,19 @@ Skills are packaged knowledge bases that AI coding assistants can reference whil
 
 ### primer-android-checkout
 
-**Version:** 1.2.0
+**Version:** 1.3.0
 
 **What it includes:**
 
-- Complete composable API reference for Checkout Sheet and Host
-- Controller pattern with remember\*Controller functions
-- Card form, Klarna, and QR code controller documentation
-- Payment method flow reference and MANUAL handling mode
-- Material 3 theming, slot-based customization, state observation
-- Expanded error reference with concrete error IDs
-- 57 supported locales, troubleshooting guide
+- Composable API reference for the checkout sheet and inline host, with a complete import map
+- Controller pattern with `remember*Controller` functions, and their identity and lifetime
+- Card form control: per-field updates, validation state, co-badged network selection
+- Payment method flows, which methods the SDK drives itself, and which need their own dependency
+- Material 3 theming via design tokens, slot-based customization, state observation
+- What the SDK provides for TalkBack, and what it leaves to you
+- Error reference with concrete error IDs, and troubleshooting by symptom
+- Gating payment creation: idempotency keys, continue or abort
+- A "Not covered here" section, so unsupported reads differently from undocumented
 
 **Directory:** [`primer-android-checkout/`](./primer-android-checkout)
 
@@ -137,7 +139,7 @@ The assistant should confirm it has access to the skill documentation.
 
 ### v1.3.0 (2026-09-10)
 
-- Rebuilt against the shipped `@primer-io/primer-js` 1.9.3, replacing claims validated against 1.7.0
+- **primer-web-components:** rebuilt against the shipped `@primer-io/primer-js` 1.9.3, replacing claims validated against 1.7.0
   - `primer:payment-start` documented with `preventDefault()` first — without it the SDK continues
     payment creation while a merchant's async check is still running
   - Removed `sdkCore`, `options.stripe`, `slot="checkout-failure"`, `--primer-color-gray-800` and
@@ -145,6 +147,36 @@ The assistant should confirm it has access to the skill documentation.
   - `redirect.returnUrl` documented — without it the redirect method is dropped from the checkout
   - The vault manager's `customerId` requirement documented, and twelve previously unmentioned events
   - `SKILL.md` 6,003 → 1,982 words, reorganised onto the shared skill standard
+- **primer-android-checkout:** re-verified against SDK `3.0.0-beta.6` and hardened over ten
+  standard-driven passes, each measured by compiling twenty generated integrations against the
+  published artifact
+  - `SKILL.md` cut from 10,020 to under 2,000 words; detail moved into the reference files
+  - 3DS, Klarna and Stripe ACH need their own dependency coordinates — the SDK loads those wrappers
+    reflectively, so without them 3DS throws and the method disappears from the list while
+    everything still compiles
+  - Removed `redirectScheme` guidance: nothing in the SDK reads it, and the SDK registers its own
+    redirect intent filter. Klarna's `returnIntentUrl` is the setting that is actually required
+  - Validation errors corrected: only `errorResId` is ever populated, and the field-name resource id
+    is always `0`, so the previously documented resolution call would have thrown on every error
+  - `threeDsOptions` and its siblings documented with their owning type, `PrimerPaymentMethodOptions`
+  - Two different `PrimerPaymentMethod` types disambiguated: the one reachable from the client
+    session carries no surcharge
+  - `clientSessionCachingEnabled` documented as inverted, and `is3DSSanityCheckEnabled` as the
+    default that blocks 3DS on emulators and rooted devices
+  - `formatAmount` documented as safe only while the session is `Ready` — it throws elsewhere, even
+    in states that carry a client session
+  - `paymentHandling = MANUAL` removed as an option: Components wires no tokenization callback and
+    backend-driven methods fail outright in that mode
+  - iDEAL and PromptPay method types listed with their processor prefixes, so a `== "IDEAL"` filter
+    no longer looks correct
+  - Removed documentation of the Klarna, QR-code and country-selection controllers: they are
+    `internal` to the SDK and cannot be called from app code
+  - Checkout state documented as transitions and terminality, not just a member list
+  - Accessibility section added: what the built-in fields announce, what replacing a slot costs, and
+    the fact that the SDK exposes no accessibility API at this version
+  - Import map completed for Primer _and_ platform imports, with a do-not-import list, and a
+    copy-ready import block on every recipe
+  - Added a "Not covered here" boundary section, so unsupported reads differently from undocumented
 
 ### v1.2.0 (2026-03-20)
 

@@ -194,6 +194,10 @@ The type of Apple Pay button to display.
 
 The visual style of the Apple Pay button.
 
+:::note Apple Pay button dimensions
+The SDK does not currently expose Apple Pay button height or corner radius as Primer styling options. CSS custom properties such as `--apple-pay-button-height` and `--apple-pay-button-border-radius` are not part of the documented `<primer-checkout>` styling API and may not resize the SDK-rendered Apple Pay button.
+:::
+
 ### applePay.captureBillingAddress
 
 **Type**: `boolean`

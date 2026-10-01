@@ -32,17 +32,23 @@ Skills are packaged knowledge bases that AI coding assistants can reference whil
 
 ### primer-ios-checkout
 
-**Version:** 1.0.0
+**Version:** 1.3.1
 
 **What it includes:**
 
-- Complete scope protocol reference for all payment method scopes
-- SwiftUI integration patterns (NavigationStack, sheets, full-screen covers)
-- UIKit support via PrimerCheckoutPresenter
-- Design token theming with PrimerCheckoutTheme
-- State management via AsyncStream and onCompletion
-- Card form customization with field-level control
-- Common troubleshooting scenarios
+- Integration tasks in the order you ship them, with three references by integration domain
+- `PrimerCheckout` for the managed flow, and `PrimerCheckoutSession` with the composables for
+  custom layouts
+- Session and state type reference, with the error ids
+- Card form slots and `CardFormDefaults`, with field-level validation display
+- Per-method setup: the redirect scheme, Apple Pay's merchant identifier, 3DS
+- Design token theming via `PrimerCheckoutTheme`, and how dark mode actually applies
+- Paying with a saved card from your own pay button, with the SDK's CVV recapture screen
+- Outcome delivery documented as it behaves — a failure after ready arrives once per attempt
+- Gating payment creation: idempotency keys, continue or abort
+- UIKit support via `PrimerCheckoutPresenter`
+- A "What this skill does not cover" section, so unsupported reads differently from undocumented
+- Troubleshooting by symptom
 
 **Directory:** [`primer-ios-checkout/`](./primer-ios-checkout)
 
@@ -139,7 +145,8 @@ The assistant should confirm it has access to the skill documentation.
 
 ### v1.3.0 (2026-09-10)
 
-- **primer-web-components:** rebuilt against the shipped `@primer-io/primer-js` 1.9.3, replacing claims validated against 1.7.0
+- **primer-web-components:** rebuilt against the shipped `@primer-io/primer-js` 1.9.3, replacing
+  claims validated against 1.7.0
   - `primer:payment-start` documented with `preventDefault()` first — without it the SDK continues
     payment creation while a merchant's async check is still running
   - Removed `sdkCore`, `options.stripe`, `slot="checkout-failure"`, `--primer-color-gray-800` and
@@ -177,6 +184,32 @@ The assistant should confirm it has access to the skill documentation.
   - Import map completed for Primer _and_ platform imports, with a do-not-import list, and a
     copy-ready import block on every recipe
   - Added a "Not covered here" boundary section, so unsupported reads differently from undocumented
+- **primer-ios-checkout:** rewritten onto the shipped Session API and verified against SDK
+  `3.0.0-beta.7`
+  - The previous revision was built around `PrimerCheckoutScope`, `PrimerCardFormScope` and 21
+    sibling scope and state types. All are declared without `public`, so none was reachable from an
+    app, and `PrimerCheckout` has no `scope:` parameter — the only documented route to them
+  - Rewritten onto what ships: `PrimerCheckout` for the managed flow, and `PrimerCheckoutSession`
+    with `.primerCheckoutSession(_:)`, `PrimerCardForm`, `PrimerPaymentMethods` and
+    `PrimerVaultedPaymentMethods` for custom layouts. The previous revision named none of them
+  - `onCompletion` documented as not one-shot: a failure after the session is ready is delivered
+    once per attempt, so the previously documented navigate-on-terminal-state pattern double-fired
+  - `PrimerError` corrected from a struct to an enum with no accessible initializer, and
+    `diagnosticsId` from optional to non-optional; the 37 error ids listed
+  - "Gate payment creation" filled rather than omitted: `onBeforePaymentCreate` and `idempotencyKey`
+    are both public, and setting the handler makes the key ignored
+  - `urlScheme` documented as required for every redirect method and 3DS — it defaults to `nil` and
+    only warns when malformed, so it fails at the return rather than at startup
+  - Re-pinned from `3.0.0-beta.5` to `3.0.0-beta.7`, which changed the API the skill documents:
+    `updateCvvInput` removed, `selectVaulted(_:)` now pays and raises the SDK's own CVV screen,
+    `darkColors` removed and `width` renamed `borderWidth`, `formatAmount(_:)` and the modifier's
+    `theme:` added
+  - Added a "What this skill does not cover" section, so unsupported reads differently from
+    undocumented
+  - `SKILL.md` 8,254 → 1,388 words; the two reference files replaced by three, organised by
+    integration domain
+  - Gate: 23 of 23 usage blocks compile against the published tag, with no imports supplied by the
+    harness. The previous revision compiled 6 of 63
 
 ### v1.2.0 (2026-03-20)
 

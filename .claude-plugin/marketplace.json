@@ -18,7 +18,7 @@
     },
     {
       "name": "primer-ios-checkout",
-      "description": "Build checkout and payment experiences using Primer's iOS CheckoutComponents SDK. Covers SwiftUI scope-based architecture, UIKit support, theming, state management, and all payment method scope APIs.",
+      "description": "Build checkout and payment experiences using Primer's iOS CheckoutComponents SDK. Covers PrimerCheckout and PrimerCheckoutSession, the card form and payment method composables, saved cards, theming, UIKit support, and outcome handling.",
       "source": "./claude-code-skills",
       "strict": false,
       "skills": ["./primer-ios-checkout"]

@@ -54,7 +54,7 @@ Skills are packaged knowledge bases that AI coding assistants can reference whil
 
 ### primer-android-checkout
 
-**Version:** 1.3.0
+**Version:** 1.4.0
 
 **What it includes:**
 
@@ -62,7 +62,9 @@ Skills are packaged knowledge bases that AI coding assistants can reference whil
 - Controller pattern with `remember*Controller` functions, and their identity and lifetime
 - Card form control: per-field updates, validation state, co-badged network selection
 - Payment method flows, which methods the SDK drives itself, and which need their own dependency
-- Material 3 theming via design tokens, slot-based customization, state observation
+- Material 3 theming via design tokens and `appearanceMode`, slot-based customization, state
+  observation
+- Google Pay Express Checkout: shipping address and shipping option handlers
 - What the SDK provides for TalkBack, and what it leaves to you
 - Error reference with concrete error IDs, and troubleshooting by symptom
 - Gating payment creation: idempotency keys, continue or abort
@@ -142,6 +144,38 @@ The assistant should confirm it has access to the skill documentation.
 **Best Practice:** Use both together! The skill provides workflow guidance while Context7 ensures you have the latest API information.
 
 ## Version History
+
+### v1.4.0 (2026-10-20)
+
+- **primer-android-checkout:** re-pinned from `3.0.0-beta.6` to `3.0.0-beta.8`, which changed the
+  API the skill documents
+  - `PrimerCheckoutState` is down to four members: `BeforeClientSessionUpdated` and
+    `ClientSessionUpdated` are removed, and a session update now publishes `Ready` again with the
+    updated session. In-flight signal is the card form's `state.isLoading`
+  - `Failure.error` renamed `primerError`, and `Failure` gained `checkoutData` (payment and order id
+    when a payment was created); the sheet's `error` slot now takes two parameters
+  - `formatAmount` works in every state after the first `Ready`. Removed the "format
+    `ClientSessionUpdated` totals yourself" guidance, the `runCatching` guards and the
+    surcharge-crash workaround it required
+  - Theming: `appearanceMode` (`SYSTEM`/`LIGHT`/`DARK`) and `isDarkAppearance()`,
+    `borderWidthTokens` → `widthTokens` (`default`/`focus`/`selected`/`error`), `brandFont` and an
+    `error` style on typography, `primerColorOnBrand`. The raw palette (`primerColorGray*` and the
+    other ramps) is now internal, `primerColorBackground` is `primerColorBackgroundPrimary`, the
+    `…Hover` border tokens and every `base` token are gone; samples override semantic tokens instead
+  - Google Pay Express Checkout: `onShippingAddressChange` / `onShippingOptionChange`, with a
+    worked handler and the `shipping-not-updated` error id
+  - Autofill on the default card and billing fields noted; KDoc table gains the `s.error` examples
+    that no longer compile
+  - `3ds-android`, `klarna-android` and `stripe-android` now release with the SDK, so the install
+    snippet pins them at `3.0.0-beta.8` instead of their old standalone versions
+  - Merchant-supplied pieces (method icons, fonts, token source, navigation, shipping backend) are
+    snippet parameters instead of undefined `your*` stubs, and `import com.example.checkout.R` is
+    gone from every import block, so each snippet compiles as written
+  - Gate: 50 of 50 compilation units from 44 usage blocks compile, with no imports supplied by the
+    harness, and the three `// WRONG (compiles; wrong at runtime)` halves compile as marked. The
+    previous revision failed 8 of 50. Run against a local publish of the SDK's `v3` branch at
+    `6bbca60fc` as `3.0.0-beta.8`, strictly pinned, before the release reached Maven Central: re-run
+    against the published artifact
 
 ### v1.3.0 (2026-09-10)
 

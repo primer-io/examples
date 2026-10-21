@@ -20,8 +20,8 @@ and keep the rest.
 **SDK status: beta** — the API can change between releases. What ships but is out of scope is
 [listed here](references/composable-reference.md#not-covered-here).
 
-Every name starting `your`/`Your` — `yourCartRepository`, `YourPaymentMethodIcon`,
-`R.font.your_brand_bold` — is code you write. Everything else resolves from the SDK or AndroidX.
+What you supply — icons, fonts, the client token, navigation, backend calls — arrives as a
+parameter of the snippet that needs it. Everything else resolves from the SDK or AndroidX.
 
 ## When to use this skill
 
@@ -53,7 +53,7 @@ plugins {
 }
 
 dependencies {
-    implementation("io.primer:checkout:3.0.0-beta.6")
+    implementation("io.primer:checkout:3.0.0-beta.8")
 
     implementation(platform("androidx.compose:compose-bom:2025.12.00"))
     implementation("androidx.compose.ui:ui")
@@ -64,16 +64,14 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.4")
 
     // Needed only by patterns in this skill:
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4") // viewModel()
     implementation("androidx.navigation:navigation-compose:2.8.4")
     implementation("androidx.compose.animation:animation")               // AnimatedContent
-    implementation("com.google.android.gms:play-services-wallet:19.5.0") // ButtonConstants
 
-    // Payment-method wrappers: `io.primer:checkout` compiles against these and ships none
-    // of them, so add one coordinate per method you enable in the Dashboard.
-    implementation("io.primer:3ds-android:1.8.0")     // 3DS on card payments
-    implementation("io.primer:klarna-android:1.3.0")  // Klarna
-    implementation("io.primer:stripe-android:1.1.2")  // STRIPE_ACH
+    // Payment-method wrappers, released with the SDK at its version. `io.primer:checkout`
+    // ships none of them: add one per method you enable in the Dashboard.
+    implementation("io.primer:3ds-android:3.0.0-beta.8")     // 3DS on card payments
+    implementation("io.primer:klarna-android:3.0.0-beta.8")  // Klarna
+    implementation("io.primer:stripe-android:3.0.0-beta.8")  // STRIPE_ACH
 }
 ```
 
@@ -91,10 +89,9 @@ each block copies from. It is not a ceiling on what your screen may import: thes
 _receive_ a `NavController`, so `NavHost`, `composable` and `rememberNavController` are absent
 because the graph is yours, not because they are barred.
 
-Two it settles. `by` needs `androidx.compose.runtime.getValue` (plus `setValue` for a `var`).
-`Modifier.weight` is a `RowScope` member with no import: importing
-`androidx.compose.foundation.layout.weight` hits an `internal` symbol and fails the build. The
-do-not-import list names both.
+Two it settles: `by` needs `androidx.compose.runtime.getValue` (plus `setValue` for a `var`), and
+`Modifier.weight` is a `RowScope` member with no import — importing
+`androidx.compose.foundation.layout.weight` fails the build.
 
 `rememberPrimerCheckoutController` is annotated `@ExperimentalPrimerApi` at opt-in level
 `WARNING`: it compiles without opting in, but fails under `allWarningsAsErrors`. Add
@@ -103,7 +100,7 @@ do-not-import list names both.
 ## Take the first payment
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -125,7 +122,7 @@ fun CheckoutScreen(clientToken: String, onDone: (String) -> Unit) {
     LaunchedEffect(state) {
         when (val s = state) {
             is PrimerCheckoutState.Success -> onDone(s.checkoutData.payment.id)
-            is PrimerCheckoutState.Failure -> Log.e("Checkout", s.error.diagnosticsId)
+            is PrimerCheckoutState.Failure -> Log.e("Checkout", s.primerError.diagnosticsId)
             else -> Unit
         }
     }
@@ -141,20 +138,18 @@ live. [Full screens](references/compose-patterns.md#sheet-vs-host-patterns).
 
 ## Handle the outcome
 
-`PrimerCheckoutState` is a sealed interface with six members, observed on `controller.state`; four
-carry a payload. Read
+`PrimerCheckoutState` is a sealed interface with four members — `Loading`, `Ready`, `Success`,
+`Failure` — observed on `controller.state`; the last three carry a payload. Read
 [every member and the transitions between them](references/composable-reference.md#state-types).
 
 Handle `Success` and `Failure`. Both are terminal and both **stick** until a new attempt starts; a
 retry runs `Loading` → `Ready` → terminal again, so your handler fires once per attempt.
 `refresh()` is the only way back into `Loading`.
 
-`formatAmount(amountInCents)` formats minor units in the session currency (`1000` → `"$10.00"`),
-reading it from `Ready` only — from every other state, `ClientSessionUpdated` included, it throws
-`IllegalArgumentException`. Format while `Ready`, guard the call, keep the string. Nothing returns
-to `Ready`, and a card submit passes through `ClientSessionUpdated`, so format updated totals from
-that payload yourself
-([both rules, reconciled](references/composable-reference.md#when-both-rules-collide-formatamount-and-clientsessionupdated)).
+A client-session update goes `Ready(old)` → `Ready(new)`: read totals off the latest `Ready`; the
+in-flight signal is the card form's `state.isLoading`. `formatAmount(amountInCents)` (`1000` →
+`"$10.00"`) works in every state after the first `Ready` and throws before it
+([details](references/composable-reference.md#controller-interfaces)).
 
 The controller is a ViewModel keyed to the composition, not the token: **a new client token on the
 same screen does not rebuild it** — leave and re-enter to start over.
@@ -185,14 +180,12 @@ filters methods, `customerId` allows saving them, `lineItems` is required for Kl
 
 ## Style it
 
-`PrimerTheme` carries the tokens: colours (light and dark), spacing, radius, size, border width,
-typography. Semantic colours are computed from base ones, so overriding one base token updates
-every semantic token and the Material 3 `ColorScheme`. Subclass
-`LightColorTokens`/`DarkColorTokens`, copy the other `*Tokens` data classes, pass the result as
-`theme =` to the sheet or host.
-
-`TypographyStyle.font` has no default: a custom font means rebuilding each style with a `@FontRes`
-id off your app's own `R`. Untouched styles keep the SDK's Inter, which lives on the SDK's `R`.
+`PrimerTheme` carries colours (light and dark), `appearanceMode` (`SYSTEM`, `LIGHT`, `DARK`),
+spacing, radius, size, `widthTokens` and typography; pass it as `theme =` to the sheet or host.
+The raw palette (`primerColorGray*`, `Red*`, …) is `internal`: subclass
+`LightColorTokens`/`DarkColorTokens` and override `primerColorBrand` and semantic tokens such as
+`primerColorBackgroundPrimary` or `primerColorOnBrand` (text on brand buttons).
+`TypographyTokens(brandFont = R.font.your_brand_regular)` sets every style's font, from your `R`.
 [Token values and the M3 mapping](references/composable-reference.md#theming-types),
 [four worked themes](references/compose-patterns.md#theming-patterns).
 
@@ -204,14 +197,18 @@ snippet — without it the method is dropped from the list, logged as `misconfig
 [Which method needs what](references/composable-reference.md#payment-methods-and-what-each-needs),
 including the two — Klarna and QR code — with no merchant-callable API at all.
 
+Google Pay can collect a shipping address and offer shipping options: register
+`checkout.onShippingAddressChange` (return the options) and `checkout.onShippingOptionChange` (have
+your backend PATCH `order.shipping` on the client session) — both, or the options never show
+([pattern](references/compose-patterns.md#shipping-address-and-options-express-checkout)).
+
 Whenever any method carries a non-zero surcharge, `PrimerPaymentMethods` draws its own surcharge
 cards and never calls the `method` slot, so a custom row applies only to surcharge-free lists; for
 both, build the list from `controller.methods` — whose element type is the only one carrying
 `surcharge`; `clientSession.paymentMethod` is a
 [different class of the same name](references/composable-reference.md#two-types-called-primerpaymentmethod).
-`Surcharge` is a sealed interface, not a number: interpolating it prints a class name. Format its `amount` with `formatAmount`, from `Ready` — and
-keep `PrimerPaymentMethods` in a `Ready` branch: its surcharge header formats there too, and
-throws elsewhere.
+`Surcharge` is a sealed interface, not a number: interpolating it prints a class name. Format its
+`amount` with `formatAmount`.
 
 ## Customise the form
 
@@ -229,11 +226,9 @@ Replacing a slot also replaces its accessibility labels — the SDK sets them an
 overrides them ([what each override costs](references/composable-reference.md#accessibility)).
 
 Drive a custom submit button from `state.isFormValid && !state.isLoading`; the default reads "Pay",
-with no amount. `state.fieldErrors` gives string-resource ids, not text — resolve them with
-`fieldErrorMessage(error, context)` from
-[`SyncValidationError`](references/composable-reference.md#syncvalidationerror), which takes a
-`Context` so the same helper works inside and outside composition. `errorId` is programmatic, never
-shopper-facing, and `fieldId` is not resolvable here — that section says why.
+with no amount. Default fields offer autofill; your own inputs need a `contentType`. `state.fieldErrors` gives string-resource ids, not text: resolve them with the
+[`fieldErrorMessage(error, context)` helper](references/composable-reference.md#syncvalidationerror);
+never show `errorId`, and never resolve `fieldId` — that section says why.
 
 ## Saved payment methods
 
@@ -260,13 +255,15 @@ slot: hoisted to screen scope, a retry after a decline collides with the payment
 
 ## Errors and recovery
 
-`Failure` carries a `PrimerError`. Switch on `errorId`; `description` and `recoverySuggestion` are
+`Failure` carries `primerError`, plus `checkoutData` (payment and order id when a payment was
+created, e.g. a decline; otherwise `null`). Switch on `primerError.errorId`; `description` and `recoverySuggestion` are
 for logs, not shoppers; `errorCode` is the issuer reason (`"card_declined"`); quote `diagnosticsId`
 to Primer support.
 
 `"unauthorized"` and `"failed-to-create-session"` mean the token expired, and `refresh()` reuses that token — mint a new one and re-enter the screen. Inside the
 sheet you may need none of this: the default `error` screen already offers Retry (via `refresh()`)
-and "try other payment methods"; overriding `error` replaces both.
+and "try other payment methods"; overriding `error` — a two-parameter slot,
+`(primerError, checkoutData)` — replaces both.
 [Every id and what to do about it](references/composable-reference.md#error-ids),
 [recovery screen](references/compose-patterns.md#error-recovery-pattern).
 
@@ -283,7 +280,7 @@ logging patterns that confirm it.
 - Put navigation, analytics and cart mutation in `LaunchedEffect`, never in composition
 - Handle `Success` and `Failure`; end the `when` with `else`
 - Set `paymentMethodOptions.klarnaOptions.returnIntentUrl` before Klarna; it throws without one
-- Call `formatAmount` only from `Ready`; format `ClientSessionUpdated` totals yourself
+- Call `formatAmount` only after the first `Ready`; read updated totals off the latest `Ready`
 
 <details>
 <summary><strong>Old patterns: drop-in and headless</strong></summary>

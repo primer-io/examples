@@ -55,9 +55,10 @@ is the more common case and the one where the platform itself suggests `weight`.
 [do-not-import list](composable-reference.md#import-map) repeats all of this where you are actually
 assembling imports, and names the error each wrong one produces.
 
-**Stubs are named for their owner.** Anything starting `your`/`Your` — `yourCartRepository`,
-`YourPaymentMethodIcon`, `R.font.your_brand_bold`, `YourCheckoutViewModel` — is code you write, and
-nothing else here is. The convention is stated in [`SKILL.md`](../SKILL.md#overview).
+**What you supply arrives as a parameter.** Your icons, fonts, client token source, navigation and
+backend calls are parameters of the snippet that needs them — `methodIcon`, `@FontRes regular`,
+`onPaid`, `quoteShipping` — so every snippet compiles as written. Anything named `your`/`Your` in a
+comment, such as `R.font.your_brand_bold`, is yours too. The convention is stated in [`SKILL.md`](../SKILL.md#overview).
 
 **Provenance.** Signatures and behaviour were read off the source of the release tag that
 [`SKILL.md`](../SKILL.md#install-and-initialise) pins. Where a pattern depends on behaviour that a
@@ -69,76 +70,77 @@ the rule is stated once in
 
 ## Contents
 
-This file is ~9,900 words. Read one section, not the file: the ranges are exact, so
-`sed -n '1092,1255p' references/compose-patterns.md` gives you the theming patterns and nothing
+This file is long. Read one section, not the file: the ranges are exact, so
+`sed -n '1089,1260p' references/compose-patterns.md` gives you the theming patterns and nothing
 else. Every snippet carries its own import block, so one section is self-contained.
 
 | Lines     | Section                                                                                                                                                                |
 | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 136-374   | [Sheet vs Host Patterns](#sheet-vs-host-patterns)                                                                                                                      |
-| 138-171   | &nbsp;&nbsp;[Minimal Sheet (fastest integration)](#minimal-sheet-fastest-integration)                                                                                  |
-| 172-256   | &nbsp;&nbsp;[Sheet with Custom Slots](#sheet-with-custom-slots)                                                                                                        |
-| 257-374   | &nbsp;&nbsp;[Inline Host (full control)](#inline-host-full-control)                                                                                                    |
-| 375-536   | [State Observation Patterns](#state-observation-patterns)                                                                                                              |
+| 138-374   | [Sheet vs Host Patterns](#sheet-vs-host-patterns)                                                                                                                      |
+| 140-173   | &nbsp;&nbsp;[Minimal Sheet (fastest integration)](#minimal-sheet-fastest-integration)                                                                                  |
+| 174-258   | &nbsp;&nbsp;[Sheet with Custom Slots](#sheet-with-custom-slots)                                                                                                        |
+| 259-374   | &nbsp;&nbsp;[Inline Host (full control)](#inline-host-full-control)                                                                                                    |
+| 375-525   | [State Observation Patterns](#state-observation-patterns)                                                                                                              |
 | 377-407   | &nbsp;&nbsp;[Observing Checkout State](#observing-checkout-state)                                                                                                      |
 | 408-441   | &nbsp;&nbsp;[Observing Card Form State](#observing-card-form-state)                                                                                                    |
-| 442-504   | &nbsp;&nbsp;[Observing Payment Methods](#observing-payment-methods)                                                                                                    |
-| 505-536   | &nbsp;&nbsp;[Observing Saved Payment Methods](#observing-saved-payment-methods)                                                                                        |
-| 537-700   | [Custom Card Form Layouts](#custom-card-form-layouts)                                                                                                                  |
-| 539-577   | &nbsp;&nbsp;[Rearranged Fields](#rearranged-fields)                                                                                                                    |
-| 578-628   | &nbsp;&nbsp;[Replace Only the Submit Button](#replace-only-the-submit-button)                                                                                          |
-| 629-656   | &nbsp;&nbsp;[Replace Individual Fields in CardDetailsContent](#replace-individual-fields-in-carddetailscontent)                                                        |
-| 657-700   | &nbsp;&nbsp;[Add Vault Toggle to Card Form](#add-vault-toggle-to-card-form)                                                                                            |
-| 701-816   | [Custom Payment Method Lists](#custom-payment-method-lists)                                                                                                            |
-| 703-773   | &nbsp;&nbsp;[Custom Method Row](#custom-method-row)                                                                                                                    |
-| 774-816   | &nbsp;&nbsp;[Filter Payment Methods by Type](#filter-payment-methods-by-type)                                                                                          |
-| 817-947   | [Controller Lifecycle Patterns](#controller-lifecycle-patterns)                                                                                                        |
-| 819-844   | &nbsp;&nbsp;[Correct: Screen-Level Checkout Controller](#correct-screen-level-checkout-controller)                                                                     |
-| 845-870   | &nbsp;&nbsp;[Wrong: Controller in Conditional](#wrong-controller-in-conditional)                                                                                       |
-| 871-910   | &nbsp;&nbsp;[Correct: Controller Survives Toggle](#correct-controller-survives-toggle)                                                                                 |
-| 911-947   | &nbsp;&nbsp;[Refreshing the Session](#refreshing-the-session)                                                                                                          |
-| 948-1091  | [Navigation Patterns](#navigation-patterns)                                                                                                                            |
-| 950-994   | &nbsp;&nbsp;[Sheet with Navigation Component](#sheet-with-navigation-component)                                                                                        |
-| 995-1091  | &nbsp;&nbsp;[Host with Internal Navigation](#host-with-internal-navigation)                                                                                            |
-| 1092-1255 | [Theming Patterns](#theming-patterns)                                                                                                                                  |
-| 1094-1118 | &nbsp;&nbsp;[Custom Brand Colors](#custom-brand-colors)                                                                                                                |
-| 1119-1154 | &nbsp;&nbsp;[Custom Typography](#custom-typography)                                                                                                                    |
-| 1155-1178 | &nbsp;&nbsp;[Custom Spacing and Radius](#custom-spacing-and-radius)                                                                                                    |
-| 1179-1208 | &nbsp;&nbsp;[Access Theme Tokens Inside Host](#access-theme-tokens-inside-host)                                                                                        |
-| 1209-1255 | &nbsp;&nbsp;[Full Customization Example](#full-customization-example)                                                                                                  |
-| 1256-1420 | [Accessibility for slots you replaced](#accessibility-for-slots-you-replaced)                                                                                          |
-| 1271-1325 | &nbsp;&nbsp;[A labelled custom method row](#a-labelled-custom-method-row)                                                                                              |
-| 1326-1388 | &nbsp;&nbsp;[A labelled custom submit button](#a-labelled-custom-submit-button)                                                                                        |
-| 1389-1420 | &nbsp;&nbsp;[Announcing something of your own](#announcing-something-of-your-own)                                                                                      |
-| 1421-1619 | [Common Pitfalls](#common-pitfalls)                                                                                                                                    |
-| 1423-1457 | &nbsp;&nbsp;[Pitfall: Creating a Second Checkout Controller Instead of Passing the First](#pitfall-creating-a-second-checkout-controller-instead-of-passing-the-first) |
-| 1458-1472 | &nbsp;&nbsp;[Pitfall: Using collectAsState Instead of collectAsStateWithLifecycle](#pitfall-using-collectasstate-instead-of-collectasstatewithlifecycle)               |
-| 1473-1498 | &nbsp;&nbsp;[Pitfall: SDK Components Outside Host/Sheet Scope](#pitfall-sdk-components-outside-hostsheet-scope)                                                        |
-| 1499-1532 | &nbsp;&nbsp;[Pitfall: Setting redirectScheme and Expecting It to Do Something](#pitfall-setting-redirectscheme-and-expecting-it-to-do-something)                       |
-| 1533-1564 | &nbsp;&nbsp;[Pitfall: Only Handling Success](#pitfall-only-handling-success)                                                                                           |
-| 1565-1619 | &nbsp;&nbsp;[Pitfall: Confusing isFormValid and fieldErrors](#pitfall-confusing-isformvalid-and-fielderrors)                                                           |
-| 1620-1673 | [Troubleshooting: symptom to cause](#troubleshooting-symptom-to-cause)                                                                                                 |
-| 1674-1795 | [Debugging Patterns](#debugging-patterns)                                                                                                                              |
-| 1676-1698 | &nbsp;&nbsp;[Log All State Transitions](#log-all-state-transitions)                                                                                                    |
-| 1699-1720 | &nbsp;&nbsp;[Log Card Form State Changes](#log-card-form-state-changes)                                                                                                |
-| 1721-1741 | &nbsp;&nbsp;[Log Payment Method List](#log-payment-method-list)                                                                                                        |
-| 1742-1775 | &nbsp;&nbsp;[Log All Events with Diagnostics](#log-all-events-with-diagnostics)                                                                                        |
-| 1776-1795 | &nbsp;&nbsp;[Verify Installation](#verify-installation)                                                                                                                |
-| 1796-1915 | [Complete Integration Example](#complete-integration-example)                                                                                                          |
-| 1916-1930 | [Klarna and QR Code Payment Methods](#klarna-and-qr-code-payment-methods)                                                                                              |
-| 1931-2012 | [Gating Payment Creation (idempotency keys)](#gating-payment-creation-idempotency-keys)                                                                                |
-| 2013-2136 | [Google Pay Integration Pattern](#google-pay-integration-pattern)                                                                                                      |
-| 2137-2281 | [Error Recovery Pattern](#error-recovery-pattern)                                                                                                                      |
-| 2230-2281 | &nbsp;&nbsp;[Replacing the Sheet's Error Screen](#replacing-the-sheets-error-screen)                                                                                   |
-| 2282-2393 | [Vault-Only Flow Pattern](#vault-only-flow-pattern)                                                                                                                    |
-| 2394-2482 | [Retryable Pay Button for Saved Methods](#retryable-pay-button-for-saved-methods)                                                                                      |
+| 442-493   | &nbsp;&nbsp;[Observing Payment Methods](#observing-payment-methods)                                                                                                    |
+| 494-525   | &nbsp;&nbsp;[Observing Saved Payment Methods](#observing-saved-payment-methods)                                                                                        |
+| 526-688   | [Custom Card Form Layouts](#custom-card-form-layouts)                                                                                                                  |
+| 528-566   | &nbsp;&nbsp;[Rearranged Fields](#rearranged-fields)                                                                                                                    |
+| 567-616   | &nbsp;&nbsp;[Replace Only the Submit Button](#replace-only-the-submit-button)                                                                                          |
+| 617-644   | &nbsp;&nbsp;[Replace Individual Fields in CardDetailsContent](#replace-individual-fields-in-carddetailscontent)                                                        |
+| 645-688   | &nbsp;&nbsp;[Add Vault Toggle to Card Form](#add-vault-toggle-to-card-form)                                                                                            |
+| 689-811   | [Custom Payment Method Lists](#custom-payment-method-lists)                                                                                                            |
+| 691-768   | &nbsp;&nbsp;[Custom Method Row](#custom-method-row)                                                                                                                    |
+| 769-811   | &nbsp;&nbsp;[Filter Payment Methods by Type](#filter-payment-methods-by-type)                                                                                          |
+| 812-942   | [Controller Lifecycle Patterns](#controller-lifecycle-patterns)                                                                                                        |
+| 814-839   | &nbsp;&nbsp;[Correct: Screen-Level Checkout Controller](#correct-screen-level-checkout-controller)                                                                     |
+| 840-865   | &nbsp;&nbsp;[Wrong: Controller in Conditional](#wrong-controller-in-conditional)                                                                                       |
+| 866-905   | &nbsp;&nbsp;[Correct: Controller Survives Toggle](#correct-controller-survives-toggle)                                                                                 |
+| 906-942   | &nbsp;&nbsp;[Refreshing the Session](#refreshing-the-session)                                                                                                          |
+| 943-1088  | [Navigation Patterns](#navigation-patterns)                                                                                                                            |
+| 945-991   | &nbsp;&nbsp;[Sheet with Navigation Component](#sheet-with-navigation-component)                                                                                        |
+| 992-1088  | &nbsp;&nbsp;[Host with Internal Navigation](#host-with-internal-navigation)                                                                                            |
+| 1089-1260 | [Theming Patterns](#theming-patterns)                                                                                                                                  |
+| 1091-1115 | &nbsp;&nbsp;[Custom Brand Colors](#custom-brand-colors)                                                                                                                |
+| 1116-1152 | &nbsp;&nbsp;[Custom Typography](#custom-typography)                                                                                                                    |
+| 1153-1176 | &nbsp;&nbsp;[Custom Spacing and Radius](#custom-spacing-and-radius)                                                                                                    |
+| 1177-1206 | &nbsp;&nbsp;[Access Theme Tokens Inside Host](#access-theme-tokens-inside-host)                                                                                        |
+| 1207-1260 | &nbsp;&nbsp;[Full Customization Example](#full-customization-example)                                                                                                  |
+| 1261-1436 | [Accessibility for slots you replaced](#accessibility-for-slots-you-replaced)                                                                                          |
+| 1276-1337 | &nbsp;&nbsp;[A labelled custom method row](#a-labelled-custom-method-row)                                                                                              |
+| 1338-1400 | &nbsp;&nbsp;[A labelled custom submit button](#a-labelled-custom-submit-button)                                                                                        |
+| 1401-1436 | &nbsp;&nbsp;[Announcing something of your own](#announcing-something-of-your-own)                                                                                      |
+| 1437-1638 | [Common Pitfalls](#common-pitfalls)                                                                                                                                    |
+| 1439-1473 | &nbsp;&nbsp;[Pitfall: Creating a Second Checkout Controller Instead of Passing the First](#pitfall-creating-a-second-checkout-controller-instead-of-passing-the-first) |
+| 1474-1488 | &nbsp;&nbsp;[Pitfall: Using collectAsState Instead of collectAsStateWithLifecycle](#pitfall-using-collectasstate-instead-of-collectasstatewithlifecycle)               |
+| 1489-1514 | &nbsp;&nbsp;[Pitfall: SDK Components Outside Host/Sheet Scope](#pitfall-sdk-components-outside-hostsheet-scope)                                                        |
+| 1515-1548 | &nbsp;&nbsp;[Pitfall: Setting redirectScheme and Expecting It to Do Something](#pitfall-setting-redirectscheme-and-expecting-it-to-do-something)                       |
+| 1549-1585 | &nbsp;&nbsp;[Pitfall: Only Handling Success](#pitfall-only-handling-success)                                                                                           |
+| 1586-1638 | &nbsp;&nbsp;[Pitfall: Confusing isFormValid and fieldErrors](#pitfall-confusing-isformvalid-and-fielderrors)                                                           |
+| 1639-1692 | [Troubleshooting: symptom to cause](#troubleshooting-symptom-to-cause)                                                                                                 |
+| 1693-1816 | [Debugging Patterns](#debugging-patterns)                                                                                                                              |
+| 1695-1717 | &nbsp;&nbsp;[Log All State Transitions](#log-all-state-transitions)                                                                                                    |
+| 1718-1739 | &nbsp;&nbsp;[Log Card Form State Changes](#log-card-form-state-changes)                                                                                                |
+| 1740-1760 | &nbsp;&nbsp;[Log Payment Method List](#log-payment-method-list)                                                                                                        |
+| 1761-1796 | &nbsp;&nbsp;[Log All Events with Diagnostics](#log-all-events-with-diagnostics)                                                                                        |
+| 1797-1816 | &nbsp;&nbsp;[Verify Installation](#verify-installation)                                                                                                                |
+| 1817-1936 | [Complete Integration Example](#complete-integration-example)                                                                                                          |
+| 1937-1951 | [Klarna and QR Code Payment Methods](#klarna-and-qr-code-payment-methods)                                                                                              |
+| 1952-2033 | [Gating Payment Creation (idempotency keys)](#gating-payment-creation-idempotency-keys)                                                                                |
+| 2034-2213 | [Google Pay Integration Pattern](#google-pay-integration-pattern)                                                                                                      |
+| 2156-2213 | &nbsp;&nbsp;[Shipping Address and Options (Express Checkout)](#shipping-address-and-options-express-checkout)                                                          |
+| 2214-2369 | [Error Recovery Pattern](#error-recovery-pattern)                                                                                                                      |
+| 2307-2369 | &nbsp;&nbsp;[Replacing the Sheet's Error Screen](#replacing-the-sheets-error-screen)                                                                                   |
+| 2370-2481 | [Vault-Only Flow Pattern](#vault-only-flow-pattern)                                                                                                                    |
+| 2482-2570 | [Retryable Pay Button for Saved Methods](#retryable-pay-button-for-saved-methods)                                                                                      |
 
 ## Sheet vs Host Patterns
 
 ### Minimal Sheet (fastest integration)
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -172,7 +174,7 @@ fun CheckoutScreen(clientToken: String, onComplete: () -> Unit) {
 ### Sheet with Custom Slots
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -257,7 +259,7 @@ fun CustomSheetCheckout(clientToken: String) {
 ### Inline Host (full control)
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -298,16 +300,14 @@ fun InlineCheckoutScreen(clientToken: String) {
     val checkout = rememberPrimerCheckoutController(clientToken)
     val checkoutState by checkout.state.collectAsStateWithLifecycle()
 
-    // formatAmount throws outside Ready, and the state can move on between the snapshot this
-    // composition rendered and the call, so the match is not enough on its own: format it from
-    // an effect, guard the call, and keep the last good string.
+    // Kept across Loading and the terminal states. Every client-session update publishes a
+    // new Ready, so this re-formats the updated total too.
     var formattedTotal by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(checkoutState) {
         when (val s = checkoutState) {
             is PrimerCheckoutState.Ready ->
-                runCatching { checkout.formatAmount(s.clientSession.totalAmount ?: 0) }
-                    .onSuccess { formattedTotal = it }
+                formattedTotal = checkout.formatAmount(s.clientSession.totalAmount ?: 0)
             is PrimerCheckoutState.Success -> { /* navigate away */ }
             is PrimerCheckoutState.Failure -> { /* show error in your UI */ }
             else -> Unit
@@ -361,7 +361,7 @@ fun InlineCheckoutScreen(clientToken: String) {
                         PrimerCardForm(controller = cardFormController)
                     }
                 }
-                // PrimerCheckoutState is a sealed interface with six subtypes --
+                // PrimerCheckoutState is a sealed interface with four subtypes --
                 // the when must be exhaustive.
                 else -> Unit
             }
@@ -381,7 +381,7 @@ delegated properties — `when (checkoutState) { is Ready -> checkoutState.clien
 compile. Bind the subject to a local `val` in the `when` and use that:
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -399,7 +399,7 @@ when (val s = checkoutState) {
         Text("Order: ${s.clientSession.orderId}")
         Text("Amount: ${s.clientSession.totalAmount} ${s.clientSession.currencyCode}")
     }
-    // PrimerCheckoutState is a sealed interface with six subtypes --
+    // PrimerCheckoutState is a sealed interface with four subtypes --
     // the when must be exhaustive.
     else -> Unit
 }
@@ -408,7 +408,7 @@ when (val s = checkoutState) {
 ### Observing Card Form State
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.primer.android.components.domain.inputs.models.PrimerInputElementType
@@ -441,22 +441,13 @@ if (networks.availableNetworks.size > 1) {
 
 ### Observing Payment Methods
 
-`formatAmount` throws outside `PrimerCheckoutState.Ready`
-([why](composable-reference.md#controller-interfaces)), so format the surcharges once while the
-state _is_ `Ready` and render the strings you kept — do not call it from the row. The whole
-mapping goes inside one `runCatching`: the state can still move on mid-effect, and a surcharge
-column that keeps its previous values beats one that crashes the screen.
-
-Because nothing returns the state to `Ready`, this effect runs while `Ready` and then not again:
-after a client-session update the strings below are the _pre-update_ surcharges. That is the
-deliberate trade — stale beats crashed — and if you need the updated figures as text, format them
-from the `ClientSessionUpdated` payload yourself, exactly as
-[both rules reconciled](composable-reference.md#when-both-rules-collide-formatamount-and-clientsessionupdated)
-sets out. The same section explains why `PrimerPaymentMethods` itself belongs inside a `Ready`
-branch once any method carries a surcharge.
+Format the surcharges from an effect keyed on `Ready` and render the strings you kept — not from
+the row, which composes far more often. A client-session update publishes a new `Ready`, so the
+effect re-runs and the strings follow the updated surcharges
+([`formatAmount`](composable-reference.md#controller-interfaces)).
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -477,22 +468,20 @@ var surchargeText by remember { mutableStateOf(emptyMap<String, String>()) }
 
 LaunchedEffect(checkoutState, methods) {
     if (checkoutState !is PrimerCheckoutState.Ready) return@LaunchedEffect
-    runCatching {
-        methods.mapNotNull { method ->
-            // Surcharge is a sealed interface, not a number: interpolating it prints a
-            // class name.
-            when (val surcharge = method.surcharge) {
-                is Surcharge.PaymentMethodSurcharge ->
-                    method.paymentMethodType to "+ ${checkout.formatAmount(surcharge.amount)}"
-                // minOrNull, not min: min() throws on an empty surcharges map.
-                is Surcharge.CardNetworksSurcharge ->
-                    surcharge.surcharges.values.minOrNull()?.let { cheapest ->
-                        method.paymentMethodType to "+ from ${checkout.formatAmount(cheapest)}"
-                    }
-                null -> null
-            }
-        }.toMap()
-    }.onSuccess { surchargeText = it }
+    surchargeText = methods.mapNotNull { method ->
+        // Surcharge is a sealed interface, not a number: interpolating it prints a
+        // class name.
+        when (val surcharge = method.surcharge) {
+            is Surcharge.PaymentMethodSurcharge ->
+                method.paymentMethodType to "+ ${checkout.formatAmount(surcharge.amount)}"
+            // minOrNull, not min: min() throws on an empty surcharges map.
+            is Surcharge.CardNetworksSurcharge ->
+                surcharge.surcharges.values.minOrNull()?.let { cheapest ->
+                    method.paymentMethodType to "+ from ${checkout.formatAmount(cheapest)}"
+                }
+            null -> null
+        }
+    }.toMap()
 }
 
 methods.forEach { method ->
@@ -505,7 +494,7 @@ methods.forEach { method ->
 ### Observing Saved Payment Methods
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -546,7 +535,7 @@ Do not add `CardFormDefaults.CardNetworkField` as a row of its own: `CardNumberF
 it as its trailing icon, so a separate call puts a second co-badge selector on screen.
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -578,7 +567,7 @@ PrimerCardForm(
 ### Replace Only the Submit Button
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -620,16 +609,15 @@ PrimerCardForm(
 `MyBrandButton(text = "Pay ${checkout.formatAmount(formState.amount)}", …)`, and **`formState` has
 no `amount`** — `PrimerCardFormController.State` never carries one, so that line is
 `Unresolved reference 'amount'`
-([the KDoc's four broken examples](composable-reference.md#where-the-sdks-own-kdoc-is-wrong)). The
-total lives on `clientSession.totalAmount`, and formatting it is `Ready`-only, so a "Pay $10.00"
-button reads the string you cached while `Ready` — the effect in
-[Inline Host](#inline-host-full-control) is that cache — and never calls `formatAmount` from the
-slot, which composes on every keystroke and mostly not from `Ready`.
+([the KDoc's broken examples](composable-reference.md#where-the-sdks-own-kdoc-is-wrong)). The
+total lives on `Ready.clientSession.totalAmount`, so a "Pay $10.00" button reads the string
+formatted from the latest `Ready` — the effect in [Inline Host](#inline-host-full-control) keeps
+it — rather than calling `formatAmount` from the slot, which composes on every keystroke.
 
 ### Replace Individual Fields in CardDetailsContent
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -657,7 +645,7 @@ PrimerCardForm(
 ### Add Vault Toggle to Card Form
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -723,7 +711,7 @@ is `io.primer.checkout.api.checkout.models.PrimerPaymentMethod`, the five-field 
 ([two types, one name](composable-reference.md#two-types-called-primerpaymentmethod)).
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -735,46 +723,53 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.Composable
 import io.primer.checkout.components.paymentMethods.PrimerPaymentMethods
+import io.primer.checkout.components.paymentMethods.PrimerPaymentMethodsController
 
-PrimerPaymentMethods(
-    controller = paymentMethodsController,
-    // TWO parameters: (paymentMethod, onClick). Not three -- there is no isSelected on
-    // this slot; that is PrimerVaultedPaymentMethods' `item`. A third parameter here
-    // fails with "expected 2 parameters, got 3".
-    method = { method, onClick ->
-        Card(
-            onClick = onClick,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-        ) {
-            Row(
-                modifier = Modifier.padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
+@Composable
+fun CustomMethodList(
+    paymentMethodsController: PrimerPaymentMethodsController,
+    // No brand icon is available from the SDK: PrimerPaymentMethod carries no icon field and
+    // PaymentMethodsDefaults exposes no icon-only composable. Pass your own drawable per
+    // paymentMethodType, or use PaymentMethodsDefaults.Method(method, onClick) for the
+    // SDK-drawn row including its icon, at the cost of the custom layout.
+    methodIcon: @Composable (paymentMethodType: String) -> Unit,
+) {
+    PrimerPaymentMethods(
+        controller = paymentMethodsController,
+        // TWO parameters: (paymentMethod, onClick). Not three -- there is no isSelected on
+        // this slot; that is PrimerVaultedPaymentMethods' `item`. A third parameter here
+        // fails with "expected 2 parameters, got 3".
+        method = { method, onClick ->
+            Card(
+                onClick = onClick,
+                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
             ) {
-                // No brand icon is available from the SDK: PrimerPaymentMethod carries no
-                // icon field and PaymentMethodsDefaults exposes no icon-only composable.
-                // Supply your own drawable per paymentMethodType, or use
-                // PaymentMethodsDefaults.Method(method, onClick) for the SDK-drawn row
-                // including its icon, at the cost of the custom layout.
-                YourPaymentMethodIcon(method.paymentMethodType)
-                Spacer(Modifier.width(12.dp))
-                Text(
-                    method.paymentMethodName ?: method.paymentMethodType,
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-                // No surcharge line here on purpose: this slot does not run when any method
-                // carries one. No trailing chevron either -- that would need a
-                // material-icons-* artifact, and the install snippet declares none.
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    methodIcon(method.paymentMethodType)
+                    Spacer(Modifier.width(12.dp))
+                    Text(
+                        method.paymentMethodName ?: method.paymentMethodType,
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                    // No surcharge line here on purpose: this slot does not run when any
+                    // method carries one. No trailing chevron either -- that would need a
+                    // material-icons-* artifact, and the install snippet declares none.
+                }
             }
-        }
-    },
-)
+        },
+    )
+}
 ```
 
 ### Filter Payment Methods by Type
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -819,7 +814,7 @@ Column {
 ### Correct: Screen-Level Checkout Controller
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.runtime.Composable
 import io.primer.android.core.ExperimentalPrimerApi
 import io.primer.checkout.api.checkout.PrimerCheckoutHost
@@ -845,7 +840,7 @@ fun CheckoutScreen(clientToken: String) {
 ### Wrong: Controller in Conditional
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -871,7 +866,7 @@ fun BadExample(clientToken: String) {
 ### Correct: Controller Survives Toggle
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -911,7 +906,7 @@ your own timer or a back handler that can fire mid-payment.
 ### Refreshing the Session
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -936,7 +931,7 @@ Column {
                 Text("Refresh")
             }
         }
-        // PrimerCheckoutState is a sealed interface with six subtypes --
+        // PrimerCheckoutState is a sealed interface with four subtypes --
         // the when must be exhaustive.
         else -> Unit
     }
@@ -950,25 +945,27 @@ Column {
 ### Sheet with Navigation Component
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.primer.android.core.ExperimentalPrimerApi
 import io.primer.checkout.api.checkout.PrimerCheckoutSheet
 import io.primer.checkout.api.checkout.rememberPrimerCheckoutController
 import io.primer.checkout.api.state.PrimerCheckoutState
+import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalPrimerApi::class)
 @Composable
-fun NavHostCheckout(navController: NavController) {
-    val viewModel: YourCheckoutViewModel = viewModel()
-    val clientToken by viewModel.clientToken.collectAsStateWithLifecycle()
+fun NavHostCheckout(
+    navController: NavController,
+    clientToken: StateFlow<String?>,   // from your ViewModel, fetched from your backend
+) {
+    val token by clientToken.collectAsStateWithLifecycle()
 
-    clientToken?.let { token ->
+    token?.let { token ->
         val checkout = rememberPrimerCheckoutController(token)
 
         val state by checkout.state.collectAsStateWithLifecycle()
@@ -995,7 +992,7 @@ fun NavHostCheckout(navController: NavController) {
 ### Host with Internal Navigation
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
@@ -1040,7 +1037,7 @@ fun HostWithNavigation(clientToken: String) {
                 screen = Screen.SUCCESS
             }
             is PrimerCheckoutState.Failure -> {
-                paymentError = s.error
+                paymentError = s.primerError
                 screen = Screen.ERROR
             }
             else -> Unit
@@ -1094,7 +1091,7 @@ fun HostWithNavigation(clientToken: String) {
 ### Custom Brand Colors
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.ui.graphics.Color
 import io.primer.checkout.PrimerTheme
 import io.primer.checkout.api.checkout.PrimerCheckoutSheet
@@ -1118,31 +1115,32 @@ PrimerCheckoutSheet(
 
 ### Custom Typography
 
-`R.font.your_brand_regular` and `R.font.your_brand_bold` below are **your** resources, not the
-SDK's: drop a `.ttf`/`.otf` (or an XML font family) into your module's `res/font/`, and the ids
-appear on your app's own generated `R` — which you import by your own package name, because there
-is no SDK `R` your code can reach. `TypographyStyle.font` has no default, so a style you pass has
-to name a font; the SDK's bundled Inter lives on the SDK module's `R`. Styles you do not pass keep
-Inter.
+The font ids passed below are **your** resources, not the SDK's: drop a `.ttf`/`.otf` (or an XML
+font family) into your module's `res/font/`, and the ids appear on your app's own generated `R`,
+which there is no SDK equivalent of. The theme takes them as parameters for that reason. `brandFont` sets the font of every style you do not pass; a
+style you do pass names its own, because `TypographyStyle.font` has no default. Set `brandFont` on
+the constructor: `copy(brandFont = …)` does not re-derive the styles.
 
 ```kotlin
-// imports for this snippet
-import com.example.checkout.R   // YOUR app's generated R: substitute your module's package
+// imports for this snippet: add to the top of your file
+import androidx.annotation.FontRes
 import io.primer.checkout.PrimerTheme
 import io.primer.checkout.internal.tokens.TypographyStyle
 import io.primer.checkout.internal.tokens.TypographyTokens
 
-val myTheme = PrimerTheme(
+// Call with your own ids: brandTypographyTheme(R.font.your_brand_regular, R.font.your_brand_bold)
+fun brandTypographyTheme(@FontRes regular: Int, @FontRes bold: Int) = PrimerTheme(
     typographyTokens = TypographyTokens(
+        brandFont = regular,
         titleXlarge = TypographyStyle(
-            font = R.font.your_brand_regular,
+            font = bold,
             size = 28,
             weight = 700,
             lineHeight = 36,
             letterSpacing = -0.5f,
         ),
         bodyLarge = TypographyStyle(
-            font = R.font.your_brand_regular,
+            font = regular,
             size = 16,
             weight = 400,
             lineHeight = 24,
@@ -1155,7 +1153,7 @@ val myTheme = PrimerTheme(
 ### Custom Spacing and Radius
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.ui.unit.dp
 import io.primer.checkout.PrimerTheme
 import io.primer.checkout.internal.tokens.RadiusTokens
@@ -1179,7 +1177,7 @@ val compactTheme = PrimerTheme(
 ### Access Theme Tokens Inside Host
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -1190,11 +1188,11 @@ import io.primer.checkout.api.checkout.PrimerCheckoutHost
 
 PrimerCheckoutHost(checkout = checkout, theme = myTheme) {
     val theme = LocalPrimerTheme.current
-    val colors = theme.colorTokens() // respects dark/light mode
+    val colors = theme.colorTokens() // the appearance the host resolved from appearanceMode
 
     Box(
         modifier = Modifier
-            .background(colors.primerColorBackground)
+            .background(colors.primerColorBackgroundPrimary)
             .padding(theme.spacingTokens.large),
     ) {
         Text(
@@ -1209,39 +1207,46 @@ PrimerCheckoutHost(checkout = checkout, theme = myTheme) {
 ### Full Customization Example
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
+import androidx.annotation.FontRes
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.checkout.R   // YOUR app's generated R: substitute your module's package
+import io.primer.checkout.PrimerAppearanceMode
 import io.primer.checkout.PrimerTheme
-import io.primer.checkout.internal.tokens.BorderWidthTokens
 import io.primer.checkout.internal.tokens.DarkColorTokens
 import io.primer.checkout.internal.tokens.LightColorTokens
 import io.primer.checkout.internal.tokens.RadiusTokens
 import io.primer.checkout.internal.tokens.TypographyStyle
 import io.primer.checkout.internal.tokens.TypographyTokens
+import io.primer.checkout.internal.tokens.WidthTokens
 
-val brandTheme = PrimerTheme(
+// Call with your own ids: brandTheme(R.font.your_brand_regular, R.font.your_brand_bold)
+fun brandTheme(@FontRes regularFont: Int, @FontRes boldFont: Int) = PrimerTheme(
+    // The raw greys are internal: override the semantic tokens instead.
     lightColorTokens = object : LightColorTokens() {
-        override val primerColorBrand: Color = Color(0xFF1DB954)   // your brand green
-        override val primerColorGray900: Color = Color(0xFF191414) // near-black text
+        override val primerColorBrand: Color = Color(0xFF1DB954)       // your brand green
+        override val primerColorTextPrimary: Color = Color(0xFF191414) // near-black text
+        override val primerColorOnBrand: Color = Color(0xFF000000)     // label on the pay button
     },
     darkColorTokens = object : DarkColorTokens() {
         override val primerColorBrand: Color = Color(0xFF1ED760)
-        override val primerColorGray000: Color = Color(0xFF121212)
+        override val primerColorBackgroundPrimary: Color = Color(0xFF121212)
+        override val primerColorOnBrand: Color = Color(0xFF000000)
     },
+    appearanceMode = PrimerAppearanceMode.SYSTEM,   // LIGHT or DARK pins it
     radiusTokens = RadiusTokens(
         small = 8.dp,
         medium = 12.dp,
         large = 24.dp,  // very rounded
     ),
-    borderWidthTokens = BorderWidthTokens(
-        thin = 1.5.dp,
-        medium = 2.dp,
+    widthTokens = WidthTokens(
+        default = 1.5.dp,
+        focus = 2.dp,
     ),
     typographyTokens = TypographyTokens(
+        brandFont = regularFont,   // every style not passed below
         titleXlarge = TypographyStyle(
-            font = R.font.your_brand_bold,
+            font = boldFont,
             size = 24,
             weight = 700,
             lineHeight = 32,
@@ -1276,7 +1281,7 @@ method the client session did not name is a wire code like `ADYEN_IDEAL` read ou
 Put the label on the row and let the inner text be decorative.
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -1290,38 +1295,45 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.Composable
 import io.primer.checkout.components.paymentMethods.PrimerPaymentMethods
+import io.primer.checkout.components.paymentMethods.PrimerPaymentMethodsController
 
-PrimerPaymentMethods(
-    controller = paymentMethodsController,
-    // TWO parameters: (paymentMethod, onClick).
-    method = { method, onClick ->
-        // paymentMethodName, not displayName, and nullable -- so the fallback is the wire
-        // code. Build the spoken label from the same expression you render.
-        val name = method.paymentMethodName ?: method.paymentMethodType
-        Card(
-            onClick = onClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp)
-                .semantics { contentDescription = "Pay with $name" },
-        ) {
-            Row(
-                modifier = Modifier.padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
+@Composable
+fun LabelledMethodList(
+    paymentMethodsController: PrimerPaymentMethodsController,
+    methodIcon: @Composable (paymentMethodType: String) -> Unit,   // yours, unlabelled
+) {
+    PrimerPaymentMethods(
+        controller = paymentMethodsController,
+        // TWO parameters: (paymentMethod, onClick).
+        method = { method, onClick ->
+            // paymentMethodName, not displayName, and nullable -- so the fallback is the wire
+            // code. Build the spoken label from the same expression you render.
+            val name = method.paymentMethodName ?: method.paymentMethodType
+            Card(
+                onClick = onClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+                    .semantics { contentDescription = "Pay with $name" },
             ) {
-                YourPaymentMethodIcon(method.paymentMethodType)
-                Spacer(Modifier.width(12.dp))
-                Text(name, style = MaterialTheme.typography.bodyLarge)
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    methodIcon(method.paymentMethodType)
+                    Spacer(Modifier.width(12.dp))
+                    Text(name, style = MaterialTheme.typography.bodyLarge)
+                }
             }
-        }
-    },
-)
+        },
+    )
+}
 ```
 
-`YourPaymentMethodIcon` is your own composable; give its own image a null
-`contentDescription`, because the row above already carries the label and a labelled icon inside a
-labelled row is read twice.
+`methodIcon` is your own composable; give its image a null `contentDescription`, because the row
+above already carries the label and a labelled icon inside a labelled row is read twice.
 
 ### A labelled custom submit button
 
@@ -1332,7 +1344,7 @@ payment" and "Processing payment, please wait". Overriding the slot drops all fo
 disabled and says nothing about why.
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -1393,17 +1405,21 @@ moving focus — your own validation message, an updated total, a retry banner. 
 uses for its error text and its loading screen, and it is one modifier:
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 
-Text(
-    yourStatusMessage,
-    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
-)
+@Composable
+fun StatusMessage(message: String) {
+    Text(
+        message,
+        modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+    )
+}
 ```
 
 Use `Polite`, not `Assertive`: assertive interrupts whatever TalkBack is mid-sentence on, which
@@ -1431,7 +1447,7 @@ methods request and its own terminal event. Pass the one controller down instead
 already close over it.
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import io.primer.checkout.api.checkout.PrimerCheckoutSheet
 import io.primer.checkout.api.checkout.rememberPrimerCheckoutController
 import io.primer.checkout.components.card.PrimerCardForm
@@ -1458,7 +1474,7 @@ PrimerCheckoutSheet(
 ### Pitfall: Using collectAsState Instead of collectAsStateWithLifecycle
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -1479,7 +1495,7 @@ overlays, so a submit appears to do nothing. Create the child controller and its
 same scope.
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import io.primer.checkout.api.checkout.PrimerCheckoutHost
 import io.primer.checkout.components.card.PrimerCardForm
 import io.primer.checkout.components.card.rememberCardFormController
@@ -1511,7 +1527,7 @@ compiler falls through to. Three levels deep is correct here
 ([what belongs to what](composable-reference.md#configuration-types)).
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import io.primer.android.data.settings.PrimerKlarnaOptions
 import io.primer.android.data.settings.PrimerPaymentMethodOptions
 import io.primer.android.data.settings.PrimerSettings
@@ -1534,30 +1550,35 @@ val settings = PrimerSettings(
 
 `Success` and `Failure` are both members of `PrimerCheckoutState`, and both stick on the flow
 until a new attempt starts. Collecting only one of them silently drops the other, and a `when`
-over the state needs an `else` -- there are six members, not two.
+over the state needs an `else` -- there are four members, not two.
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import android.util.Log
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import io.primer.checkout.api.state.PrimerCheckoutState
 
-// WRONG (compiles; wrong at runtime) -- ignores failures, and misses the client-session states entirely
-LaunchedEffect(state) {
-    if (state is PrimerCheckoutState.Success) { /* ... */ }
+// WRONG (compiles; wrong at runtime) -- ignores failures
+@Composable
+fun SuccessOnly(state: PrimerCheckoutState, onPaid: (paymentId: String) -> Unit) {
+    LaunchedEffect(state) {
+        if (state is PrimerCheckoutState.Success) onPaid(state.checkoutData.payment.id)
+    }
 }
 
 // CORRECT -- handle both outcomes, and terminate the when
-LaunchedEffect(state) {
-    when (val s = state) {
-        is PrimerCheckoutState.Success -> {
-            yourNavigateToConfirmation(s.checkoutData.payment.id)
+@Composable
+fun BothOutcomes(state: PrimerCheckoutState, onPaid: (paymentId: String) -> Unit) {
+    LaunchedEffect(state) {
+        when (state) {
+            is PrimerCheckoutState.Success -> onPaid(state.checkoutData.payment.id)
+            is PrimerCheckoutState.Failure -> {
+                Log.e("Checkout", "Error: ${state.primerError.description}")
+                Log.e("Checkout", "diagnosticsId: ${state.primerError.diagnosticsId}")
+            }
+            else -> Unit
         }
-        is PrimerCheckoutState.Failure -> {
-            Log.e("Checkout", "Error: ${s.error.description}")
-            Log.e("Checkout", "diagnosticsId: ${s.error.diagnosticsId}")
-        }
-        else -> Unit
     }
 }
 ```
@@ -1565,7 +1586,7 @@ LaunchedEffect(state) {
 ### Pitfall: Confusing isFormValid and fieldErrors
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 // fieldErrorMessage(error, context) is this skill's own helper, defined a few lines below
 // in this file and identically in composable-reference.md. It is not an SDK function.
 import androidx.compose.material3.Button
@@ -1601,18 +1622,16 @@ not compile — and take the `Context` as a parameter so the same function works
 that has no composition around it.
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import android.content.Context
-import com.example.checkout.R   // YOUR app's generated R: substitute your module's package
 import io.primer.android.ui.core.model.SyncValidationError
 
 // A plain function, not a @Composable, so the same one serves a Text() in a slot and a
 // ViewModel formatting errors for a snackbar. The same function appears in
 // composable-reference.md, deliberately. Keep them identical.
-// R here is YOUR app's generated R: import com.example.checkout.R
+// Every Components validation error sets errorResId; orEmpty() only satisfies the nullable type.
 fun fieldErrorMessage(error: SyncValidationError, context: Context): String =
-    error.errorResId?.let { context.getString(it) }
-        ?: context.getString(R.string.your_field_invalid)
+    error.errorResId?.let { context.getString(it) }.orEmpty()
 ```
 
 ---
@@ -1638,14 +1657,6 @@ narrowed it to one of these.
   defaults to `true` and refuses to initialise when the 3DS SDK reports device warnings, which it
   always does there. Set it `false` in debug builds
   ([why](composable-reference.md#configuration-types)).
-- **Crash inside `PrimerPaymentMethods`** — the list was composed outside `Ready` while a method
-  carried a surcharge; its surcharge header formats an amount and `formatAmount` is `Ready`-only.
-- **Crash after a failed payment, inside the SDK's own sheet, on a surcharged session** — the
-  default error screen's "try other payment methods" button navigates back to the method list
-  while the state is `Failure`, and the surcharge header throws there. Not fixable in your code:
-  override the sheet's `error` slot and offer `refresh()` instead
-  ([why](composable-reference.md#signatures-defaults-and-slot-behaviour),
-  [how](#replacing-the-sheets-error-screen)).
 - **A payment never completes after the sheet was hidden or navigated away from** — leaving
   composition cancels the in-flight flow, and a pending `beforePaymentCreate` decision is
   _aborted_ with `"Payment gate dismissed"`. Keep the sheet or host composed until a terminal
@@ -1663,7 +1674,15 @@ narrowed it to one of these.
   [Restore it](#accessibility-for-slots-you-replaced).
 - **A disabled pay button announces nothing about why** — a custom `submitButton` dropped the
   SDK's `stateDescription`. Same section.
-- **Crash formatting an amount** — `formatAmount` called outside `Ready`.
+- **Crash formatting an amount** — `formatAmount` called before the first `Ready`, when there is
+  no currency yet.
+- **`Unresolved reference` in a theme** — `primerColorGray…`/`Red…`/`Blue…`/`Green…` are
+  `internal` (override semantic tokens), `primerColorBackground` is `primerColorBackgroundPrimary`,
+  the `…Hover` border tokens and every `base` token are gone, and `BorderWidthTokens` is
+  `WidthTokens` ([tokens](composable-reference.md#theming-types)).
+- **`Unresolved reference 'error'` on a `Failure`, or the sheet's `error` slot rejects your
+  lambda** — the property is `primerError`, and the slot takes two parameters,
+  `(primerError, checkoutData)`.
 - **Compose compiler build failure** — apply `org.jetbrains.kotlin.plugin.compose` matching your
   Kotlin version; `composeOptions.kotlinCompilerExtensionVersion` is obsolete on Kotlin 2.x.
 - **`Icons.Default.*` unresolved** — no `material-icons-*` coordinate is declared, by design; see
@@ -1676,7 +1695,7 @@ narrowed it to one of these.
 ### Log All State Transitions
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import android.util.Log
 import androidx.compose.runtime.LaunchedEffect
 import io.primer.android.core.ExperimentalPrimerApi
@@ -1699,7 +1718,7 @@ LaunchedEffect(checkout) {
 ### Log Card Form State Changes
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import android.util.Log
 import androidx.compose.runtime.LaunchedEffect
 import io.primer.checkout.components.card.rememberCardFormController
@@ -1721,7 +1740,7 @@ LaunchedEffect(controller) {
 ### Log Payment Method List
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import android.util.Log
 import androidx.compose.runtime.LaunchedEffect
 import io.primer.checkout.components.paymentMethods.rememberPaymentMethodsController
@@ -1742,7 +1761,7 @@ LaunchedEffect(controller) {
 ### Log All Events with Diagnostics
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import android.util.Log
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -1758,11 +1777,13 @@ LaunchedEffect(state) {
             Log.i("PrimerDebug", "Order ID: ${s.checkoutData.payment.orderId}")
         }
         is PrimerCheckoutState.Failure -> {
-            Log.e("PrimerDebug", "Payment failed: ${s.error.description}")
-            Log.e("PrimerDebug", "Error ID: ${s.error.errorId}")
-            Log.e("PrimerDebug", "Error code: ${s.error.errorCode}")
-            Log.e("PrimerDebug", "Diagnostics ID: ${s.error.diagnosticsId}")
-            Log.e("PrimerDebug", "Recovery: ${s.error.recoverySuggestion}")
+            Log.e("PrimerDebug", "Payment failed: ${s.primerError.description}")
+            Log.e("PrimerDebug", "Error ID: ${s.primerError.errorId}")
+            Log.e("PrimerDebug", "Error code: ${s.primerError.errorCode}")
+            Log.e("PrimerDebug", "Diagnostics ID: ${s.primerError.diagnosticsId}")
+            Log.e("PrimerDebug", "Recovery: ${s.primerError.recoverySuggestion}")
+            // Null when the failure came before a payment was created
+            Log.e("PrimerDebug", "Payment ID: ${s.checkoutData?.payment?.id}")
         }
         else -> Unit
     }
@@ -1799,7 +1820,7 @@ Full checkout screen with settings, theming, payment methods, card form, saved p
 outcome handling:
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -1867,7 +1888,7 @@ fun FullCheckoutScreen(
                 onPaymentComplete(s.checkoutData.payment.id)
             }
             is PrimerCheckoutState.Failure -> {
-                Log.e("Checkout", "diagnosticsId: ${s.error.diagnosticsId}")
+                Log.e("Checkout", "diagnosticsId: ${s.primerError.diagnosticsId}")
             }
             else -> Unit
         }
@@ -1948,7 +1969,7 @@ the payment that already failed), and a `rememberSaveable` outside it survives a
 (put "already accepted" there).
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -2015,7 +2036,7 @@ fun GatedCheckout(clientToken: String) {
 Configure Google Pay and show an express checkout button:
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -2073,7 +2094,7 @@ fun GooglePayCheckout(clientToken: String, onComplete: (String) -> Unit) {
         when (val s = checkoutState) {
             is PrimerCheckoutState.Success -> onComplete(s.checkoutData.payment.id)
             is PrimerCheckoutState.Failure -> {
-                Log.e("GooglePay", "Error: ${s.error.description}")
+                Log.e("GooglePay", "Error: ${s.primerError.description}")
             }
             else -> Unit
         }
@@ -2128,9 +2149,65 @@ not meet them — which can cost you a production review. It stands here as the 
 integration, not as shippable UI. The compliant path is the SDK-drawn Google Pay row inside
 `PrimerPaymentMethods`, styled through `googlePayOptions.buttonOptions` and `buttonStyle`; the
 alternative is Google's own branded button, a `FrameLayout`
-(`com.google.android.gms.wallet.button.PayButton`, in the `play-services-wallet` coordinate the
-install snippet already carries) that you would host in an `AndroidView` and wire up yourself.
+(`com.google.android.gms.wallet.button.PayButton`, from the `play-services-wallet` 20.0.0 that
+`io.primer:checkout` already brings in) that you would host in an `AndroidView` and wire up yourself.
 This skill does not cover that path.
+
+### Shipping address and options (Express Checkout)
+
+Register `onShippingAddressChange` and `onShippingOptionChange` on the checkout controller and the
+Google Pay sheet asks for a shipping address and offers your options — nothing to set in
+`PrimerGooglePayOptions`. Register **both**: the address handler alone makes the sheet collect an
+address but ignore the options you return, and the option handler alone is ignored with a warning.
+
+- `onShippingAddressChange` runs when the sheet opens and whenever the shopper changes the address.
+  Return the options for that address; an empty list keeps the shopper in the sheet with "We do not
+  ship to this address". The address may be partial until the shopper authorises.
+- `onShippingOptionChange` runs when the shopper picks an option, and eagerly for the pre-selected
+  one. Have your backend PATCH the client session's `order.shipping.methodId` and
+  `order.shipping.amount` to the selected option, then return. The SDK re-reads the session and
+  refuses to authorise unless both match — that arrives as a `Failure` with `errorId`
+  `"shipping-not-updated"`. The same option can arrive more than once, so the call must be
+  idempotent; throw to show the shopper a retryable error.
+- Both are `suspend`, and together with the session re-read they share a 20-second budget per
+  Google Pay callback; past it the handler is cancelled.
+
+```kotlin
+// imports for this snippet: add to the top of your file
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import io.primer.android.domain.action.models.PrimerAddress
+import io.primer.checkout.api.shipping.PrimerShippingOption
+import io.primer.checkout.api.state.PrimerCheckoutController
+
+@Composable
+fun ExpressCheckoutShipping(
+    checkout: PrimerCheckoutController,
+    // Your backend's quotes for an address, each as
+    // PrimerShippingOption(id, name, description, amount): `id` becomes
+    // order.shipping.methodId and `amount` (minor units) order.shipping.amount.
+    quoteShipping: suspend (PrimerAddress) -> List<PrimerShippingOption>,
+    // Your backend PATCHes order.shipping on the client session. Idempotent.
+    applyShippingOption: suspend (PrimerShippingOption) -> Unit,
+) {
+    DisposableEffect(checkout) {
+        checkout.onShippingAddressChange { change ->
+            // change.paymentMethodType is "GOOGLE_PAY"; the address may be partial.
+            quoteShipping(change.shippingAddress)
+        }
+        checkout.onShippingOptionChange { change ->
+            applyShippingOption(change.selectedShippingOption)
+        }
+        onDispose {
+            checkout.onShippingAddressChange(null)
+            checkout.onShippingOptionChange(null)
+        }
+    }
+}
+```
+
+Call it at screen level beside `rememberPrimerCheckoutController`. The updated session reaches you
+as a new `Ready`, so a total you format from `Ready` follows the shipping cost.
 
 ---
 
@@ -2145,7 +2222,7 @@ An expired token has to be reported upwards so the host can re-enter the screen 
 Everything else recovers in place with `checkout.refresh()`.
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -2184,7 +2261,7 @@ fun CheckoutWithErrorRecovery(
             when (val s = state) {
                 is PrimerCheckoutState.Success -> onComplete()
                 is PrimerCheckoutState.Failure -> {
-                    when (s.error.errorId) {
+                    when (s.primerError.errorId) {
                         "payment-cancelled" -> {
                             // User cancelled -- no action needed
                         }
@@ -2210,8 +2287,8 @@ fun CheckoutWithErrorRecovery(
                             }
                         }
                         else -> {
-                            Log.e("Checkout", "Error: ${s.error.errorId}")
-                            Log.e("Checkout", "diagnosticsId: ${s.error.diagnosticsId}")
+                            Log.e("Checkout", "Error: ${s.primerError.errorId}")
+                            Log.e("Checkout", "diagnosticsId: ${s.primerError.diagnosticsId}")
                         }
                     }
                 }
@@ -2231,10 +2308,12 @@ fun CheckoutWithErrorRecovery(
 
 The default `error` screen carries two buttons — **Retry**, wired to `checkout.refresh()`, and
 "try other payment methods" — and overriding the slot replaces both, so a custom error screen that
-forgets `refresh()` is a dead end. Rebuild the retry:
+forgets `refresh()` is a dead end. The slot takes **two** parameters: the `PrimerError`, and the
+`PrimerCheckoutData?` that is non-null when the payment was created before failing. Rebuild the
+retry:
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -2243,35 +2322,44 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.primer.checkout.api.checkout.PrimerCheckoutSheet
+import io.primer.checkout.api.state.PrimerCheckoutController
 
-PrimerCheckoutSheet(
-    checkout = checkout,
-    error = { err ->
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            // description and recoverySuggestion are developer-facing: show your own copy
-            // to the shopper and log the rest.
-            Text("We could not take that payment", style = MaterialTheme.typography.titleMedium)
-            when (err.errorId) {
-                // refresh() reuses the same client token, so it cannot fix an expired one.
-                "unauthorized", "failed-to-create-session" ->
-                    Button(onClick = { yourNavigateToFreshToken() }) { Text("Start again") }
-                else ->
-                    Button(onClick = { checkout.refresh() }) { Text("Retry") }
+@Composable
+fun SheetWithOwnErrorScreen(
+    checkout: PrimerCheckoutController,
+    onTokenExpired: () -> Unit,   // leave the screen and come back with a fresh client token
+) {
+    PrimerCheckoutSheet(
+        checkout = checkout,
+        error = { primerError, checkoutData ->
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                // description and recoverySuggestion are developer-facing: show your own
+                // copy to the shopper and log the rest.
+                Text("We could not take that payment", style = MaterialTheme.typography.titleMedium)
+                when (primerError.errorId) {
+                    // refresh() reuses the same client token, so it cannot fix an expired one.
+                    "unauthorized", "failed-to-create-session" ->
+                        Button(onClick = onTokenExpired) { Text("Start again") }
+                    else ->
+                        Button(onClick = { checkout.refresh() }) { Text("Retry") }
+                }
+                TextButton(onClick = { checkout.dismiss() }) { Text("Back to cart") }
+                Text(
+                    // Payment id when one was created (e.g. a decline), else the diagnostics id
+                    "Reference: ${checkoutData?.payment?.id ?: primerError.diagnosticsId}",
+                    style = MaterialTheme.typography.bodySmall,
+                )
             }
-            TextButton(onClick = { checkout.dismiss() }) { Text("Back to cart") }
-            Text(
-                "Reference: ${err.diagnosticsId}",
-                style = MaterialTheme.typography.bodySmall,
-            )
-        }
-    },
-)
+        },
+    )
+}
 ```
 
 `checkout.dismiss()` is what closes the sheet from a custom result screen; the default success
@@ -2290,7 +2378,7 @@ charged is decided by the client session your server creates; see
 [the Primer docs](https://primer.io/docs) for a vault-intent session.
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -2400,7 +2488,7 @@ instead, and reset it when the attempt ends, or a declined saved-card payment le
 with a spinner and no way to retry short of leaving the screen.
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button

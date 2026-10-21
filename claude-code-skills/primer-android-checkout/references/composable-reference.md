@@ -24,36 +24,35 @@ cannot reference them, and those flows are driven by `PrimerCheckoutSheet` or
 
 ## Contents
 
-This file is ~13,900 words. Read one section, not the file: the ranges are exact, so
-`sed -n '58,388p' references/composable-reference.md` gives you the import map and nothing else.
+This file is long. Read one section, not the file: the ranges are exact, so
+`sed -n '57,391p' references/composable-reference.md` gives you the import map and nothing else.
 A parent range includes its subsections.
 
-| Lines     | Section                                                                                                                              |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| 58-388    | [Import map](#import-map) — complete for these snippets; do-not-import list included                                                 |
-| 389-427   | [Controller creation](#controller-creation)                                                                                          |
-| 428-682   | [Controller interfaces](#controller-interfaces)                                                                                      |
-| 550-652   | &nbsp;&nbsp;[When `formatAmount` and `ClientSessionUpdated` collide](#when-both-rules-collide-formatamount-and-clientsessionupdated) |
-| 653-682   | &nbsp;&nbsp;[The beforePaymentCreate handler](#the-beforepaymentcreate-handler)                                                      |
-| 683-1030  | [Composables and defaults](#composables-and-defaults)                                                                                |
-| 685-711   | &nbsp;&nbsp;[Where the SDK's own KDoc is wrong](#where-the-sdks-own-kdoc-is-wrong)                                                   |
-| 712-747   | &nbsp;&nbsp;[Every slot, and how many parameters it takes](#every-slot-and-how-many-parameters-it-takes)                             |
-| 748-1030  | &nbsp;&nbsp;[Signatures, defaults and slot behaviour](#signatures-defaults-and-slot-behaviour)                                       |
-| 1031-1226 | [State types](#state-types)                                                                                                          |
-| 1180-1226 | &nbsp;&nbsp;[SyncValidationError](#syncvalidationerror)                                                                              |
-| 1227-1390 | [Configuration types](#configuration-types) — every setting's owner                                                                  |
-| 1391-1568 | [Common data types](#common-data-types)                                                                                              |
-| 1546-1568 | &nbsp;&nbsp;[Two types called `PrimerPaymentMethod`](#two-types-called-primerpaymentmethod)                                          |
-| 1569-1597 | [Payment methods and what each needs](#payment-methods-and-what-each-needs)                                                          |
-| 1598-1617 | [Error ids](#error-ids)                                                                                                              |
-| 1618-1734 | [Theming types](#theming-types)                                                                                                      |
-| 1681-1734 | &nbsp;&nbsp;[Colour tokens](#colour-tokens)                                                                                          |
-| 1735-1765 | [Material 3 colour mapping](#material-3-colour-mapping)                                                                              |
-| 1766-1866 | [Accessibility](#accessibility)                                                                                                      |
-| 1778-1802 | &nbsp;&nbsp;[What the default composables announce](#what-the-default-composables-announce)                                          |
-| 1803-1846 | &nbsp;&nbsp;[What the SDK does not do](#what-the-sdk-does-not-do)                                                                    |
-| 1847-1866 | &nbsp;&nbsp;[What each override costs](#what-each-override-costs)                                                                    |
-| 1867-1884 | [Not covered here](#not-covered-here)                                                                                                |
+| Lines     | Section                                                                                                  |
+| --------- | -------------------------------------------------------------------------------------------------------- |
+| 57-391    | [Import map](#import-map) — complete for these snippets; do-not-import list included                     |
+| 392-430   | [Controller creation](#controller-creation)                                                              |
+| 431-584   | [Controller interfaces](#controller-interfaces)                                                          |
+| 555-584   | &nbsp;&nbsp;[The beforePaymentCreate handler](#the-beforepaymentcreate-handler)                          |
+| 585-918   | [Composables and defaults](#composables-and-defaults)                                                    |
+| 587-614   | &nbsp;&nbsp;[Where the SDK's own KDoc is wrong](#where-the-sdks-own-kdoc-is-wrong)                       |
+| 615-650   | &nbsp;&nbsp;[Every slot, and how many parameters it takes](#every-slot-and-how-many-parameters-it-takes) |
+| 651-918   | &nbsp;&nbsp;[Signatures, defaults and slot behaviour](#signatures-defaults-and-slot-behaviour)           |
+| 919-1108  | [State types](#state-types)                                                                              |
+| 1063-1108 | &nbsp;&nbsp;[SyncValidationError](#syncvalidationerror)                                                  |
+| 1109-1273 | [Configuration types](#configuration-types) — every setting's owner                                      |
+| 1274-1451 | [Common data types](#common-data-types)                                                                  |
+| 1429-1451 | &nbsp;&nbsp;[Two types called `PrimerPaymentMethod`](#two-types-called-primerpaymentmethod)              |
+| 1452-1480 | [Payment methods and what each needs](#payment-methods-and-what-each-needs)                              |
+| 1481-1501 | [Error ids](#error-ids)                                                                                  |
+| 1502-1664 | [Theming types](#theming-types)                                                                          |
+| 1593-1664 | &nbsp;&nbsp;[Colour tokens](#colour-tokens)                                                              |
+| 1665-1700 | [Material 3 colour mapping](#material-3-colour-mapping)                                                  |
+| 1701-1807 | [Accessibility](#accessibility)                                                                          |
+| 1713-1743 | &nbsp;&nbsp;[What the default composables announce](#what-the-default-composables-announce)              |
+| 1744-1787 | &nbsp;&nbsp;[What the SDK does not do](#what-the-sdk-does-not-do)                                        |
+| 1788-1807 | &nbsp;&nbsp;[What each override costs](#what-each-override-costs)                                        |
+| 1808-1825 | [Not covered here](#not-covered-here)                                                                    |
 
 ## Import map
 
@@ -79,7 +78,7 @@ the platform symbols the snippets here depend on: if a symbol used by a snippet 
 this skill — here and in [`compose-patterns.md`](compose-patterns.md) — is preceded by its own
 contiguous `// imports for this snippet` block containing exactly what that snippet needs. Copy
 that block. The list below is the _index_: it is where you look up a symbol you need for code you
-are writing yourself, and where you check a package you are unsure of. Reading down 142 entries
+are writing yourself, and where you check a package you are unsure of. Reading down the whole map
 picking out ten is how `io.primer.checkout.api.state.rememberPrimerCheckoutController` gets
 written — the package borrowed from the `PrimerCheckoutState` line beside it. The real package is
 `io.primer.checkout.api.checkout`, it is correct in the list, and the mistake still happened four
@@ -173,16 +172,23 @@ import io.primer.android.configuration.data.model.CountryCode
 import io.primer.android.clientSessionActions.domain.models.PrimerCountry
 import io.primer.android.ui.core.model.SyncValidationError
 import io.primer.android.configuration.domain.model.Surcharge
+import io.primer.android.domain.action.models.PrimerAddress            // shipping address payload
+
+// Express Checkout shipping (Google Pay)
+import io.primer.checkout.api.shipping.PrimerShippingAddressChange
+import io.primer.checkout.api.shipping.PrimerShippingOptionChange
+import io.primer.checkout.api.shipping.PrimerShippingOption
 
 // Theming
 import io.primer.checkout.PrimerTheme
+import io.primer.checkout.PrimerAppearanceMode          // SYSTEM, LIGHT, DARK
 import io.primer.checkout.LocalPrimerTheme
 import io.primer.checkout.internal.tokens.LightColorTokens
 import io.primer.checkout.internal.tokens.DarkColorTokens
 import io.primer.checkout.internal.tokens.SpacingTokens
 import io.primer.checkout.internal.tokens.RadiusTokens
 import io.primer.checkout.internal.tokens.SizeTokens
-import io.primer.checkout.internal.tokens.BorderWidthTokens
+import io.primer.checkout.internal.tokens.WidthTokens
 import io.primer.checkout.internal.tokens.TypographyTokens
 import io.primer.checkout.internal.tokens.TypographyStyle
 
@@ -193,6 +199,7 @@ import io.primer.checkout.internal.tokens.TypographyStyle
 // Compose runtime
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect             // registering the shipping handlers
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.mutableStateOf
@@ -222,7 +229,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.background
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.isSystemInDarkTheme       // PrimerTheme.colorTokens()'s default
+import androidx.compose.foundation.isSystemInDarkTheme       // isDarkAppearance() under SYSTEM
 
 // Compose UI
 import androidx.compose.ui.Modifier
@@ -265,19 +272,15 @@ import android.content.Context                                // fieldErrorMessa
 import android.util.Log
 import androidx.annotation.StringRes                          // only in the declarations below
 import androidx.annotation.FontRes                            // TypographyStyle.font
-import androidx.lifecycle.viewmodel.compose.viewModel         // viewModel() in the nav pattern
 import androidx.navigation.NavController                      // navigate()/popBackStack() are members
 import com.google.android.gms.wallet.button.ButtonConstants   // GooglePayButtonOptions values
 import kotlinx.coroutines.launch                              // scope.launch { ... }
 import kotlinx.coroutines.flow.StateFlow                      // naming a controller's flow type
-import java.text.NumberFormat                                 // formatting amounts outside Ready
-import java.util.Currency                                     // ...and its fraction digits
 import java.util.Locale                                       // PrimerSettings.locale
 import java.util.UUID                                         // idempotency keys
 
-// Your app's own generated R, needed by every `R.string.…` and `R.font.…` below. It is
-// not the SDK's R and there is nothing here to copy: substitute your module's package.
-//   import com.example.checkout.R
+// Your app's own generated R is not listed: no snippet here needs it. Font ids arrive as
+// @FontRes parameters, which you call with your R.font ids.
 
 // ===== DO NOT IMPORT =====
 // The wrong imports a writer assembling an import block reaches for by name.
@@ -433,24 +436,40 @@ interface PrimerCheckoutController {
     val state: StateFlow<PrimerCheckoutState>
     fun refresh()   // back to Loading, refetches configuration, methods and saved methods
     fun dismiss()   // closes the sheet or the host overlay; the controller stays usable
+
+    // Express Checkout shipping for Google Pay. Register both; null removes a handler.
+    fun onShippingAddressChange(
+        handler: (suspend (PrimerShippingAddressChange) -> List<PrimerShippingOption>)?,
+    )
+    fun onShippingOptionChange(handler: (suspend (PrimerShippingOptionChange) -> Unit)?)
 }
 
-// Extension, not a member. See the note below: Ready-only.
+data class PrimerShippingAddressChange(val paymentMethodType: String, val shippingAddress: PrimerAddress)
+data class PrimerShippingOptionChange(val paymentMethodType: String, val selectedShippingOption: PrimerShippingOption)
+data class PrimerShippingOption(
+    val id: String,            // must equal the order.shipping.methodId your backend sets
+    val name: String,          // option label in the sheet
+    val description: String,   // shown under the label
+    val amount: Int,           // minor units; must equal order.shipping.amount
+)
+
+// Extension, not a member. Throws before the first Ready: see below.
 fun PrimerCheckoutController.formatAmount(amountInCents: Int): String
 ```
 
-`formatAmount` reads the currency code off whatever state it finds at the moment of the call, and
-it looks in exactly one state: `PrimerCheckoutState.Ready`. From every other state — `Loading`,
-`BeforeClientSessionUpdated`, `ClientSessionUpdated`, `Success`, `Failure` — the currency resolves
-to null and the call throws `IllegalArgumentException`. `ClientSessionUpdated` is the trap: it
-carries a `clientSession` of its own and still is not a state `formatAmount` will read.
+`formatAmount` formats with the currency of the current `Ready` session or, in any other state, of
+the last `Ready` the controller published. So once the checkout has been `Ready` once it works in
+every state — during `refresh()`'s `Loading`, from `Success` and from `Failure` — and after a
+client-session update it uses the updated session. Before the first `Ready` (the initial `Loading`,
+or a `Failure` raised by initialisation) there is no currency yet, and it throws
+`IllegalArgumentException`.
 
-So a formatted amount is not something to derive at render time in an arbitrary state. Do what the
-SDK's own app bar does — format while `Ready` in a `LaunchedEffect`, keep the string, render the
-string:
+Format from a `Ready` and keep the string, so the total stays on screen through `Loading` and the
+terminal states. Every client-session update publishes a new `Ready`, so the effect below re-runs
+and the string follows the updated total:
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -466,34 +485,20 @@ var formattedTotal by remember { mutableStateOf<String?>(null) }
 
 LaunchedEffect(state) {
     val ready = state as? PrimerCheckoutState.Ready ?: return@LaunchedEffect
-    runCatching { checkout.formatAmount(ready.clientSession.totalAmount ?: 0) }
-        .onSuccess { formattedTotal = it }
+    formattedTotal = checkout.formatAmount(ready.clientSession.totalAmount ?: 0)
 }
 
 Text(formattedTotal ?: "")
 ```
 
-**The `runCatching` is not defensive noise, and every `formatAmount` call in this skill has one.**
-`formatAmount` does not read the `Ready` you matched on; it reads the controller's state at the
-moment of the call, and a session update between the snapshot this composition rendered and the
-line that runs can move that state to `BeforeClientSessionUpdated`. Checking the state first
-narrows the window and does not close it. On failure keep the last good string — an amount that is
-one update stale beats a crash, and the next `Ready` overwrites it.
-
 The same applies to any surcharge, fee or line-item amount you format yourself. Two different
-owners hand you those minor-unit `Int`s, and each is readable in any state — reading the number
-never throws, only turning it into text goes through `Ready`:
+owners hand you those minor-unit `Int`s:
 
-- `PrimerClientSession` (off `Ready.clientSession` or `ClientSessionUpdated.clientSession`) carries
-  `totalAmount`, `fees[].amount` and `lineItems[].amount`.
+- `PrimerClientSession` (off `Ready.clientSession`) carries `totalAmount`, `fees[].amount` and
+  `lineItems[].amount`.
 - `io.primer.checkout.api.checkout.models.PrimerPaymentMethod` — the type in
   `controller.methods`, **not** the one on `clientSession.paymentMethod` — carries `surcharge`.
   [Two types share that name](#two-types-called-primerpaymentmethod).
-
-When that rule meets the instruction to re-render on a
-client-session update, read
-[both rules, reconciled](#when-both-rules-collide-formatamount-and-clientsessionupdated) below —
-the two collide on an ordinary card payment.
 
 ```kotlin
 @Stable
@@ -547,109 +552,6 @@ interface PrimerPaymentCreationDecisionHandler {
 }
 ```
 
-### When both rules collide: `formatAmount` and `ClientSessionUpdated`
-
-Two true statements in this skill meet on one ordinary task, and readers have hit the collision
-often enough that leaving both standing is itself the defect. `formatAmount` is safe from `Ready`
-only. `ClientSessionUpdated` is the state that says the totals, fees and surcharges just changed
-and should be re-rendered. Doing the second with the first throws.
-
-Three facts settle it, all read off the release tag `SKILL.md` pins:
-
-- **Nothing moves the state back to `Ready`.** `Ready` is assigned in exactly two places: the
-  initial load, and `refresh()`. `ClientSessionUpdated` is therefore not a blip you can wait out —
-  you stay in it until a terminal state or a `refresh()`.
-- **A card submit causes one.** The Components card form pushes a billing-address client-session
-  action before it tokenizes, whenever any billing field is non-blank, so
-  `Ready → BeforeClientSessionUpdated → ClientSessionUpdated → Success`/`Failure` is the _normal_
-  path through a card payment, not an edge case.
-- **The SDK does not re-format either.** Its own app bar caches the string it formatted while
-  `Ready` and leaves it alone; there is no SDK code path that formats an amount from an updated
-  session.
-
-So: **format from `Ready` and cache the string; when `ClientSessionUpdated` arrives, re-render from
-its payload — and if you need the changed amount as _text_, format that one yourself.** Never call
-`formatAmount` from `ClientSessionUpdated`, and do not call `refresh()` to get back to `Ready` for
-formatting's sake: it refetches configuration, methods and saved methods and resets the flow.
-
-```kotlin
-// imports for this snippet
-import androidx.compose.material3.Text
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import io.primer.checkout.api.state.PrimerCheckoutState
-import io.primer.checkout.api.state.formatAmount
-
-val state by checkout.state.collectAsStateWithLifecycle()
-var currencyCode by remember { mutableStateOf<String?>(null) }
-var total by remember { mutableStateOf<String?>(null) }
-
-LaunchedEffect(state) {
-    when (val s = state) {
-        is PrimerCheckoutState.Ready -> {
-            currencyCode = s.clientSession.currencyCode
-            runCatching { checkout.formatAmount(s.clientSession.totalAmount ?: 0) }
-                .onSuccess { total = it }
-        }
-        // The amount changed and formatAmount would throw from here. Format it yourself
-        // with the currency you kept from Ready.
-        is PrimerCheckoutState.ClientSessionUpdated -> {
-            total = yourFormatMinorUnits(s.clientSession.totalAmount ?: 0, currencyCode) ?: total
-        }
-        else -> Unit
-    }
-}
-
-Text(total ?: "")
-```
-
-```kotlin
-// imports for this snippet
-import java.text.NumberFormat
-import java.util.Currency
-import java.util.Locale
-
-// As close to the SDK's own formatter as app code can get: it also uses
-// NumberFormat.getCurrencyInstance(settings.locale), so pass the same Locale you gave
-// PrimerSettings or the two strings will disagree. One difference to know about: the SDK takes
-// the minor-unit exponent from its own bundled currency-format list, this takes it from
-// Currency.defaultFractionDigits, and for a handful of currencies those differ by a digit.
-// Currency.getInstance throws IllegalArgumentException on anything that is not an ISO 4217
-// code, hence the runCatching.
-fun yourFormatMinorUnits(
-    amountInMinorUnits: Int,
-    currencyCode: String?,
-    locale: Locale = Locale.getDefault(),
-): String? = currencyCode?.let { code ->
-    runCatching {
-        val iso = Currency.getInstance(code)
-        val digits = iso.defaultFractionDigits.coerceAtLeast(0)
-        var divisor = 1.0
-        repeat(digits) { divisor *= 10.0 }
-        NumberFormat.getCurrencyInstance(locale).apply {
-            currency = iso
-            maximumFractionDigits = digits
-            minimumFractionDigits = digits
-        }.format(amountInMinorUnits / divisor)
-    }.getOrNull()
-}
-```
-
-`amountInMinorUnits` is the same minor-unit `Int` the session carries, `currencyCode` is the ISO
-4217 code you kept from `Ready` (null before the first `Ready`, hence the nullable return), and
-`locale` defaults to the device's — pass the one you gave `PrimerSettings` if you set it.
-
-One rendering hazard follows from the same fact, and it is the SDK's code that throws rather than
-yours: `PrimerPaymentMethods` formats a surcharge header by calling `formatAmount` **during
-composition** (see [Composables and defaults](#composables-and-defaults)). Keep that composable
-inside a `Ready` branch — every host pattern in
-[`compose-patterns.md`](compose-patterns.md#sheet-vs-host-patterns) does — or a session update
-while a surcharged method is on screen takes the crash out of your control.
-
 ### The beforePaymentCreate handler
 
 Identity and lifetime, because the whole gating contract depends on them and neither is visible
@@ -685,16 +587,17 @@ from the signature:
 ### Where the SDK's own KDoc is wrong
 
 Read this before you copy anything out of the SDK's doc comments, because the composables below
-carry `## Custom …` examples in their KDoc and **four of those examples do not compile**. This is
+carry `## Custom …` examples in their KDoc and **five of those examples do not compile**. This is
 not a warning about KDoc in general: these are the specific lines, at the release `SKILL.md` pins,
 that a reader lands on precisely when they set out to do what this skill's recipes do.
 
-| KDoc, on                                                    | What it writes                                                           | Why it fails                                                                                                                                                                                                                                                                                 |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `PrimerPaymentMethods`, custom-row example                  | `AsyncImage(model = paymentMethod.iconUrl, …)`                           | `Unresolved reference 'iconUrl'`. The type has [five fields](#common-data-types) and no icon of any kind. The KDoc is describing a field the SDK does not ship                                                                                                                               |
-| `PrimerCardForm`, custom-submit-button example              | `checkout.formatAmount(formState.amount)`                                | `Unresolved reference 'amount'`. `PrimerCardFormController.State` has no amount — the card form never sees one. The total lives on `clientSession.totalAmount`, and formatting it is [`Ready`-only](#controller-interfaces), so a "Pay $10.00" button needs the cached string, not this line |
-| `PrimerCardForm`, custom-field-layout example               | `CardFormDefaults.CardNumberField()`, `ExpiryField(Modifier.weight(1f))` | No parameterless overloads: every default field takes the controller first ([signatures](#signatures-defaults-and-slot-behaviour)). `Modifier` is never the first argument                                                                                                                   |
-| `PrimerCardFormController` and `rememberCardFormController` | `rememberCardFormState(checkout)`, four times                            | `Unresolved reference`. The factory is `rememberCardFormController`                                                                                                                                                                                                                          |
+| KDoc, on                                                                              | What it writes                                                           | Why it fails                                                                                                                                                                                                             |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `PrimerPaymentMethods`, custom-row example                                            | `AsyncImage(model = paymentMethod.iconUrl, …)`                           | `Unresolved reference 'iconUrl'`. The type has [five fields](#common-data-types) and no icon of any kind. The KDoc is describing a field the SDK does not ship                                                           |
+| `PrimerCardForm`, custom-submit-button example                                        | `checkout.formatAmount(formState.amount)`                                | `Unresolved reference 'amount'`. `PrimerCardFormController.State` has no amount — the card form never sees one. The total lives on `Ready.clientSession.totalAmount`; format that [from `Ready`](#controller-interfaces) |
+| `PrimerCardForm`, custom-field-layout example                                         | `CardFormDefaults.CardNumberField()`, `ExpiryField(Modifier.weight(1f))` | No parameterless overloads: every default field takes the controller first ([signatures](#signatures-defaults-and-slot-behaviour)). `Modifier` is never the first argument                                               |
+| `PrimerCardFormController` and `rememberCardFormController`                           | `rememberCardFormState(checkout)`, three times                           | `Unresolved reference`. The factory is `rememberCardFormController`                                                                                                                                                      |
+| `PrimerCheckoutController`, `rememberPrimerCheckoutController`, `PrimerCheckoutSheet` | `showError(s.error)` on a `Failure`                                      | `Unresolved reference 'error'`. The property is `primerError`                                                                                                                                                            |
 
 One more KDoc line compiles and is still a trap: `CardFormDefaults`' rearranging example lays two
 fields out with `Modifier.weight(1f)` inside a `Row { }`. That is legal Kotlin — `RowScope` provides
@@ -722,7 +625,7 @@ than with anything that points at the right count. The two neighbours that get c
 | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------- |
 | `PrimerCheckoutSheet`                       | `splash`, `loading`, `paymentMethodSelection`, `cardForm`                                                  | —                                                                                   | **0**                                         |
 | `PrimerCheckoutSheet`                       | `success`                                                                                                  | `checkoutData: PrimerCheckoutData`                                                  | **1**                                         |
-| `PrimerCheckoutSheet`                       | `error`                                                                                                    | `error: PrimerError`                                                                | **1**                                         |
+| `PrimerCheckoutSheet`                       | `error`                                                                                                    | `primerError: PrimerError`, `checkoutData: PrimerCheckoutData?`                     | **2**                                         |
 | `PrimerCheckoutSheet`, `PrimerCheckoutHost` | `beforePaymentCreate`                                                                                      | `handler: PrimerPaymentCreationDecisionHandler`                                     | **1**                                         |
 | `PrimerCheckoutHost`                        | `content`                                                                                                  | —                                                                                   | **0**                                         |
 | `PrimerCardForm`                            | `cardDetails`, `billingAddress`, `submitButton`                                                            | —                                                                                   | **0**                                         |
@@ -766,8 +669,9 @@ fun PrimerCheckoutSheet(
     success: @Composable (PrimerCheckoutData) -> Unit = { data ->
         PrimerCheckoutSheetDefaults.Success(checkoutData = data)
     },
-    error: @Composable (PrimerError) -> Unit = { err ->
-        PrimerCheckoutSheetDefaults.Error(error = err)
+    // TWO parameters. checkoutData is non-null when the payment was created before failing.
+    error: @Composable (PrimerError, PrimerCheckoutData?) -> Unit = { primerError, _ ->
+        PrimerCheckoutSheetDefaults.Error(error = primerError)
     },
     beforePaymentCreate: (@Composable (handler: PrimerPaymentCreationDecisionHandler) -> Unit)? = null,
 )
@@ -949,28 +853,12 @@ cards with the `method` slot **not called at all**; your custom row only applies
 every method's surcharge is absent or zero. There is no slot for the surcharge card, so a custom
 row cannot render a surcharge — the SDK formats those itself.
 
-Two consequences of _how_ it formats them. A `Surcharge.CardNetworksSurcharge` is collapsed to a
+One consequence of _how_ it formats them: a `Surcharge.CardNetworksSurcharge` is collapsed to a
 single "surcharge may apply" line rather than an amount, so per-network figures are yours to render
-or not at all. And a non-zero `Surcharge.PaymentMethodSurcharge` header calls the same
-[`Ready`-only `formatAmount`](#controller-interfaces) **from composition**, so composing
-`PrimerPaymentMethods` outside `Ready` with such a method in the list throws
-`IllegalArgumentException` from inside the SDK, where you cannot catch it. Render the list inside a
-`Ready` branch. (A `CardNetworksSurcharge` does not format: it groups under an internal
-"unknown" value and takes the "surcharge may apply" branch. Only a real
-`PaymentMethodSurcharge` amount reaches `formatAmount`.)
-
-**The default sheet walks into that itself, and there is nothing in your code to fix.** The sheet's
-screens are chosen by its own nav graph rather than by the state, so its method-selection screen
-can be composed while the state is not `Ready` — and its default `error` screen offers a "try other
-payment methods" button that navigates straight back to it. On a client session where any method
-carries a non-zero `PaymentMethodSurcharge`, a failed payment followed by that button composes
-`PrimerPaymentMethods` from `Failure` and the surcharge header throws inside the SDK. Nothing in the
-public API turns that button off on its own; the mitigation is to override the sheet's
-[`error` slot](#signatures-defaults-and-slot-behaviour) — which replaces both of its buttons — and
-offer `checkout.refresh()`, the one call that goes back through `Loading` to `Ready`, instead of a
-route back to the list ([worked example](compose-patterns.md#replacing-the-sheets-error-screen)).
-Worth knowing before you ship surcharges: the crash lands in your app's crash reporter, not
-Primer's.
+or not at all. A `Surcharge.PaymentMethodSurcharge` header calls
+[`formatAmount`](#controller-interfaces) during composition, which works in every state after the
+first `Ready` — so the default sheet's "try other payment methods" route back to the list after a
+failure is safe.
 
 ```kotlin
 @Composable
@@ -1035,37 +923,32 @@ the two booleans, not in the action.
 sealed interface PrimerCheckoutState {
     data object Loading : PrimerCheckoutState
     data class Ready(val clientSession: PrimerClientSession) : PrimerCheckoutState
-    data object BeforeClientSessionUpdated : PrimerCheckoutState
-    data class ClientSessionUpdated(val clientSession: PrimerClientSession) : PrimerCheckoutState
     data class Success(val checkoutData: PrimerCheckoutData) : PrimerCheckoutState
-    data class Failure(val error: PrimerError) : PrimerCheckoutState
+    data class Failure(
+        val primerError: PrimerError,
+        val checkoutData: PrimerCheckoutData? = null,
+    ) : PrimerCheckoutState
 }
 ```
 
 The members, their payloads and the transitions between them — the canonical list:
 
-| State                        | Carries         | Meaning                                                                                                                                                                                                                                                                                           |
-| ---------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Loading`                    | —               | Initial value, and the state `refresh()` returns to                                                                                                                                                                                                                                               |
-| `Ready`                      | `clientSession` | Configuration, methods and saved methods loaded. The only state `formatAmount` reads                                                                                                                                                                                                              |
-| `BeforeClientSessionUpdated` | —               | An update is starting — most often the billing-address action the card form pushes when you submit it                                                                                                                                                                                             |
-| `ClientSessionUpdated`       | `clientSession` | Update finished. Re-render totals, fees and surcharges from **this payload**, formatting the changed amounts yourself: `formatAmount` throws here, and the state does not go back to `Ready` on its own. [Both rules, reconciled](#when-both-rules-collide-formatamount-and-clientsessionupdated) |
-| `Success`                    | `checkoutData`  | Terminal under `AUTO` handling: the payment was created                                                                                                                                                                                                                                           |
-| `Failure`                    | `error`         | Terminal: the attempt failed                                                                                                                                                                                                                                                                      |
+| State     | Carries                        | Meaning                                                                                                                                                                                                   |
+| --------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Loading` | —                              | Initial value, and the state `refresh()` returns to                                                                                                                                                       |
+| `Ready`   | `clientSession`                | Configuration, methods and saved methods loaded. Re-published with the updated session after every client-session update                                                                                  |
+| `Success` | `checkoutData`                 | Terminal under `AUTO` handling: the payment was created                                                                                                                                                   |
+| `Failure` | `primerError`, `checkoutData?` | Terminal: the attempt failed. `checkoutData` carries the payment and order id when the payment was created before failing (a decline), and is `null` when it failed before one existed. No decline reason |
 
 What moves the machine:
 
 - `Loading` is entered once at construction, and re-entered **only** by `refresh()` — which reuses
   the same client token, so it cannot recover from an expired one.
 - `Loading` → `Ready` on successful configuration load; `Loading` → `Failure` if it fails.
-- `BeforeClientSessionUpdated` → `ClientSessionUpdated` around a session update. Neither is
-  terminal, and neither leads back to `Ready`: `Ready` is set only by the initial load and by
-  `refresh()`, so after an update you sit in `ClientSessionUpdated` until a terminal state or a
-  `refresh()`. Submitting the card form is enough to cause one — it pushes a billing-address
-  action first whenever any billing field is filled — so most card payments pass through
-  `ClientSessionUpdated` on the way to `Success`. Anything that needs `Ready` (`formatAmount`, and
-  `PrimerPaymentMethods` when a method carries a surcharge) has to account for that:
-  [how](#when-both-rules-collide-formatamount-and-clientsessionupdated).
+- `Ready` → `Ready` around a client-session update. The card form pushes a billing-address action
+  on submit whenever a billing field is filled, and `setVaultOnSuccess` pushes one too; each ends
+  in a new `Ready` carrying the updated session. There is no state for "update in flight": read
+  the card form's `state.isLoading`, which covers both actions.
 - `Success` and `Failure` are terminal and **re-enterable**: both stick on the flow until a new
   attempt starts, and a retry runs `Loading` → `Ready` → terminal again. A handler keyed on the
   state therefore fires once per attempt rather than once per session.
@@ -1074,7 +957,7 @@ What moves the machine:
 
 Because the terminal states stick, act on them from a `LaunchedEffect` keyed on the state and never
 from composition — a `Success` that sticks would otherwise re-fire its effect on every
-recomposition. End every `when` over the state with `else`: there are six members.
+recomposition. End every `when` over the state with `else`, or list all four members.
 
 ```kotlin
 data class PrimerCheckoutData(
@@ -1198,17 +1081,16 @@ like any other — and `fieldId` is not a resource id at all. `context.getString
 exactly this reason. Do not resolve `fieldId`, and do not show `errorId`.
 
 ```kotlin
-// imports for this snippet
+// imports for this snippet: add to the top of your file
 import android.content.Context
-import com.example.checkout.R   // YOUR app's generated R: substitute your module's package
 import io.primer.android.ui.core.model.SyncValidationError
 
 // A plain function, not a @Composable, so the same one serves a Text() in a slot and a
 // ViewModel formatting errors for a snackbar. The same function appears in
 // compose-patterns.md, deliberately. Keep them identical.
+// Every Components validation error sets errorResId; orEmpty() only satisfies the nullable type.
 fun fieldErrorMessage(error: SyncValidationError, context: Context): String =
-    error.errorResId?.let { context.getString(it) }
-        ?: context.getString(R.string.your_field_invalid)
+    error.errorResId?.let { context.getString(it) }.orEmpty()
 ```
 
 Two things about that shape are load-bearing, and both exist because the reader will restructure
@@ -1272,8 +1154,9 @@ shows two levels of nesting in the shape you copy.
 `Success`/`Failure`, which is the contract everything else in this skill assumes. `MANUAL` is a
 drop-in and headless mode, and Components does not complete it:
 
-- Components wires exactly seven headless callbacks into `PrimerCheckoutState` — available methods,
-  before/after client-session update, additional info, before-payment-create, completed, failed.
+- Components wires its headless callbacks into `PrimerCheckoutState` — available methods,
+  client-session update (re-published as `Ready`), additional info, before-payment-create,
+  completed, failed.
   There is **no tokenization callback**, so under `MANUAL` there is nothing to hand your backend the
   payment method token, and no resume path for the client token it might return.
 - Backend-driven methods — every browser redirect, so PayPal, iDEAL, Bancontact and the rest — are
@@ -1554,7 +1437,7 @@ wanted is not on the object you actually have.
 | Type                                                         | What hands it to you                                                                                                                              | Fields                                                                                                                                   |
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | `io.primer.checkout.api.checkout.models.PrimerPaymentMethod` | `PrimerPaymentMethodsController.methods` (`controller.methods`), the `method` slot of `PrimerPaymentMethods`, and `PaymentMethodsDefaults.Method` | The five above: `paymentMethodType`, `paymentMethodName`, `supportedPrimerSessionIntents`, `paymentMethodManagerCategories`, `surcharge` |
-| `io.primer.android.domain.action.models.PrimerPaymentMethod` | `PrimerClientSession.paymentMethod` — i.e. `Ready.clientSession.paymentMethod` and `ClientSessionUpdated.clientSession.paymentMethod`             | **One**: `orderedAllowedCardNetworks: List<CardNetwork.Type>`. No `surcharge`, no `paymentMethodType`, no `paymentMethodName`            |
+| `io.primer.android.domain.action.models.PrimerPaymentMethod` | `PrimerClientSession.paymentMethod` — i.e. `Ready.clientSession.paymentMethod`                                                                    | **One**: `orderedAllowedCardNetworks: List<CardNetwork.Type>`. No `surcharge`, no `paymentMethodType`, no `paymentMethodName`            |
 
 Two consequences, and they are the whole of it:
 
@@ -1597,58 +1480,82 @@ drive or replace those screens. Leave the methods in the list and let `PrimerChe
 
 ## Error ids
 
-`PrimerCheckoutState.Failure.error.errorId` values worth branching on, and what to do about each.
+`PrimerCheckoutState.Failure.primerError.errorId` values worth branching on, and what to do about each.
 The canonical list — `SKILL.md` links here rather than repeating it.
 
-| `errorId`                        | Error class                               | Meaning                                                                                                                                                  | What to do                                                                                                                    |
-| -------------------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `"payment-cancelled"`            | `PaymentMethodCancelledError`             | The shopper backed out of a method's flow                                                                                                                | Nothing. Not a failure to report                                                                                              |
-| `"failed-to-redirect"`           | `PaymentMethodRedirectError`              | Could not open the external app or browser                                                                                                               | Offer another payment method                                                                                                  |
-| `"bad-network"`                  | `BadNetworkError`                         | A request failed on a poor connection                                                                                                                    | Offer retry via `refresh()`                                                                                                   |
-| `"connectivity-errors"`          | `ConnectivityError`                       | No connectivity at all                                                                                                                                   | Offer retry via `refresh()`                                                                                                   |
-| `"failed-to-create-session"`     | `SessionCreateError`                      | The checkout session could not be created                                                                                                                | Mint a new client token and re-enter the screen — `refresh()` reuses the old one                                              |
-| `"unauthorized"`                 | `UnauthorizedError`                       | Client token invalid or expired                                                                                                                          | As above: a new token and a new screen                                                                                        |
-| `"client-error"`                 | `ClientError`                             | HTTP 4xx                                                                                                                                                 | Not shopper-recoverable. Log `diagnosticsId` and check the client session your server sent                                    |
-| `"server-error"`                 | `ServerError` / `HttpError`               | HTTP 5xx                                                                                                                                                 | Retry later                                                                                                                   |
-| `"invalid-value"`                | `GeneralError`                            | Bad value in SDK configuration or session                                                                                                                | Fix the settings or session; not retryable as-is                                                                              |
-| `"unknown-error"`                | `PrimerUnknownError`                      | Unclassified                                                                                                                                             | Log `diagnosticsId` and quote it to Primer support                                                                            |
-| `"missing-sdk-dependency"`       | `ThreeDsError.ThreeDsLibraryMissingError` | 3DS was required and `io.primer:3ds-android` is not on the classpath — the SDK looks for it by class name at runtime                                     | Add the coordinate from the install snippet in [`SKILL.md`](../SKILL.md#install-and-initialise)                               |
-| `"misconfigured-payment-method"` | `MisConfiguredPaymentMethodError`         | A method is enabled in the Dashboard but its wrapper artifact is missing (`io.primer:klarna-android`, `io.primer:stripe-android`), so its factory failed | Same: add that method's coordinate. Until you do, the method is filtered out of `controller.methods` rather than shown broken |
+| `errorId`                        | Error class                               | Meaning                                                                                                                                                             | What to do                                                                                                                                 |
+| -------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `"payment-cancelled"`            | `PaymentMethodCancelledError`             | The shopper backed out of a method's flow                                                                                                                           | Nothing. Not a failure to report                                                                                                           |
+| `"failed-to-redirect"`           | `PaymentMethodRedirectError`              | Could not open the external app or browser                                                                                                                          | Offer another payment method                                                                                                               |
+| `"bad-network"`                  | `BadNetworkError`                         | A request failed on a poor connection                                                                                                                               | Offer retry via `refresh()`                                                                                                                |
+| `"connectivity-errors"`          | `ConnectivityError`                       | No connectivity at all                                                                                                                                              | Offer retry via `refresh()`                                                                                                                |
+| `"failed-to-create-session"`     | `SessionCreateError`                      | The checkout session could not be created                                                                                                                           | Mint a new client token and re-enter the screen — `refresh()` reuses the old one                                                           |
+| `"unauthorized"`                 | `UnauthorizedError`                       | Client token invalid or expired                                                                                                                                     | As above: a new token and a new screen                                                                                                     |
+| `"client-error"`                 | `ClientError`                             | HTTP 4xx                                                                                                                                                            | Not shopper-recoverable. Log `diagnosticsId` and check the client session your server sent                                                 |
+| `"server-error"`                 | `ServerError` / `HttpError`               | HTTP 5xx                                                                                                                                                            | Retry later                                                                                                                                |
+| `"invalid-value"`                | `GeneralError`                            | Bad value in SDK configuration or session                                                                                                                           | Fix the settings or session; not retryable as-is                                                                                           |
+| `"unknown-error"`                | `PrimerUnknownError`                      | Unclassified                                                                                                                                                        | Log `diagnosticsId` and quote it to Primer support                                                                                         |
+| `"missing-sdk-dependency"`       | `ThreeDsError.ThreeDsLibraryMissingError` | 3DS was required and `io.primer:3ds-android` is not on the classpath — the SDK looks for it by class name at runtime                                                | Add the coordinate from the install snippet in [`SKILL.md`](../SKILL.md#install-and-initialise)                                            |
+| `"shipping-not-updated"`         | `GooglePayError.ShippingNotUpdated`       | Google Pay authorised a shipping option the client session does not carry: `order.shipping.methodId`/`amount` did not match after `onShippingOptionChange` returned | Make the option handler PATCH both fields before returning ([shipping](compose-patterns.md#shipping-address-and-options-express-checkout)) |
+| `"misconfigured-payment-method"` | `MisConfiguredPaymentMethodError`         | A method is enabled in the Dashboard but its wrapper artifact is missing (`io.primer:klarna-android`, `io.primer:stripe-android`), so its factory failed            | Same: add that method's coordinate. Until you do, the method is filtered out of `controller.methods` rather than shown broken              |
 
 ## Theming types
 
 ```kotlin
+enum class PrimerAppearanceMode { SYSTEM, LIGHT, DARK }   // io.primer.checkout.PrimerAppearanceMode
+
 data class PrimerTheme(                       // io.primer.checkout.PrimerTheme
     val lightColorTokens: LightColorTokens = LightColorTokens(),
     val darkColorTokens: DarkColorTokens = DarkColorTokens(),
-    val borderWidthTokens: BorderWidthTokens = BorderWidthTokens(),
+    val appearanceMode: PrimerAppearanceMode = PrimerAppearanceMode.SYSTEM,
+    val widthTokens: WidthTokens = WidthTokens(),
     val radiusTokens: RadiusTokens = RadiusTokens(),
     val sizeTokens: SizeTokens = SizeTokens(),
     val spacingTokens: SpacingTokens = SpacingTokens(),
     val typographyTokens: TypographyTokens = TypographyTokens(),
 ) {
-    // Member function, not an extension. Returns dark or light tokens.
-    @Composable fun colorTokens(darkTheme: Boolean = isSystemInDarkTheme()): LightColorTokens
+    // True for DARK, false for LIGHT, isSystemInDarkTheme() for SYSTEM.
+    @Composable fun isDarkAppearance(): Boolean
+
+    // Member function, not an extension. Returns dark or light tokens. The default is the
+    // appearance the sheet or host resolved; outside them it is always light.
+    @Composable fun colorTokens(darkTheme: Boolean = /* resolved appearance */): LightColorTokens
 }
 
 val LocalPrimerTheme = staticCompositionLocalOf { PrimerTheme() }
 ```
 
+`appearanceMode` decides which colour set the sheet, the host, the Material 3 scheme and the
+payment-method logos use: `LIGHT` or `DARK` pins the checkout regardless of the phone, `SYSTEM`
+follows it. Inside the sheet or host, `LocalPrimerTheme.current.colorTokens()` already returns the
+resolved set. Outside them, pass the mode yourself:
+`theme.colorTokens(theme.isDarkAppearance())`.
+
+A theme number that is `NaN` or infinite — any `Dp` token, or a `letterSpacing` — is replaced by
+its default, with a warning in the SDK log.
+
 ```kotlin
 data class SpacingTokens(
     val xxsmall: Dp = 2.dp, val xsmall: Dp = 4.dp, val small: Dp = 8.dp,
-    val medium: Dp = 12.dp, val large: Dp = 16.dp, val xlarge: Dp = 20.dp, val base: Dp = 4.dp,
+    val medium: Dp = 12.dp, val large: Dp = 16.dp, val xlarge: Dp = 20.dp, val xxlarge: Dp = 24.dp,
 )
 data class RadiusTokens(
-    val xsmall: Dp = 2.dp, val small: Dp = 4.dp, val medium: Dp = 8.dp,
-    val large: Dp = 12.dp, val base: Dp = 4.dp,
+    val xsmall: Dp = 2.dp, val small: Dp = 4.dp, val medium: Dp = 8.dp, val large: Dp = 12.dp,
 )
 data class SizeTokens(
     val small: Dp = 16.dp, val medium: Dp = 20.dp, val large: Dp = 24.dp,
-    val xlarge: Dp = 32.dp, val xxlarge: Dp = 44.dp, val xxxlarge: Dp = 56.dp, val base: Dp = 4.dp,
+    val xlarge: Dp = 32.dp, val xxlarge: Dp = 40.dp, val xxxlarge: Dp = 56.dp,
 )
-data class BorderWidthTokens(val thin: Dp = 1.dp, val medium: Dp = 2.dp, val thick: Dp = 3.dp)
+data class WidthTokens(
+    val default: Dp = 1.dp,    // resting borders on inputs and buttons
+    val focus: Dp = 2.dp,      // focused input; also the stroke of the SDK's spinners
+    val selected: Dp = 2.dp,   // selected saved card or Klarna category
+    val error: Dp = 2.dp,      // input showing an error
+)
 ```
+
+There is no `base` token on spacing, radius or size, and no `BorderWidthTokens` /
+`borderWidthTokens`: borders are `widthTokens`.
 
 ```kotlin
 data class TypographyStyle(
@@ -1662,93 +1569,115 @@ data class TypographyStyle(
 }
 
 data class TypographyTokens(
-    // R.font.inter is the SDK module's own R, not yours: there is no import that reaches
-    // it from app code. Your overrides name a font on your app's R instead.
-    val titleXlarge: TypographyStyle = TypographyStyle(font = R.font.inter, letterSpacing = -0.6f, weight = 550, size = 24, lineHeight = 32),
-    val titleLarge: TypographyStyle = TypographyStyle(font = R.font.inter, letterSpacing = -0.2f, weight = 550, size = 16, lineHeight = 20),
-    val bodyLarge: TypographyStyle = TypographyStyle(font = R.font.inter, letterSpacing = -0.2f, weight = 400, size = 16, lineHeight = 20),
-    val bodyMedium: TypographyStyle = TypographyStyle(font = R.font.inter, letterSpacing = 0f, weight = 400, size = 14, lineHeight = 20),
-    val bodySmall: TypographyStyle = TypographyStyle(font = R.font.inter, letterSpacing = 0f, weight = 400, size = 12, lineHeight = 16),
+    // The font every style below defaults to. R.font.inter is the SDK module's own R, not
+    // yours: there is no import that reaches it from app code.
+    @FontRes val brandFont: Int = R.font.inter,
+    val titleXlarge: TypographyStyle = TypographyStyle(font = brandFont, letterSpacing = -0.6f, weight = 550, size = 24, lineHeight = 32),
+    val titleLarge: TypographyStyle = TypographyStyle(font = brandFont, letterSpacing = -0.2f, weight = 550, size = 16, lineHeight = 20),
+    val bodyLarge: TypographyStyle = TypographyStyle(font = brandFont, letterSpacing = -0.2f, weight = 400, size = 16, lineHeight = 20),
+    val bodyMedium: TypographyStyle = TypographyStyle(font = brandFont, letterSpacing = 0f, weight = 400, size = 14, lineHeight = 20),
+    val bodySmall: TypographyStyle = TypographyStyle(font = brandFont, letterSpacing = 0f, weight = 400, size = 12, lineHeight = 16),
+    val error: TypographyStyle? = null,   // field error text; null follows bodySmall
 )
 ```
 
-Each default names the SDK's own bundled Inter resource, which your app cannot reference (it is the
-SDK module's `R`). Since `font` has no default, customising a style means passing an id off **your**
-generated `R` — `import com.example.checkout.R`, with your module's package — along with the other
-four values; styles you do not pass keep Inter. Sizes are `sp` and weights are variable-font weights
-(550 is a mid-semibold). [Worked example](compose-patterns.md#custom-typography).
+`brandFont` is the one-line way to put your font everywhere: `TypographyTokens(brandFont =
+R.font.your_brand_regular)`, with `R` your app's own generated `R`. Set it on the constructor — `copy(brandFont = …)` does not re-derive the
+five styles, which keep the font they were built with. Pass a style explicitly to change its size
+or weight; `TypographyStyle.font` has no default, so a style you build names its font. Sizes are
+`sp`; weights are applied both as the variable-font axis and as a real `FontWeight`, so a static
+font and API 24–25 get the right weight too. The same tokens feed Material 3's `Typography`, so
+M3 components you place inside the sheet or host match.
+[Worked example](compose-patterns.md#custom-typography).
 
 ### Colour tokens
 
-`LightColorTokens` is an `open class` with 16 base tokens as `open val`s and 26 semantic tokens as
-`open val` getters that resolve through the base ones. `DarkColorTokens : LightColorTokens()`
-overrides 15 base values (brand stays the same). Override a base token and every semantic token
-follows.
+`LightColorTokens` is an `open class`. Its raw palette — `primerColorGray000` to `Gray900`,
+`Red100`/`500`/`900`, `Blue500`/`900`, `Green500` — is **`internal`**: app code cannot read or
+override it, and an `override val primerColorGray900` fails to compile. Two base tokens are
+overridable, `primerColorBrand` and `primerColorBorderTransparentDefault`, and every semantic token
+below is an `open val` you can override directly. `DarkColorTokens : LightColorTokens()` swaps the
+palette (brand stays the same), so the semantic tokens follow without you overriding them twice.
 
-| Base token                            | Light       | Dark        |
-| ------------------------------------- | ----------- | ----------- |
-| `primerColorBrand`                    | `#2F98FF`   | `#2F98FF`   |
-| `primerColorGray000`                  | `#FFFFFF`   | `#171619`   |
-| `primerColorGray100`                  | `#F5F5F5`   | `#292929`   |
-| `primerColorGray200`                  | `#EEEEEE`   | `#424242`   |
-| `primerColorGray300`                  | `#E0E0E0`   | `#575757`   |
-| `primerColorGray400`                  | `#BDBDBD`   | `#858585`   |
-| `primerColorGray500`                  | `#9E9E9E`   | `#767577`   |
-| `primerColorGray600`                  | `#757575`   | `#C7C7C7`   |
-| `primerColorGray900`                  | `#212121`   | `#EFEFEF`   |
-| `primerColorRed100`                   | `#FFECEC`   | `#321C20`   |
-| `primerColorRed500`                   | `#FF7279`   | `#E46D70`   |
-| `primerColorRed900`                   | `#B4324B`   | `#F6BFBF`   |
-| `primerColorGreen500`                 | `#3EB68F`   | `#27B17D`   |
-| `primerColorBlue500`                  | `#399DFF`   | `#3F93E4`   |
-| `primerColorBlue900`                  | `#2270F4`   | `#4AAEFF`   |
-| `primerColorBorderTransparentDefault` | transparent | transparent |
+Palette values, for reading the semantic table (ARGB — the greys are translucent):
 
-Semantic tokens and what they resolve to:
+| Palette (internal)    | Light       | Dark        |
+| --------------------- | ----------- | ----------- |
+| `primerColorBrand`    | `#FF2F98FF` | `#FF2F98FF` |
+| `primerColorGray000`  | `#FFFFFFFF` | `#FF171619` |
+| `primerColorGray100`  | `#0A212121` | `#0AEFEFEF` |
+| `primerColorGray200`  | `#12212121` | `#12EFEFEF` |
+| `primerColorGray300`  | `#24212121` | `#24EFEFEF` |
+| `primerColorGray400`  | `#4D212121` | `#4DEFEFEF` |
+| `primerColorGray500`  | `#70212121` | `#70EFEFEF` |
+| `primerColorGray600`  | `#9E212121` | `#9EEFEFEF` |
+| `primerColorGray900`  | `#FF212121` | `#FFEFEFEF` |
+| `primerColorRed100`   | `#FFFFECEC` | `#FF321C20` |
+| `primerColorRed500`   | `#FFFF7279` | `#FFE46D70` |
+| `primerColorRed900`   | `#FFB4324B` | `#FFF6BFBF` |
+| `primerColorGreen500` | `#FF3EB68F` | `#FF27B17D` |
+| `primerColorBlue500`  | `#FF399DFF` | `#FF3F93E4` |
+| `primerColorBlue900`  | `#FF2270F4` | `#FF4AAEFF` |
 
-| Token                                                                    | Resolves to                           |
-| ------------------------------------------------------------------------ | ------------------------------------- |
-| `primerColorTextPrimary`                                                 | `primerColorGray900`                  |
-| `primerColorTextSecondary`                                               | `primerColorGray600`                  |
-| `primerColorTextPlaceholder`                                             | `primerColorGray500`                  |
-| `primerColorTextDisabled`                                                | `primerColorGray400`                  |
-| `primerColorTextNegative`                                                | `primerColorRed900`                   |
-| `primerColorTextLink`                                                    | `primerColorBlue900`                  |
-| `primerColorBackground`                                                  | `primerColorGray000`                  |
-| `primerColorBorderOutlinedDefault`                                       | `primerColorGray300`                  |
-| `primerColorBorderOutlinedHover`                                         | `primerColorGray400`                  |
-| `primerColorBorderOutlinedActive`                                        | `primerColorGray500`                  |
-| `primerColorBorderOutlinedFocus`                                         | `primerColorFocus`                    |
-| `primerColorBorderOutlinedDisabled`                                      | `primerColorGray200`                  |
-| `primerColorBorderOutlinedError`                                         | `primerColorRed500`                   |
-| `primerColorBorderOutlinedLoading`                                       | `primerColorGray200`                  |
-| `primerColorBorderOutlinedSelected`                                      | `primerColorBrand`                    |
-| `primerColorBorderTransparentHover` / `Active` / `Disabled` / `Selected` | `primerColorBorderTransparentDefault` |
-| `primerColorBorderTransparentFocus`                                      | `primerColorFocus`                    |
-| `primerColorIconPrimary`                                                 | `primerColorGray900`                  |
-| `primerColorIconDisabled`                                                | `primerColorGray400`                  |
-| `primerColorIconNegative`                                                | `primerColorRed500`                   |
-| `primerColorIconPositive`                                                | `primerColorGreen500`                 |
-| `primerColorFocus`                                                       | `primerColorBrand`                    |
-| `primerColorLoader`                                                      | `primerColorBrand`                    |
+`primerColorBrand` is the only row there you can override. Semantic tokens, all overridable, and
+what they resolve to:
+
+| Token                                                          | Resolves to                           |
+| -------------------------------------------------------------- | ------------------------------------- |
+| `primerColorBackgroundPrimary`                                 | `primerColorGray000` — the sheet      |
+| `primerColorBackgroundSecondary`                               | `primerColorGray100`                  |
+| `primerColorBackgroundOutlinedDefault`                         | `primerColorBackgroundPrimary`        |
+| `primerColorBackgroundOutlinedDisabled`                        | `primerColorGray100`                  |
+| `primerColorTextPrimary`                                       | `primerColorGray900`                  |
+| `primerColorTextSecondary`                                     | `primerColorGray600`                  |
+| `primerColorTextPlaceholder`                                   | `primerColorGray500`                  |
+| `primerColorTextDisabled`                                      | `primerColorGray400`                  |
+| `primerColorTextNegative`                                      | `primerColorRed900`                   |
+| `primerColorTextLink`                                          | `primerColorBlue900`                  |
+| `primerColorTextOutlinedDefault`                               | `primerColorTextPrimary`              |
+| `primerColorBorderOutlinedDefault`                             | `primerColorGray300`                  |
+| `primerColorBorderOutlinedActive`                              | `primerColorGray500`                  |
+| `primerColorBorderOutlinedFocus`                               | `primerColorFocus`                    |
+| `primerColorBorderOutlinedDisabled`                            | `primerColorGray200`                  |
+| `primerColorBorderOutlinedError`                               | `primerColorRed500`                   |
+| `primerColorBorderOutlinedLoading`                             | `primerColorGray200`                  |
+| `primerColorBorderOutlinedSelected`                            | `primerColorBrand`                    |
+| `primerColorBorderTransparentActive` / `Disabled` / `Selected` | `primerColorBorderTransparentDefault` |
+| `primerColorBorderTransparentFocus`                            | `primerColorFocus`                    |
+| `primerColorIconPrimary`                                       | `primerColorGray900`                  |
+| `primerColorIconDisabled`                                      | `primerColorGray400`                  |
+| `primerColorIconNegative`                                      | `primerColorRed500`                   |
+| `primerColorIconPositive`                                      | `primerColorGreen500`                 |
+| `primerColorFocus`                                             | `primerColorBrand`                    |
+| `primerColorLoader`                                            | `primerColorBrand`                    |
+| `primerColorOnBrand`                                           | `primerColorBackgroundPrimary`        |
+
+`primerColorOnBrand` is the content colour on brand-filled surfaces: the pay button's label, the error screen's
+button, the delete confirmation, and Material's `onPrimary`. It
+follows the sheet colour, so a pale brand in dark mode gets dark text on its button; override it
+when your brand needs a fixed label colour. Overriding `primerColorBackgroundPrimary` moves it
+too.
+
+Names that no longer exist, for porting an older theme: `primerColorBackground` is
+`primerColorBackgroundPrimary`; `primerColorBorderOutlinedHover` and
+`primerColorBorderTransparentHover` are gone; `SizeTokens.xxlarge` now defaults to 40dp, not 44dp.
 
 ## Material 3 colour mapping
 
 `PrimerCheckoutSheet` and `PrimerCheckoutHost` both wrap their content in a `MaterialTheme` whose
 `ColorScheme` is derived from the active colour tokens, so Material components you place inside
-inherit Primer's colours. `onColoredSurface` below means `primerColorGray000` in light mode and
-`primerColorGray900` in dark.
+inherit Primer's colours. `typography` is mapped from the typography tokens the same way.
 
 | M3 role                                                                    | Primer token                                           |
 | -------------------------------------------------------------------------- | ------------------------------------------------------ |
 | `primary`                                                                  | `primerColorBrand`                                     |
-| `onPrimary`, `onPrimaryContainer`, `onSecondary`, `onTertiary`, `onError`  | `onColoredSurface`                                     |
+| `onPrimary`, `onPrimaryContainer`, `onSecondary`, `onTertiary`, `onError`  | `primerColorOnBrand`                                   |
 | `primaryContainer`                                                         | `primerColorBlue900`                                   |
 | `inversePrimary`, `tertiary`                                               | `primerColorBlue500`                                   |
 | `secondary`                                                                | `primerColorGray600`                                   |
 | `secondaryContainer`, `tertiaryContainer`, `surfaceContainerHigh`          | `primerColorGray200`                                   |
 | `onSecondaryContainer`, `onTertiaryContainer`, `onBackground`, `onSurface` | `primerColorTextPrimary`                               |
-| `background`, `surface`, `surfaceContainerLowest`                          | `primerColorBackground`                                |
+| `background`, `surface`, `surfaceContainerLowest`                          | `primerColorBackgroundPrimary`                         |
 | `surfaceVariant`, `surfaceContainer`, `surfaceContainerLow`                | `primerColorGray100`                                   |
 | `onSurfaceVariant`                                                         | `primerColorTextSecondary`                             |
 | `surfaceTint`                                                              | `primerColorBrand`                                     |
@@ -1762,6 +1691,12 @@ inherit Primer's colours. `onColoredSurface` below means `primerColorGray000` in
 | `onErrorContainer`                                                         | `primerColorTextNegative`                              |
 | `outline`                                                                  | `primerColorBorderOutlinedDefault`                     |
 | `scrim`                                                                    | `Color.Black` at 32% alpha                             |
+
+| M3 text style                          | Primer style  |
+| -------------------------------------- | ------------- |
+| `headlineSmall`, `titleLarge`          | `titleXlarge` |
+| `titleMedium`, `labelLarge`            | `titleLarge`  |
+| `bodyLarge`, `bodyMedium`, `bodySmall` | same name     |
 
 ## Accessibility
 
@@ -1799,6 +1734,12 @@ label follows the shopper's font-size setting. Containers do not — `SpacingTok
 and `RadiusTokens` are all `Dp` — so check the SDK's screens at the largest font scale you
 support rather than assuming they reflow. Layout direction is handled: the inputs and rows read
 `LocalLayoutDirection`, and numeric fields force LTR digits inside an RTL layout.
+
+Autofill: the default card and billing fields declare their Compose `ContentType` (card number,
+security code, cardholder and person names, street, locality, region, postal code, phone), so
+Google autofill offers saved cards and addresses. Expiry and country declare none — the expiry
+field keeps four digits, and the country field is a picker. A field you replace with your own
+input loses this unless you set `Modifier.semantics { contentType = … }` yourself.
 
 ### What the SDK does not do
 

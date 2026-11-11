@@ -1,11 +1,4 @@
 # folders
-.turbo
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
 dist
 node_modules
 temp
@@ -20,8 +13,6 @@ temp
 .idea
 .ignore
 .npmrc
-
-examples/react-web-components/src/clientToken.ts
 
 .claude/
 

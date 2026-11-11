@@ -9,8 +9,7 @@ export interface ClientTokenErrorResponse {
 }
 
 export type ClientTokenResponse =
-  | ClientTokenSuccessResponse
-  | ClientTokenErrorResponse;
+  ClientTokenSuccessResponse | ClientTokenErrorResponse;
 
 /**
  * Fetches a client token from the API

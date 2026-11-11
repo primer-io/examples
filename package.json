@@ -1,22 +1,7 @@
 {
-  "name": "primer-playground",
-  "version": "0.0.0-semantic-release",
-  "packageManager": "yarn@4.9.1",
-  "workspaces": [
-    "packages/*",
-    "examples/*"
-  ],
-  "nohoist": [
-    "**/react",
-    "**/react-dom",
-    "**/typescript",
-    "**/@types/react",
-    "**/@types/react-dom"
-  ],
+  "name": "primer-examples",
+  "private": true,
   "scripts": {
-    "dev": "turbo run dev",
-    "lint:es": "turbo run lint",
-    "lint:ts": "turbo run check-types",
     "format": "prettier . --write",
     "lint:format": "prettier . --check",
     "postinstall": "simple-git-hooks"
@@ -30,9 +15,8 @@
     ]
   },
   "devDependencies": {
-    "lint-staged": "^16.1.2",
-    "prettier": "^3.5.3",
-    "simple-git-hooks": "^2.13.0",
-    "turbo": "2.5.3"
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.10",
+    "simple-git-hooks": "^2.14.0"
   }
 }

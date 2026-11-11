@@ -1,89 +1,37 @@
-# Primer Beta Documentation & Examples
+# Primer Checkout examples and AI skills
 
-This repository hosts the public documentation and integration examples for Primer's Beta Primer Components.
-
-## Overview
-
-- `/docs` - Official documentation for Beta SDK Components
-- `/examples` - Integration examples for Beta Primer Components
-- `/packages` - Shared utilities and components
-
-## Quick Start
-
-### Documentation
-
-```bash
-# Install dependencies
-yarn install
-
-# Start documentation site
-yarn dev
-```
-
-### Run examples
-
-- navigate to /examples/ folder and
-- choose an example to run
-- follow the README instructions
-
-## Documentation
-
-Our documentation is built with [Docusaurus](https://docusaurus.io/) and can be found in the `/docs` directory. Key sections include:
-
-- Getting Started
-- Component API Reference
-- Integration Guides
-- Customization & Theming
-- Migration Guides
+Runnable examples for Primer Checkout on the web, and AI coding skills for web, iOS and Android.
 
 ## Examples
 
-The `/examples` directory contains working implementations using Beta Primer Components:
+| Example                                                                 | What it shows                                                                                        |
+| ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| [primer-checkout-basic](examples/primer-checkout-basic)                 | Minimal TypeScript and Vite integration with a toggle for custom styling.                            |
+| [primer-checkout-custom-form](examples/primer-checkout-custom-form)     | React card form built from individual Primer input components.                                       |
+| [primer-checkout-custom-layout](examples/primer-checkout-custom-layout) | React layout that places card and PayPal in their own sections and groups the other payment methods. |
+| [primer-checkout-themes](examples/primer-checkout-themes)               | Switching between eight visual themes with CSS variables (TypeScript and Vite).                      |
+| [primer-checkout-vaulted](examples/primer-checkout-vaulted)             | Saving payment methods with the vault option, with a control to reset the session.                   |
 
-- Basic Checkout Flow
-- Custom Layout Examples
-- Framework-Specific Integrations (React, Vue, Angular)
-- Advanced Customization Examples
+Every example is a standalone project. Open its folder, run `npm install`, then `npm run dev`. These examples get their client token from Primer's hosted demo endpoint, so they run without a Primer account.
 
-Each example includes:
+## AI skills
 
-- Source code
-- README with setup instructions
-- Live demo link (where applicable)
+Skills for Claude Code and other AI coding assistants that cover Primer Checkout on web, iOS and Android. In Claude Code, add the marketplace, then install the plugin for your platform:
 
-## Contributing
-
-We welcome contributions! Here's how you can help:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-update`)
-3. Commit your changes (`git commit -m 'Add amazing update'`)
-4. Push to the branch (`git push origin feature/amazing-update`)
-5. Open a Pull Request
-
-### Development Guidelines
-
-- Follow the existing code style
-- Update documentation for changes
-
-## Project Structure
-
-```
-.
-├── docs/                 # Documentation site
-├── examples/            # Integration examples
-│   ├── react/
-│   ├── vue/
-│   └── ...
-└── packages/           # Shared utilities
-    └── common/
+```text
+/plugin marketplace add primer-io/examples
+/plugin install primer-web-components@primer-skills
+/plugin install primer-ios-checkout@primer-skills
+/plugin install primer-android-checkout@primer-skills
 ```
 
-## Reporting Issues
+For other assistants, see [claude-code-skills/README.md](claude-code-skills/README.md).
 
-- For documentation issues, use the [Documentation Issue Template](../examples/.github/ISSUE_TEMPLATE/documentation.md)
-- For example code issues, use the [Example Issue Template](../examples/.github/ISSUE_TEMPLATE/example.md)
+## More from Primer
 
-## Support
+- [Primer documentation](https://primer.io/docs) covers all products and integrations, including the server-side APIs.
+- The [Primer GitHub organization](https://github.com/primer-io) hosts the iOS, Android and React Native SDKs.
 
-- [Official Documentation](https://docs.primer.io)
+## Issues
+
+Report problems with an example or a skill in [GitHub issues](https://github.com/primer-io/examples/issues).

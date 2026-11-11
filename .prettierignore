@@ -1,19 +1,13 @@
 *.min.*
-_templates/generator/with-prompt/prompt.js
 
 #!include:.gitignore
 # https://github.com/prettier/prettier/issues/8048
 
 # folders
-.yarn
 dist
 lib
 node_modules
 temp
-examples/.github
-.changeset
-.docusaurus
-build
 
 # files
 **/coverage/*
@@ -25,3 +19,4 @@ build
 .npmrc
 .next
 **/mockServiceWorker.js
+package-lock.json

@@ -9,8 +9,7 @@ import { fetchClientToken } from './fetchClientToken.ts';
 
   // Reference to checkout element
   const checkout = document.querySelector('primer-checkout') as
-    | (PrimerCheckoutComponent & HTMLElement)
-    | null;
+    (PrimerCheckoutComponent & HTMLElement) | null;
 
   // Function to initialize or reinitialize the checkout with a new token
   async function initializeCheckout() {

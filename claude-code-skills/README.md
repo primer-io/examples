@@ -125,24 +125,6 @@ Do you have access to the Primer <web components|iOS checkout|Android checkout> 
 
 The assistant should confirm it has access to the skill documentation.
 
-## When to Use Skills vs Context7
-
-**Use Primer Skills when:**
-
-- You're working in your IDE and want integrated assistance
-- You need offline access to documentation
-- You want best practices and patterns included automatically
-- You're focused on implementation and troubleshooting
-
-**Use Context7 when:**
-
-- You want the absolute latest documentation updates
-- You're using web-based LLMs (ChatGPT, Claude.ai)
-- You need to verify against the live documentation
-- You're researching new features or API changes
-
-**Best Practice:** Use both together! The skill provides workflow guidance while Context7 ensures you have the latest API information.
-
 ## Version History
 
 ### v1.4.0 (2026-10-20)

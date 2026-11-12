@@ -4,13 +4,14 @@ Runnable examples for Primer Checkout on the web, and AI coding skills for web, 
 
 ## Examples
 
-| Example                                                                 | What it shows                                                                                        |
-| ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| [primer-checkout-basic](examples/primer-checkout-basic)                 | Minimal TypeScript and Vite integration with a toggle for custom styling.                            |
-| [primer-checkout-custom-form](examples/primer-checkout-custom-form)     | React card form built from individual Primer input components.                                       |
-| [primer-checkout-custom-layout](examples/primer-checkout-custom-layout) | React layout that places card and PayPal in their own sections and groups the other payment methods. |
-| [primer-checkout-themes](examples/primer-checkout-themes)               | Switching between eight visual themes with CSS variables (TypeScript and Vite).                      |
-| [primer-checkout-vaulted](examples/primer-checkout-vaulted)             | Saving payment methods with the vault option, with a control to reset the session.                   |
+| Example                                                                 | What it shows                                                                                                  |
+| ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [primer-checkout-basic](examples/primer-checkout-basic)                 | Minimal TypeScript and Vite integration with a toggle for custom styling.                                      |
+| [primer-checkout-custom-form](examples/primer-checkout-custom-form)     | React card form built from individual Primer input components.                                                 |
+| [primer-checkout-custom-layout](examples/primer-checkout-custom-layout) | React layout that places card and PayPal in their own sections and groups the other payment methods.           |
+| [primer-checkout-themes](examples/primer-checkout-themes)               | Switching between eight visual themes with CSS variables (TypeScript and Vite).                                |
+| [primer-checkout-vaulted](examples/primer-checkout-vaulted)             | Saving payment methods with the vault option, with a control to reset the session.                             |
+| [stripe-billing](examples/stripe-billing)                               | Stripe Billing owns the subscription; Primer Checkout takes the first payment and Primer charges each renewal. |
 
 Every example is a standalone project. Open its folder, run `npm install`, then `npm run dev`. These examples get their client token from Primer's hosted demo endpoint, so they run without a Primer account.
 

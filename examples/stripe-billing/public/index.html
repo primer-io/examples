@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stripe Billing + Primer Checkout</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        font-size: 20px;
+        line-height: 1.5;
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 24px;
+        color: #111;
+      }
+      h1 {
+        font-size: 32px;
+        margin: 0 0 4px;
+      }
+      h2 {
+        font-size: 22px;
+        margin: 32px 0 8px;
+      }
+      header p {
+        margin: 0 0 24px;
+        color: #555;
+      }
+      form {
+        display: flex;
+        gap: 12px;
+      }
+      input {
+        flex: 1;
+        font-size: 20px;
+        padding: 10px 12px;
+        border: 2px solid #888;
+        border-radius: 6px;
+      }
+      button {
+        font-size: 20px;
+        padding: 10px 20px;
+        border: 0;
+        border-radius: 6px;
+        background: #111;
+        color: #fff;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+      #order {
+        font-weight: 600;
+        margin: 24px 0 8px;
+      }
+      .checkout-complete {
+        font-weight: 600;
+        margin: 24px 0 8px;
+      }
+      #log li {
+        margin: 4px 0;
+      }
+      #log li.error {
+        color: #b00020;
+        font-weight: 600;
+      }
+      .spinner {
+        display: inline-block;
+        width: 0.8em;
+        height: 0.8em;
+        margin-right: 0.5em;
+        border: 2px solid #888;
+        border-top-color: #111;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .spinner {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Subscribe</h1>
+      <p>
+        Stripe Billing owns the subscription. Primer Checkout takes the first
+        payment.
+      </p>
+    </header>
+
+    <form id="subscribe-form">
+      <input id="email" type="email" placeholder="you@example.com" required />
+      <button id="subscribe-button" type="submit">Subscribe</button>
+    </form>
+
+    <p id="order" hidden></p>
+
+    <!-- Primer Checkout is mounted here once the client session exists. -->
+    <div id="checkout"></div>
+
+    <h2>What happened</h2>
+    <ol id="log"></ol>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "primer-stripe-billing-example",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node --env-file=.env server/index.js",
+    "dev": "node --env-file=.env --watch server/index.js",
+    "check": "for f in $(find server public scripts -name '*.js' 2>/dev/null); do node --check \"$f\" || exit 1; done && PRIMER_API_KEY=x STRIPE_SECRET_KEY=sk_test_x PRIMER_WEBHOOK_SECRET=x STRIPE_WEBHOOK_SECRET=x STRIPE_PRICE_ID=x STRIPE_CPM_TYPE_ID=x node --input-type=module -e \"for (const m of ['app', 'config', 'http-error', 'primer', 'stripe', 'first-payment', 'renewal', 'primer-events', 'webhooks']) await import('./server/' + m + '.js')\"",
+    "advance-clock": "node --env-file=.env scripts/advance-clock.js"
+  },
+  "dependencies": {
+    "@primer-io/primer-js": "1.16.0",
+    "express": "^5.3.0",
+    "stripe": "^23.1.0"
+  }
+}

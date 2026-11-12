@@ -20,7 +20,9 @@ public struct PrimerCheckout: View {
         clientToken: String,
         primerSettings: PrimerSettings = PrimerSettings(),
         primerTheme: PrimerCheckoutTheme = PrimerCheckoutTheme(),
-        onCompletion: ((PrimerCheckoutState) -> Void)? = nil
+        onCompletion: ((PrimerCheckoutState) -> Void)? = nil,
+        onShippingAddressChange: ShippingAddressChangeHandler? = nil,
+        onShippingOptionChange: ShippingOptionChangeHandler? = nil
     )
 }
 ```
@@ -56,12 +58,16 @@ public final class PrimerCheckoutSession: ObservableObject {
     @Published public private(set) var clientSession: PrimerClientSession?
 
     public var onBeforePaymentCreate: BeforePaymentCreateHandler?
+    public var onShippingAddressChange: ShippingAddressChangeHandler?
+    public var onShippingOptionChange: ShippingOptionChangeHandler?
     public var idempotencyKey: @Sendable () -> String?
 
     public init(clientToken: String,
                 settings: PrimerSettings = PrimerSettings(),
                 theme: PrimerCheckoutTheme = PrimerCheckoutTheme(),
-                idempotencyKey: @escaping @Sendable () -> String? = { nil })
+                idempotencyKey: @escaping @Sendable () -> String? = { nil },
+                onShippingAddressChange: ShippingAddressChangeHandler? = nil,
+                onShippingOptionChange: ShippingOptionChangeHandler? = nil)
 
     public func start() async
     public func refresh() async
@@ -78,6 +84,30 @@ public final class PrimerCheckoutSession: ObservableObject {
 
 `clientSession` is the value checkout initialized with. A mid-checkout client-session update —
 a surcharge, a billing address — does **not** refresh it; call `refresh()` for that.
+
+The shipping handlers drive Express Checkout in the Apple Pay sheet. See
+[the pattern](payment-methods.md#shipping-address-and-options-express-checkout).
+
+```swift
+public typealias ShippingAddressChangeHandler =
+    @Sendable (_ change: PrimerShippingAddressChange) async throws -> [PrimerShippingOption]
+public typealias ShippingOptionChangeHandler =
+    @Sendable (_ change: PrimerShippingOptionChange) async throws -> Void
+
+public struct PrimerShippingAddressChange: Sendable {
+    public let paymentMethodType: String
+    public let shippingAddress: PrimerAddress
+}
+
+public struct PrimerShippingOptionChange: Sendable {
+    public let paymentMethodType: String
+    public let selectedShippingOption: PrimerShippingOption
+}
+
+public struct PrimerShippingOption: Equatable, Sendable {
+    public init(id: String, name: String, description: String, amount: Int)
+}
+```
 
 `cardForm` and `selection` are non-nil only once `phase == .ready`, and are cached, so the same
 instance comes back on each access.

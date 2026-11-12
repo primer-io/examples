@@ -196,18 +196,18 @@ import PrimerSDK
 let theme = PrimerCheckoutTheme(
     colors: ColorOverrides(primerColorBrand: .purple),
     radius: RadiusOverrides(primerRadiusMedium: 12),
-    borderWidth: BorderWidthOverrides(primerBorderWidthThin: 1.5)
+    width: WidthOverrides(primerWidthDefault: 1.5)
 )
 ```
 
-| Group         | Type                   | Covers                                                                                        |
-| ------------- | ---------------------- | --------------------------------------------------------------------------------------------- |
-| `colors`      | `ColorOverrides`       | Brand, the grey ramp, background, text, border, icon, focus and loader colours                |
-| `radius`      | `RadiusOverrides`      | `primerRadiusXsmall` … `primerRadiusLarge`, plus `primerRadiusBase`                           |
-| `spacing`     | `SpacingOverrides`     | `primerSpaceXxsmall` … `primerSpaceXxlarge`, plus `primerSpaceBase`                           |
-| `sizes`       | `SizeOverrides`        | `primerSizeSmall` … `primerSizeXxxlarge`, plus `primerSizeBase`                               |
-| `typography`  | `TypographyOverrides`  | `titleXlarge`, `titleLarge`, `bodyLarge`, `bodyMedium`, `bodySmall`, each a `TypographyStyle` |
-| `borderWidth` | `BorderWidthOverrides` | `primerBorderWidthThin`, `primerBorderWidthMedium`, `primerBorderWidthThick`                  |
+| Group        | Type                  | Covers                                                                                             |
+| ------------ | --------------------- | -------------------------------------------------------------------------------------------------- |
+| `colors`     | `ColorOverrides`      | Brand, the grey ramp, background, text, border, icon, focus and loader colours                     |
+| `radius`     | `RadiusOverrides`     | `primerRadiusXsmall` … `primerRadiusLarge`, plus `primerRadiusBase`                                |
+| `spacing`    | `SpacingOverrides`    | `primerSpaceXxsmall` … `primerSpaceXxlarge`, plus `primerSpaceBase`                                |
+| `sizes`      | `SizeOverrides`       | `primerSizeSmall` … `primerSizeXxxlarge`, plus `primerSizeBase`                                    |
+| `typography` | `TypographyOverrides` | `titleXlarge`, `titleLarge`, `bodyLarge`, `bodyMedium`, `bodySmall`, each a `TypographyStyle`      |
+| `width`      | `WidthOverrides`      | Border widths: `primerWidthDefault`, `primerWidthFocus`, `primerWidthError`, `primerWidthSelected` |
 
 A `TypographyStyle` takes `font` (a family name), `size`, `weight`, `letterSpacing` and
 `lineHeight`. `weight` is a SwiftUI `Font.Weight`, so it takes `.semibold`, not a number.

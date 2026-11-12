@@ -1,6 +1,6 @@
 ---
 name: primer-ios-checkout
-description: Accept card and alternative payments in a SwiftUI or UIKit iOS app with Primer's CheckoutComponents SDK (PrimerSDK). Use this skill to take a first card payment, add Apple Pay, PayPal, Klarna or iDEAL, theme the checkout, reuse saved cards, gate payment creation with an idempotency key, or handle 3DS and redirect returns. Also use it to migrate onto Components from Primer's iOS drop-in or headless SDK, and to debug a checkout that renders blank, shows no payment methods, stays loading, or does nothing on submit.
+description: Accept card and alternative payments in a SwiftUI or UIKit iOS app with Primer's CheckoutComponents SDK (PrimerSDK). Use this skill to take a first card payment, add Apple Pay, PayPal, Klarna or iDEAL, offer shipping options in the Apple Pay sheet, theme the checkout, reuse saved cards, gate payment creation with an idempotency key, or handle 3DS and redirect returns. Also use it to migrate onto Components from Primer's iOS drop-in or headless SDK, and to debug a checkout that renders blank, shows no payment methods, stays loading, or does nothing on submit.
 ---
 
 # Primer iOS Checkout
@@ -23,9 +23,10 @@ must too.
 
 ## When to use this skill
 
-Taking a first payment on iOS; adding Apple Pay, PayPal, Klarna or a redirect method; theming the
-sheet; reusing a saved card; attaching an idempotency key; handling a 3DS or redirect return; a
-checkout that renders blank or does nothing on submit; migrating off the drop-in or headless SDK.
+Taking a first payment on iOS; adding Apple Pay, PayPal, Klarna or a redirect method; pricing
+shipping inside the Apple Pay sheet; theming the sheet; reusing a saved card; attaching an
+idempotency key; handling a 3DS or redirect return; a checkout that renders blank or does nothing
+on submit; migrating off the drop-in or headless SDK.
 
 Creating the client session, enabling methods, and API keys are backend and Dashboard jobs — see
 [Primer's documentation](https://primer.io/docs). This skill starts at the client token.
@@ -174,6 +175,12 @@ then appears in the sheet with no client change. What varies is the **extra clie
 method needs. See [`references/payment-methods.md`](references/payment-methods.md) for the table;
 the short version is that Apple Pay needs a merchant identifier in `PrimerApplePayOptions`, and
 every redirect method needs `urlScheme`.
+
+Apple Pay can collect a shipping address and offer shipping options: set
+`session.onShippingAddressChange` (return the options) and `session.onShippingOptionChange` (have
+your backend PATCH `order.shipping` on the client session). Set both, or the options never show.
+Nothing goes in `PrimerApplePayOptions` for this
+([pattern](references/payment-methods.md#shipping-address-and-options-express-checkout)).
 
 ## Customise the form
 

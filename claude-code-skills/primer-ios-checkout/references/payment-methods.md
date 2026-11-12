@@ -8,6 +8,7 @@ What each method needs on the client, beyond being enabled on the client session
 - [What each method needs](#what-each-method-needs)
 - [The redirect scheme](#the-redirect-scheme)
 - [Apple Pay](#apple-pay)
+  - [Shipping address and options (Express Checkout)](#shipping-address-and-options-express-checkout)
 - [Klarna](#klarna)
 - [3DS](#3ds)
 - [Stripe ACH](#stripe-ach)
@@ -91,6 +92,56 @@ effect here: Apple Pay is listed whenever it is enabled.
 
 Apple's Human Interface Guidelines bind the button's appearance whatever the compiler allows, and
 the SDK's own Apple Pay button state is internal, so use the button Primer renders.
+
+### Shipping address and options (Express Checkout)
+
+Set `onShippingAddressChange` and `onShippingOptionChange` on the session and the Apple Pay sheet
+asks for a shipping address and offers your options. There is nothing to set in
+`PrimerApplePayOptions`: the SDK asks for the postal address itself, and `requireShippingMethod` is
+not needed. `shippingContactFields` still adds other fields, such as name or email.
+
+- `onShippingAddressChange` runs when the sheet opens with an address and whenever the shopper
+  changes it. Return the options for that address. An empty array shows Apple's "cannot deliver to
+  this address" error and keeps the shopper in the sheet. Apple redacts the address to country,
+  postal code, city and state until the shopper authorises.
+- `onShippingOptionChange` runs when the shopper picks an option, and right away for the
+  pre-selected one: the option matching the session's `order.shipping.methodId`, else the first.
+  Have your backend PATCH the client session's `order.shipping.methodId` and `order.shipping.amount`
+  to the selected option, then return. The SDK re-reads the session and checks both. The same
+  option can arrive more than once, so the call must be idempotent.
+- If the PATCH does not match, or the handler throws, the sheet stays open on the option your
+  backend last confirmed. Authorising without a confirmed option fails with `merchant-error`, and
+  nothing is charged.
+- Each handler has 20 seconds. Past that, the call counts as failed.
+- Set **both**. The address handler alone collects an address and shows no options; use it when
+  only the total depends on the address, and PATCH the session before you return. The option
+  handler alone is ignored with a warning in the log.
+- A `SHIPPING` checkout module on the client session wins over the handlers, also with a warning.
+
+```swift
+import PrimerSDK
+
+@MainActor
+func addShipping(
+    to session: PrimerCheckoutSession,
+    // Your backend's quotes for an address, each as PrimerShippingOption(id:name:description:amount:):
+    // `id` becomes order.shipping.methodId and `amount` (minor units) order.shipping.amount.
+    quoteShipping: @escaping @Sendable (PrimerAddress) async throws -> [PrimerShippingOption],
+    // Your backend PATCHes order.shipping on the client session. Idempotent.
+    applyShippingOption: @escaping @Sendable (PrimerShippingOption) async throws -> Void
+) {
+    session.onShippingAddressChange = { change in
+        // change.paymentMethodType is "APPLE_PAY"; the address is partial.
+        try await quoteShipping(change.shippingAddress)
+    }
+    session.onShippingOptionChange = { change in
+        try await applyShippingOption(change.selectedShippingOption)
+    }
+}
+```
+
+Set them before the shopper taps Apple Pay; the SDK reads them then. `PrimerCheckout` and the
+`PrimerCheckoutPresenter` overloads take the same two handlers as their last parameters.
 
 ## Klarna
 

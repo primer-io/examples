@@ -13,6 +13,7 @@ Runnable examples for Primer Checkout on the web, and AI coding skills for web, 
 | [primer-checkout-vaulted](examples/primer-checkout-vaulted)             | Saving payment methods with the vault option, with a control to reset the session.                                                           |
 | [stripe-billing](examples/stripe-billing)                               | Stripe Billing owns the subscription; Primer Checkout takes the first payment and Primer charges each renewal.                               |
 | [vault-manual-approval](examples/vault-manual-approval)                 | Backend decides per payment whether to process with Stripe through Primer's PCI proxy or with Primer orchestration (Vault, manual approval). |
+| [sphere-tax](examples/sphere-tax)                                       | Real-time tax from Sphere: tax on each order, sales recorded in Sphere, refunds as credit notes.                                             |
 
 Every example is a standalone project. Open its folder, run `npm install`, then `npm run dev`. The `primer-checkout-*` examples get their client token from Primer's hosted demo endpoint, so they run without a Primer account. The other examples need your own sandbox keys, listed in their README.
 

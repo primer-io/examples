@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Checkout with tax from Sphere</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        font-size: 20px;
+        line-height: 1.5;
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 24px;
+        color: #111;
+      }
+      h1 {
+        font-size: 32px;
+        margin: 0 0 4px;
+      }
+      h2 {
+        font-size: 22px;
+        margin: 32px 0 8px;
+      }
+      header p {
+        margin: 0 0 24px;
+        color: #555;
+      }
+      form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 8px 0;
+      }
+      fieldset {
+        display: contents;
+      }
+      input {
+        flex: 1 1 45%;
+        font-size: 20px;
+        padding: 10px 12px;
+        border: 2px solid #888;
+        border-radius: 6px;
+      }
+      button {
+        font-size: 20px;
+        padding: 10px 20px;
+        border: 0;
+        border-radius: 6px;
+        background: #111;
+        color: #fff;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      td {
+        padding: 4px 0;
+      }
+      td + td {
+        text-align: right;
+      }
+      tr.total {
+        font-weight: 600;
+      }
+      #order {
+        font-weight: 600;
+        margin: 24px 0 8px;
+      }
+      #hint {
+        color: #b00020;
+      }
+      .checkout-complete {
+        font-weight: 600;
+        margin: 24px 0 8px;
+      }
+      #log li {
+        margin: 4px 0;
+      }
+      #log li.error {
+        color: #b00020;
+        font-weight: 600;
+      }
+      .spinner {
+        display: inline-block;
+        width: 0.8em;
+        height: 0.8em;
+        margin-right: 0.5em;
+        border: 2px solid #888;
+        border-top-color: #111;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .spinner {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Checkout with tax from Sphere</h1>
+      <p>
+        The server asks Sphere for the tax, puts it in the Primer client
+        session, and records the sale in Sphere once the payment succeeds.
+      </p>
+    </header>
+
+    <div id="start">
+      <button id="start-saved" type="button">Use a saved address</button>
+      <button id="start-new" type="button">Enter address at checkout</button>
+    </div>
+
+    <p id="order" hidden></p>
+    <table id="summary" hidden></table>
+
+    <form id="address-form" hidden>
+      <fieldset id="address-fields">
+        <input
+          name="addressLine1"
+          placeholder="Address line 1"
+          aria-label="Address line 1"
+        />
+        <input
+          name="addressLine2"
+          placeholder="Address line 2"
+          aria-label="Address line 2"
+        />
+        <input name="city" placeholder="City" aria-label="City" required />
+        <input name="state" placeholder="State" aria-label="State" />
+        <input
+          name="postalCode"
+          placeholder="Postal code"
+          aria-label="Postal code"
+          required
+        />
+        <input
+          name="countryCode"
+          placeholder="Country code (US)"
+          aria-label="Country code"
+          maxlength="2"
+          required
+        />
+        <input
+          name="taxId"
+          placeholder="Tax ID (optional)"
+          aria-label="Tax ID"
+        />
+        <button id="tax-button" type="submit">Calculate tax</button>
+      </fieldset>
+    </form>
+    <p id="hint" hidden></p>
+
+    <!-- Primer Checkout is mounted here once the client session exists. -->
+    <div id="checkout"></div>
+
+    <section id="after-payment" hidden>
+      <h2>Refund</h2>
+      <form id="refund-form">
+        <input
+          id="refund-amount"
+          type="text"
+          inputmode="decimal"
+          aria-label="Refund amount"
+          required
+        />
+        <button id="refund-button" type="submit">Refund</button>
+      </form>
+      <button id="cancel-button" type="button">
+        Cancel in Sphere (chargeback)
+      </button>
+      <ul id="refund-list" hidden></ul>
+    </section>
+
+    <h2>What happened</h2>
+    <ol id="log"></ol>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

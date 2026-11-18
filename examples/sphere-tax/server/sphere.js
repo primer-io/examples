@@ -64,8 +64,8 @@ function errorDetail(body) {
   return { code: null, message: fields.join('; ') || null };
 }
 
-// showDetail words a 4xx for the shopper. Only calculate_tax uses it, because there a 4xx
-// usually means "fix the address".
+// showDetail puts Sphere's code and message in the error text. Only calculate_tax uses it. The
+// caller shows it to the shopper only for customer_tax_location_invalid.
 async function post(url, body, timeoutMs, { showDetail = false } = {}) {
   let res;
   let text;

@@ -78,8 +78,22 @@ export function updateClientSession(body) {
   return request('PATCH', '/client-session', body);
 }
 
-export function getPayment(paymentId) {
-  return request('GET', `/payments/${encodeURIComponent(paymentId)}`);
+// withEvents adds each transaction's events, which carry the capture time.
+export function getPayment(paymentId, { withEvents = false } = {}) {
+  const query = withEvents ? '?expand=transactions.events' : '';
+  return request('GET', `/payments/${encodeURIComponent(paymentId)}${query}`);
+}
+
+// When the money was captured: the latest CAPTURE_SUCCEEDED event on a SALE transaction, as
+// UTC ISO 8601. Returns null if there is none. Needs the payment from getPayment with events.
+export function captureTime(payment) {
+  const dates = (payment.transactions || [])
+    .filter((t) => t.transactionType === 'SALE')
+    .flatMap((t) => t.events || [])
+    .filter((e) => e.type === 'CAPTURE_SUCCEEDED' && e.date)
+    .map((e) => toUtcIso(e.date));
+  // ISO strings in the same format sort in time order.
+  return dates.sort().at(-1) ?? null;
 }
 
 // The items are payment summaries: use them to find an id, then call getPayment for the rest.

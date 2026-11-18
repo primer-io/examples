@@ -8,6 +8,7 @@ import { flushWrite } from './outbox.js';
 import * as primer from './primer.js';
 import {
   CAPTURED,
+  WAITING,
   age,
   isClientError,
   isPermanent,
@@ -22,12 +23,11 @@ import {
 } from './shared.js';
 import * as sphere from './sphere.js';
 
-const WAITING = new Set(['AUTHORIZED', 'PENDING']);
 const NOT_PAID = new Set(['DECLINED', 'FAILED', 'CANCELLED']);
 const POLL_MS = 1_500;
 const DAY_MS = 24 * 60 * 60 * 1000;
-// Sphere rejected the product setup or the key, which a shopper cannot fix.
-const MERCHANT_CODES = ['invalid_product_tax_code'];
+// A settling payment can take days to finish, so it waits longer before someone looks at it.
+const SETTLE_WAIT_MS = 14 * DAY_MS;
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const requireOpen = (order) => {
@@ -76,15 +76,14 @@ async function quoteTax(order, address, taxId) {
         },
       };
     }
-    // A final 4xx is usually an address Sphere cannot locate, and the shopper fixes it. A bad
-    // key or product setup is ours to fix, so it stays a server error.
-    if (
-      !sphere.isRetryableWrite(err) &&
-      err.status >= 400 &&
-      !MERCHANT_CODES.includes(err.code)
-    ) {
+    // The shopper can fix an address Sphere cannot place. Every other 4xx is a setup problem
+    // (key, product, request), so it is logged and the checkout gets the generic error.
+    if (err.code === 'customer_tax_location_invalid') {
       throw new HttpError(422, err.message);
     }
+    console.error(
+      `SPHERE_SETUP_ERROR order ${order.id}: ${err.message} ${JSON.stringify(err.body ?? {})}`,
+    );
     throw err;
   }
 }
@@ -198,15 +197,22 @@ function paymentMismatch(order, payment) {
   return null;
 }
 
-function saleBody(order, payment) {
+function saleBody(order, payment, capturedOn) {
   return {
     // The order id is the external_id, so repeating the request never creates a second sale.
     external_id: order.id,
     type: 'debit',
     status: 'finalized',
-    // The payment date, so a late retry cannot move the sale into another tax period.
-    finalized_on: primer.toUtcIso(payment.date),
+    // The capture time, so a late retry cannot move the sale into another tax period.
+    finalized_on: capturedOn,
     ...sphereCustomer(order),
+    ...(order.taxId
+      ? {
+          customer_tax_ids: [
+            { tax_id: order.taxId, country: order.address.countryCode },
+          ],
+        }
+      : {}),
     // No id means Sphere calculates the tax itself: either Sphere was unavailable at checkout
     // (fail open) or no tax applied because you aren't registered there.
     ...(order.tax.calculationId
@@ -303,12 +309,18 @@ async function checkPayment(orderId, paymentId, waitMs) {
   }
   if (!CAPTURED.has(payment.status)) {
     const { awaitingSince } = requireOrder(orderId);
-    if (age(awaitingSince) > DAY_MS) {
-      orderNeedsReview(orderId, `still ${payment.status} after 24h`);
+    const settling = payment.status === 'SETTLING';
+    if (age(awaitingSince) > (settling ? SETTLE_WAIT_MS : DAY_MS)) {
+      orderNeedsReview(
+        orderId,
+        `still ${payment.status} after ${settling ? '14 days' : '24h'}`,
+      );
       return { outcome: 'NEEDS_REVIEW', summary: summarize(orderId) };
     }
     return { outcome: 'AWAITING_CAPTURE', summary: summarize(orderId) };
   }
+  // The capture time is only in the transaction events.
+  payment = await primer.getPayment(paymentId, { withEvents: true });
   return recordSale(orderId, payment);
 }
 
@@ -345,8 +357,11 @@ function releasePayment(orderId, paymentId) {
 
 function recordSale(orderId, payment) {
   const order = requireOrder(orderId);
+  const capturedOn = primer.captureTime(payment);
   const problem =
-    order.status === 'AWAITING_CAPTURE' && paymentMismatch(order, payment);
+    order.status === 'AWAITING_CAPTURE' &&
+    (paymentMismatch(order, payment) ||
+      (!capturedOn && 'captured but no CAPTURE_SUCCEEDED event'));
   if (problem) {
     orderNeedsReview(orderId, `payment ${payment.id}: ${problem}`);
   } else if (order.status === 'AWAITING_CAPTURE') {
@@ -356,7 +371,7 @@ function recordSale(orderId, payment) {
         externalId: orderId,
         orderId,
         kind: 'sale',
-        body: saleBody(order, payment),
+        body: saleBody(order, payment, capturedOn),
       });
       db.saveOrder({ ...order, status: 'PAID' });
     });

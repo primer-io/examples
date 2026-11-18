@@ -6,7 +6,10 @@ import { HttpError } from './http-error.js';
 import * as primer from './primer.js';
 import * as sphere from './sphere.js';
 
-export const CAPTURED = new Set(['SETTLING', 'SETTLED', 'PARTIALLY_SETTLED']);
+// The sale is recorded only once the money is settled. SETTLING can still be cancelled, so it
+// waits with the other in-flight statuses.
+export const CAPTURED = new Set(['SETTLED', 'PARTIALLY_SETTLED']);
+export const WAITING = new Set(['AUTHORIZED', 'PENDING', 'SETTLING']);
 
 export const sum = (numbers) => numbers.reduce((a, b) => a + b, 0);
 export const age = (iso) => Date.now() - Date.parse(iso);

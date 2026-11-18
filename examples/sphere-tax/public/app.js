@@ -379,11 +379,11 @@ function mountCheckout(clientToken) {
         );
       } else if (result.outcome === 'AWAITING_CAPTURE') {
         step.done(
-          "Payment authorized but not captured yet. The server records the sale once it's captured.",
+          'Payment received but not settled yet. The server records the sale once it settles.',
         );
       } else if (result.outcome === 'NEEDS_REVIEW') {
         step.done(
-          "The payment doesn't match the order. Nothing was recorded; check the server log.",
+          'The payment needs a manual check before the sale is recorded. Nothing was recorded; check the server log.',
           true,
         );
       } else {

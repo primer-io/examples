@@ -6,7 +6,7 @@ import { confirmPayment } from './orders.js';
 import { flushWrite } from './outbox.js';
 import { findPaymentsByOrder } from './primer.js';
 import { confirmRefund } from './refunds.js';
-import { CAPTURED } from './shared.js';
+import { CAPTURED, WAITING } from './shared.js';
 
 const TICK_MS = 5_000;
 // Searching for payments is one Primer call per open order, so it runs less often.
@@ -15,6 +15,15 @@ const RECOVERY_EVERY_MS = 30_000;
 // are not searched for.
 const MIN_AGE_MS = 30_000;
 const MAX_AGE_MS = 24 * 60 * 60 * 1000;
+
+// How often to check an order that is waiting for capture, by how long it has waited.
+export function checkIntervalMs(awaitingSince) {
+  const waited = Date.now() - Date.parse(awaitingSince);
+  if (waited < 2 * 60_000) return 0;
+  if (waited < 60 * 60_000) return 30_000;
+  return 5 * 60_000;
+}
+const lastChecked = new Map();
 
 let running = false;
 let lastRecovery = 0;
@@ -57,7 +66,7 @@ async function recoverPayments() {
       const payments = await findPaymentsByOrder(order.id);
       const found =
         payments.find((p) => CAPTURED.has(p.status)) ||
-        payments.find((p) => p.status === 'AUTHORIZED');
+        payments.find((p) => WAITING.has(p.status));
       if (!found) return;
       // A payment made without a tax quote goes to NEEDS_REVIEW in confirmPayment.
       const { outcome } = await confirmPayment(order.id, found.id, {
@@ -73,7 +82,18 @@ async function recoverPayments() {
 export async function tick() {
   await recoverPayments();
 
-  for (const order of db.listOrders('AWAITING_CAPTURE')) {
+  const waiting = db.listOrders('AWAITING_CAPTURE');
+  // Forget orders that stopped waiting, however they did, so the map does not grow forever.
+  const waitingIds = new Set(waiting.map((o) => o.id));
+  for (const id of lastChecked.keys()) {
+    if (!waitingIds.has(id)) lastChecked.delete(id);
+  }
+
+  for (const order of waiting) {
+    const due =
+      (lastChecked.get(order.id) ?? 0) + checkIntervalMs(order.awaitingSince);
+    if (Date.now() < due) continue;
+    lastChecked.set(order.id, Date.now());
     await attempt(`capture check for ${order.id}`, async () => {
       const { outcome } = await confirmPayment(order.id, order.paymentId, {
         waitMs: 0,

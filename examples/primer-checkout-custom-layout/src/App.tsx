@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './styles.css';
-import { fetchClientToken } from './fetchClientToken.ts';
+import { createClientSession } from './createClientSession.ts';
 
 const CHECKOUT_CONFIG = {
   paypal: {
@@ -11,25 +11,28 @@ const CHECKOUT_CONFIG = {
 function App() {
   const [clientToken, setClientToken] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
 
-  // Fetch client token on component mount
+  // Create a client session on component mount
   useEffect(() => {
-    async function getToken() {
-      setIsLoading(true);
-      const response = await fetchClientToken('a1b2c3d4e5f6g7h8i9j0');
-      if (response.success) {
-        setClientToken(response.clientToken);
-      } else {
-        console.error('Failed to fetch client token:', response.error);
-      }
-      setIsLoading(false);
-    }
-
-    getToken();
+    createClientSession()
+      .then(setClientToken)
+      .catch((e: unknown) =>
+        setError(e instanceof Error ? e.message : String(e)),
+      )
+      .finally(() => setIsLoading(false));
   }, []);
 
   if (isLoading) {
     return <div className='loading'>Loading checkout...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className='loading' role='alert'>
+        {error}
+      </div>
+    );
   }
 
   return (

@@ -21,11 +21,6 @@ body {
   padding: 2rem;
 }
 
-.disclaimer {
-  padding-bottom: 1rem;
-  margin-bottom: 1rem;
-}
-
 .theme-selector {
   margin-bottom: 2rem;
   display: flex;

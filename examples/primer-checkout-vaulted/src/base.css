@@ -272,3 +272,8 @@ primer-checkout {
 .refresh-session-button.error {
   background-color: var(--primer-color-red-500);
 }
+
+.checkout-error {
+  color: #b42318;
+  margin: 0 0 1rem;
+}

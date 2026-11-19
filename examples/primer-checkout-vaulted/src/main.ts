@@ -1,6 +1,6 @@
 import { loadPrimer, PrimerCheckoutComponent } from '@primer-io/primer-js';
 import { createExplanationElement } from './explanation.ts';
-import { fetchClientToken } from './fetchClientToken.ts';
+import { createClientSession } from './createClientSession.ts';
 
 // Initialize everything
 (async function () {
@@ -10,6 +10,12 @@ import { fetchClientToken } from './fetchClientToken.ts';
   // Reference to checkout element
   const checkout = document.querySelector('primer-checkout') as
     (PrimerCheckoutComponent & HTMLElement) | null;
+
+  // Shows why the client session could not be created
+  const errorMessage = document.createElement('p');
+  errorMessage.className = 'checkout-error';
+  errorMessage.setAttribute('role', 'alert');
+  errorMessage.hidden = true;
 
   // Function to initialize or reinitialize the checkout with a new token
   async function initializeCheckout() {
@@ -23,19 +29,22 @@ import { fetchClientToken } from './fetchClientToken.ts';
       refreshButton.textContent = 'Resetting session...';
     }
 
-    // Fetch a new client token
-    const response = await fetchClientToken('a1b2c3d4e5f6g7h8i9j0', 'vaulted');
+    // Create a new client session and use its token
+    try {
+      const clientToken = await createClientSession();
+      errorMessage.hidden = true;
 
-    if (response.success && checkout) {
-      // ✅ Use setAttribute() for client-token
-      checkout.setAttribute('client-token', response.clientToken);
+      // client-token is an attribute
+      checkout?.setAttribute('client-token', clientToken);
 
-      // ✅ Options property is set directly (not an attribute)
-      checkout.options = {
-        vault: {
-          enabled: true,
-        },
-      };
+      // options is a property, not an attribute
+      if (checkout) {
+        checkout.options = {
+          vault: {
+            enabled: true,
+          },
+        };
+      }
 
       // Reset button state
       if (refreshButton) {
@@ -43,8 +52,10 @@ import { fetchClientToken } from './fetchClientToken.ts';
         refreshButton.disabled = false;
         refreshButton.textContent = 'Reset Checkout Session';
       }
-    } else {
-      console.error('Failed to retrieve client token');
+    } catch (error) {
+      errorMessage.textContent =
+        error instanceof Error ? error.message : String(error);
+      errorMessage.hidden = false;
 
       // Reset button with error indication
       if (refreshButton) {
@@ -98,6 +109,9 @@ import { fetchClientToken } from './fetchClientToken.ts';
 
   // Add the refresh button between explanation and checkout
   main.insertBefore(createRefreshButton(), checkout as Node | null);
+
+  // Show errors right above the checkout
+  main.insertBefore(errorMessage, checkout as Node | null);
 
   // Initialize checkout on page load
   await initializeCheckout();

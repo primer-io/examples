@@ -1,5 +1,5 @@
 import { loadPrimer } from '@primer-io/primer-js';
-import { fetchClientToken } from './fetchClientToken.ts';
+import { createClientSession } from './createClientSession.ts';
 
 // Function to apply custom styles based on saved preference
 function applyStoredStylePreference() {
@@ -50,10 +50,14 @@ function setupStyleToggle() {
   await loadPrimer();
 
   const checkout = document.querySelector('primer-checkout')!;
-  const response = await fetchClientToken('a1b2c3d4e5f6g7h8i9j0');
-
-  if (response.success) {
-    // ✅ Use setAttribute() for client-token
-    checkout.setAttribute('client-token', response.clientToken);
+  try {
+    // Set the client token to initialize the checkout
+    checkout.setAttribute('client-token', await createClientSession());
+  } catch (error) {
+    const message = document.createElement('p');
+    message.setAttribute('role', 'alert');
+    message.textContent =
+      error instanceof Error ? error.message : String(error);
+    checkout.replaceWith(message);
   }
 })();

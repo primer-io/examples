@@ -8,3 +8,11 @@ declare module 'react' {
     interface IntrinsicElements extends CustomElements {}
   }
 }
+
+// This file is a module (it has an import), so augment the global types.
+declare global {
+  interface ImportMetaEnv {
+    readonly VITE_PRIMER_API_KEY?: string;
+    readonly VITE_PRIMER_API_URL?: string;
+  }
+}

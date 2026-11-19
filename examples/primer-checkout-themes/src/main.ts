@@ -1,5 +1,5 @@
 import { loadPrimer, PrimerCheckoutComponent } from '@primer-io/primer-js';
-import { fetchClientToken } from './fetchClientToken';
+import { createClientSession } from './createClientSession';
 
 (async function () {
   await loadPrimer();
@@ -17,14 +17,12 @@ import { fetchClientToken } from './fetchClientToken';
     'next-theme',
   ) as HTMLButtonElement;
 
-  // Fetch client token
-  const response = await fetchClientToken('a1b2c3d4e5f6g7h8i9j0');
-  if (response.success) {
-    clientToken = response.clientToken;
+  // Create a client session and initialize the checkout
+  try {
+    clientToken = await createClientSession();
     initializeCheckout(clientToken);
-  } else {
-    console.error('Failed to fetch client token:', response.error);
-    showError(response.error);
+  } catch (error) {
+    showError(error instanceof Error ? error.message : String(error));
   }
 
   // Theme configuration
@@ -144,7 +142,7 @@ import { fetchClientToken } from './fetchClientToken';
       'primer-checkout',
     ) as HTMLElement & PrimerCheckoutComponent;
 
-    // ✅ Use setAttribute() for client-token
+    // Set the client token as an attribute
     checkoutElement.setAttribute('client-token', token);
 
     // Clear container and append element
@@ -176,7 +174,7 @@ import { fetchClientToken } from './fetchClientToken';
 
     // Set a tiny timeout to ensure the DOM has fully processed the removal
     setTimeout(() => {
-      // ✅ Use setAttribute() for client-token
+      // Set the client token as an attribute
       newCheckout.setAttribute('client-token', token);
       checkoutContainer.appendChild(newCheckout as unknown as HTMLElement);
     }, 50);
@@ -184,11 +182,13 @@ import { fetchClientToken } from './fetchClientToken';
 
   // Function to show error
   function showError(error: string) {
-    checkoutContainer.innerHTML = `
-      <div class="error-message">
-        <h3>Error Loading Checkout</h3>
-        <p>${error}</p>
-      </div>
-    `;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'error-message';
+    const title = document.createElement('h3');
+    title.textContent = 'Error Loading Checkout';
+    const message = document.createElement('p');
+    message.textContent = error;
+    wrapper.append(title, message);
+    checkoutContainer.replaceChildren(wrapper);
   }
 })();

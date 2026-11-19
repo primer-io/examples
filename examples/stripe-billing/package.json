@@ -12,7 +12,7 @@
     "advance-clock": "node --env-file=.env scripts/advance-clock.js"
   },
   "dependencies": {
-    "@primer-io/primer-js": "1.16.0",
+    "@primer-io/primer-js": "1.17.0",
     "express": "^5.3.0",
     "stripe": "^23.1.0"
   }

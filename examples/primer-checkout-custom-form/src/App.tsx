@@ -1,10 +1,13 @@
-import { PrimerCheckoutComponent } from '@primer-io/primer-js';
+import type {
+  PrimerCheckoutComponent,
+  PrimerEvents,
+} from '@primer-io/primer-js';
 import { useEffect, useRef, useState } from 'react';
 import { DiscountCodeSection } from './components/DiscountCodeSection';
 import { OrderSummary } from './components/OrderSummary';
 import { SecureBadge } from './components/SecureBadge';
 import { TestCardsTable } from './components/TestCardsTable';
-import { fetchClientToken } from './fetchClientToken.ts';
+import { createClientSession } from './createClientSession.ts';
 import './styles.css';
 
 /**
@@ -16,6 +19,7 @@ import './styles.css';
 function App() {
   const [clientToken, setClientToken] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const checkoutRef = useRef<PrimerCheckoutComponent | null>(null);
 
@@ -28,11 +32,10 @@ function App() {
   useEffect(() => {
     async function getToken() {
       setIsLoading(true);
-      const response = await fetchClientToken('a1b2c3d4e5f6g7h8i9j0');
-      if (response.success) {
-        setClientToken(response.clientToken);
-      } else {
-        console.error('Failed to fetch client token:', response.error);
+      try {
+        setClientToken(await createClientSession());
+      } catch (e) {
+        setError(e instanceof Error ? e.message : String(e));
       }
       setIsLoading(false);
     }
@@ -41,11 +44,17 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (clientToken && checkoutRef.current) {
-      checkoutRef.current.addEventListener('primer:state-change', (event) => {
-        setIsProcessing(!!event.detail?.isProcessing);
-      });
-    }
+    const checkout = checkoutRef.current;
+    if (!clientToken || !checkout) return;
+
+    const handleStateChange = (event: PrimerEvents['primer:state-change']) => {
+      setIsProcessing(event.detail.isProcessing);
+    };
+
+    checkout.addEventListener('primer:state-change', handleStateChange);
+    return () => {
+      checkout.removeEventListener('primer:state-change', handleStateChange);
+    };
   }, [clientToken]);
 
   // Handle discount code application
@@ -56,6 +65,14 @@ function App() {
 
   if (isLoading) {
     return <div className='loading'>Loading checkout...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className='loading' role='alert'>
+        {error}
+      </div>
+    );
   }
 
   return (

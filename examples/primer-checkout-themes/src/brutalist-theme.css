@@ -100,14 +100,3 @@
   border-bottom: 3px solid #000;
   display: inline-block;
 }
-
-:root[data-theme='brutalist'] .disclaimer {
-  border: 3px solid #000;
-  padding: 12px;
-  font-family: 'Courier New', monospace;
-  position: relative;
-  top: -3px;
-  left: -3px;
-  box-shadow: 6px 6px 0 0 #000000;
-  margin-bottom: 24px;
-}

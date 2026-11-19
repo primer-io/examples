@@ -15,7 +15,7 @@ Runnable examples for Primer Checkout on the web, and AI coding skills for web, 
 | [vault-manual-approval](examples/vault-manual-approval)                 | Backend decides per payment whether to process with Stripe through Primer's PCI proxy or with Primer orchestration (Vault, manual approval). |
 | [sphere-tax](examples/sphere-tax)                                       | Real-time tax from Sphere: tax on each order, sales recorded in Sphere, refunds as credit notes.                                             |
 
-Every example is a standalone project. Open its folder, run `npm install`, then `npm run dev`. The `primer-checkout-*` examples get their client token from Primer's hosted demo endpoint, so they run without a Primer account. The other examples need your own sandbox keys, listed in their README.
+Every example is a standalone project that runs against your own Primer sandbox account. Open its folder, copy `.env.example` to `.env` and add the sandbox keys it lists, then run `npm install` and `npm run dev`. Each example's README has the details.
 
 ## AI skills
 
